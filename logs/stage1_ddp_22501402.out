@@ -1,0 +1,208 @@
+========================================
+Stage 1 DDP: YOLOMG on Anti-UAV-RGBT
+Job ID:  22501402
+Node:    gcn33
+GPUs:    0,1,2,3
+Time:    Wed May  6 02:37:57 CEST 2026
+========================================
+
+Local scratch:
+Filesystem      Size  Used Avail Use% Mounted on
+wstor_scratch1  2.5P  554T  1.9P  23% /gpfs/scratch1
+
+Copying Anti-UAV-RGBT to GPFS scratch...
+Done in 128s.  Size: 3.9G
+
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+Stage 1 training  →  /projects/prjs2041/runs/stage1/antiuav_rgbt10
+Device: cuda:0  |  IMG_SIZE=640  EPOCHS=100  BS=16  world_size=4
+Loading datasets …
+
+                 from  n    params  module                                  arguments                     
+
+                 from  n    params  module                                  arguments                     
+  0                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  0                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+
+                 from  n    params  module                                  arguments                     
+  0                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  1                -1  1       336  models.common.C3                        [8, 8]                        
+  1                -1  1       336  models.common.C3                        [8, 8]                        
+  2                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  2                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  1                -1  1       336  models.common.C3                        [8, 8]                        
+  3                -1  1       336  models.common.C3                        [8, 8, 1]                     
+  2                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  3                -1  1       336  models.common.C3                        [8, 8, 1]                     
+  4           [-1, 1]  1       130  models.common.Concat3                   [16, 1]                       
+  4           [-1, 1]  1       130  models.common.Concat3                   [16, 1]                       
+  3                -1  1       336  models.common.C3                        [8, 8, 1]                     
+  5                -1  1      1248  models.common.C3                        [16, 16, 1]                   
+  4           [-1, 1]  1       130  models.common.Concat3                   [16, 1]                       
+  5                -1  1      1248  models.common.C3                        [16, 16, 1]                   
+  6                -1  1      4672  models.common.Conv                      [16, 32, 3, 2]                
+  6                -1  1      4672  models.common.Conv                      [16, 32, 3, 2]                
+  5                -1  1      1248  models.common.C3                        [16, 16, 1]                   
+  7                -1  1      4800  models.common.C3                        [32, 32, 1]                   
+  7                -1  1      4800  models.common.C3                        [32, 32, 1]                   
+  6                -1  1      4672  models.common.Conv                      [16, 32, 3, 2]                
+  8                -1  1     18560  models.common.Conv                      [32, 64, 3, 2]                
+  8                -1  1     18560  models.common.Conv                      [32, 64, 3, 2]                
+  7                -1  1      4800  models.common.C3                        [32, 32, 1]                   
+  9                -1  1     18816  models.common.C3                        [64, 64, 1]                   
+  9                -1  1     18816  models.common.C3                        [64, 64, 1]                   
+  8                -1  1     18560  models.common.Conv                      [32, 64, 3, 2]                
+ 10                -1  1     73984  models.common.Conv                      [64, 128, 3, 2]               
+ 10                -1  1     73984  models.common.Conv                      [64, 128, 3, 2]               
+  9                -1  1     18816  models.common.C3                        [64, 64, 1]                   
+ 10                -1  1     73984  models.common.Conv                      [64, 128, 3, 2]               
+ 11                -1  3    156928  models.common.C3                        [128, 128, 3]                 
+ 11                -1  3    156928  models.common.C3                        [128, 128, 3]                 
+ 12                -1  1     41344  models.common.SPPF                      [128, 128, 5]                 
+ 12                -1  1     41344  models.common.SPPF                      [128, 128, 5]                 
+ 13                -1  1     33280  models.common.Conv                      [128, 256, 1, 1]              
+ 13                -1  1     33280  models.common.Conv                      [128, 256, 1, 1]              
+ 14                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 14                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 15           [-1, 9]  1         0  models.common.Concat                    [1]                           
+ 15           [-1, 9]  1         0  models.common.Concat                    [1]                           
+ 11                -1  3    156928  models.common.C3                        [128, 128, 3]                 
+ 12                -1  1     41344  models.common.SPPF                      [128, 128, 5]                 
+ 13                -1  1     33280  models.common.Conv                      [128, 256, 1, 1]              
+ 14                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 15           [-1, 9]  1         0  models.common.Concat                    [1]                           
+ 16                -1  1    312832  models.common.C3                        [320, 256, 1, False]          
+ 16                -1  1    312832  models.common.C3                        [320, 256, 1, False]          
+ 17                -1  1     33024  models.common.Conv                      [256, 128, 1, 1]              
+ 17                -1  1     33024  models.common.Conv                      [256, 128, 1, 1]              
+ 18                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 18                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 19           [-1, 6]  1         0  models.common.Concat                    [1]                           
+ 19           [-1, 6]  1         0  models.common.Concat                    [1]                           
+ 16                -1  1    312832  models.common.C3                        [320, 256, 1, False]          
+ 20                -1  1     78592  models.common.C3                        [160, 128, 1, False]          
+ 20                -1  1     78592  models.common.C3                        [160, 128, 1, False]          
+ 17                -1  1     33024  models.common.Conv                      [256, 128, 1, 1]              
+ 18                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 19           [-1, 6]  1         0  models.common.Concat                    [1]                           
+ 21                -1  1    147712  models.common.Conv                      [128, 128, 3, 2]              
+ 22          [-1, 16]  1         0  models.common.Concat                    [1]                           
+ 21                -1  1    147712  models.common.Conv                      [128, 128, 3, 2]              
+ 22          [-1, 16]  1         0  models.common.Concat                    [1]                           
+ 20                -1  1     78592  models.common.C3                        [160, 128, 1, False]          
+ 21                -1  1    147712  models.common.Conv                      [128, 128, 3, 2]              
+ 22          [-1, 16]  1         0  models.common.Concat                    [1]                           
+ 23                -1  1    329216  models.common.C3                        [384, 256, 1, False]          
+ 23                -1  1    329216  models.common.C3                        [384, 256, 1, False]          
+ 23                -1  1    329216  models.common.C3                        [384, 256, 1, False]          
+ 24                -1  1    590336  models.common.Conv                      [256, 256, 3, 2]              
+ 24                -1  1    590336  models.common.Conv                      [256, 256, 3, 2]              
+ 25          [-1, 12]  1         0  models.common.Concat                    [1]                           
+ 25          [-1, 12]  1         0  models.common.Concat                    [1]                           
+ 24                -1  1    590336  models.common.Conv                      [256, 256, 3, 2]              
+ 25          [-1, 12]  1         0  models.common.Concat                    [1]                           
+ 26                -1  1   1117184  models.common.C3                        [384, 512, 1, False]          
+ 26                -1  1   1117184  models.common.C3                        [384, 512, 1, False]          
+ 27      [20, 23, 26]  1     16182  models.yolo.Detect                      [1, [[3, 2, 4, 3, 4, 3], [6, 4, 7, 5, 9, 6], [12, 7, 15, 9, 26, 14]], [128, 256, 512]]
+ 27      [20, 23, 26]  1     16182  models.yolo.Detect                      [1, [[3, 2, 4, 3, 4, 3], [6, 4, 7, 5, 9, 6], [12, 7, 15, 9, 26, 14]], [128, 256, 512]]
+ 26                -1  1   1117184  models.common.C3                        [384, 512, 1, False]          
+ 27      [20, 23, 26]  1     16182  models.yolo.Detect                      [1, [[3, 2, 4, 3, 4, 3], [6, 4, 7, 5, 9, 6], [12, 7, 15, 9, 26, 14]], [128, 256, 512]]
+  train: 149,528 frames  |  val: 61,999 frames
+Building YOLOMG from /projects/prjs2041/YOLOMG/models/dual_uav2.yaml …
+
+                 from  n    params  module                                  arguments                     
+  0                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  1                -1  1       336  models.common.C3                        [8, 8]                        
+  2                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  3                -1  1       336  models.common.C3                        [8, 8, 1]                     
+  4           [-1, 1]  1       130  models.common.Concat3                   [16, 1]                       
+  5                -1  1      1248  models.common.C3                        [16, 16, 1]                   
+  6                -1  1      4672  models.common.Conv                      [16, 32, 3, 2]                
+  7                -1  1      4800  models.common.C3                        [32, 32, 1]                   
+  8                -1  1     18560  models.common.Conv                      [32, 64, 3, 2]                
+  9                -1  1     18816  models.common.C3                        [64, 64, 1]                   
+ 10                -1  1     73984  models.common.Conv                      [64, 128, 3, 2]               
+ 11                -1  3    156928  models.common.C3                        [128, 128, 3]                 
+ 12                -1  1     41344  models.common.SPPF                      [128, 128, 5]                 
+ 13                -1  1     33280  models.common.Conv                      [128, 256, 1, 1]              
+ 14                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 15           [-1, 9]  1         0  models.common.Concat                    [1]                           
+ 16                -1  1    312832  models.common.C3                        [320, 256, 1, False]          
+ 17                -1  1     33024  models.common.Conv                      [256, 128, 1, 1]              
+ 18                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 19           [-1, 6]  1         0  models.common.Concat                    [1]                           
+ 20                -1  1     78592  models.common.C3                        [160, 128, 1, False]          
+ 21                -1  1    147712  models.common.Conv                      [128, 128, 3, 2]              
+ 22          [-1, 16]  1         0  models.common.Concat                    [1]                           
+ 23                -1  1    329216  models.common.C3                        [384, 256, 1, False]          
+ 24                -1  1    590336  models.common.Conv                      [256, 256, 3, 2]              
+ 25          [-1, 12]  1         0  models.common.Concat                    [1]                           
+ 26                -1  1   1117184  models.common.C3                        [384, 512, 1, False]          
+ 27      [20, 23, 26]  1     16182  models.yolo.Detect                      [1, [[3, 2, 4, 3, 4, 3], [6, 4, 7, 5, 9, 6], [12, 7, 15, 9, 26, 14]], [128, 256, 512]]
+Model Summary: 318 layers, 2979976 parameters, 2979976 gradients, 91.5 GFLOPs
+
+Model Summary: 318 layers, 2979976 parameters, 2979976 gradients, 91.5 GFLOPs
+
+Model Summary: 318 layers, 2979976 parameters, 2979976 gradients, 91.5 GFLOPs
+
+Model Summary: 318 layers, 2979976 parameters, 2979976 gradients, 91.5 GFLOPs
+
+  Parameters: 2,979,976
+
+Starting training for 100 epochs …
+
+  [  0/99][   0/2337]  mem=1.99G  box=0.0873  obj=0.0015  cls=0.0000
+  [  0/99][  50/2337]  mem=23.11G  box=0.0509  obj=0.0015  cls=0.0000
+W0506 02:42:27.391455 3123689 /gpfs/home3/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/api.py:900] Sending process 3123743 closing signal SIGTERM
+W0506 02:42:27.393751 3123689 /gpfs/home3/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/api.py:900] Sending process 3123744 closing signal SIGTERM
+W0506 02:42:27.394290 3123689 /gpfs/home3/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/api.py:900] Sending process 3123746 closing signal SIGTERM
+E0506 02:42:28.278800 3123689 /gpfs/home3/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/api.py:874] failed (exitcode: -9) local_rank: 2 (pid: 3123745) of binary: /home/knguyen1/.conda/envs/uav_master/bin/python3.9
+Traceback (most recent call last):
+  File "/home/knguyen1/.conda/envs/uav_master/bin/torchrun", line 6, in <module>
+    sys.exit(main())
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/run.py", line 892, in main
+    run(args)
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/run.py", line 883, in run
+    elastic_launch(
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/launcher/api.py", line 139, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/launcher/api.py", line 270, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+========================================================
+/projects/prjs2041/uav_code/train_stage1.py FAILED
+--------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+--------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-05-06_02:42:27
+  host      : gcn33.local.snellius.surf.nl
+  rank      : 2 (local_rank: 2)
+  exitcode  : -9 (pid: 3123745)
+  error_file: <N/A>
+  traceback : Signal 9 (SIGKILL) received by PID 3123745
+========================================================
+
+========================================
+Finished at: Wed May  6 02:42:28 CEST 2026
+Check results: /projects/prjs2041/runs/stage1/
+========================================
+[2026-05-06T02:42:29.113] error: Detected 1 oom_kill event in StepId=22501402.batch. Some of the step tasks have been OOM Killed.

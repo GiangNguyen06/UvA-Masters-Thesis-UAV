@@ -1,0 +1,2203 @@
+========================================
+Stage 1 DDP: YOLOMG on Anti-UAV-RGBT
+Job ID:  22522864
+Node:    gcn26
+GPUs:    0,1,2,3
+Time:    Wed May  6 21:52:25 CEST 2026
+========================================
+
+Local scratch:
+Filesystem      Size  Used Avail Use% Mounted on
+wstor_scratch1  2.5P  550T  1.9P  23% /gpfs/scratch1
+
+Copying Anti-UAV-RGBT to GPFS scratch...
+Done in 174s.  Size: 5.1G
+
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+Stage 1 training  →  /projects/prjs2041/runs/stage1/antiuav_rgbt14
+Device: cuda:0  |  IMG_SIZE=640  EPOCHS=100  BS=16  world_size=4
+Loading datasets …
+  train: 149,528 frames  |  val: 61,999 frames
+Building YOLOMG from /projects/prjs2041/YOLOMG/models/dual_uav2.yaml …
+
+                 from  n    params  module                                  arguments                     
+
+                 from  n    params  module                                  arguments                     
+
+                 from  n    params  module                                  arguments                     
+
+                 from  n    params  module                                  arguments                     
+  0                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  0                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  0                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  0                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  1                -1  1       336  models.common.C3                        [8, 8]                        
+  1                -1  1       336  models.common.C3                        [8, 8]                        
+  1                -1  1       336  models.common.C3                        [8, 8]                        
+  1                -1  1       336  models.common.C3                        [8, 8]                        
+  2                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  2                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  2                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  2                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  3                -1  1       336  models.common.C3                        [8, 8, 1]                     
+  3                -1  1       336  models.common.C3                        [8, 8, 1]                     
+  3                -1  1       336  models.common.C3                        [8, 8, 1]                     
+  3                -1  1       336  models.common.C3                        [8, 8, 1]                     
+  4           [-1, 1]  1       130  models.common.Concat3                   [16, 1]                       
+  4           [-1, 1]  1       130  models.common.Concat3                   [16, 1]                       
+  4           [-1, 1]  1       130  models.common.Concat3                   [16, 1]                       
+  4           [-1, 1]  1       130  models.common.Concat3                   [16, 1]                       
+  5                -1  1      1248  models.common.C3                        [16, 16, 1]                   
+  6                -1  1      4672  models.common.Conv                      [16, 32, 3, 2]                
+  5                -1  1      1248  models.common.C3                        [16, 16, 1]                   
+  5                -1  1      1248  models.common.C3                        [16, 16, 1]                   
+  5                -1  1      1248  models.common.C3                        [16, 16, 1]                   
+  6                -1  1      4672  models.common.Conv                      [16, 32, 3, 2]                
+  6                -1  1      4672  models.common.Conv                      [16, 32, 3, 2]                
+  6                -1  1      4672  models.common.Conv                      [16, 32, 3, 2]                
+  7                -1  1      4800  models.common.C3                        [32, 32, 1]                   
+  8                -1  1     18560  models.common.Conv                      [32, 64, 3, 2]                
+  7                -1  1      4800  models.common.C3                        [32, 32, 1]                   
+  7                -1  1      4800  models.common.C3                        [32, 32, 1]                   
+  7                -1  1      4800  models.common.C3                        [32, 32, 1]                   
+  8                -1  1     18560  models.common.Conv                      [32, 64, 3, 2]                
+  8                -1  1     18560  models.common.Conv                      [32, 64, 3, 2]                
+  8                -1  1     18560  models.common.Conv                      [32, 64, 3, 2]                
+  9                -1  1     18816  models.common.C3                        [64, 64, 1]                   
+ 10                -1  1     73984  models.common.Conv                      [64, 128, 3, 2]               
+  9                -1  1     18816  models.common.C3                        [64, 64, 1]                   
+  9                -1  1     18816  models.common.C3                        [64, 64, 1]                   
+  9                -1  1     18816  models.common.C3                        [64, 64, 1]                   
+ 10                -1  1     73984  models.common.Conv                      [64, 128, 3, 2]               
+ 10                -1  1     73984  models.common.Conv                      [64, 128, 3, 2]               
+ 10                -1  1     73984  models.common.Conv                      [64, 128, 3, 2]               
+ 11                -1  3    156928  models.common.C3                        [128, 128, 3]                 
+ 11                -1  3    156928  models.common.C3                        [128, 128, 3]                 
+ 12                -1  1     41344  models.common.SPPF                      [128, 128, 5]                 
+ 11                -1  3    156928  models.common.C3                        [128, 128, 3]                 
+ 11                -1  3    156928  models.common.C3                        [128, 128, 3]                 
+ 13                -1  1     33280  models.common.Conv                      [128, 256, 1, 1]              
+ 12                -1  1     41344  models.common.SPPF                      [128, 128, 5]                 
+ 14                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 15           [-1, 9]  1         0  models.common.Concat                    [1]                           
+ 12                -1  1     41344  models.common.SPPF                      [128, 128, 5]                 
+ 13                -1  1     33280  models.common.Conv                      [128, 256, 1, 1]              
+ 12                -1  1     41344  models.common.SPPF                      [128, 128, 5]                 
+ 13                -1  1     33280  models.common.Conv                      [128, 256, 1, 1]              
+ 14                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 15           [-1, 9]  1         0  models.common.Concat                    [1]                           
+ 14                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 13                -1  1     33280  models.common.Conv                      [128, 256, 1, 1]              
+ 15           [-1, 9]  1         0  models.common.Concat                    [1]                           
+ 14                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 15           [-1, 9]  1         0  models.common.Concat                    [1]                           
+ 16                -1  1    312832  models.common.C3                        [320, 256, 1, False]          
+ 17                -1  1     33024  models.common.Conv                      [256, 128, 1, 1]              
+ 16                -1  1    312832  models.common.C3                        [320, 256, 1, False]          
+ 18                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 19           [-1, 6]  1         0  models.common.Concat                    [1]                           
+ 16                -1  1    312832  models.common.C3                        [320, 256, 1, False]          
+ 16                -1  1    312832  models.common.C3                        [320, 256, 1, False]          
+ 17                -1  1     33024  models.common.Conv                      [256, 128, 1, 1]              
+ 18                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 19           [-1, 6]  1         0  models.common.Concat                    [1]                           
+ 17                -1  1     33024  models.common.Conv                      [256, 128, 1, 1]              
+ 18                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 17                -1  1     33024  models.common.Conv                      [256, 128, 1, 1]              
+ 19           [-1, 6]  1         0  models.common.Concat                    [1]                           
+ 18                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 19           [-1, 6]  1         0  models.common.Concat                    [1]                           
+ 20                -1  1     78592  models.common.C3                        [160, 128, 1, False]          
+ 20                -1  1     78592  models.common.C3                        [160, 128, 1, False]          
+ 20                -1  1     78592  models.common.C3                        [160, 128, 1, False]          
+ 21                -1  1    147712  models.common.Conv                      [128, 128, 3, 2]              
+ 20                -1  1     78592  models.common.C3                        [160, 128, 1, False]          
+ 22          [-1, 16]  1         0  models.common.Concat                    [1]                           
+ 21                -1  1    147712  models.common.Conv                      [128, 128, 3, 2]              
+ 22          [-1, 16]  1         0  models.common.Concat                    [1]                           
+ 21                -1  1    147712  models.common.Conv                      [128, 128, 3, 2]              
+ 22          [-1, 16]  1         0  models.common.Concat                    [1]                           
+ 21                -1  1    147712  models.common.Conv                      [128, 128, 3, 2]              
+ 22          [-1, 16]  1         0  models.common.Concat                    [1]                           
+ 23                -1  1    329216  models.common.C3                        [384, 256, 1, False]          
+ 23                -1  1    329216  models.common.C3                        [384, 256, 1, False]          
+ 23                -1  1    329216  models.common.C3                        [384, 256, 1, False]          
+ 23                -1  1    329216  models.common.C3                        [384, 256, 1, False]          
+ 24                -1  1    590336  models.common.Conv                      [256, 256, 3, 2]              
+ 25          [-1, 12]  1         0  models.common.Concat                    [1]                           
+ 24                -1  1    590336  models.common.Conv                      [256, 256, 3, 2]              
+ 25          [-1, 12]  1         0  models.common.Concat                    [1]                           
+ 24                -1  1    590336  models.common.Conv                      [256, 256, 3, 2]              
+ 25          [-1, 12]  1         0  models.common.Concat                    [1]                           
+ 24                -1  1    590336  models.common.Conv                      [256, 256, 3, 2]              
+ 25          [-1, 12]  1         0  models.common.Concat                    [1]                           
+ 26                -1  1   1117184  models.common.C3                        [384, 512, 1, False]          
+ 27      [20, 23, 26]  1     16182  models.yolo.Detect                      [1, [[3, 2, 4, 3, 4, 3], [6, 4, 7, 5, 9, 6], [12, 7, 15, 9, 26, 14]], [128, 256, 512]]
+ 26                -1  1   1117184  models.common.C3                        [384, 512, 1, False]          
+ 26                -1  1   1117184  models.common.C3                        [384, 512, 1, False]          
+ 26                -1  1   1117184  models.common.C3                        [384, 512, 1, False]          
+ 27      [20, 23, 26]  1     16182  models.yolo.Detect                      [1, [[3, 2, 4, 3, 4, 3], [6, 4, 7, 5, 9, 6], [12, 7, 15, 9, 26, 14]], [128, 256, 512]]
+ 27      [20, 23, 26]  1     16182  models.yolo.Detect                      [1, [[3, 2, 4, 3, 4, 3], [6, 4, 7, 5, 9, 6], [12, 7, 15, 9, 26, 14]], [128, 256, 512]]
+ 27      [20, 23, 26]  1     16182  models.yolo.Detect                      [1, [[3, 2, 4, 3, 4, 3], [6, 4, 7, 5, 9, 6], [12, 7, 15, 9, 26, 14]], [128, 256, 512]]
+Model Summary: 318 layers, 2979976 parameters, 2979976 gradients, 91.5 GFLOPs
+
+Model Summary: 318 layers, 2979976 parameters, 2979976 gradients, 91.5 GFLOPs
+
+Model Summary: 318 layers, 2979976 parameters, 2979976 gradients, 91.5 GFLOPs
+
+Model Summary: 318 layers, 2979976 parameters, 2979976 gradients, 91.5 GFLOPs
+
+  Parameters: 2,979,976
+
+Starting training for 100 epochs …
+
+  [  0/99][   0/2337]  mem=1.99G  box=0.0873  obj=0.0015  cls=0.0000
+  [  0/99][  50/2337]  mem=23.11G  box=0.0509  obj=0.0015  cls=0.0000
+  [  0/99][ 100/2337]  mem=23.11G  box=0.0434  obj=0.0016  cls=0.0000
+  [  0/99][ 150/2337]  mem=23.11G  box=0.0407  obj=0.0015  cls=0.0000
+  [  0/99][ 200/2337]  mem=23.11G  box=0.0379  obj=0.0015  cls=0.0000
+  [  0/99][ 250/2337]  mem=23.11G  box=0.0357  obj=0.0015  cls=0.0000
+  [  0/99][ 300/2337]  mem=23.11G  box=0.0349  obj=0.0015  cls=0.0000
+  [  0/99][ 350/2337]  mem=23.11G  box=0.0341  obj=0.0015  cls=0.0000
+  [  0/99][ 400/2337]  mem=23.11G  box=0.0336  obj=0.0014  cls=0.0000
+  [  0/99][ 450/2337]  mem=23.11G  box=0.0330  obj=0.0014  cls=0.0000
+  [  0/99][ 500/2337]  mem=23.11G  box=0.0323  obj=0.0014  cls=0.0000
+  [  0/99][ 550/2337]  mem=23.11G  box=0.0319  obj=0.0014  cls=0.0000
+  [  0/99][ 600/2337]  mem=23.11G  box=0.0318  obj=0.0014  cls=0.0000
+  [  0/99][ 650/2337]  mem=23.11G  box=0.0317  obj=0.0014  cls=0.0000
+  [  0/99][ 700/2337]  mem=23.11G  box=0.0315  obj=0.0014  cls=0.0000
+  [  0/99][ 750/2337]  mem=23.11G  box=0.0312  obj=0.0013  cls=0.0000
+  [  0/99][ 800/2337]  mem=23.11G  box=0.0310  obj=0.0013  cls=0.0000
+  [  0/99][ 850/2337]  mem=23.11G  box=0.0308  obj=0.0013  cls=0.0000
+  [  0/99][ 900/2337]  mem=23.11G  box=0.0307  obj=0.0013  cls=0.0000
+  [  0/99][ 950/2337]  mem=23.11G  box=0.0305  obj=0.0013  cls=0.0000
+  [  0/99][1000/2337]  mem=23.11G  box=0.0303  obj=0.0013  cls=0.0000
+  [  0/99][1050/2337]  mem=23.11G  box=0.0302  obj=0.0013  cls=0.0000
+  [  0/99][1100/2337]  mem=23.11G  box=0.0300  obj=0.0013  cls=0.0000
+  [  0/99][1150/2337]  mem=23.11G  box=0.0299  obj=0.0013  cls=0.0000
+  [  0/99][1200/2337]  mem=23.11G  box=0.0299  obj=0.0013  cls=0.0000
+  [  0/99][1250/2337]  mem=23.11G  box=0.0298  obj=0.0013  cls=0.0000
+  [  0/99][1300/2337]  mem=23.11G  box=0.0296  obj=0.0013  cls=0.0000
+  [  0/99][1350/2337]  mem=23.11G  box=0.0294  obj=0.0013  cls=0.0000
+  [  0/99][1400/2337]  mem=23.11G  box=0.0294  obj=0.0013  cls=0.0000
+  [  0/99][1450/2337]  mem=23.11G  box=0.0293  obj=0.0013  cls=0.0000
+  [  0/99][1500/2337]  mem=23.11G  box=0.0292  obj=0.0013  cls=0.0000
+  [  0/99][1550/2337]  mem=23.11G  box=0.0292  obj=0.0013  cls=0.0000
+  [  0/99][1600/2337]  mem=23.11G  box=0.0290  obj=0.0012  cls=0.0000
+  [  0/99][1650/2337]  mem=23.11G  box=0.0289  obj=0.0012  cls=0.0000
+  [  0/99][1700/2337]  mem=23.11G  box=0.0289  obj=0.0012  cls=0.0000
+  [  0/99][1750/2337]  mem=23.11G  box=0.0287  obj=0.0012  cls=0.0000
+  [  0/99][1800/2337]  mem=23.11G  box=0.0287  obj=0.0012  cls=0.0000
+  [  0/99][1850/2337]  mem=23.11G  box=0.0285  obj=0.0012  cls=0.0000
+  [  0/99][1900/2337]  mem=23.11G  box=0.0284  obj=0.0012  cls=0.0000
+  [  0/99][1950/2337]  mem=23.11G  box=0.0282  obj=0.0012  cls=0.0000
+  [  0/99][2000/2337]  mem=23.11G  box=0.0281  obj=0.0012  cls=0.0000
+  [  0/99][2050/2337]  mem=23.11G  box=0.0280  obj=0.0012  cls=0.0000
+  [  0/99][2100/2337]  mem=23.11G  box=0.0279  obj=0.0012  cls=0.0000
+  [  0/99][2150/2337]  mem=23.11G  box=0.0278  obj=0.0012  cls=0.0000
+  [  0/99][2200/2337]  mem=23.11G  box=0.0277  obj=0.0012  cls=0.0000
+  [  0/99][2250/2337]  mem=23.11G  box=0.0276  obj=0.0012  cls=0.0000
+  [  0/99][2300/2337]  mem=23.11G  box=0.0275  obj=0.0012  cls=0.0000
+
+Epoch   0/99  loss=0.0288  mAP@0.5=0.0000  mAP@0.5:0.95=0.0000
+
+  ✓ New best mAP@0.5 = 0.0000  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [  1/99][   0/2337]  mem=23.09G  box=0.0363  obj=0.0011  cls=0.0000
+  [  1/99][  50/2337]  mem=23.09G  box=0.0229  obj=0.0010  cls=0.0000
+  [  1/99][ 100/2337]  mem=23.09G  box=0.0227  obj=0.0010  cls=0.0000
+  [  1/99][ 150/2337]  mem=23.09G  box=0.0231  obj=0.0010  cls=0.0000
+  [  1/99][ 200/2337]  mem=23.09G  box=0.0225  obj=0.0010  cls=0.0000
+  [  1/99][ 250/2337]  mem=23.09G  box=0.0222  obj=0.0010  cls=0.0000
+  [  1/99][ 300/2337]  mem=23.09G  box=0.0220  obj=0.0010  cls=0.0000
+  [  1/99][ 350/2337]  mem=23.09G  box=0.0219  obj=0.0010  cls=0.0000
+  [  1/99][ 400/2337]  mem=23.09G  box=0.0217  obj=0.0010  cls=0.0000
+  [  1/99][ 450/2337]  mem=23.09G  box=0.0217  obj=0.0010  cls=0.0000
+  [  1/99][ 500/2337]  mem=23.09G  box=0.0216  obj=0.0010  cls=0.0000
+  [  1/99][ 550/2337]  mem=23.09G  box=0.0213  obj=0.0010  cls=0.0000
+  [  1/99][ 600/2337]  mem=23.09G  box=0.0212  obj=0.0010  cls=0.0000
+  [  1/99][ 650/2337]  mem=23.09G  box=0.0213  obj=0.0010  cls=0.0000
+  [  1/99][ 700/2337]  mem=23.09G  box=0.0214  obj=0.0010  cls=0.0000
+  [  1/99][ 750/2337]  mem=23.09G  box=0.0213  obj=0.0010  cls=0.0000
+  [  1/99][ 800/2337]  mem=23.09G  box=0.0214  obj=0.0010  cls=0.0000
+  [  1/99][ 850/2337]  mem=23.09G  box=0.0215  obj=0.0010  cls=0.0000
+  [  1/99][ 900/2337]  mem=23.09G  box=0.0214  obj=0.0010  cls=0.0000
+  [  1/99][ 950/2337]  mem=23.09G  box=0.0214  obj=0.0010  cls=0.0000
+  [  1/99][1000/2337]  mem=23.09G  box=0.0213  obj=0.0010  cls=0.0000
+  [  1/99][1050/2337]  mem=23.09G  box=0.0213  obj=0.0010  cls=0.0000
+  [  1/99][1100/2337]  mem=23.09G  box=0.0212  obj=0.0010  cls=0.0000
+  [  1/99][1150/2337]  mem=23.09G  box=0.0212  obj=0.0010  cls=0.0000
+  [  1/99][1200/2337]  mem=23.09G  box=0.0212  obj=0.0010  cls=0.0000
+  [  1/99][1250/2337]  mem=23.09G  box=0.0212  obj=0.0010  cls=0.0000
+  [  1/99][1300/2337]  mem=23.09G  box=0.0212  obj=0.0010  cls=0.0000
+  [  1/99][1350/2337]  mem=23.09G  box=0.0211  obj=0.0010  cls=0.0000
+  [  1/99][1400/2337]  mem=23.09G  box=0.0211  obj=0.0010  cls=0.0000
+  [  1/99][1450/2337]  mem=23.09G  box=0.0210  obj=0.0010  cls=0.0000
+  [  1/99][1500/2337]  mem=23.09G  box=0.0209  obj=0.0010  cls=0.0000
+  [  1/99][1550/2337]  mem=23.09G  box=0.0210  obj=0.0009  cls=0.0000
+  [  1/99][1600/2337]  mem=23.09G  box=0.0210  obj=0.0009  cls=0.0000
+  [  1/99][1650/2337]  mem=23.09G  box=0.0210  obj=0.0009  cls=0.0000
+  [  1/99][1700/2337]  mem=23.09G  box=0.0210  obj=0.0009  cls=0.0000
+  [  1/99][1750/2337]  mem=23.09G  box=0.0209  obj=0.0009  cls=0.0000
+  [  1/99][1800/2337]  mem=23.09G  box=0.0208  obj=0.0009  cls=0.0000
+  [  1/99][1850/2337]  mem=23.09G  box=0.0208  obj=0.0009  cls=0.0000
+  [  1/99][1900/2337]  mem=23.09G  box=0.0207  obj=0.0009  cls=0.0000
+  [  1/99][1950/2337]  mem=23.09G  box=0.0208  obj=0.0009  cls=0.0000
+  [  1/99][2000/2337]  mem=23.09G  box=0.0207  obj=0.0009  cls=0.0000
+  [  1/99][2050/2337]  mem=23.09G  box=0.0207  obj=0.0009  cls=0.0000
+  [  1/99][2100/2337]  mem=23.09G  box=0.0207  obj=0.0009  cls=0.0000
+  [  1/99][2150/2337]  mem=23.09G  box=0.0207  obj=0.0009  cls=0.0000
+  [  1/99][2200/2337]  mem=23.09G  box=0.0206  obj=0.0009  cls=0.0000
+  [  1/99][2250/2337]  mem=23.09G  box=0.0206  obj=0.0009  cls=0.0000
+  [  1/99][2300/2337]  mem=23.09G  box=0.0206  obj=0.0009  cls=0.0000
+
+Epoch   1/99  loss=0.0215  mAP@0.5=0.0195  mAP@0.5:0.95=0.0195
+
+  ✓ New best mAP@0.5 = 0.0195  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [  2/99][   0/2337]  mem=30.22G  box=0.0125  obj=0.0007  cls=0.0000
+  [  2/99][  50/2337]  mem=30.22G  box=0.0198  obj=0.0008  cls=0.0000
+  [  2/99][ 100/2337]  mem=30.22G  box=0.0201  obj=0.0008  cls=0.0000
+  [  2/99][ 150/2337]  mem=30.22G  box=0.0199  obj=0.0008  cls=0.0000
+  [  2/99][ 200/2337]  mem=30.22G  box=0.0201  obj=0.0008  cls=0.0000
+  [  2/99][ 250/2337]  mem=30.22G  box=0.0201  obj=0.0008  cls=0.0000
+  [  2/99][ 300/2337]  mem=30.22G  box=0.0199  obj=0.0008  cls=0.0000
+  [  2/99][ 350/2337]  mem=30.22G  box=0.0196  obj=0.0008  cls=0.0000
+  [  2/99][ 400/2337]  mem=30.22G  box=0.0193  obj=0.0008  cls=0.0000
+  [  2/99][ 450/2337]  mem=30.22G  box=0.0195  obj=0.0007  cls=0.0000
+  [  2/99][ 500/2337]  mem=30.22G  box=0.0196  obj=0.0007  cls=0.0000
+  [  2/99][ 550/2337]  mem=30.22G  box=0.0194  obj=0.0007  cls=0.0000
+  [  2/99][ 600/2337]  mem=30.22G  box=0.0196  obj=0.0007  cls=0.0000
+  [  2/99][ 650/2337]  mem=30.22G  box=0.0194  obj=0.0007  cls=0.0000
+  [  2/99][ 700/2337]  mem=30.22G  box=0.0195  obj=0.0007  cls=0.0000
+  [  2/99][ 750/2337]  mem=30.22G  box=0.0194  obj=0.0007  cls=0.0000
+  [  2/99][ 800/2337]  mem=30.22G  box=0.0194  obj=0.0007  cls=0.0000
+  [  2/99][ 850/2337]  mem=30.22G  box=0.0193  obj=0.0007  cls=0.0000
+  [  2/99][ 900/2337]  mem=30.22G  box=0.0192  obj=0.0007  cls=0.0000
+  [  2/99][ 950/2337]  mem=30.22G  box=0.0194  obj=0.0007  cls=0.0000
+  [  2/99][1000/2337]  mem=30.22G  box=0.0194  obj=0.0007  cls=0.0000
+  [  2/99][1050/2337]  mem=30.22G  box=0.0193  obj=0.0007  cls=0.0000
+  [  2/99][1100/2337]  mem=30.22G  box=0.0193  obj=0.0007  cls=0.0000
+  [  2/99][1150/2337]  mem=30.22G  box=0.0193  obj=0.0007  cls=0.0000
+  [  2/99][1200/2337]  mem=30.22G  box=0.0192  obj=0.0007  cls=0.0000
+  [  2/99][1250/2337]  mem=30.22G  box=0.0193  obj=0.0007  cls=0.0000
+  [  2/99][1300/2337]  mem=30.22G  box=0.0194  obj=0.0007  cls=0.0000
+  [  2/99][1350/2337]  mem=30.22G  box=0.0194  obj=0.0007  cls=0.0000
+  [  2/99][1400/2337]  mem=30.22G  box=0.0195  obj=0.0007  cls=0.0000
+  [  2/99][1450/2337]  mem=30.22G  box=0.0195  obj=0.0007  cls=0.0000
+  [  2/99][1500/2337]  mem=30.22G  box=0.0196  obj=0.0007  cls=0.0000
+  [  2/99][1550/2337]  mem=30.22G  box=0.0195  obj=0.0007  cls=0.0000
+  [  2/99][1600/2337]  mem=30.22G  box=0.0195  obj=0.0007  cls=0.0000
+  [  2/99][1650/2337]  mem=30.22G  box=0.0195  obj=0.0007  cls=0.0000
+  [  2/99][1700/2337]  mem=30.22G  box=0.0194  obj=0.0007  cls=0.0000
+  [  2/99][1750/2337]  mem=30.22G  box=0.0194  obj=0.0007  cls=0.0000
+  [  2/99][1800/2337]  mem=30.22G  box=0.0194  obj=0.0007  cls=0.0000
+  [  2/99][1850/2337]  mem=30.22G  box=0.0194  obj=0.0007  cls=0.0000
+  [  2/99][1900/2337]  mem=30.22G  box=0.0194  obj=0.0007  cls=0.0000
+  [  2/99][1950/2337]  mem=30.22G  box=0.0194  obj=0.0007  cls=0.0000
+  [  2/99][2000/2337]  mem=30.22G  box=0.0194  obj=0.0007  cls=0.0000
+  [  2/99][2050/2337]  mem=30.22G  box=0.0194  obj=0.0007  cls=0.0000
+  [  2/99][2100/2337]  mem=30.22G  box=0.0194  obj=0.0007  cls=0.0000
+  [  2/99][2150/2337]  mem=30.22G  box=0.0194  obj=0.0007  cls=0.0000
+  [  2/99][2200/2337]  mem=30.22G  box=0.0194  obj=0.0007  cls=0.0000
+  [  2/99][2250/2337]  mem=30.22G  box=0.0193  obj=0.0007  cls=0.0000
+  [  2/99][2300/2337]  mem=30.22G  box=0.0193  obj=0.0007  cls=0.0000
+
+Epoch   2/99  loss=0.0199  mAP@0.5=0.4093  mAP@0.5:0.95=0.4093
+
+  ✓ New best mAP@0.5 = 0.4093  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [  3/99][   0/2337]  mem=31.90G  box=0.0348  obj=0.0005  cls=0.0000
+  [  3/99][  50/2337]  mem=31.90G  box=0.0204  obj=0.0005  cls=0.0000
+  [  3/99][ 100/2337]  mem=31.90G  box=0.0187  obj=0.0005  cls=0.0000
+  [  3/99][ 150/2337]  mem=31.90G  box=0.0187  obj=0.0005  cls=0.0000
+  [  3/99][ 200/2337]  mem=31.90G  box=0.0188  obj=0.0005  cls=0.0000
+  [  3/99][ 250/2337]  mem=31.90G  box=0.0187  obj=0.0005  cls=0.0000
+  [  3/99][ 300/2337]  mem=31.90G  box=0.0186  obj=0.0005  cls=0.0000
+  [  3/99][ 350/2337]  mem=31.90G  box=0.0183  obj=0.0005  cls=0.0000
+  [  3/99][ 400/2337]  mem=31.90G  box=0.0184  obj=0.0005  cls=0.0000
+  [  3/99][ 450/2337]  mem=31.90G  box=0.0184  obj=0.0005  cls=0.0000
+  [  3/99][ 500/2337]  mem=31.90G  box=0.0184  obj=0.0005  cls=0.0000
+  [  3/99][ 550/2337]  mem=31.90G  box=0.0185  obj=0.0005  cls=0.0000
+  [  3/99][ 600/2337]  mem=31.90G  box=0.0186  obj=0.0005  cls=0.0000
+  [  3/99][ 650/2337]  mem=31.90G  box=0.0186  obj=0.0005  cls=0.0000
+  [  3/99][ 700/2337]  mem=31.90G  box=0.0185  obj=0.0005  cls=0.0000
+  [  3/99][ 750/2337]  mem=31.90G  box=0.0184  obj=0.0005  cls=0.0000
+  [  3/99][ 800/2337]  mem=31.90G  box=0.0182  obj=0.0005  cls=0.0000
+  [  3/99][ 850/2337]  mem=31.90G  box=0.0183  obj=0.0005  cls=0.0000
+  [  3/99][ 900/2337]  mem=31.90G  box=0.0183  obj=0.0005  cls=0.0000
+  [  3/99][ 950/2337]  mem=31.90G  box=0.0183  obj=0.0005  cls=0.0000
+  [  3/99][1000/2337]  mem=31.90G  box=0.0182  obj=0.0005  cls=0.0000
+  [  3/99][1050/2337]  mem=31.90G  box=0.0182  obj=0.0005  cls=0.0000
+  [  3/99][1100/2337]  mem=31.90G  box=0.0181  obj=0.0005  cls=0.0000
+  [  3/99][1150/2337]  mem=31.90G  box=0.0181  obj=0.0005  cls=0.0000
+  [  3/99][1200/2337]  mem=31.90G  box=0.0182  obj=0.0005  cls=0.0000
+  [  3/99][1250/2337]  mem=31.90G  box=0.0183  obj=0.0005  cls=0.0000
+  [  3/99][1300/2337]  mem=31.90G  box=0.0183  obj=0.0005  cls=0.0000
+  [  3/99][1350/2337]  mem=31.90G  box=0.0184  obj=0.0005  cls=0.0000
+  [  3/99][1400/2337]  mem=31.90G  box=0.0184  obj=0.0005  cls=0.0000
+  [  3/99][1450/2337]  mem=31.90G  box=0.0183  obj=0.0005  cls=0.0000
+  [  3/99][1500/2337]  mem=31.90G  box=0.0183  obj=0.0005  cls=0.0000
+  [  3/99][1550/2337]  mem=31.90G  box=0.0183  obj=0.0005  cls=0.0000
+  [  3/99][1600/2337]  mem=31.90G  box=0.0183  obj=0.0005  cls=0.0000
+  [  3/99][1650/2337]  mem=31.90G  box=0.0182  obj=0.0005  cls=0.0000
+  [  3/99][1700/2337]  mem=31.90G  box=0.0182  obj=0.0005  cls=0.0000
+  [  3/99][1750/2337]  mem=31.90G  box=0.0182  obj=0.0005  cls=0.0000
+  [  3/99][1800/2337]  mem=31.90G  box=0.0182  obj=0.0005  cls=0.0000
+  [  3/99][1850/2337]  mem=31.90G  box=0.0183  obj=0.0005  cls=0.0000
+  [  3/99][1900/2337]  mem=31.90G  box=0.0182  obj=0.0005  cls=0.0000
+  [  3/99][1950/2337]  mem=31.90G  box=0.0181  obj=0.0005  cls=0.0000
+  [  3/99][2000/2337]  mem=31.90G  box=0.0181  obj=0.0005  cls=0.0000
+  [  3/99][2050/2337]  mem=31.90G  box=0.0182  obj=0.0005  cls=0.0000
+  [  3/99][2100/2337]  mem=31.90G  box=0.0182  obj=0.0005  cls=0.0000
+  [  3/99][2150/2337]  mem=31.90G  box=0.0182  obj=0.0005  cls=0.0000
+  [  3/99][2200/2337]  mem=31.90G  box=0.0182  obj=0.0005  cls=0.0000
+  [  3/99][2250/2337]  mem=31.90G  box=0.0182  obj=0.0005  cls=0.0000
+  [  3/99][2300/2337]  mem=31.90G  box=0.0181  obj=0.0005  cls=0.0000
+
+Epoch   3/99  loss=0.0188  mAP@0.5=0.5365  mAP@0.5:0.95=0.5365
+
+  ✓ New best mAP@0.5 = 0.5365  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [  4/99][   0/2337]  mem=31.90G  box=0.0108  obj=0.0004  cls=0.0000
+  [  4/99][  50/2337]  mem=31.90G  box=0.0174  obj=0.0004  cls=0.0000
+  [  4/99][ 100/2337]  mem=31.90G  box=0.0177  obj=0.0004  cls=0.0000
+  [  4/99][ 150/2337]  mem=31.90G  box=0.0182  obj=0.0004  cls=0.0000
+  [  4/99][ 200/2337]  mem=31.90G  box=0.0176  obj=0.0004  cls=0.0000
+  [  4/99][ 250/2337]  mem=31.90G  box=0.0179  obj=0.0004  cls=0.0000
+  [  4/99][ 300/2337]  mem=31.90G  box=0.0178  obj=0.0004  cls=0.0000
+  [  4/99][ 350/2337]  mem=31.90G  box=0.0176  obj=0.0004  cls=0.0000
+  [  4/99][ 400/2337]  mem=31.90G  box=0.0175  obj=0.0004  cls=0.0000
+  [  4/99][ 450/2337]  mem=31.90G  box=0.0177  obj=0.0004  cls=0.0000
+  [  4/99][ 500/2337]  mem=31.90G  box=0.0177  obj=0.0004  cls=0.0000
+  [  4/99][ 550/2337]  mem=31.90G  box=0.0177  obj=0.0004  cls=0.0000
+  [  4/99][ 600/2337]  mem=31.90G  box=0.0177  obj=0.0004  cls=0.0000
+  [  4/99][ 650/2337]  mem=31.90G  box=0.0179  obj=0.0004  cls=0.0000
+  [  4/99][ 700/2337]  mem=31.90G  box=0.0178  obj=0.0004  cls=0.0000
+  [  4/99][ 750/2337]  mem=31.90G  box=0.0178  obj=0.0004  cls=0.0000
+  [  4/99][ 800/2337]  mem=31.90G  box=0.0178  obj=0.0004  cls=0.0000
+  [  4/99][ 850/2337]  mem=31.90G  box=0.0178  obj=0.0004  cls=0.0000
+  [  4/99][ 900/2337]  mem=31.90G  box=0.0178  obj=0.0004  cls=0.0000
+  [  4/99][ 950/2337]  mem=31.90G  box=0.0177  obj=0.0004  cls=0.0000
+  [  4/99][1000/2337]  mem=31.90G  box=0.0176  obj=0.0004  cls=0.0000
+  [  4/99][1050/2337]  mem=31.90G  box=0.0176  obj=0.0004  cls=0.0000
+  [  4/99][1100/2337]  mem=31.90G  box=0.0175  obj=0.0004  cls=0.0000
+  [  4/99][1150/2337]  mem=31.90G  box=0.0176  obj=0.0004  cls=0.0000
+  [  4/99][1200/2337]  mem=31.90G  box=0.0176  obj=0.0004  cls=0.0000
+  [  4/99][1250/2337]  mem=31.90G  box=0.0175  obj=0.0004  cls=0.0000
+  [  4/99][1300/2337]  mem=31.90G  box=0.0176  obj=0.0004  cls=0.0000
+  [  4/99][1350/2337]  mem=31.90G  box=0.0176  obj=0.0004  cls=0.0000
+  [  4/99][1400/2337]  mem=31.90G  box=0.0175  obj=0.0004  cls=0.0000
+  [  4/99][1450/2337]  mem=31.90G  box=0.0176  obj=0.0004  cls=0.0000
+  [  4/99][1500/2337]  mem=31.90G  box=0.0175  obj=0.0004  cls=0.0000
+  [  4/99][1550/2337]  mem=31.90G  box=0.0176  obj=0.0004  cls=0.0000
+  [  4/99][1600/2337]  mem=31.90G  box=0.0177  obj=0.0004  cls=0.0000
+  [  4/99][1650/2337]  mem=31.90G  box=0.0177  obj=0.0004  cls=0.0000
+  [  4/99][1700/2337]  mem=31.90G  box=0.0177  obj=0.0004  cls=0.0000
+  [  4/99][1750/2337]  mem=31.90G  box=0.0176  obj=0.0004  cls=0.0000
+  [  4/99][1800/2337]  mem=31.90G  box=0.0177  obj=0.0004  cls=0.0000
+  [  4/99][1850/2337]  mem=31.90G  box=0.0177  obj=0.0004  cls=0.0000
+  [  4/99][1900/2337]  mem=31.90G  box=0.0176  obj=0.0004  cls=0.0000
+  [  4/99][1950/2337]  mem=31.90G  box=0.0176  obj=0.0004  cls=0.0000
+  [  4/99][2000/2337]  mem=31.90G  box=0.0175  obj=0.0004  cls=0.0000
+  [  4/99][2050/2337]  mem=31.90G  box=0.0175  obj=0.0004  cls=0.0000
+  [  4/99][2100/2337]  mem=31.90G  box=0.0175  obj=0.0004  cls=0.0000
+  [  4/99][2150/2337]  mem=31.90G  box=0.0175  obj=0.0004  cls=0.0000
+  [  4/99][2200/2337]  mem=31.90G  box=0.0175  obj=0.0004  cls=0.0000
+  [  4/99][2250/2337]  mem=31.90G  box=0.0175  obj=0.0004  cls=0.0000
+  [  4/99][2300/2337]  mem=31.90G  box=0.0176  obj=0.0004  cls=0.0000
+
+Epoch   4/99  loss=0.0180  mAP@0.5=0.5626  mAP@0.5:0.95=0.5626
+
+  ✓ New best mAP@0.5 = 0.5626  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [  5/99][   0/2337]  mem=31.90G  box=0.0098  obj=0.0003  cls=0.0000
+  [  5/99][  50/2337]  mem=31.90G  box=0.0171  obj=0.0003  cls=0.0000
+  [  5/99][ 100/2337]  mem=31.90G  box=0.0163  obj=0.0003  cls=0.0000
+  [  5/99][ 150/2337]  mem=31.90G  box=0.0169  obj=0.0003  cls=0.0000
+  [  5/99][ 200/2337]  mem=31.90G  box=0.0168  obj=0.0003  cls=0.0000
+  [  5/99][ 250/2337]  mem=31.90G  box=0.0170  obj=0.0003  cls=0.0000
+  [  5/99][ 300/2337]  mem=31.90G  box=0.0170  obj=0.0003  cls=0.0000
+  [  5/99][ 350/2337]  mem=31.90G  box=0.0173  obj=0.0003  cls=0.0000
+  [  5/99][ 400/2337]  mem=31.90G  box=0.0171  obj=0.0003  cls=0.0000
+  [  5/99][ 450/2337]  mem=31.90G  box=0.0170  obj=0.0003  cls=0.0000
+  [  5/99][ 500/2337]  mem=31.90G  box=0.0171  obj=0.0003  cls=0.0000
+  [  5/99][ 550/2337]  mem=31.90G  box=0.0171  obj=0.0003  cls=0.0000
+  [  5/99][ 600/2337]  mem=31.90G  box=0.0172  obj=0.0003  cls=0.0000
+  [  5/99][ 650/2337]  mem=31.90G  box=0.0171  obj=0.0003  cls=0.0000
+  [  5/99][ 700/2337]  mem=31.90G  box=0.0171  obj=0.0003  cls=0.0000
+  [  5/99][ 750/2337]  mem=31.90G  box=0.0171  obj=0.0003  cls=0.0000
+  [  5/99][ 800/2337]  mem=31.90G  box=0.0170  obj=0.0003  cls=0.0000
+  [  5/99][ 850/2337]  mem=31.90G  box=0.0172  obj=0.0003  cls=0.0000
+  [  5/99][ 900/2337]  mem=31.90G  box=0.0172  obj=0.0003  cls=0.0000
+  [  5/99][ 950/2337]  mem=31.90G  box=0.0173  obj=0.0003  cls=0.0000
+  [  5/99][1000/2337]  mem=31.90G  box=0.0172  obj=0.0003  cls=0.0000
+  [  5/99][1050/2337]  mem=31.90G  box=0.0173  obj=0.0003  cls=0.0000
+  [  5/99][1100/2337]  mem=31.90G  box=0.0172  obj=0.0003  cls=0.0000
+  [  5/99][1150/2337]  mem=31.90G  box=0.0171  obj=0.0003  cls=0.0000
+  [  5/99][1200/2337]  mem=31.90G  box=0.0171  obj=0.0003  cls=0.0000
+  [  5/99][1250/2337]  mem=31.90G  box=0.0172  obj=0.0003  cls=0.0000
+  [  5/99][1300/2337]  mem=31.90G  box=0.0171  obj=0.0003  cls=0.0000
+  [  5/99][1350/2337]  mem=31.90G  box=0.0172  obj=0.0003  cls=0.0000
+  [  5/99][1400/2337]  mem=31.90G  box=0.0171  obj=0.0003  cls=0.0000
+  [  5/99][1450/2337]  mem=31.90G  box=0.0171  obj=0.0003  cls=0.0000
+  [  5/99][1500/2337]  mem=31.90G  box=0.0171  obj=0.0003  cls=0.0000
+  [  5/99][1550/2337]  mem=31.90G  box=0.0171  obj=0.0003  cls=0.0000
+  [  5/99][1600/2337]  mem=31.90G  box=0.0171  obj=0.0003  cls=0.0000
+  [  5/99][1650/2337]  mem=31.90G  box=0.0171  obj=0.0003  cls=0.0000
+  [  5/99][1700/2337]  mem=31.90G  box=0.0171  obj=0.0003  cls=0.0000
+  [  5/99][1750/2337]  mem=31.90G  box=0.0171  obj=0.0003  cls=0.0000
+  [  5/99][1800/2337]  mem=31.90G  box=0.0171  obj=0.0003  cls=0.0000
+  [  5/99][1850/2337]  mem=31.90G  box=0.0171  obj=0.0003  cls=0.0000
+  [  5/99][1900/2337]  mem=31.90G  box=0.0171  obj=0.0003  cls=0.0000
+  [  5/99][1950/2337]  mem=31.90G  box=0.0171  obj=0.0003  cls=0.0000
+  [  5/99][2000/2337]  mem=31.90G  box=0.0172  obj=0.0003  cls=0.0000
+  [  5/99][2050/2337]  mem=31.90G  box=0.0171  obj=0.0003  cls=0.0000
+  [  5/99][2100/2337]  mem=31.90G  box=0.0171  obj=0.0003  cls=0.0000
+  [  5/99][2150/2337]  mem=31.90G  box=0.0172  obj=0.0003  cls=0.0000
+  [  5/99][2200/2337]  mem=31.90G  box=0.0172  obj=0.0003  cls=0.0000
+  [  5/99][2250/2337]  mem=31.90G  box=0.0173  obj=0.0003  cls=0.0000
+  [  5/99][2300/2337]  mem=31.90G  box=0.0173  obj=0.0003  cls=0.0000
+
+Epoch   5/99  loss=0.0175  mAP@0.5=0.5740  mAP@0.5:0.95=0.5740
+
+  ✓ New best mAP@0.5 = 0.5740  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [  6/99][   0/2337]  mem=31.90G  box=0.0236  obj=0.0004  cls=0.0000
+  [  6/99][  50/2337]  mem=31.90G  box=0.0169  obj=0.0003  cls=0.0000
+  [  6/99][ 100/2337]  mem=31.90G  box=0.0168  obj=0.0003  cls=0.0000
+  [  6/99][ 150/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [  6/99][ 200/2337]  mem=31.90G  box=0.0160  obj=0.0003  cls=0.0000
+  [  6/99][ 250/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  6/99][ 300/2337]  mem=31.90G  box=0.0168  obj=0.0003  cls=0.0000
+  [  6/99][ 350/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [  6/99][ 400/2337]  mem=31.90G  box=0.0163  obj=0.0003  cls=0.0000
+  [  6/99][ 450/2337]  mem=31.90G  box=0.0163  obj=0.0003  cls=0.0000
+  [  6/99][ 500/2337]  mem=31.90G  box=0.0162  obj=0.0003  cls=0.0000
+  [  6/99][ 550/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  6/99][ 600/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  6/99][ 650/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [  6/99][ 700/2337]  mem=31.90G  box=0.0167  obj=0.0003  cls=0.0000
+  [  6/99][ 750/2337]  mem=31.90G  box=0.0169  obj=0.0003  cls=0.0000
+  [  6/99][ 800/2337]  mem=31.90G  box=0.0168  obj=0.0003  cls=0.0000
+  [  6/99][ 850/2337]  mem=31.90G  box=0.0167  obj=0.0003  cls=0.0000
+  [  6/99][ 900/2337]  mem=31.90G  box=0.0167  obj=0.0003  cls=0.0000
+  [  6/99][ 950/2337]  mem=31.90G  box=0.0168  obj=0.0003  cls=0.0000
+  [  6/99][1000/2337]  mem=31.90G  box=0.0168  obj=0.0003  cls=0.0000
+  [  6/99][1050/2337]  mem=31.90G  box=0.0169  obj=0.0003  cls=0.0000
+  [  6/99][1100/2337]  mem=31.90G  box=0.0168  obj=0.0003  cls=0.0000
+  [  6/99][1150/2337]  mem=31.90G  box=0.0168  obj=0.0003  cls=0.0000
+  [  6/99][1200/2337]  mem=31.90G  box=0.0167  obj=0.0003  cls=0.0000
+  [  6/99][1250/2337]  mem=31.90G  box=0.0166  obj=0.0003  cls=0.0000
+  [  6/99][1300/2337]  mem=31.90G  box=0.0166  obj=0.0003  cls=0.0000
+  [  6/99][1350/2337]  mem=31.90G  box=0.0166  obj=0.0003  cls=0.0000
+  [  6/99][1400/2337]  mem=31.90G  box=0.0166  obj=0.0003  cls=0.0000
+  [  6/99][1450/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [  6/99][1500/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [  6/99][1550/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [  6/99][1600/2337]  mem=31.90G  box=0.0166  obj=0.0003  cls=0.0000
+  [  6/99][1650/2337]  mem=31.90G  box=0.0166  obj=0.0003  cls=0.0000
+  [  6/99][1700/2337]  mem=31.90G  box=0.0166  obj=0.0003  cls=0.0000
+  [  6/99][1750/2337]  mem=31.90G  box=0.0166  obj=0.0003  cls=0.0000
+  [  6/99][1800/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [  6/99][1850/2337]  mem=31.90G  box=0.0166  obj=0.0003  cls=0.0000
+  [  6/99][1900/2337]  mem=31.90G  box=0.0166  obj=0.0003  cls=0.0000
+  [  6/99][1950/2337]  mem=31.90G  box=0.0166  obj=0.0003  cls=0.0000
+  [  6/99][2000/2337]  mem=31.90G  box=0.0167  obj=0.0003  cls=0.0000
+  [  6/99][2050/2337]  mem=31.90G  box=0.0166  obj=0.0003  cls=0.0000
+  [  6/99][2100/2337]  mem=31.90G  box=0.0167  obj=0.0003  cls=0.0000
+  [  6/99][2150/2337]  mem=31.90G  box=0.0167  obj=0.0003  cls=0.0000
+  [  6/99][2200/2337]  mem=31.90G  box=0.0167  obj=0.0003  cls=0.0000
+  [  6/99][2250/2337]  mem=31.90G  box=0.0167  obj=0.0003  cls=0.0000
+  [  6/99][2300/2337]  mem=31.90G  box=0.0167  obj=0.0003  cls=0.0000
+
+Epoch   6/99  loss=0.0172  mAP@0.5=0.5821  mAP@0.5:0.95=0.5821
+
+  ✓ New best mAP@0.5 = 0.5821  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [  7/99][   0/2337]  mem=31.90G  box=0.0098  obj=0.0003  cls=0.0000
+  [  7/99][  50/2337]  mem=31.90G  box=0.0168  obj=0.0003  cls=0.0000
+  [  7/99][ 100/2337]  mem=31.90G  box=0.0163  obj=0.0003  cls=0.0000
+  [  7/99][ 150/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  7/99][ 200/2337]  mem=31.90G  box=0.0168  obj=0.0003  cls=0.0000
+  [  7/99][ 250/2337]  mem=31.90G  box=0.0171  obj=0.0003  cls=0.0000
+  [  7/99][ 300/2337]  mem=31.90G  box=0.0169  obj=0.0003  cls=0.0000
+  [  7/99][ 350/2337]  mem=31.90G  box=0.0168  obj=0.0003  cls=0.0000
+  [  7/99][ 400/2337]  mem=31.90G  box=0.0166  obj=0.0003  cls=0.0000
+  [  7/99][ 450/2337]  mem=31.90G  box=0.0166  obj=0.0003  cls=0.0000
+  [  7/99][ 500/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  7/99][ 550/2337]  mem=31.90G  box=0.0163  obj=0.0003  cls=0.0000
+  [  7/99][ 600/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [  7/99][ 650/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  7/99][ 700/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  7/99][ 750/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [  7/99][ 800/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  7/99][ 850/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  7/99][ 900/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  7/99][ 950/2337]  mem=31.90G  box=0.0163  obj=0.0003  cls=0.0000
+  [  7/99][1000/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  7/99][1050/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  7/99][1100/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  7/99][1150/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  7/99][1200/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  7/99][1250/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  7/99][1300/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  7/99][1350/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  7/99][1400/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [  7/99][1450/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [  7/99][1500/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [  7/99][1550/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [  7/99][1600/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [  7/99][1650/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  7/99][1700/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  7/99][1750/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  7/99][1800/2337]  mem=31.90G  box=0.0163  obj=0.0003  cls=0.0000
+  [  7/99][1850/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  7/99][1900/2337]  mem=31.90G  box=0.0163  obj=0.0003  cls=0.0000
+  [  7/99][1950/2337]  mem=31.90G  box=0.0163  obj=0.0003  cls=0.0000
+  [  7/99][2000/2337]  mem=31.90G  box=0.0163  obj=0.0003  cls=0.0000
+  [  7/99][2050/2337]  mem=31.90G  box=0.0163  obj=0.0003  cls=0.0000
+  [  7/99][2100/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  7/99][2150/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  7/99][2200/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  7/99][2250/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  7/99][2300/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+
+Epoch   7/99  loss=0.0169  mAP@0.5=0.5871  mAP@0.5:0.95=0.5871
+
+  ✓ New best mAP@0.5 = 0.5871  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [  8/99][   0/2337]  mem=31.90G  box=0.0118  obj=0.0002  cls=0.0000
+  [  8/99][  50/2337]  mem=31.90G  box=0.0163  obj=0.0003  cls=0.0000
+  [  8/99][ 100/2337]  mem=31.90G  box=0.0159  obj=0.0003  cls=0.0000
+  [  8/99][ 150/2337]  mem=31.90G  box=0.0160  obj=0.0003  cls=0.0000
+  [  8/99][ 200/2337]  mem=31.90G  box=0.0163  obj=0.0003  cls=0.0000
+  [  8/99][ 250/2337]  mem=31.90G  box=0.0163  obj=0.0003  cls=0.0000
+  [  8/99][ 300/2337]  mem=31.90G  box=0.0159  obj=0.0003  cls=0.0000
+  [  8/99][ 350/2337]  mem=31.90G  box=0.0162  obj=0.0003  cls=0.0000
+  [  8/99][ 400/2337]  mem=31.90G  box=0.0162  obj=0.0003  cls=0.0000
+  [  8/99][ 450/2337]  mem=31.90G  box=0.0166  obj=0.0003  cls=0.0000
+  [  8/99][ 500/2337]  mem=31.90G  box=0.0167  obj=0.0003  cls=0.0000
+  [  8/99][ 550/2337]  mem=31.90G  box=0.0167  obj=0.0003  cls=0.0000
+  [  8/99][ 600/2337]  mem=31.90G  box=0.0167  obj=0.0003  cls=0.0000
+  [  8/99][ 650/2337]  mem=31.90G  box=0.0167  obj=0.0003  cls=0.0000
+  [  8/99][ 700/2337]  mem=31.90G  box=0.0167  obj=0.0003  cls=0.0000
+  [  8/99][ 750/2337]  mem=31.90G  box=0.0167  obj=0.0003  cls=0.0000
+  [  8/99][ 800/2337]  mem=31.90G  box=0.0167  obj=0.0003  cls=0.0000
+  [  8/99][ 850/2337]  mem=31.90G  box=0.0166  obj=0.0003  cls=0.0000
+  [  8/99][ 900/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [  8/99][ 950/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [  8/99][1000/2337]  mem=31.90G  box=0.0166  obj=0.0003  cls=0.0000
+  [  8/99][1050/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [  8/99][1100/2337]  mem=31.90G  box=0.0166  obj=0.0003  cls=0.0000
+  [  8/99][1150/2337]  mem=31.90G  box=0.0166  obj=0.0003  cls=0.0000
+  [  8/99][1200/2337]  mem=31.90G  box=0.0166  obj=0.0003  cls=0.0000
+  [  8/99][1250/2337]  mem=31.90G  box=0.0166  obj=0.0003  cls=0.0000
+  [  8/99][1300/2337]  mem=31.90G  box=0.0166  obj=0.0003  cls=0.0000
+  [  8/99][1350/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [  8/99][1400/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [  8/99][1450/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [  8/99][1500/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [  8/99][1550/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  8/99][1600/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [  8/99][1650/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [  8/99][1700/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [  8/99][1750/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  8/99][1800/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  8/99][1850/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  8/99][1900/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  8/99][1950/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  8/99][2000/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  8/99][2050/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [  8/99][2100/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  8/99][2150/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  8/99][2200/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [  8/99][2250/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  8/99][2300/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+
+Epoch   8/99  loss=0.0167  mAP@0.5=0.5865  mAP@0.5:0.95=0.5865
+
+  [  9/99][   0/2337]  mem=31.90G  box=0.0097  obj=0.0002  cls=0.0000
+  [  9/99][  50/2337]  mem=31.90G  box=0.0155  obj=0.0003  cls=0.0000
+  [  9/99][ 100/2337]  mem=31.90G  box=0.0154  obj=0.0003  cls=0.0000
+  [  9/99][ 150/2337]  mem=31.90G  box=0.0160  obj=0.0003  cls=0.0000
+  [  9/99][ 200/2337]  mem=31.90G  box=0.0162  obj=0.0003  cls=0.0000
+  [  9/99][ 250/2337]  mem=31.90G  box=0.0163  obj=0.0003  cls=0.0000
+  [  9/99][ 300/2337]  mem=31.90G  box=0.0168  obj=0.0003  cls=0.0000
+  [  9/99][ 350/2337]  mem=31.90G  box=0.0168  obj=0.0003  cls=0.0000
+  [  9/99][ 400/2337]  mem=31.90G  box=0.0169  obj=0.0003  cls=0.0000
+  [  9/99][ 450/2337]  mem=31.90G  box=0.0169  obj=0.0003  cls=0.0000
+  [  9/99][ 500/2337]  mem=31.90G  box=0.0169  obj=0.0003  cls=0.0000
+  [  9/99][ 550/2337]  mem=31.90G  box=0.0170  obj=0.0003  cls=0.0000
+  [  9/99][ 600/2337]  mem=31.90G  box=0.0167  obj=0.0003  cls=0.0000
+  [  9/99][ 650/2337]  mem=31.90G  box=0.0167  obj=0.0003  cls=0.0000
+  [  9/99][ 700/2337]  mem=31.90G  box=0.0166  obj=0.0003  cls=0.0000
+  [  9/99][ 750/2337]  mem=31.90G  box=0.0166  obj=0.0003  cls=0.0000
+  [  9/99][ 800/2337]  mem=31.90G  box=0.0168  obj=0.0003  cls=0.0000
+  [  9/99][ 850/2337]  mem=31.90G  box=0.0169  obj=0.0003  cls=0.0000
+  [  9/99][ 900/2337]  mem=31.90G  box=0.0169  obj=0.0003  cls=0.0000
+  [  9/99][ 950/2337]  mem=31.90G  box=0.0169  obj=0.0003  cls=0.0000
+  [  9/99][1000/2337]  mem=31.90G  box=0.0168  obj=0.0003  cls=0.0000
+  [  9/99][1050/2337]  mem=31.90G  box=0.0168  obj=0.0003  cls=0.0000
+  [  9/99][1100/2337]  mem=31.90G  box=0.0168  obj=0.0003  cls=0.0000
+  [  9/99][1150/2337]  mem=31.90G  box=0.0168  obj=0.0003  cls=0.0000
+  [  9/99][1200/2337]  mem=31.90G  box=0.0168  obj=0.0003  cls=0.0000
+  [  9/99][1250/2337]  mem=31.90G  box=0.0168  obj=0.0003  cls=0.0000
+  [  9/99][1300/2337]  mem=31.90G  box=0.0168  obj=0.0003  cls=0.0000
+  [  9/99][1350/2337]  mem=31.90G  box=0.0168  obj=0.0003  cls=0.0000
+  [  9/99][1400/2337]  mem=31.90G  box=0.0168  obj=0.0003  cls=0.0000
+  [  9/99][1450/2337]  mem=31.90G  box=0.0168  obj=0.0003  cls=0.0000
+  [  9/99][1500/2337]  mem=31.90G  box=0.0168  obj=0.0003  cls=0.0000
+  [  9/99][1550/2337]  mem=31.90G  box=0.0168  obj=0.0003  cls=0.0000
+  [  9/99][1600/2337]  mem=31.90G  box=0.0168  obj=0.0003  cls=0.0000
+  [  9/99][1650/2337]  mem=31.90G  box=0.0167  obj=0.0003  cls=0.0000
+  [  9/99][1700/2337]  mem=31.90G  box=0.0167  obj=0.0003  cls=0.0000
+  [  9/99][1750/2337]  mem=31.90G  box=0.0167  obj=0.0003  cls=0.0000
+  [  9/99][1800/2337]  mem=31.90G  box=0.0167  obj=0.0003  cls=0.0000
+  [  9/99][1850/2337]  mem=31.90G  box=0.0166  obj=0.0003  cls=0.0000
+  [  9/99][1900/2337]  mem=31.90G  box=0.0166  obj=0.0003  cls=0.0000
+  [  9/99][1950/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [  9/99][2000/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [  9/99][2050/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [  9/99][2100/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [  9/99][2150/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [  9/99][2200/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [  9/99][2250/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [  9/99][2300/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+
+Epoch   9/99  loss=0.0165  mAP@0.5=0.5864  mAP@0.5:0.95=0.5864
+
+  [ 10/99][   0/2337]  mem=31.90G  box=0.0311  obj=0.0003  cls=0.0000
+  [ 10/99][  50/2337]  mem=31.90G  box=0.0176  obj=0.0003  cls=0.0000
+  [ 10/99][ 100/2337]  mem=31.90G  box=0.0170  obj=0.0003  cls=0.0000
+  [ 10/99][ 150/2337]  mem=31.90G  box=0.0168  obj=0.0003  cls=0.0000
+  [ 10/99][ 200/2337]  mem=31.90G  box=0.0167  obj=0.0003  cls=0.0000
+  [ 10/99][ 250/2337]  mem=31.90G  box=0.0170  obj=0.0003  cls=0.0000
+  [ 10/99][ 300/2337]  mem=31.90G  box=0.0170  obj=0.0003  cls=0.0000
+  [ 10/99][ 350/2337]  mem=31.90G  box=0.0167  obj=0.0003  cls=0.0000
+  [ 10/99][ 400/2337]  mem=31.90G  box=0.0167  obj=0.0003  cls=0.0000
+  [ 10/99][ 450/2337]  mem=31.90G  box=0.0168  obj=0.0003  cls=0.0000
+  [ 10/99][ 500/2337]  mem=31.90G  box=0.0168  obj=0.0003  cls=0.0000
+  [ 10/99][ 550/2337]  mem=31.90G  box=0.0168  obj=0.0003  cls=0.0000
+  [ 10/99][ 600/2337]  mem=31.90G  box=0.0167  obj=0.0003  cls=0.0000
+  [ 10/99][ 650/2337]  mem=31.90G  box=0.0166  obj=0.0003  cls=0.0000
+  [ 10/99][ 700/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [ 10/99][ 750/2337]  mem=31.90G  box=0.0166  obj=0.0003  cls=0.0000
+  [ 10/99][ 800/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [ 10/99][ 850/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [ 10/99][ 900/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [ 10/99][ 950/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [ 10/99][1000/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [ 10/99][1050/2337]  mem=31.90G  box=0.0166  obj=0.0003  cls=0.0000
+  [ 10/99][1100/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [ 10/99][1150/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [ 10/99][1200/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [ 10/99][1250/2337]  mem=31.90G  box=0.0163  obj=0.0003  cls=0.0000
+  [ 10/99][1300/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [ 10/99][1350/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [ 10/99][1400/2337]  mem=31.90G  box=0.0163  obj=0.0003  cls=0.0000
+  [ 10/99][1450/2337]  mem=31.90G  box=0.0163  obj=0.0003  cls=0.0000
+  [ 10/99][1500/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [ 10/99][1550/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [ 10/99][1600/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [ 10/99][1650/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [ 10/99][1700/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [ 10/99][1750/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [ 10/99][1800/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [ 10/99][1850/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [ 10/99][1900/2337]  mem=31.90G  box=0.0164  obj=0.0003  cls=0.0000
+  [ 10/99][1950/2337]  mem=31.90G  box=0.0163  obj=0.0003  cls=0.0000
+  [ 10/99][2000/2337]  mem=31.90G  box=0.0163  obj=0.0003  cls=0.0000
+  [ 10/99][2050/2337]  mem=31.90G  box=0.0163  obj=0.0003  cls=0.0000
+  [ 10/99][2100/2337]  mem=31.90G  box=0.0163  obj=0.0003  cls=0.0000
+  [ 10/99][2150/2337]  mem=31.90G  box=0.0163  obj=0.0003  cls=0.0000
+  [ 10/99][2200/2337]  mem=31.90G  box=0.0163  obj=0.0003  cls=0.0000
+  [ 10/99][2250/2337]  mem=31.90G  box=0.0163  obj=0.0003  cls=0.0000
+  [ 10/99][2300/2337]  mem=31.90G  box=0.0163  obj=0.0003  cls=0.0000
+
+Epoch  10/99  loss=0.0163  mAP@0.5=0.5873  mAP@0.5:0.95=0.5873
+
+  ✓ New best mAP@0.5 = 0.5873  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [ 11/99][   0/2337]  mem=31.90G  box=0.0098  obj=0.0003  cls=0.0000
+  [ 11/99][  50/2337]  mem=31.90G  box=0.0153  obj=0.0003  cls=0.0000
+  [ 11/99][ 100/2337]  mem=31.90G  box=0.0159  obj=0.0003  cls=0.0000
+  [ 11/99][ 150/2337]  mem=31.90G  box=0.0161  obj=0.0003  cls=0.0000
+  [ 11/99][ 200/2337]  mem=31.90G  box=0.0162  obj=0.0003  cls=0.0000
+  [ 11/99][ 250/2337]  mem=31.90G  box=0.0158  obj=0.0003  cls=0.0000
+  [ 11/99][ 300/2337]  mem=31.90G  box=0.0158  obj=0.0003  cls=0.0000
+  [ 11/99][ 350/2337]  mem=31.90G  box=0.0160  obj=0.0003  cls=0.0000
+  [ 11/99][ 400/2337]  mem=31.90G  box=0.0162  obj=0.0003  cls=0.0000
+  [ 11/99][ 450/2337]  mem=31.90G  box=0.0161  obj=0.0003  cls=0.0000
+  [ 11/99][ 500/2337]  mem=31.90G  box=0.0161  obj=0.0003  cls=0.0000
+  [ 11/99][ 550/2337]  mem=31.90G  box=0.0161  obj=0.0003  cls=0.0000
+  [ 11/99][ 600/2337]  mem=31.90G  box=0.0161  obj=0.0003  cls=0.0000
+  [ 11/99][ 650/2337]  mem=31.90G  box=0.0160  obj=0.0003  cls=0.0000
+  [ 11/99][ 700/2337]  mem=31.90G  box=0.0161  obj=0.0003  cls=0.0000
+  [ 11/99][ 750/2337]  mem=31.90G  box=0.0160  obj=0.0003  cls=0.0000
+  [ 11/99][ 800/2337]  mem=31.90G  box=0.0160  obj=0.0003  cls=0.0000
+  [ 11/99][ 850/2337]  mem=31.90G  box=0.0159  obj=0.0003  cls=0.0000
+  [ 11/99][ 900/2337]  mem=31.90G  box=0.0159  obj=0.0003  cls=0.0000
+  [ 11/99][ 950/2337]  mem=31.90G  box=0.0158  obj=0.0003  cls=0.0000
+  [ 11/99][1000/2337]  mem=31.90G  box=0.0159  obj=0.0003  cls=0.0000
+  [ 11/99][1050/2337]  mem=31.90G  box=0.0158  obj=0.0003  cls=0.0000
+  [ 11/99][1100/2337]  mem=31.90G  box=0.0158  obj=0.0003  cls=0.0000
+  [ 11/99][1150/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 11/99][1200/2337]  mem=31.90G  box=0.0158  obj=0.0003  cls=0.0000
+  [ 11/99][1250/2337]  mem=31.90G  box=0.0158  obj=0.0003  cls=0.0000
+  [ 11/99][1300/2337]  mem=31.90G  box=0.0158  obj=0.0003  cls=0.0000
+  [ 11/99][1350/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 11/99][1400/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 11/99][1450/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 11/99][1500/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 11/99][1550/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 11/99][1600/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 11/99][1650/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 11/99][1700/2337]  mem=31.90G  box=0.0156  obj=0.0003  cls=0.0000
+  [ 11/99][1750/2337]  mem=31.90G  box=0.0156  obj=0.0003  cls=0.0000
+  [ 11/99][1800/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 11/99][1850/2337]  mem=31.90G  box=0.0156  obj=0.0003  cls=0.0000
+  [ 11/99][1900/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 11/99][1950/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 11/99][2000/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 11/99][2050/2337]  mem=31.90G  box=0.0156  obj=0.0003  cls=0.0000
+  [ 11/99][2100/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 11/99][2150/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 11/99][2200/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 11/99][2250/2337]  mem=31.90G  box=0.0156  obj=0.0003  cls=0.0000
+  [ 11/99][2300/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+
+Epoch  11/99  loss=0.0162  mAP@0.5=0.5876  mAP@0.5:0.95=0.5876
+
+  ✓ New best mAP@0.5 = 0.5876  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [ 12/99][   0/2337]  mem=31.90G  box=0.0106  obj=0.0002  cls=0.0000
+  [ 12/99][  50/2337]  mem=31.90G  box=0.0147  obj=0.0003  cls=0.0000
+  [ 12/99][ 100/2337]  mem=31.90G  box=0.0166  obj=0.0003  cls=0.0000
+  [ 12/99][ 150/2337]  mem=31.90G  box=0.0162  obj=0.0003  cls=0.0000
+  [ 12/99][ 200/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [ 12/99][ 250/2337]  mem=31.90G  box=0.0165  obj=0.0003  cls=0.0000
+  [ 12/99][ 300/2337]  mem=31.90G  box=0.0163  obj=0.0003  cls=0.0000
+  [ 12/99][ 350/2337]  mem=31.90G  box=0.0160  obj=0.0003  cls=0.0000
+  [ 12/99][ 400/2337]  mem=31.90G  box=0.0160  obj=0.0003  cls=0.0000
+  [ 12/99][ 450/2337]  mem=31.90G  box=0.0159  obj=0.0003  cls=0.0000
+  [ 12/99][ 500/2337]  mem=31.90G  box=0.0158  obj=0.0003  cls=0.0000
+  [ 12/99][ 550/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 12/99][ 600/2337]  mem=31.90G  box=0.0159  obj=0.0003  cls=0.0000
+  [ 12/99][ 650/2337]  mem=31.90G  box=0.0161  obj=0.0003  cls=0.0000
+  [ 12/99][ 700/2337]  mem=31.90G  box=0.0160  obj=0.0003  cls=0.0000
+  [ 12/99][ 750/2337]  mem=31.90G  box=0.0161  obj=0.0003  cls=0.0000
+  [ 12/99][ 800/2337]  mem=31.90G  box=0.0161  obj=0.0003  cls=0.0000
+  [ 12/99][ 850/2337]  mem=31.90G  box=0.0161  obj=0.0003  cls=0.0000
+  [ 12/99][ 900/2337]  mem=31.90G  box=0.0160  obj=0.0003  cls=0.0000
+  [ 12/99][ 950/2337]  mem=31.90G  box=0.0159  obj=0.0003  cls=0.0000
+  [ 12/99][1000/2337]  mem=31.90G  box=0.0158  obj=0.0003  cls=0.0000
+  [ 12/99][1050/2337]  mem=31.90G  box=0.0158  obj=0.0003  cls=0.0000
+  [ 12/99][1100/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 12/99][1150/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 12/99][1200/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 12/99][1250/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 12/99][1300/2337]  mem=31.90G  box=0.0158  obj=0.0003  cls=0.0000
+  [ 12/99][1350/2337]  mem=31.90G  box=0.0159  obj=0.0003  cls=0.0000
+  [ 12/99][1400/2337]  mem=31.90G  box=0.0158  obj=0.0003  cls=0.0000
+  [ 12/99][1450/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 12/99][1500/2337]  mem=31.90G  box=0.0158  obj=0.0003  cls=0.0000
+  [ 12/99][1550/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 12/99][1600/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 12/99][1650/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 12/99][1700/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 12/99][1750/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 12/99][1800/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 12/99][1850/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 12/99][1900/2337]  mem=31.90G  box=0.0156  obj=0.0003  cls=0.0000
+  [ 12/99][1950/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 12/99][2000/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 12/99][2050/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 12/99][2100/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 12/99][2150/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 12/99][2200/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 12/99][2250/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 12/99][2300/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+
+Epoch  12/99  loss=0.0160  mAP@0.5=0.5881  mAP@0.5:0.95=0.5881
+
+  ✓ New best mAP@0.5 = 0.5881  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [ 13/99][   0/2337]  mem=31.90G  box=0.0102  obj=0.0002  cls=0.0000
+  [ 13/99][  50/2337]  mem=31.90G  box=0.0156  obj=0.0003  cls=0.0000
+  [ 13/99][ 100/2337]  mem=31.90G  box=0.0144  obj=0.0003  cls=0.0000
+  [ 13/99][ 150/2337]  mem=31.90G  box=0.0144  obj=0.0003  cls=0.0000
+  [ 13/99][ 200/2337]  mem=31.90G  box=0.0150  obj=0.0003  cls=0.0000
+  [ 13/99][ 250/2337]  mem=31.90G  box=0.0153  obj=0.0003  cls=0.0000
+  [ 13/99][ 300/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 13/99][ 350/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 13/99][ 400/2337]  mem=31.90G  box=0.0154  obj=0.0003  cls=0.0000
+  [ 13/99][ 450/2337]  mem=31.90G  box=0.0155  obj=0.0003  cls=0.0000
+  [ 13/99][ 500/2337]  mem=31.90G  box=0.0155  obj=0.0003  cls=0.0000
+  [ 13/99][ 550/2337]  mem=31.90G  box=0.0156  obj=0.0003  cls=0.0000
+  [ 13/99][ 600/2337]  mem=31.90G  box=0.0156  obj=0.0003  cls=0.0000
+  [ 13/99][ 650/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 13/99][ 700/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 13/99][ 750/2337]  mem=31.90G  box=0.0156  obj=0.0003  cls=0.0000
+  [ 13/99][ 800/2337]  mem=31.90G  box=0.0155  obj=0.0003  cls=0.0000
+  [ 13/99][ 850/2337]  mem=31.90G  box=0.0156  obj=0.0003  cls=0.0000
+  [ 13/99][ 900/2337]  mem=31.90G  box=0.0156  obj=0.0003  cls=0.0000
+  [ 13/99][ 950/2337]  mem=31.90G  box=0.0156  obj=0.0003  cls=0.0000
+  [ 13/99][1000/2337]  mem=31.90G  box=0.0156  obj=0.0003  cls=0.0000
+  [ 13/99][1050/2337]  mem=31.90G  box=0.0156  obj=0.0003  cls=0.0000
+  [ 13/99][1100/2337]  mem=31.90G  box=0.0156  obj=0.0003  cls=0.0000
+  [ 13/99][1150/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 13/99][1200/2337]  mem=31.90G  box=0.0156  obj=0.0003  cls=0.0000
+  [ 13/99][1250/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 13/99][1300/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 13/99][1350/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 13/99][1400/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 13/99][1450/2337]  mem=31.90G  box=0.0157  obj=0.0003  cls=0.0000
+  [ 13/99][1500/2337]  mem=31.90G  box=0.0156  obj=0.0003  cls=0.0000
+  [ 13/99][1550/2337]  mem=31.90G  box=0.0156  obj=0.0003  cls=0.0000
+  [ 13/99][1600/2337]  mem=31.90G  box=0.0156  obj=0.0003  cls=0.0000
+  [ 13/99][1650/2337]  mem=31.90G  box=0.0156  obj=0.0003  cls=0.0000
+  [ 13/99][1700/2337]  mem=31.90G  box=0.0156  obj=0.0003  cls=0.0000
+  [ 13/99][1750/2337]  mem=31.90G  box=0.0156  obj=0.0003  cls=0.0000
+  [ 13/99][1800/2337]  mem=31.90G  box=0.0156  obj=0.0003  cls=0.0000
+  [ 13/99][1850/2337]  mem=31.90G  box=0.0156  obj=0.0003  cls=0.0000
+  [ 13/99][1900/2337]  mem=31.90G  box=0.0156  obj=0.0003  cls=0.0000
+  [ 13/99][1950/2337]  mem=31.90G  box=0.0156  obj=0.0003  cls=0.0000
+  [ 13/99][2000/2337]  mem=31.90G  box=0.0155  obj=0.0003  cls=0.0000
+  [ 13/99][2050/2337]  mem=31.90G  box=0.0155  obj=0.0003  cls=0.0000
+  [ 13/99][2100/2337]  mem=31.90G  box=0.0155  obj=0.0003  cls=0.0000
+  [ 13/99][2150/2337]  mem=31.90G  box=0.0155  obj=0.0003  cls=0.0000
+  [ 13/99][2200/2337]  mem=31.90G  box=0.0156  obj=0.0003  cls=0.0000
+  [ 13/99][2250/2337]  mem=31.90G  box=0.0155  obj=0.0003  cls=0.0000
+  [ 13/99][2300/2337]  mem=31.90G  box=0.0156  obj=0.0003  cls=0.0000
+
+Epoch  13/99  loss=0.0157  mAP@0.5=0.5892  mAP@0.5:0.95=0.5892
+
+  ✓ New best mAP@0.5 = 0.5892  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [ 14/99][   0/2337]  mem=31.90G  box=0.0097  obj=0.0003  cls=0.0000
+  [ 14/99][  50/2337]  mem=31.90G  box=0.0145  obj=0.0003  cls=0.0000
+  [ 14/99][ 100/2337]  mem=31.90G  box=0.0156  obj=0.0003  cls=0.0000
+  [ 14/99][ 150/2337]  mem=31.90G  box=0.0153  obj=0.0003  cls=0.0000
+  [ 14/99][ 200/2337]  mem=31.90G  box=0.0156  obj=0.0003  cls=0.0000
+  [ 14/99][ 250/2337]  mem=31.90G  box=0.0153  obj=0.0003  cls=0.0000
+  [ 14/99][ 300/2337]  mem=31.90G  box=0.0155  obj=0.0003  cls=0.0000
+  [ 14/99][ 350/2337]  mem=31.90G  box=0.0155  obj=0.0003  cls=0.0000
+  [ 14/99][ 400/2337]  mem=31.90G  box=0.0152  obj=0.0003  cls=0.0000
+  [ 14/99][ 450/2337]  mem=31.90G  box=0.0154  obj=0.0003  cls=0.0000
+  [ 14/99][ 500/2337]  mem=31.90G  box=0.0154  obj=0.0003  cls=0.0000
+  [ 14/99][ 550/2337]  mem=31.90G  box=0.0152  obj=0.0003  cls=0.0000
+  [ 14/99][ 600/2337]  mem=31.90G  box=0.0153  obj=0.0003  cls=0.0000
+  [ 14/99][ 650/2337]  mem=31.90G  box=0.0153  obj=0.0003  cls=0.0000
+  [ 14/99][ 700/2337]  mem=31.90G  box=0.0154  obj=0.0003  cls=0.0000
+  [ 14/99][ 750/2337]  mem=31.90G  box=0.0154  obj=0.0003  cls=0.0000
+  [ 14/99][ 800/2337]  mem=31.90G  box=0.0154  obj=0.0003  cls=0.0000
+  [ 14/99][ 850/2337]  mem=31.90G  box=0.0153  obj=0.0003  cls=0.0000
+  [ 14/99][ 900/2337]  mem=31.90G  box=0.0154  obj=0.0003  cls=0.0000
+  [ 14/99][ 950/2337]  mem=31.90G  box=0.0155  obj=0.0003  cls=0.0000
+  [ 14/99][1000/2337]  mem=31.90G  box=0.0155  obj=0.0003  cls=0.0000
+  [ 14/99][1050/2337]  mem=31.90G  box=0.0155  obj=0.0003  cls=0.0000
+  [ 14/99][1100/2337]  mem=31.90G  box=0.0155  obj=0.0003  cls=0.0000
+  [ 14/99][1150/2337]  mem=31.90G  box=0.0155  obj=0.0003  cls=0.0000
+  [ 14/99][1200/2337]  mem=31.90G  box=0.0154  obj=0.0003  cls=0.0000
+  [ 14/99][1250/2337]  mem=31.90G  box=0.0154  obj=0.0003  cls=0.0000
+  [ 14/99][1300/2337]  mem=31.90G  box=0.0155  obj=0.0003  cls=0.0000
+  [ 14/99][1350/2337]  mem=31.90G  box=0.0154  obj=0.0003  cls=0.0000
+  [ 14/99][1400/2337]  mem=31.90G  box=0.0155  obj=0.0003  cls=0.0000
+  [ 14/99][1450/2337]  mem=31.90G  box=0.0154  obj=0.0003  cls=0.0000
+  [ 14/99][1500/2337]  mem=31.90G  box=0.0154  obj=0.0003  cls=0.0000
+  [ 14/99][1550/2337]  mem=31.90G  box=0.0155  obj=0.0003  cls=0.0000
+  [ 14/99][1600/2337]  mem=31.90G  box=0.0155  obj=0.0003  cls=0.0000
+  [ 14/99][1650/2337]  mem=31.90G  box=0.0154  obj=0.0003  cls=0.0000
+  [ 14/99][1700/2337]  mem=31.90G  box=0.0154  obj=0.0003  cls=0.0000
+  [ 14/99][1750/2337]  mem=31.90G  box=0.0154  obj=0.0003  cls=0.0000
+  [ 14/99][1800/2337]  mem=31.90G  box=0.0154  obj=0.0003  cls=0.0000
+  [ 14/99][1850/2337]  mem=31.90G  box=0.0154  obj=0.0003  cls=0.0000
+  [ 14/99][1900/2337]  mem=31.90G  box=0.0154  obj=0.0003  cls=0.0000
+  [ 14/99][1950/2337]  mem=31.90G  box=0.0154  obj=0.0003  cls=0.0000
+  [ 14/99][2000/2337]  mem=31.90G  box=0.0154  obj=0.0003  cls=0.0000
+  [ 14/99][2050/2337]  mem=31.90G  box=0.0153  obj=0.0003  cls=0.0000
+  [ 14/99][2100/2337]  mem=31.90G  box=0.0153  obj=0.0003  cls=0.0000
+  [ 14/99][2150/2337]  mem=31.90G  box=0.0153  obj=0.0003  cls=0.0000
+  [ 14/99][2200/2337]  mem=31.90G  box=0.0153  obj=0.0003  cls=0.0000
+  [ 14/99][2250/2337]  mem=31.90G  box=0.0153  obj=0.0003  cls=0.0000
+  [ 14/99][2300/2337]  mem=31.90G  box=0.0154  obj=0.0003  cls=0.0000
+
+Epoch  14/99  loss=0.0156  mAP@0.5=0.5922  mAP@0.5:0.95=0.5922
+
+  ✓ New best mAP@0.5 = 0.5922  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [ 15/99][   0/2337]  mem=31.90G  box=0.0087  obj=0.0002  cls=0.0000
+  [ 15/99][  50/2337]  mem=31.90G  box=0.0136  obj=0.0003  cls=0.0000
+  [ 15/99][ 100/2337]  mem=31.90G  box=0.0146  obj=0.0003  cls=0.0000
+  [ 15/99][ 150/2337]  mem=31.90G  box=0.0155  obj=0.0003  cls=0.0000
+  [ 15/99][ 200/2337]  mem=31.90G  box=0.0153  obj=0.0003  cls=0.0000
+  [ 15/99][ 250/2337]  mem=31.90G  box=0.0151  obj=0.0003  cls=0.0000
+  [ 15/99][ 300/2337]  mem=31.90G  box=0.0150  obj=0.0003  cls=0.0000
+  [ 15/99][ 350/2337]  mem=31.90G  box=0.0150  obj=0.0003  cls=0.0000
+  [ 15/99][ 400/2337]  mem=31.90G  box=0.0150  obj=0.0003  cls=0.0000
+  [ 15/99][ 450/2337]  mem=31.90G  box=0.0152  obj=0.0003  cls=0.0000
+  [ 15/99][ 500/2337]  mem=31.90G  box=0.0151  obj=0.0003  cls=0.0000
+  [ 15/99][ 550/2337]  mem=31.90G  box=0.0153  obj=0.0003  cls=0.0000
+  [ 15/99][ 600/2337]  mem=31.90G  box=0.0153  obj=0.0003  cls=0.0000
+  [ 15/99][ 650/2337]  mem=31.90G  box=0.0152  obj=0.0003  cls=0.0000
+  [ 15/99][ 700/2337]  mem=31.90G  box=0.0152  obj=0.0003  cls=0.0000
+  [ 15/99][ 750/2337]  mem=31.90G  box=0.0151  obj=0.0003  cls=0.0000
+  [ 15/99][ 800/2337]  mem=31.90G  box=0.0151  obj=0.0003  cls=0.0000
+  [ 15/99][ 850/2337]  mem=31.90G  box=0.0152  obj=0.0003  cls=0.0000
+  [ 15/99][ 900/2337]  mem=31.90G  box=0.0151  obj=0.0003  cls=0.0000
+  [ 15/99][ 950/2337]  mem=31.90G  box=0.0152  obj=0.0003  cls=0.0000
+  [ 15/99][1000/2337]  mem=31.90G  box=0.0152  obj=0.0003  cls=0.0000
+  [ 15/99][1050/2337]  mem=31.90G  box=0.0151  obj=0.0003  cls=0.0000
+  [ 15/99][1100/2337]  mem=31.90G  box=0.0152  obj=0.0003  cls=0.0000
+  [ 15/99][1150/2337]  mem=31.90G  box=0.0153  obj=0.0003  cls=0.0000
+  [ 15/99][1200/2337]  mem=31.90G  box=0.0152  obj=0.0003  cls=0.0000
+  [ 15/99][1250/2337]  mem=31.90G  box=0.0153  obj=0.0003  cls=0.0000
+  [ 15/99][1300/2337]  mem=31.90G  box=0.0152  obj=0.0003  cls=0.0000
+  [ 15/99][1350/2337]  mem=31.90G  box=0.0152  obj=0.0003  cls=0.0000
+  [ 15/99][1400/2337]  mem=31.90G  box=0.0152  obj=0.0003  cls=0.0000
+  [ 15/99][1450/2337]  mem=31.90G  box=0.0152  obj=0.0003  cls=0.0000
+  [ 15/99][1500/2337]  mem=31.90G  box=0.0152  obj=0.0003  cls=0.0000
+  [ 15/99][1550/2337]  mem=31.90G  box=0.0153  obj=0.0003  cls=0.0000
+  [ 15/99][1600/2337]  mem=31.90G  box=0.0153  obj=0.0003  cls=0.0000
+  [ 15/99][1650/2337]  mem=31.90G  box=0.0153  obj=0.0003  cls=0.0000
+  [ 15/99][1700/2337]  mem=31.90G  box=0.0153  obj=0.0003  cls=0.0000
+  [ 15/99][1750/2337]  mem=31.90G  box=0.0153  obj=0.0003  cls=0.0000
+  [ 15/99][1800/2337]  mem=31.90G  box=0.0152  obj=0.0003  cls=0.0000
+  [ 15/99][1850/2337]  mem=31.90G  box=0.0153  obj=0.0003  cls=0.0000
+  [ 15/99][1900/2337]  mem=31.90G  box=0.0153  obj=0.0003  cls=0.0000
+  [ 15/99][1950/2337]  mem=31.90G  box=0.0153  obj=0.0003  cls=0.0000
+  [ 15/99][2000/2337]  mem=31.90G  box=0.0153  obj=0.0003  cls=0.0000
+  [ 15/99][2050/2337]  mem=31.90G  box=0.0153  obj=0.0003  cls=0.0000
+  [ 15/99][2100/2337]  mem=31.90G  box=0.0153  obj=0.0003  cls=0.0000
+  [ 15/99][2150/2337]  mem=31.90G  box=0.0154  obj=0.0003  cls=0.0000
+  [ 15/99][2200/2337]  mem=31.90G  box=0.0154  obj=0.0003  cls=0.0000
+  [ 15/99][2250/2337]  mem=31.90G  box=0.0154  obj=0.0003  cls=0.0000
+  [ 15/99][2300/2337]  mem=31.90G  box=0.0154  obj=0.0003  cls=0.0000
+
+Epoch  15/99  loss=0.0155  mAP@0.5=0.5944  mAP@0.5:0.95=0.5944
+
+  ✓ New best mAP@0.5 = 0.5944  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [ 16/99][   0/2337]  mem=31.90G  box=0.0079  obj=0.0003  cls=0.0000
+  [ 16/99][  50/2337]  mem=31.90G  box=0.0139  obj=0.0003  cls=0.0000
+  [ 16/99][ 100/2337]  mem=31.90G  box=0.0147  obj=0.0003  cls=0.0000
+  [ 16/99][ 150/2337]  mem=31.90G  box=0.0145  obj=0.0003  cls=0.0000
+  [ 16/99][ 200/2337]  mem=31.90G  box=0.0146  obj=0.0003  cls=0.0000
+  [ 16/99][ 250/2337]  mem=31.90G  box=0.0147  obj=0.0003  cls=0.0000
+  [ 16/99][ 300/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 16/99][ 350/2337]  mem=31.90G  box=0.0146  obj=0.0003  cls=0.0000
+  [ 16/99][ 400/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 16/99][ 450/2337]  mem=31.90G  box=0.0147  obj=0.0003  cls=0.0000
+  [ 16/99][ 500/2337]  mem=31.90G  box=0.0147  obj=0.0003  cls=0.0000
+  [ 16/99][ 550/2337]  mem=31.90G  box=0.0146  obj=0.0003  cls=0.0000
+  [ 16/99][ 600/2337]  mem=31.90G  box=0.0145  obj=0.0003  cls=0.0000
+  [ 16/99][ 650/2337]  mem=31.90G  box=0.0145  obj=0.0003  cls=0.0000
+  [ 16/99][ 700/2337]  mem=31.90G  box=0.0145  obj=0.0003  cls=0.0000
+  [ 16/99][ 750/2337]  mem=31.90G  box=0.0147  obj=0.0003  cls=0.0000
+  [ 16/99][ 800/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 16/99][ 850/2337]  mem=31.90G  box=0.0149  obj=0.0003  cls=0.0000
+  [ 16/99][ 900/2337]  mem=31.90G  box=0.0150  obj=0.0003  cls=0.0000
+  [ 16/99][ 950/2337]  mem=31.90G  box=0.0149  obj=0.0003  cls=0.0000
+  [ 16/99][1000/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 16/99][1050/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 16/99][1100/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 16/99][1150/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 16/99][1200/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 16/99][1250/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 16/99][1300/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 16/99][1350/2337]  mem=31.90G  box=0.0147  obj=0.0003  cls=0.0000
+  [ 16/99][1400/2337]  mem=31.90G  box=0.0147  obj=0.0003  cls=0.0000
+  [ 16/99][1450/2337]  mem=31.90G  box=0.0147  obj=0.0003  cls=0.0000
+  [ 16/99][1500/2337]  mem=31.90G  box=0.0147  obj=0.0003  cls=0.0000
+  [ 16/99][1550/2337]  mem=31.90G  box=0.0147  obj=0.0003  cls=0.0000
+  [ 16/99][1600/2337]  mem=31.90G  box=0.0146  obj=0.0003  cls=0.0000
+  [ 16/99][1650/2337]  mem=31.90G  box=0.0147  obj=0.0003  cls=0.0000
+  [ 16/99][1700/2337]  mem=31.90G  box=0.0147  obj=0.0003  cls=0.0000
+  [ 16/99][1750/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 16/99][1800/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 16/99][1850/2337]  mem=31.90G  box=0.0147  obj=0.0003  cls=0.0000
+  [ 16/99][1900/2337]  mem=31.90G  box=0.0147  obj=0.0003  cls=0.0000
+  [ 16/99][1950/2337]  mem=31.90G  box=0.0146  obj=0.0003  cls=0.0000
+  [ 16/99][2000/2337]  mem=31.90G  box=0.0146  obj=0.0003  cls=0.0000
+  [ 16/99][2050/2337]  mem=31.90G  box=0.0146  obj=0.0003  cls=0.0000
+  [ 16/99][2100/2337]  mem=31.90G  box=0.0147  obj=0.0003  cls=0.0000
+  [ 16/99][2150/2337]  mem=31.90G  box=0.0147  obj=0.0003  cls=0.0000
+  [ 16/99][2200/2337]  mem=31.90G  box=0.0147  obj=0.0003  cls=0.0000
+  [ 16/99][2250/2337]  mem=31.90G  box=0.0147  obj=0.0003  cls=0.0000
+  [ 16/99][2300/2337]  mem=31.90G  box=0.0147  obj=0.0003  cls=0.0000
+
+Epoch  16/99  loss=0.0154  mAP@0.5=0.5998  mAP@0.5:0.95=0.5998
+
+  ✓ New best mAP@0.5 = 0.5998  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [ 17/99][   0/2337]  mem=31.90G  box=0.0232  obj=0.0003  cls=0.0000
+  [ 17/99][  50/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 17/99][ 100/2337]  mem=31.90G  box=0.0156  obj=0.0003  cls=0.0000
+  [ 17/99][ 150/2337]  mem=31.90G  box=0.0156  obj=0.0003  cls=0.0000
+  [ 17/99][ 200/2337]  mem=31.90G  box=0.0153  obj=0.0003  cls=0.0000
+  [ 17/99][ 250/2337]  mem=31.90G  box=0.0153  obj=0.0003  cls=0.0000
+  [ 17/99][ 300/2337]  mem=31.90G  box=0.0152  obj=0.0003  cls=0.0000
+  [ 17/99][ 350/2337]  mem=31.90G  box=0.0151  obj=0.0003  cls=0.0000
+  [ 17/99][ 400/2337]  mem=31.90G  box=0.0147  obj=0.0003  cls=0.0000
+  [ 17/99][ 450/2337]  mem=31.90G  box=0.0149  obj=0.0003  cls=0.0000
+  [ 17/99][ 500/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 17/99][ 550/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 17/99][ 600/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 17/99][ 650/2337]  mem=31.90G  box=0.0147  obj=0.0003  cls=0.0000
+  [ 17/99][ 700/2337]  mem=31.90G  box=0.0146  obj=0.0003  cls=0.0000
+  [ 17/99][ 750/2337]  mem=31.90G  box=0.0147  obj=0.0003  cls=0.0000
+  [ 17/99][ 800/2337]  mem=31.90G  box=0.0147  obj=0.0003  cls=0.0000
+  [ 17/99][ 850/2337]  mem=31.90G  box=0.0147  obj=0.0003  cls=0.0000
+  [ 17/99][ 900/2337]  mem=31.90G  box=0.0149  obj=0.0003  cls=0.0000
+  [ 17/99][ 950/2337]  mem=31.90G  box=0.0147  obj=0.0003  cls=0.0000
+  [ 17/99][1000/2337]  mem=31.90G  box=0.0147  obj=0.0003  cls=0.0000
+  [ 17/99][1050/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 17/99][1100/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 17/99][1150/2337]  mem=31.90G  box=0.0149  obj=0.0003  cls=0.0000
+  [ 17/99][1200/2337]  mem=31.90G  box=0.0149  obj=0.0003  cls=0.0000
+  [ 17/99][1250/2337]  mem=31.90G  box=0.0149  obj=0.0003  cls=0.0000
+  [ 17/99][1300/2337]  mem=31.90G  box=0.0149  obj=0.0003  cls=0.0000
+  [ 17/99][1350/2337]  mem=31.90G  box=0.0149  obj=0.0003  cls=0.0000
+  [ 17/99][1400/2337]  mem=31.90G  box=0.0149  obj=0.0003  cls=0.0000
+  [ 17/99][1450/2337]  mem=31.90G  box=0.0149  obj=0.0003  cls=0.0000
+  [ 17/99][1500/2337]  mem=31.90G  box=0.0149  obj=0.0003  cls=0.0000
+  [ 17/99][1550/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 17/99][1600/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 17/99][1650/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 17/99][1700/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 17/99][1750/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 17/99][1800/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 17/99][1850/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 17/99][1900/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 17/99][1950/2337]  mem=31.90G  box=0.0147  obj=0.0003  cls=0.0000
+  [ 17/99][2000/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 17/99][2050/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 17/99][2100/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 17/99][2150/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 17/99][2200/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 17/99][2250/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 17/99][2300/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+
+Epoch  17/99  loss=0.0152  mAP@0.5=0.6040  mAP@0.5:0.95=0.6040
+
+  ✓ New best mAP@0.5 = 0.6040  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [ 18/99][   0/2337]  mem=31.90G  box=0.0098  obj=0.0002  cls=0.0000
+  [ 18/99][  50/2337]  mem=31.90G  box=0.0150  obj=0.0003  cls=0.0000
+  [ 18/99][ 100/2337]  mem=31.90G  box=0.0140  obj=0.0003  cls=0.0000
+  [ 18/99][ 150/2337]  mem=31.90G  box=0.0143  obj=0.0003  cls=0.0000
+  [ 18/99][ 200/2337]  mem=31.90G  box=0.0145  obj=0.0003  cls=0.0000
+  [ 18/99][ 250/2337]  mem=31.90G  box=0.0151  obj=0.0003  cls=0.0000
+  [ 18/99][ 300/2337]  mem=31.90G  box=0.0150  obj=0.0003  cls=0.0000
+  [ 18/99][ 350/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 18/99][ 400/2337]  mem=31.90G  box=0.0147  obj=0.0003  cls=0.0000
+  [ 18/99][ 450/2337]  mem=31.90G  box=0.0146  obj=0.0003  cls=0.0000
+  [ 18/99][ 500/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 18/99][ 550/2337]  mem=31.90G  box=0.0145  obj=0.0002  cls=0.0000
+  [ 18/99][ 600/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 18/99][ 650/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 18/99][ 700/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 18/99][ 750/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 18/99][ 800/2337]  mem=31.90G  box=0.0145  obj=0.0002  cls=0.0000
+  [ 18/99][ 850/2337]  mem=31.90G  box=0.0145  obj=0.0002  cls=0.0000
+  [ 18/99][ 900/2337]  mem=31.90G  box=0.0146  obj=0.0002  cls=0.0000
+  [ 18/99][ 950/2337]  mem=31.90G  box=0.0145  obj=0.0002  cls=0.0000
+  [ 18/99][1000/2337]  mem=31.90G  box=0.0145  obj=0.0002  cls=0.0000
+  [ 18/99][1050/2337]  mem=31.90G  box=0.0145  obj=0.0002  cls=0.0000
+  [ 18/99][1100/2337]  mem=31.90G  box=0.0145  obj=0.0002  cls=0.0000
+  [ 18/99][1150/2337]  mem=31.90G  box=0.0146  obj=0.0002  cls=0.0000
+  [ 18/99][1200/2337]  mem=31.90G  box=0.0146  obj=0.0002  cls=0.0000
+  [ 18/99][1250/2337]  mem=31.90G  box=0.0146  obj=0.0002  cls=0.0000
+  [ 18/99][1300/2337]  mem=31.90G  box=0.0147  obj=0.0002  cls=0.0000
+  [ 18/99][1350/2337]  mem=31.90G  box=0.0146  obj=0.0002  cls=0.0000
+  [ 18/99][1400/2337]  mem=31.90G  box=0.0147  obj=0.0002  cls=0.0000
+  [ 18/99][1450/2337]  mem=31.90G  box=0.0147  obj=0.0002  cls=0.0000
+  [ 18/99][1500/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 18/99][1550/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 18/99][1600/2337]  mem=31.90G  box=0.0148  obj=0.0003  cls=0.0000
+  [ 18/99][1650/2337]  mem=31.90G  box=0.0149  obj=0.0003  cls=0.0000
+  [ 18/99][1700/2337]  mem=31.90G  box=0.0149  obj=0.0003  cls=0.0000
+  [ 18/99][1750/2337]  mem=31.90G  box=0.0149  obj=0.0003  cls=0.0000
+  [ 18/99][1800/2337]  mem=31.90G  box=0.0149  obj=0.0003  cls=0.0000
+  [ 18/99][1850/2337]  mem=31.90G  box=0.0149  obj=0.0003  cls=0.0000
+  [ 18/99][1900/2337]  mem=31.90G  box=0.0149  obj=0.0003  cls=0.0000
+  [ 18/99][1950/2337]  mem=31.90G  box=0.0149  obj=0.0003  cls=0.0000
+  [ 18/99][2000/2337]  mem=31.90G  box=0.0149  obj=0.0003  cls=0.0000
+  [ 18/99][2050/2337]  mem=31.90G  box=0.0149  obj=0.0003  cls=0.0000
+  [ 18/99][2100/2337]  mem=31.90G  box=0.0149  obj=0.0003  cls=0.0000
+  [ 18/99][2150/2337]  mem=31.90G  box=0.0149  obj=0.0003  cls=0.0000
+  [ 18/99][2200/2337]  mem=31.90G  box=0.0149  obj=0.0003  cls=0.0000
+  [ 18/99][2250/2337]  mem=31.90G  box=0.0149  obj=0.0003  cls=0.0000
+  [ 18/99][2300/2337]  mem=31.90G  box=0.0149  obj=0.0003  cls=0.0000
+
+Epoch  18/99  loss=0.0150  mAP@0.5=0.6078  mAP@0.5:0.95=0.6078
+
+  ✓ New best mAP@0.5 = 0.6078  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [ 19/99][   0/2337]  mem=31.90G  box=0.0195  obj=0.0003  cls=0.0000
+  [ 19/99][  50/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 19/99][ 100/2337]  mem=31.90G  box=0.0138  obj=0.0002  cls=0.0000
+  [ 19/99][ 150/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 19/99][ 200/2337]  mem=31.90G  box=0.0133  obj=0.0002  cls=0.0000
+  [ 19/99][ 250/2337]  mem=31.90G  box=0.0131  obj=0.0002  cls=0.0000
+  [ 19/99][ 300/2337]  mem=31.90G  box=0.0136  obj=0.0002  cls=0.0000
+  [ 19/99][ 350/2337]  mem=31.90G  box=0.0141  obj=0.0002  cls=0.0000
+  [ 19/99][ 400/2337]  mem=31.90G  box=0.0141  obj=0.0002  cls=0.0000
+  [ 19/99][ 450/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 19/99][ 500/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 19/99][ 550/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 19/99][ 600/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 19/99][ 650/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 19/99][ 700/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 19/99][ 750/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 19/99][ 800/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 19/99][ 850/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 19/99][ 900/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 19/99][ 950/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 19/99][1000/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 19/99][1050/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 19/99][1100/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 19/99][1150/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 19/99][1200/2337]  mem=31.90G  box=0.0145  obj=0.0002  cls=0.0000
+  [ 19/99][1250/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 19/99][1300/2337]  mem=31.90G  box=0.0145  obj=0.0002  cls=0.0000
+  [ 19/99][1350/2337]  mem=31.90G  box=0.0146  obj=0.0002  cls=0.0000
+  [ 19/99][1400/2337]  mem=31.90G  box=0.0146  obj=0.0002  cls=0.0000
+  [ 19/99][1450/2337]  mem=31.90G  box=0.0146  obj=0.0002  cls=0.0000
+  [ 19/99][1500/2337]  mem=31.90G  box=0.0146  obj=0.0002  cls=0.0000
+  [ 19/99][1550/2337]  mem=31.90G  box=0.0145  obj=0.0002  cls=0.0000
+  [ 19/99][1600/2337]  mem=31.90G  box=0.0146  obj=0.0002  cls=0.0000
+  [ 19/99][1650/2337]  mem=31.90G  box=0.0146  obj=0.0002  cls=0.0000
+  [ 19/99][1700/2337]  mem=31.90G  box=0.0146  obj=0.0002  cls=0.0000
+  [ 19/99][1750/2337]  mem=31.90G  box=0.0146  obj=0.0002  cls=0.0000
+  [ 19/99][1800/2337]  mem=31.90G  box=0.0146  obj=0.0002  cls=0.0000
+  [ 19/99][1850/2337]  mem=31.90G  box=0.0146  obj=0.0002  cls=0.0000
+  [ 19/99][1900/2337]  mem=31.90G  box=0.0146  obj=0.0002  cls=0.0000
+  [ 19/99][1950/2337]  mem=31.90G  box=0.0146  obj=0.0002  cls=0.0000
+  [ 19/99][2000/2337]  mem=31.90G  box=0.0146  obj=0.0002  cls=0.0000
+  [ 19/99][2050/2337]  mem=31.90G  box=0.0146  obj=0.0002  cls=0.0000
+  [ 19/99][2100/2337]  mem=31.90G  box=0.0146  obj=0.0002  cls=0.0000
+  [ 19/99][2150/2337]  mem=31.90G  box=0.0146  obj=0.0002  cls=0.0000
+  [ 19/99][2200/2337]  mem=31.90G  box=0.0146  obj=0.0002  cls=0.0000
+  [ 19/99][2250/2337]  mem=31.90G  box=0.0146  obj=0.0002  cls=0.0000
+  [ 19/99][2300/2337]  mem=31.90G  box=0.0146  obj=0.0002  cls=0.0000
+
+Epoch  19/99  loss=0.0150  mAP@0.5=0.6122  mAP@0.5:0.95=0.6122
+
+  ✓ New best mAP@0.5 = 0.6122  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [ 20/99][   0/2337]  mem=31.90G  box=0.0079  obj=0.0003  cls=0.0000
+  [ 20/99][  50/2337]  mem=31.90G  box=0.0151  obj=0.0003  cls=0.0000
+  [ 20/99][ 100/2337]  mem=31.90G  box=0.0154  obj=0.0002  cls=0.0000
+  [ 20/99][ 150/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 20/99][ 200/2337]  mem=31.90G  box=0.0145  obj=0.0002  cls=0.0000
+  [ 20/99][ 250/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 20/99][ 300/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 20/99][ 350/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 20/99][ 400/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 20/99][ 450/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 20/99][ 500/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 20/99][ 550/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 20/99][ 600/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 20/99][ 650/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 20/99][ 700/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 20/99][ 750/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 20/99][ 800/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 20/99][ 850/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 20/99][ 900/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 20/99][ 950/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 20/99][1000/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 20/99][1050/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 20/99][1100/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 20/99][1150/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 20/99][1200/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 20/99][1250/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 20/99][1300/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 20/99][1350/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 20/99][1400/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 20/99][1450/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 20/99][1500/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 20/99][1550/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 20/99][1600/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 20/99][1650/2337]  mem=31.90G  box=0.0145  obj=0.0002  cls=0.0000
+  [ 20/99][1700/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 20/99][1750/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 20/99][1800/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 20/99][1850/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 20/99][1900/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 20/99][1950/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 20/99][2000/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 20/99][2050/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 20/99][2100/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 20/99][2150/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 20/99][2200/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 20/99][2250/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 20/99][2300/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+
+Epoch  20/99  loss=0.0147  mAP@0.5=0.6150  mAP@0.5:0.95=0.6150
+
+  ✓ New best mAP@0.5 = 0.6150  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [ 21/99][   0/2337]  mem=31.90G  box=0.0089  obj=0.0002  cls=0.0000
+  [ 21/99][  50/2337]  mem=31.90G  box=0.0140  obj=0.0002  cls=0.0000
+  [ 21/99][ 100/2337]  mem=31.90G  box=0.0138  obj=0.0002  cls=0.0000
+  [ 21/99][ 150/2337]  mem=31.90G  box=0.0140  obj=0.0002  cls=0.0000
+  [ 21/99][ 200/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 21/99][ 250/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 21/99][ 300/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 21/99][ 350/2337]  mem=31.90G  box=0.0141  obj=0.0002  cls=0.0000
+  [ 21/99][ 400/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 21/99][ 450/2337]  mem=31.90G  box=0.0145  obj=0.0002  cls=0.0000
+  [ 21/99][ 500/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 21/99][ 550/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 21/99][ 600/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 21/99][ 650/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 21/99][ 700/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 21/99][ 750/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 21/99][ 800/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 21/99][ 850/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 21/99][ 900/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 21/99][ 950/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 21/99][1000/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 21/99][1050/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 21/99][1100/2337]  mem=31.90G  box=0.0141  obj=0.0002  cls=0.0000
+  [ 21/99][1150/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 21/99][1200/2337]  mem=31.90G  box=0.0141  obj=0.0002  cls=0.0000
+  [ 21/99][1250/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 21/99][1300/2337]  mem=31.90G  box=0.0141  obj=0.0002  cls=0.0000
+  [ 21/99][1350/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 21/99][1400/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 21/99][1450/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 21/99][1500/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 21/99][1550/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 21/99][1600/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 21/99][1650/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 21/99][1700/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 21/99][1750/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 21/99][1800/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 21/99][1850/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 21/99][1900/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 21/99][1950/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 21/99][2000/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 21/99][2050/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 21/99][2100/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 21/99][2150/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 21/99][2200/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 21/99][2250/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 21/99][2300/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+
+Epoch  21/99  loss=0.0146  mAP@0.5=0.6177  mAP@0.5:0.95=0.6177
+
+  ✓ New best mAP@0.5 = 0.6177  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [ 22/99][   0/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 22/99][  50/2337]  mem=31.90G  box=0.0136  obj=0.0002  cls=0.0000
+  [ 22/99][ 100/2337]  mem=31.90G  box=0.0148  obj=0.0002  cls=0.0000
+  [ 22/99][ 150/2337]  mem=31.90G  box=0.0147  obj=0.0002  cls=0.0000
+  [ 22/99][ 200/2337]  mem=31.90G  box=0.0148  obj=0.0002  cls=0.0000
+  [ 22/99][ 250/2337]  mem=31.90G  box=0.0151  obj=0.0002  cls=0.0000
+  [ 22/99][ 300/2337]  mem=31.90G  box=0.0148  obj=0.0002  cls=0.0000
+  [ 22/99][ 350/2337]  mem=31.90G  box=0.0147  obj=0.0002  cls=0.0000
+  [ 22/99][ 400/2337]  mem=31.90G  box=0.0146  obj=0.0002  cls=0.0000
+  [ 22/99][ 450/2337]  mem=31.90G  box=0.0148  obj=0.0002  cls=0.0000
+  [ 22/99][ 500/2337]  mem=31.90G  box=0.0146  obj=0.0002  cls=0.0000
+  [ 22/99][ 550/2337]  mem=31.90G  box=0.0145  obj=0.0002  cls=0.0000
+  [ 22/99][ 600/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 22/99][ 650/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 22/99][ 700/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 22/99][ 750/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 22/99][ 800/2337]  mem=31.90G  box=0.0145  obj=0.0002  cls=0.0000
+  [ 22/99][ 850/2337]  mem=31.90G  box=0.0145  obj=0.0002  cls=0.0000
+  [ 22/99][ 900/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 22/99][ 950/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 22/99][1000/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 22/99][1050/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 22/99][1100/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 22/99][1150/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 22/99][1200/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 22/99][1250/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 22/99][1300/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 22/99][1350/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 22/99][1400/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 22/99][1450/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 22/99][1500/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 22/99][1550/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 22/99][1600/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 22/99][1650/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 22/99][1700/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 22/99][1750/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 22/99][1800/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 22/99][1850/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 22/99][1900/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 22/99][1950/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 22/99][2000/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 22/99][2050/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 22/99][2100/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 22/99][2150/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 22/99][2200/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 22/99][2250/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 22/99][2300/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+
+Epoch  22/99  loss=0.0145  mAP@0.5=0.6197  mAP@0.5:0.95=0.6197
+
+  ✓ New best mAP@0.5 = 0.6197  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [ 23/99][   0/2337]  mem=31.90G  box=0.0293  obj=0.0003  cls=0.0000
+  [ 23/99][  50/2337]  mem=31.90G  box=0.0148  obj=0.0002  cls=0.0000
+  [ 23/99][ 100/2337]  mem=31.90G  box=0.0138  obj=0.0002  cls=0.0000
+  [ 23/99][ 150/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 23/99][ 200/2337]  mem=31.90G  box=0.0147  obj=0.0002  cls=0.0000
+  [ 23/99][ 250/2337]  mem=31.90G  box=0.0149  obj=0.0002  cls=0.0000
+  [ 23/99][ 300/2337]  mem=31.90G  box=0.0150  obj=0.0002  cls=0.0000
+  [ 23/99][ 350/2337]  mem=31.90G  box=0.0150  obj=0.0002  cls=0.0000
+  [ 23/99][ 400/2337]  mem=31.90G  box=0.0150  obj=0.0002  cls=0.0000
+  [ 23/99][ 450/2337]  mem=31.90G  box=0.0150  obj=0.0002  cls=0.0000
+  [ 23/99][ 500/2337]  mem=31.90G  box=0.0148  obj=0.0002  cls=0.0000
+  [ 23/99][ 550/2337]  mem=31.90G  box=0.0147  obj=0.0002  cls=0.0000
+  [ 23/99][ 600/2337]  mem=31.90G  box=0.0146  obj=0.0002  cls=0.0000
+  [ 23/99][ 650/2337]  mem=31.90G  box=0.0146  obj=0.0002  cls=0.0000
+  [ 23/99][ 700/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 23/99][ 750/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 23/99][ 800/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 23/99][ 850/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 23/99][ 900/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 23/99][ 950/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 23/99][1000/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 23/99][1050/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 23/99][1100/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 23/99][1150/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 23/99][1200/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 23/99][1250/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 23/99][1300/2337]  mem=31.90G  box=0.0141  obj=0.0002  cls=0.0000
+  [ 23/99][1350/2337]  mem=31.90G  box=0.0141  obj=0.0002  cls=0.0000
+  [ 23/99][1400/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 23/99][1450/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 23/99][1500/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 23/99][1550/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 23/99][1600/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 23/99][1650/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 23/99][1700/2337]  mem=31.90G  box=0.0141  obj=0.0002  cls=0.0000
+  [ 23/99][1750/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 23/99][1800/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 23/99][1850/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 23/99][1900/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 23/99][1950/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 23/99][2000/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 23/99][2050/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 23/99][2100/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 23/99][2150/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 23/99][2200/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 23/99][2250/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 23/99][2300/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+
+Epoch  23/99  loss=0.0144  mAP@0.5=0.6225  mAP@0.5:0.95=0.6225
+
+  ✓ New best mAP@0.5 = 0.6225  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [ 24/99][   0/2337]  mem=31.90G  box=0.0151  obj=0.0004  cls=0.0000
+  [ 24/99][  50/2337]  mem=31.90G  box=0.0150  obj=0.0002  cls=0.0000
+  [ 24/99][ 100/2337]  mem=31.90G  box=0.0136  obj=0.0002  cls=0.0000
+  [ 24/99][ 150/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 24/99][ 200/2337]  mem=31.90G  box=0.0133  obj=0.0002  cls=0.0000
+  [ 24/99][ 250/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 24/99][ 300/2337]  mem=31.90G  box=0.0133  obj=0.0002  cls=0.0000
+  [ 24/99][ 350/2337]  mem=31.90G  box=0.0132  obj=0.0002  cls=0.0000
+  [ 24/99][ 400/2337]  mem=31.90G  box=0.0132  obj=0.0002  cls=0.0000
+  [ 24/99][ 450/2337]  mem=31.90G  box=0.0133  obj=0.0002  cls=0.0000
+  [ 24/99][ 500/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 24/99][ 550/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 24/99][ 600/2337]  mem=31.90G  box=0.0136  obj=0.0002  cls=0.0000
+  [ 24/99][ 650/2337]  mem=31.90G  box=0.0136  obj=0.0002  cls=0.0000
+  [ 24/99][ 700/2337]  mem=31.90G  box=0.0136  obj=0.0002  cls=0.0000
+  [ 24/99][ 750/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 24/99][ 800/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 24/99][ 850/2337]  mem=31.90G  box=0.0138  obj=0.0002  cls=0.0000
+  [ 24/99][ 900/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 24/99][ 950/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 24/99][1000/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 24/99][1050/2337]  mem=31.90G  box=0.0138  obj=0.0002  cls=0.0000
+  [ 24/99][1100/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 24/99][1150/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 24/99][1200/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 24/99][1250/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 24/99][1300/2337]  mem=31.90G  box=0.0136  obj=0.0002  cls=0.0000
+  [ 24/99][1350/2337]  mem=31.90G  box=0.0136  obj=0.0002  cls=0.0000
+  [ 24/99][1400/2337]  mem=31.90G  box=0.0136  obj=0.0002  cls=0.0000
+  [ 24/99][1450/2337]  mem=31.90G  box=0.0136  obj=0.0002  cls=0.0000
+  [ 24/99][1500/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 24/99][1550/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 24/99][1600/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 24/99][1650/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 24/99][1700/2337]  mem=31.90G  box=0.0138  obj=0.0002  cls=0.0000
+  [ 24/99][1750/2337]  mem=31.90G  box=0.0138  obj=0.0002  cls=0.0000
+  [ 24/99][1800/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 24/99][1850/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 24/99][1900/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 24/99][1950/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 24/99][2000/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 24/99][2050/2337]  mem=31.90G  box=0.0140  obj=0.0002  cls=0.0000
+  [ 24/99][2100/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 24/99][2150/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 24/99][2200/2337]  mem=31.90G  box=0.0140  obj=0.0002  cls=0.0000
+  [ 24/99][2250/2337]  mem=31.90G  box=0.0140  obj=0.0002  cls=0.0000
+  [ 24/99][2300/2337]  mem=31.90G  box=0.0140  obj=0.0002  cls=0.0000
+
+Epoch  24/99  loss=0.0143  mAP@0.5=0.6223  mAP@0.5:0.95=0.6223
+
+  [ 25/99][   0/2337]  mem=31.90G  box=0.0168  obj=0.0003  cls=0.0000
+  [ 25/99][  50/2337]  mem=31.90G  box=0.0136  obj=0.0002  cls=0.0000
+  [ 25/99][ 100/2337]  mem=31.90G  box=0.0141  obj=0.0002  cls=0.0000
+  [ 25/99][ 150/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 25/99][ 200/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 25/99][ 250/2337]  mem=31.90G  box=0.0145  obj=0.0002  cls=0.0000
+  [ 25/99][ 300/2337]  mem=31.90G  box=0.0145  obj=0.0002  cls=0.0000
+  [ 25/99][ 350/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 25/99][ 400/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 25/99][ 450/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 25/99][ 500/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 25/99][ 550/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 25/99][ 600/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 25/99][ 650/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 25/99][ 700/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 25/99][ 750/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 25/99][ 800/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 25/99][ 850/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 25/99][ 900/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 25/99][ 950/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 25/99][1000/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 25/99][1050/2337]  mem=31.90G  box=0.0141  obj=0.0002  cls=0.0000
+  [ 25/99][1100/2337]  mem=31.90G  box=0.0142  obj=0.0002  cls=0.0000
+  [ 25/99][1150/2337]  mem=31.90G  box=0.0141  obj=0.0002  cls=0.0000
+  [ 25/99][1200/2337]  mem=31.90G  box=0.0141  obj=0.0002  cls=0.0000
+  [ 25/99][1250/2337]  mem=31.90G  box=0.0141  obj=0.0002  cls=0.0000
+  [ 25/99][1300/2337]  mem=31.90G  box=0.0140  obj=0.0002  cls=0.0000
+  [ 25/99][1350/2337]  mem=31.90G  box=0.0140  obj=0.0002  cls=0.0000
+  [ 25/99][1400/2337]  mem=31.90G  box=0.0141  obj=0.0002  cls=0.0000
+  [ 25/99][1450/2337]  mem=31.90G  box=0.0141  obj=0.0002  cls=0.0000
+  [ 25/99][1500/2337]  mem=31.90G  box=0.0141  obj=0.0002  cls=0.0000
+  [ 25/99][1550/2337]  mem=31.90G  box=0.0141  obj=0.0002  cls=0.0000
+  [ 25/99][1600/2337]  mem=31.90G  box=0.0141  obj=0.0002  cls=0.0000
+  [ 25/99][1650/2337]  mem=31.90G  box=0.0141  obj=0.0002  cls=0.0000
+  [ 25/99][1700/2337]  mem=31.90G  box=0.0140  obj=0.0002  cls=0.0000
+  [ 25/99][1750/2337]  mem=31.90G  box=0.0140  obj=0.0002  cls=0.0000
+  [ 25/99][1800/2337]  mem=31.90G  box=0.0140  obj=0.0002  cls=0.0000
+  [ 25/99][1850/2337]  mem=31.90G  box=0.0140  obj=0.0002  cls=0.0000
+  [ 25/99][1900/2337]  mem=31.90G  box=0.0140  obj=0.0002  cls=0.0000
+  [ 25/99][1950/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 25/99][2000/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 25/99][2050/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 25/99][2100/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 25/99][2150/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 25/99][2200/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 25/99][2250/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 25/99][2300/2337]  mem=31.90G  box=0.0138  obj=0.0002  cls=0.0000
+
+Epoch  25/99  loss=0.0142  mAP@0.5=0.6223  mAP@0.5:0.95=0.6223
+
+  [ 26/99][   0/2337]  mem=31.90G  box=0.0075  obj=0.0002  cls=0.0000
+  [ 26/99][  50/2337]  mem=31.90G  box=0.0147  obj=0.0002  cls=0.0000
+  [ 26/99][ 100/2337]  mem=31.90G  box=0.0153  obj=0.0002  cls=0.0000
+  [ 26/99][ 150/2337]  mem=31.90G  box=0.0145  obj=0.0002  cls=0.0000
+  [ 26/99][ 200/2337]  mem=31.90G  box=0.0140  obj=0.0002  cls=0.0000
+  [ 26/99][ 250/2337]  mem=31.90G  box=0.0138  obj=0.0002  cls=0.0000
+  [ 26/99][ 300/2337]  mem=31.90G  box=0.0141  obj=0.0002  cls=0.0000
+  [ 26/99][ 350/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 26/99][ 400/2337]  mem=31.90G  box=0.0138  obj=0.0002  cls=0.0000
+  [ 26/99][ 450/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 26/99][ 500/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 26/99][ 550/2337]  mem=31.90G  box=0.0138  obj=0.0002  cls=0.0000
+  [ 26/99][ 600/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 26/99][ 650/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 26/99][ 700/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 26/99][ 750/2337]  mem=31.90G  box=0.0138  obj=0.0002  cls=0.0000
+  [ 26/99][ 800/2337]  mem=31.90G  box=0.0138  obj=0.0002  cls=0.0000
+  [ 26/99][ 850/2337]  mem=31.90G  box=0.0138  obj=0.0002  cls=0.0000
+  [ 26/99][ 900/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 26/99][ 950/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 26/99][1000/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 26/99][1050/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 26/99][1100/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 26/99][1150/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 26/99][1200/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 26/99][1250/2337]  mem=31.90G  box=0.0138  obj=0.0002  cls=0.0000
+  [ 26/99][1300/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 26/99][1350/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 26/99][1400/2337]  mem=31.90G  box=0.0138  obj=0.0002  cls=0.0000
+  [ 26/99][1450/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 26/99][1500/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 26/99][1550/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 26/99][1600/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 26/99][1650/2337]  mem=31.90G  box=0.0138  obj=0.0002  cls=0.0000
+  [ 26/99][1700/2337]  mem=31.90G  box=0.0138  obj=0.0002  cls=0.0000
+  [ 26/99][1750/2337]  mem=31.90G  box=0.0138  obj=0.0002  cls=0.0000
+  [ 26/99][1800/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 26/99][1850/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 26/99][1900/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 26/99][1950/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 26/99][2000/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 26/99][2050/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 26/99][2100/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 26/99][2150/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 26/99][2200/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 26/99][2250/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 26/99][2300/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+
+Epoch  26/99  loss=0.0139  mAP@0.5=0.6242  mAP@0.5:0.95=0.6242
+
+  ✓ New best mAP@0.5 = 0.6242  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [ 27/99][   0/2337]  mem=31.90G  box=0.0190  obj=0.0003  cls=0.0000
+  [ 27/99][  50/2337]  mem=31.90G  box=0.0123  obj=0.0002  cls=0.0000
+  [ 27/99][ 100/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 27/99][ 150/2337]  mem=31.90G  box=0.0138  obj=0.0002  cls=0.0000
+  [ 27/99][ 200/2337]  mem=31.90G  box=0.0140  obj=0.0002  cls=0.0000
+  [ 27/99][ 250/2337]  mem=31.90G  box=0.0141  obj=0.0002  cls=0.0000
+  [ 27/99][ 300/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 27/99][ 350/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 27/99][ 400/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 27/99][ 450/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 27/99][ 500/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 27/99][ 550/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 27/99][ 600/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 27/99][ 650/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 27/99][ 700/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 27/99][ 750/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 27/99][ 800/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 27/99][ 850/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 27/99][ 900/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 27/99][ 950/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 27/99][1000/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 27/99][1050/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 27/99][1100/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 27/99][1150/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 27/99][1200/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 27/99][1250/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 27/99][1300/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 27/99][1350/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 27/99][1400/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 27/99][1450/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 27/99][1500/2337]  mem=31.90G  box=0.0136  obj=0.0002  cls=0.0000
+  [ 27/99][1550/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 27/99][1600/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 27/99][1650/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 27/99][1700/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 27/99][1750/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 27/99][1800/2337]  mem=31.90G  box=0.0136  obj=0.0002  cls=0.0000
+  [ 27/99][1850/2337]  mem=31.90G  box=0.0136  obj=0.0002  cls=0.0000
+  [ 27/99][1900/2337]  mem=31.90G  box=0.0136  obj=0.0002  cls=0.0000
+  [ 27/99][1950/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 27/99][2000/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 27/99][2050/2337]  mem=31.90G  box=0.0136  obj=0.0002  cls=0.0000
+  [ 27/99][2100/2337]  mem=31.90G  box=0.0136  obj=0.0002  cls=0.0000
+  [ 27/99][2150/2337]  mem=31.90G  box=0.0136  obj=0.0002  cls=0.0000
+  [ 27/99][2200/2337]  mem=31.90G  box=0.0136  obj=0.0002  cls=0.0000
+  [ 27/99][2250/2337]  mem=31.90G  box=0.0136  obj=0.0002  cls=0.0000
+  [ 27/99][2300/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+
+Epoch  27/99  loss=0.0138  mAP@0.5=0.6237  mAP@0.5:0.95=0.6237
+
+  [ 28/99][   0/2337]  mem=31.90G  box=0.0101  obj=0.0002  cls=0.0000
+  [ 28/99][  50/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 28/99][ 100/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 28/99][ 150/2337]  mem=31.90G  box=0.0133  obj=0.0002  cls=0.0000
+  [ 28/99][ 200/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 28/99][ 250/2337]  mem=31.90G  box=0.0141  obj=0.0002  cls=0.0000
+  [ 28/99][ 300/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 28/99][ 350/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 28/99][ 400/2337]  mem=31.90G  box=0.0141  obj=0.0002  cls=0.0000
+  [ 28/99][ 450/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 28/99][ 500/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 28/99][ 550/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 28/99][ 600/2337]  mem=31.90G  box=0.0138  obj=0.0002  cls=0.0000
+  [ 28/99][ 650/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 28/99][ 700/2337]  mem=31.90G  box=0.0136  obj=0.0002  cls=0.0000
+  [ 28/99][ 750/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 28/99][ 800/2337]  mem=31.90G  box=0.0138  obj=0.0002  cls=0.0000
+  [ 28/99][ 850/2337]  mem=31.90G  box=0.0138  obj=0.0002  cls=0.0000
+  [ 28/99][ 900/2337]  mem=31.90G  box=0.0138  obj=0.0002  cls=0.0000
+  [ 28/99][ 950/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 28/99][1000/2337]  mem=31.90G  box=0.0136  obj=0.0002  cls=0.0000
+  [ 28/99][1050/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 28/99][1100/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 28/99][1150/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 28/99][1200/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 28/99][1250/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 28/99][1300/2337]  mem=31.90G  box=0.0138  obj=0.0002  cls=0.0000
+  [ 28/99][1350/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 28/99][1400/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 28/99][1450/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 28/99][1500/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 28/99][1550/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 28/99][1600/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 28/99][1650/2337]  mem=31.90G  box=0.0136  obj=0.0002  cls=0.0000
+  [ 28/99][1700/2337]  mem=31.90G  box=0.0136  obj=0.0002  cls=0.0000
+  [ 28/99][1750/2337]  mem=31.90G  box=0.0136  obj=0.0002  cls=0.0000
+  [ 28/99][1800/2337]  mem=31.90G  box=0.0136  obj=0.0002  cls=0.0000
+  [ 28/99][1850/2337]  mem=31.90G  box=0.0136  obj=0.0002  cls=0.0000
+  [ 28/99][1900/2337]  mem=31.90G  box=0.0136  obj=0.0002  cls=0.0000
+  [ 28/99][1950/2337]  mem=31.90G  box=0.0136  obj=0.0002  cls=0.0000
+  [ 28/99][2000/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 28/99][2050/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 28/99][2100/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 28/99][2150/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 28/99][2200/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 28/99][2250/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 28/99][2300/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+
+Epoch  28/99  loss=0.0138  mAP@0.5=0.6272  mAP@0.5:0.95=0.6272
+
+  ✓ New best mAP@0.5 = 0.6272  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [ 29/99][   0/2337]  mem=31.90G  box=0.0083  obj=0.0002  cls=0.0000
+  [ 29/99][  50/2337]  mem=31.90G  box=0.0133  obj=0.0002  cls=0.0000
+  [ 29/99][ 100/2337]  mem=31.90G  box=0.0128  obj=0.0002  cls=0.0000
+  [ 29/99][ 150/2337]  mem=31.90G  box=0.0127  obj=0.0002  cls=0.0000
+  [ 29/99][ 200/2337]  mem=31.90G  box=0.0131  obj=0.0002  cls=0.0000
+  [ 29/99][ 250/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 29/99][ 300/2337]  mem=31.90G  box=0.0130  obj=0.0002  cls=0.0000
+  [ 29/99][ 350/2337]  mem=31.90G  box=0.0131  obj=0.0002  cls=0.0000
+  [ 29/99][ 400/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 29/99][ 450/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 29/99][ 500/2337]  mem=31.90G  box=0.0130  obj=0.0002  cls=0.0000
+  [ 29/99][ 550/2337]  mem=31.90G  box=0.0132  obj=0.0002  cls=0.0000
+  [ 29/99][ 600/2337]  mem=31.90G  box=0.0132  obj=0.0002  cls=0.0000
+  [ 29/99][ 650/2337]  mem=31.90G  box=0.0132  obj=0.0002  cls=0.0000
+  [ 29/99][ 700/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 29/99][ 750/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 29/99][ 800/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 29/99][ 850/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 29/99][ 900/2337]  mem=31.90G  box=0.0133  obj=0.0002  cls=0.0000
+  [ 29/99][ 950/2337]  mem=31.90G  box=0.0133  obj=0.0002  cls=0.0000
+  [ 29/99][1000/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 29/99][1050/2337]  mem=31.90G  box=0.0133  obj=0.0002  cls=0.0000
+  [ 29/99][1100/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 29/99][1150/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 29/99][1200/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 29/99][1250/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 29/99][1300/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 29/99][1350/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 29/99][1400/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 29/99][1450/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 29/99][1500/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 29/99][1550/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 29/99][1600/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 29/99][1650/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 29/99][1700/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 29/99][1750/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 29/99][1800/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 29/99][1850/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 29/99][1900/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 29/99][1950/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 29/99][2000/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 29/99][2050/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 29/99][2100/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 29/99][2150/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 29/99][2200/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 29/99][2250/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 29/99][2300/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+
+Epoch  29/99  loss=0.0137  mAP@0.5=0.6279  mAP@0.5:0.95=0.6279
+
+  ✓ New best mAP@0.5 = 0.6279  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [ 30/99][   0/2337]  mem=31.90G  box=0.0275  obj=0.0002  cls=0.0000
+  [ 30/99][  50/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 30/99][ 100/2337]  mem=31.90G  box=0.0144  obj=0.0002  cls=0.0000
+  [ 30/99][ 150/2337]  mem=31.90G  box=0.0138  obj=0.0002  cls=0.0000
+  [ 30/99][ 200/2337]  mem=31.90G  box=0.0136  obj=0.0002  cls=0.0000
+  [ 30/99][ 250/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 30/99][ 300/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 30/99][ 350/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 30/99][ 400/2337]  mem=31.90G  box=0.0133  obj=0.0002  cls=0.0000
+  [ 30/99][ 450/2337]  mem=31.90G  box=0.0133  obj=0.0002  cls=0.0000
+  [ 30/99][ 500/2337]  mem=31.90G  box=0.0133  obj=0.0002  cls=0.0000
+  [ 30/99][ 550/2337]  mem=31.90G  box=0.0132  obj=0.0002  cls=0.0000
+  [ 30/99][ 600/2337]  mem=31.90G  box=0.0132  obj=0.0002  cls=0.0000
+  [ 30/99][ 650/2337]  mem=31.90G  box=0.0131  obj=0.0002  cls=0.0000
+  [ 30/99][ 700/2337]  mem=31.90G  box=0.0131  obj=0.0002  cls=0.0000
+  [ 30/99][ 750/2337]  mem=31.90G  box=0.0131  obj=0.0002  cls=0.0000
+  [ 30/99][ 800/2337]  mem=31.90G  box=0.0131  obj=0.0002  cls=0.0000
+  [ 30/99][ 850/2337]  mem=31.90G  box=0.0131  obj=0.0002  cls=0.0000
+  [ 30/99][ 900/2337]  mem=31.90G  box=0.0130  obj=0.0002  cls=0.0000
+  [ 30/99][ 950/2337]  mem=31.90G  box=0.0130  obj=0.0002  cls=0.0000
+  [ 30/99][1000/2337]  mem=31.90G  box=0.0131  obj=0.0002  cls=0.0000
+  [ 30/99][1050/2337]  mem=31.90G  box=0.0130  obj=0.0002  cls=0.0000
+  [ 30/99][1100/2337]  mem=31.90G  box=0.0131  obj=0.0002  cls=0.0000
+  [ 30/99][1150/2337]  mem=31.90G  box=0.0131  obj=0.0002  cls=0.0000
+  [ 30/99][1200/2337]  mem=31.90G  box=0.0131  obj=0.0002  cls=0.0000
+  [ 30/99][1250/2337]  mem=31.90G  box=0.0131  obj=0.0002  cls=0.0000
+  [ 30/99][1300/2337]  mem=31.90G  box=0.0131  obj=0.0002  cls=0.0000
+  [ 30/99][1350/2337]  mem=31.90G  box=0.0131  obj=0.0002  cls=0.0000
+  [ 30/99][1400/2337]  mem=31.90G  box=0.0131  obj=0.0002  cls=0.0000
+  [ 30/99][1450/2337]  mem=31.90G  box=0.0131  obj=0.0002  cls=0.0000
+  [ 30/99][1500/2337]  mem=31.90G  box=0.0132  obj=0.0002  cls=0.0000
+  [ 30/99][1550/2337]  mem=31.90G  box=0.0132  obj=0.0002  cls=0.0000
+  [ 30/99][1600/2337]  mem=31.90G  box=0.0132  obj=0.0002  cls=0.0000
+  [ 30/99][1650/2337]  mem=31.90G  box=0.0132  obj=0.0002  cls=0.0000
+  [ 30/99][1700/2337]  mem=31.90G  box=0.0132  obj=0.0002  cls=0.0000
+  [ 30/99][1750/2337]  mem=31.90G  box=0.0132  obj=0.0002  cls=0.0000
+  [ 30/99][1800/2337]  mem=31.90G  box=0.0132  obj=0.0002  cls=0.0000
+  [ 30/99][1850/2337]  mem=31.90G  box=0.0132  obj=0.0002  cls=0.0000
+  [ 30/99][1900/2337]  mem=31.90G  box=0.0132  obj=0.0002  cls=0.0000
+  [ 30/99][1950/2337]  mem=31.90G  box=0.0133  obj=0.0002  cls=0.0000
+  [ 30/99][2000/2337]  mem=31.90G  box=0.0132  obj=0.0002  cls=0.0000
+  [ 30/99][2050/2337]  mem=31.90G  box=0.0132  obj=0.0002  cls=0.0000
+  [ 30/99][2100/2337]  mem=31.90G  box=0.0132  obj=0.0002  cls=0.0000
+  [ 30/99][2150/2337]  mem=31.90G  box=0.0132  obj=0.0002  cls=0.0000
+  [ 30/99][2200/2337]  mem=31.90G  box=0.0133  obj=0.0002  cls=0.0000
+  [ 30/99][2250/2337]  mem=31.90G  box=0.0132  obj=0.0002  cls=0.0000
+  [ 30/99][2300/2337]  mem=31.90G  box=0.0133  obj=0.0002  cls=0.0000
+
+Epoch  30/99  loss=0.0135  mAP@0.5=0.6313  mAP@0.5:0.95=0.6313
+
+  ✓ New best mAP@0.5 = 0.6313  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [ 31/99][   0/2337]  mem=31.90G  box=0.0062  obj=0.0002  cls=0.0000
+  [ 31/99][  50/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 31/99][ 100/2337]  mem=31.90G  box=0.0138  obj=0.0002  cls=0.0000
+  [ 31/99][ 150/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 31/99][ 200/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 31/99][ 250/2337]  mem=31.90G  box=0.0133  obj=0.0002  cls=0.0000
+  [ 31/99][ 300/2337]  mem=31.90G  box=0.0133  obj=0.0002  cls=0.0000
+  [ 31/99][ 350/2337]  mem=31.90G  box=0.0132  obj=0.0002  cls=0.0000
+  [ 31/99][ 400/2337]  mem=31.90G  box=0.0133  obj=0.0002  cls=0.0000
+  [ 31/99][ 450/2337]  mem=31.90G  box=0.0132  obj=0.0002  cls=0.0000
+  [ 31/99][ 500/2337]  mem=31.90G  box=0.0131  obj=0.0002  cls=0.0000
+  [ 31/99][ 550/2337]  mem=31.90G  box=0.0132  obj=0.0002  cls=0.0000
+  [ 31/99][ 600/2337]  mem=31.90G  box=0.0133  obj=0.0002  cls=0.0000
+  [ 31/99][ 650/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 31/99][ 700/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 31/99][ 750/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 31/99][ 800/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 31/99][ 850/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 31/99][ 900/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 31/99][ 950/2337]  mem=31.90G  box=0.0135  obj=0.0002  cls=0.0000
+  [ 31/99][1000/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 31/99][1050/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 31/99][1100/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 31/99][1150/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 31/99][1200/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 31/99][1250/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 31/99][1300/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 31/99][1350/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 31/99][1400/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 31/99][1450/2337]  mem=31.90G  box=0.0133  obj=0.0002  cls=0.0000
+  [ 31/99][1500/2337]  mem=31.90G  box=0.0133  obj=0.0002  cls=0.0000
+  [ 31/99][1550/2337]  mem=31.90G  box=0.0133  obj=0.0002  cls=0.0000
+  [ 31/99][1600/2337]  mem=31.90G  box=0.0133  obj=0.0002  cls=0.0000
+  [ 31/99][1650/2337]  mem=31.90G  box=0.0133  obj=0.0002  cls=0.0000
+  [ 31/99][1700/2337]  mem=31.90G  box=0.0133  obj=0.0002  cls=0.0000
+  [ 31/99][1750/2337]  mem=31.90G  box=0.0132  obj=0.0002  cls=0.0000
+  [ 31/99][1800/2337]  mem=31.90G  box=0.0132  obj=0.0002  cls=0.0000
+  [ 31/99][1850/2337]  mem=31.90G  box=0.0132  obj=0.0002  cls=0.0000
+  [ 31/99][1900/2337]  mem=31.90G  box=0.0132  obj=0.0002  cls=0.0000
+  [ 31/99][1950/2337]  mem=31.90G  box=0.0132  obj=0.0002  cls=0.0000
+  [ 31/99][2000/2337]  mem=31.90G  box=0.0132  obj=0.0002  cls=0.0000
+  [ 31/99][2050/2337]  mem=31.90G  box=0.0132  obj=0.0002  cls=0.0000
+  [ 31/99][2100/2337]  mem=31.90G  box=0.0131  obj=0.0002  cls=0.0000
+  [ 31/99][2150/2337]  mem=31.90G  box=0.0131  obj=0.0002  cls=0.0000
+  [ 31/99][2200/2337]  mem=31.90G  box=0.0131  obj=0.0002  cls=0.0000
+  [ 31/99][2250/2337]  mem=31.90G  box=0.0131  obj=0.0002  cls=0.0000
+  [ 31/99][2300/2337]  mem=31.90G  box=0.0131  obj=0.0002  cls=0.0000
+
+Epoch  31/99  loss=0.0134  mAP@0.5=0.6346  mAP@0.5:0.95=0.6346
+
+  ✓ New best mAP@0.5 = 0.6346  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [ 32/99][   0/2337]  mem=31.90G  box=0.0148  obj=0.0002  cls=0.0000
+  [ 32/99][  50/2337]  mem=31.90G  box=0.0143  obj=0.0002  cls=0.0000
+  [ 32/99][ 100/2337]  mem=31.90G  box=0.0131  obj=0.0002  cls=0.0000
+  [ 32/99][ 150/2337]  mem=31.90G  box=0.0132  obj=0.0002  cls=0.0000
+  [ 32/99][ 200/2337]  mem=31.90G  box=0.0131  obj=0.0002  cls=0.0000
+  [ 32/99][ 250/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 32/99][ 300/2337]  mem=31.90G  box=0.0128  obj=0.0002  cls=0.0000
+  [ 32/99][ 350/2337]  mem=31.90G  box=0.0128  obj=0.0002  cls=0.0000
+  [ 32/99][ 400/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 32/99][ 450/2337]  mem=31.90G  box=0.0130  obj=0.0002  cls=0.0000
+  [ 32/99][ 500/2337]  mem=31.90G  box=0.0130  obj=0.0002  cls=0.0000
+  [ 32/99][ 550/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 32/99][ 600/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 32/99][ 650/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 32/99][ 700/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 32/99][ 750/2337]  mem=31.90G  box=0.0130  obj=0.0002  cls=0.0000
+  [ 32/99][ 800/2337]  mem=31.90G  box=0.0131  obj=0.0002  cls=0.0000
+  [ 32/99][ 850/2337]  mem=31.90G  box=0.0131  obj=0.0002  cls=0.0000
+  [ 32/99][ 900/2337]  mem=31.90G  box=0.0131  obj=0.0002  cls=0.0000
+  [ 32/99][ 950/2337]  mem=31.90G  box=0.0130  obj=0.0002  cls=0.0000
+  [ 32/99][1000/2337]  mem=31.90G  box=0.0130  obj=0.0002  cls=0.0000
+  [ 32/99][1050/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 32/99][1100/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 32/99][1150/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 32/99][1200/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 32/99][1250/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 32/99][1300/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 32/99][1350/2337]  mem=31.90G  box=0.0128  obj=0.0002  cls=0.0000
+  [ 32/99][1400/2337]  mem=31.90G  box=0.0128  obj=0.0002  cls=0.0000
+  [ 32/99][1450/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 32/99][1500/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 32/99][1550/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 32/99][1600/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 32/99][1650/2337]  mem=31.90G  box=0.0128  obj=0.0002  cls=0.0000
+  [ 32/99][1700/2337]  mem=31.90G  box=0.0128  obj=0.0002  cls=0.0000
+  [ 32/99][1750/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 32/99][1800/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 32/99][1850/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 32/99][1900/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 32/99][1950/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 32/99][2000/2337]  mem=31.90G  box=0.0130  obj=0.0002  cls=0.0000
+  [ 32/99][2050/2337]  mem=31.90G  box=0.0130  obj=0.0002  cls=0.0000
+  [ 32/99][2100/2337]  mem=31.90G  box=0.0130  obj=0.0002  cls=0.0000
+  [ 32/99][2150/2337]  mem=31.90G  box=0.0130  obj=0.0002  cls=0.0000
+  [ 32/99][2200/2337]  mem=31.90G  box=0.0130  obj=0.0002  cls=0.0000
+  [ 32/99][2250/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 32/99][2300/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+
+Epoch  32/99  loss=0.0132  mAP@0.5=0.6377  mAP@0.5:0.95=0.6377
+
+  ✓ New best mAP@0.5 = 0.6377  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [ 33/99][   0/2337]  mem=31.90G  box=0.0193  obj=0.0003  cls=0.0000
+  [ 33/99][  50/2337]  mem=31.90G  box=0.0122  obj=0.0002  cls=0.0000
+  [ 33/99][ 100/2337]  mem=31.90G  box=0.0124  obj=0.0002  cls=0.0000
+  [ 33/99][ 150/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 33/99][ 200/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 33/99][ 250/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 33/99][ 300/2337]  mem=31.90G  box=0.0127  obj=0.0002  cls=0.0000
+  [ 33/99][ 350/2337]  mem=31.90G  box=0.0127  obj=0.0002  cls=0.0000
+  [ 33/99][ 400/2337]  mem=31.90G  box=0.0127  obj=0.0002  cls=0.0000
+  [ 33/99][ 450/2337]  mem=31.90G  box=0.0128  obj=0.0002  cls=0.0000
+  [ 33/99][ 500/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 33/99][ 550/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 33/99][ 600/2337]  mem=31.90G  box=0.0130  obj=0.0002  cls=0.0000
+  [ 33/99][ 650/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 33/99][ 700/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 33/99][ 750/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 33/99][ 800/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 33/99][ 850/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 33/99][ 900/2337]  mem=31.90G  box=0.0128  obj=0.0002  cls=0.0000
+  [ 33/99][ 950/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 33/99][1000/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 33/99][1050/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 33/99][1100/2337]  mem=31.90G  box=0.0130  obj=0.0002  cls=0.0000
+  [ 33/99][1150/2337]  mem=31.90G  box=0.0130  obj=0.0002  cls=0.0000
+  [ 33/99][1200/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 33/99][1250/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 33/99][1300/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 33/99][1350/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 33/99][1400/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 33/99][1450/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 33/99][1500/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 33/99][1550/2337]  mem=31.90G  box=0.0128  obj=0.0002  cls=0.0000
+  [ 33/99][1600/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 33/99][1650/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 33/99][1700/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 33/99][1750/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 33/99][1800/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 33/99][1850/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 33/99][1900/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 33/99][1950/2337]  mem=31.90G  box=0.0130  obj=0.0002  cls=0.0000
+  [ 33/99][2000/2337]  mem=31.90G  box=0.0130  obj=0.0002  cls=0.0000
+  [ 33/99][2050/2337]  mem=31.90G  box=0.0130  obj=0.0002  cls=0.0000
+  [ 33/99][2100/2337]  mem=31.90G  box=0.0130  obj=0.0002  cls=0.0000
+  [ 33/99][2150/2337]  mem=31.90G  box=0.0130  obj=0.0002  cls=0.0000
+  [ 33/99][2200/2337]  mem=31.90G  box=0.0130  obj=0.0002  cls=0.0000
+  [ 33/99][2250/2337]  mem=31.90G  box=0.0130  obj=0.0002  cls=0.0000
+  [ 33/99][2300/2337]  mem=31.90G  box=0.0130  obj=0.0002  cls=0.0000
+
+Epoch  33/99  loss=0.0131  mAP@0.5=0.6400  mAP@0.5:0.95=0.6400
+
+  ✓ New best mAP@0.5 = 0.6400  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [ 34/99][   0/2337]  mem=31.90G  box=0.0102  obj=0.0002  cls=0.0000
+  [ 34/99][  50/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 34/99][ 100/2337]  mem=31.90G  box=0.0124  obj=0.0002  cls=0.0000
+  [ 34/99][ 150/2337]  mem=31.90G  box=0.0123  obj=0.0002  cls=0.0000
+  [ 34/99][ 200/2337]  mem=31.90G  box=0.0121  obj=0.0002  cls=0.0000
+  [ 34/99][ 250/2337]  mem=31.90G  box=0.0121  obj=0.0002  cls=0.0000
+  [ 34/99][ 300/2337]  mem=31.90G  box=0.0121  obj=0.0002  cls=0.0000
+  [ 34/99][ 350/2337]  mem=31.90G  box=0.0123  obj=0.0002  cls=0.0000
+  [ 34/99][ 400/2337]  mem=31.90G  box=0.0123  obj=0.0002  cls=0.0000
+  [ 34/99][ 450/2337]  mem=31.90G  box=0.0124  obj=0.0002  cls=0.0000
+  [ 34/99][ 500/2337]  mem=31.90G  box=0.0127  obj=0.0002  cls=0.0000
+  [ 34/99][ 550/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 34/99][ 600/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 34/99][ 650/2337]  mem=31.90G  box=0.0127  obj=0.0002  cls=0.0000
+  [ 34/99][ 700/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 34/99][ 750/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 34/99][ 800/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 34/99][ 850/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 34/99][ 900/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 34/99][ 950/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 34/99][1000/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 34/99][1050/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 34/99][1100/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 34/99][1150/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 34/99][1200/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 34/99][1250/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 34/99][1300/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 34/99][1350/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 34/99][1400/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 34/99][1450/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 34/99][1500/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 34/99][1550/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 34/99][1600/2337]  mem=31.90G  box=0.0127  obj=0.0002  cls=0.0000
+  [ 34/99][1650/2337]  mem=31.90G  box=0.0127  obj=0.0002  cls=0.0000
+  [ 34/99][1700/2337]  mem=31.90G  box=0.0127  obj=0.0002  cls=0.0000
+  [ 34/99][1750/2337]  mem=31.90G  box=0.0127  obj=0.0002  cls=0.0000
+  [ 34/99][1800/2337]  mem=31.90G  box=0.0127  obj=0.0002  cls=0.0000
+  [ 34/99][1850/2337]  mem=31.90G  box=0.0127  obj=0.0002  cls=0.0000
+  [ 34/99][1900/2337]  mem=31.90G  box=0.0127  obj=0.0002  cls=0.0000
+  [ 34/99][1950/2337]  mem=31.90G  box=0.0127  obj=0.0002  cls=0.0000
+  [ 34/99][2000/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 34/99][2050/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 34/99][2100/2337]  mem=31.90G  box=0.0127  obj=0.0002  cls=0.0000
+  [ 34/99][2150/2337]  mem=31.90G  box=0.0127  obj=0.0002  cls=0.0000
+  [ 34/99][2200/2337]  mem=31.90G  box=0.0127  obj=0.0002  cls=0.0000
+  [ 34/99][2250/2337]  mem=31.90G  box=0.0127  obj=0.0002  cls=0.0000
+  [ 34/99][2300/2337]  mem=31.90G  box=0.0127  obj=0.0002  cls=0.0000
+
+Epoch  34/99  loss=0.0130  mAP@0.5=0.6431  mAP@0.5:0.95=0.6431
+
+  ✓ New best mAP@0.5 = 0.6431  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [ 35/99][   0/2337]  mem=31.90G  box=0.0110  obj=0.0002  cls=0.0000
+  [ 35/99][  50/2337]  mem=31.90G  box=0.0106  obj=0.0002  cls=0.0000
+  [ 35/99][ 100/2337]  mem=31.90G  box=0.0115  obj=0.0002  cls=0.0000
+  [ 35/99][ 150/2337]  mem=31.90G  box=0.0115  obj=0.0002  cls=0.0000
+  [ 35/99][ 200/2337]  mem=31.90G  box=0.0119  obj=0.0002  cls=0.0000
+  [ 35/99][ 250/2337]  mem=31.90G  box=0.0120  obj=0.0002  cls=0.0000
+  [ 35/99][ 300/2337]  mem=31.90G  box=0.0121  obj=0.0002  cls=0.0000
+  [ 35/99][ 350/2337]  mem=31.90G  box=0.0123  obj=0.0002  cls=0.0000
+  [ 35/99][ 400/2337]  mem=31.90G  box=0.0122  obj=0.0002  cls=0.0000
+  [ 35/99][ 450/2337]  mem=31.90G  box=0.0122  obj=0.0002  cls=0.0000
+  [ 35/99][ 500/2337]  mem=31.90G  box=0.0122  obj=0.0002  cls=0.0000
+  [ 35/99][ 550/2337]  mem=31.90G  box=0.0122  obj=0.0002  cls=0.0000
+  [ 35/99][ 600/2337]  mem=31.90G  box=0.0123  obj=0.0002  cls=0.0000
+  [ 35/99][ 650/2337]  mem=31.90G  box=0.0123  obj=0.0002  cls=0.0000
+  [ 35/99][ 700/2337]  mem=31.90G  box=0.0123  obj=0.0002  cls=0.0000
+  [ 35/99][ 750/2337]  mem=31.90G  box=0.0123  obj=0.0002  cls=0.0000
+  [ 35/99][ 800/2337]  mem=31.90G  box=0.0123  obj=0.0002  cls=0.0000
+  [ 35/99][ 850/2337]  mem=31.90G  box=0.0122  obj=0.0002  cls=0.0000
+  [ 35/99][ 900/2337]  mem=31.90G  box=0.0123  obj=0.0002  cls=0.0000
+  [ 35/99][ 950/2337]  mem=31.90G  box=0.0123  obj=0.0002  cls=0.0000
+  [ 35/99][1000/2337]  mem=31.90G  box=0.0123  obj=0.0002  cls=0.0000
+  [ 35/99][1050/2337]  mem=31.90G  box=0.0123  obj=0.0002  cls=0.0000
+  [ 35/99][1100/2337]  mem=31.90G  box=0.0123  obj=0.0002  cls=0.0000
+  [ 35/99][1150/2337]  mem=31.90G  box=0.0123  obj=0.0002  cls=0.0000
+  [ 35/99][1200/2337]  mem=31.90G  box=0.0123  obj=0.0002  cls=0.0000
+  [ 35/99][1250/2337]  mem=31.90G  box=0.0123  obj=0.0002  cls=0.0000
+  [ 35/99][1300/2337]  mem=31.90G  box=0.0123  obj=0.0002  cls=0.0000
+  [ 35/99][1350/2337]  mem=31.90G  box=0.0122  obj=0.0002  cls=0.0000
+  [ 35/99][1400/2337]  mem=31.90G  box=0.0122  obj=0.0002  cls=0.0000
+  [ 35/99][1450/2337]  mem=31.90G  box=0.0123  obj=0.0002  cls=0.0000
+  [ 35/99][1500/2337]  mem=31.90G  box=0.0124  obj=0.0002  cls=0.0000
+  [ 35/99][1550/2337]  mem=31.90G  box=0.0124  obj=0.0002  cls=0.0000
+  [ 35/99][1600/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 35/99][1650/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 35/99][1700/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 35/99][1750/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 35/99][1800/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 35/99][1850/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 35/99][1900/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 35/99][1950/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 35/99][2000/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 35/99][2050/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 35/99][2100/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 35/99][2150/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 35/99][2200/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 35/99][2250/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 35/99][2300/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+
+Epoch  35/99  loss=0.0129  mAP@0.5=0.6448  mAP@0.5:0.95=0.6448
+
+  ✓ New best mAP@0.5 = 0.6448  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [ 36/99][   0/2337]  mem=31.90G  box=0.0235  obj=0.0002  cls=0.0000
+  [ 36/99][  50/2337]  mem=31.90G  box=0.0136  obj=0.0002  cls=0.0000
+  [ 36/99][ 100/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 36/99][ 150/2337]  mem=31.90G  box=0.0127  obj=0.0002  cls=0.0000
+  [ 36/99][ 200/2337]  mem=31.90G  box=0.0131  obj=0.0002  cls=0.0000
+  [ 36/99][ 250/2337]  mem=31.90G  box=0.0133  obj=0.0002  cls=0.0000
+  [ 36/99][ 300/2337]  mem=31.90G  box=0.0131  obj=0.0002  cls=0.0000
+  [ 36/99][ 350/2337]  mem=31.90G  box=0.0128  obj=0.0002  cls=0.0000
+  [ 36/99][ 400/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 36/99][ 450/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 36/99][ 500/2337]  mem=31.90G  box=0.0127  obj=0.0002  cls=0.0000
+  [ 36/99][ 550/2337]  mem=31.90G  box=0.0127  obj=0.0002  cls=0.0000
+  [ 36/99][ 600/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 36/99][ 650/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 36/99][ 700/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 36/99][ 750/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 36/99][ 800/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 36/99][ 850/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 36/99][ 900/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 36/99][ 950/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 36/99][1000/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 36/99][1050/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 36/99][1100/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 36/99][1150/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 36/99][1200/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 36/99][1250/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 36/99][1300/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 36/99][1350/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 36/99][1400/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 36/99][1450/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 36/99][1500/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 36/99][1550/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 36/99][1600/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 36/99][1650/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 36/99][1700/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 36/99][1750/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 36/99][1800/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 36/99][1850/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 36/99][1900/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 36/99][1950/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 36/99][2000/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 36/99][2050/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 36/99][2100/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 36/99][2150/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 36/99][2200/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 36/99][2250/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 36/99][2300/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+
+Epoch  36/99  loss=0.0127  mAP@0.5=0.6474  mAP@0.5:0.95=0.6474
+
+  ✓ New best mAP@0.5 = 0.6474  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [ 37/99][   0/2337]  mem=31.90G  box=0.0089  obj=0.0002  cls=0.0000
+  [ 37/99][  50/2337]  mem=31.90G  box=0.0137  obj=0.0002  cls=0.0000
+  [ 37/99][ 100/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 37/99][ 150/2337]  mem=31.90G  box=0.0140  obj=0.0002  cls=0.0000
+  [ 37/99][ 200/2337]  mem=31.90G  box=0.0139  obj=0.0002  cls=0.0000
+  [ 37/99][ 250/2337]  mem=31.90G  box=0.0134  obj=0.0002  cls=0.0000
+  [ 37/99][ 300/2337]  mem=31.90G  box=0.0132  obj=0.0002  cls=0.0000
+  [ 37/99][ 350/2337]  mem=31.90G  box=0.0131  obj=0.0002  cls=0.0000
+  [ 37/99][ 400/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 37/99][ 450/2337]  mem=31.90G  box=0.0129  obj=0.0002  cls=0.0000
+  [ 37/99][ 500/2337]  mem=31.90G  box=0.0128  obj=0.0002  cls=0.0000
+  [ 37/99][ 550/2337]  mem=31.90G  box=0.0128  obj=0.0002  cls=0.0000
+  [ 37/99][ 600/2337]  mem=31.90G  box=0.0127  obj=0.0002  cls=0.0000
+  [ 37/99][ 650/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 37/99][ 700/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 37/99][ 750/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 37/99][ 800/2337]  mem=31.90G  box=0.0126  obj=0.0002  cls=0.0000
+  [ 37/99][ 850/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 37/99][ 900/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 37/99][ 950/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 37/99][1000/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 37/99][1050/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 37/99][1100/2337]  mem=31.90G  box=0.0124  obj=0.0002  cls=0.0000
+  [ 37/99][1150/2337]  mem=31.90G  box=0.0124  obj=0.0002  cls=0.0000
+  [ 37/99][1200/2337]  mem=31.90G  box=0.0124  obj=0.0002  cls=0.0000
+  [ 37/99][1250/2337]  mem=31.90G  box=0.0123  obj=0.0002  cls=0.0000
+  [ 37/99][1300/2337]  mem=31.90G  box=0.0123  obj=0.0002  cls=0.0000
+  [ 37/99][1350/2337]  mem=31.90G  box=0.0124  obj=0.0002  cls=0.0000
+  [ 37/99][1400/2337]  mem=31.90G  box=0.0124  obj=0.0002  cls=0.0000
+  [ 37/99][1450/2337]  mem=31.90G  box=0.0124  obj=0.0002  cls=0.0000
+  [ 37/99][1500/2337]  mem=31.90G  box=0.0124  obj=0.0002  cls=0.0000
+  [ 37/99][1550/2337]  mem=31.90G  box=0.0123  obj=0.0002  cls=0.0000
+  [ 37/99][1600/2337]  mem=31.90G  box=0.0123  obj=0.0002  cls=0.0000
+  [ 37/99][1650/2337]  mem=31.90G  box=0.0123  obj=0.0002  cls=0.0000
+  [ 37/99][1700/2337]  mem=31.90G  box=0.0123  obj=0.0002  cls=0.0000
+  [ 37/99][1750/2337]  mem=31.90G  box=0.0123  obj=0.0002  cls=0.0000
+  [ 37/99][1800/2337]  mem=31.90G  box=0.0124  obj=0.0002  cls=0.0000
+  [ 37/99][1850/2337]  mem=31.90G  box=0.0124  obj=0.0002  cls=0.0000
+  [ 37/99][1900/2337]  mem=31.90G  box=0.0124  obj=0.0002  cls=0.0000
+  [ 37/99][1950/2337]  mem=31.90G  box=0.0124  obj=0.0002  cls=0.0000
+  [ 37/99][2000/2337]  mem=31.90G  box=0.0124  obj=0.0002  cls=0.0000
+  [ 37/99][2050/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 37/99][2100/2337]  mem=31.90G  box=0.0124  obj=0.0002  cls=0.0000
+  [ 37/99][2150/2337]  mem=31.90G  box=0.0124  obj=0.0002  cls=0.0000
+  [ 37/99][2200/2337]  mem=31.90G  box=0.0124  obj=0.0002  cls=0.0000
+  [ 37/99][2250/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 37/99][2300/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+
+Epoch  37/99  loss=0.0126  mAP@0.5=0.6494  mAP@0.5:0.95=0.6494
+
+  ✓ New best mAP@0.5 = 0.6494  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [ 38/99][   0/2337]  mem=31.90G  box=0.0208  obj=0.0003  cls=0.0000
+  [ 38/99][  50/2337]  mem=31.90G  box=0.0113  obj=0.0002  cls=0.0000
+  [ 38/99][ 100/2337]  mem=31.90G  box=0.0119  obj=0.0002  cls=0.0000
+  [ 38/99][ 150/2337]  mem=31.90G  box=0.0116  obj=0.0002  cls=0.0000
+  [ 38/99][ 200/2337]  mem=31.90G  box=0.0115  obj=0.0002  cls=0.0000
+  [ 38/99][ 250/2337]  mem=31.90G  box=0.0118  obj=0.0002  cls=0.0000
+  [ 38/99][ 300/2337]  mem=31.90G  box=0.0118  obj=0.0002  cls=0.0000
+  [ 38/99][ 350/2337]  mem=31.90G  box=0.0118  obj=0.0002  cls=0.0000
+  [ 38/99][ 400/2337]  mem=31.90G  box=0.0118  obj=0.0002  cls=0.0000
+  [ 38/99][ 450/2337]  mem=31.90G  box=0.0118  obj=0.0002  cls=0.0000
+  [ 38/99][ 500/2337]  mem=31.90G  box=0.0118  obj=0.0002  cls=0.0000
+  [ 38/99][ 550/2337]  mem=31.90G  box=0.0118  obj=0.0002  cls=0.0000
+  [ 38/99][ 600/2337]  mem=31.90G  box=0.0118  obj=0.0002  cls=0.0000
+  [ 38/99][ 650/2337]  mem=31.90G  box=0.0118  obj=0.0002  cls=0.0000
+  [ 38/99][ 700/2337]  mem=31.90G  box=0.0118  obj=0.0002  cls=0.0000
+  [ 38/99][ 750/2337]  mem=31.90G  box=0.0119  obj=0.0002  cls=0.0000
+  [ 38/99][ 800/2337]  mem=31.90G  box=0.0119  obj=0.0002  cls=0.0000
+  [ 38/99][ 850/2337]  mem=31.90G  box=0.0119  obj=0.0002  cls=0.0000
+  [ 38/99][ 900/2337]  mem=31.90G  box=0.0119  obj=0.0002  cls=0.0000
+  [ 38/99][ 950/2337]  mem=31.90G  box=0.0120  obj=0.0002  cls=0.0000
+  [ 38/99][1000/2337]  mem=31.90G  box=0.0119  obj=0.0002  cls=0.0000
+  [ 38/99][1050/2337]  mem=31.90G  box=0.0120  obj=0.0002  cls=0.0000
+  [ 38/99][1100/2337]  mem=31.90G  box=0.0120  obj=0.0002  cls=0.0000
+  [ 38/99][1150/2337]  mem=31.90G  box=0.0121  obj=0.0002  cls=0.0000
+  [ 38/99][1200/2337]  mem=31.90G  box=0.0121  obj=0.0002  cls=0.0000
+  [ 38/99][1250/2337]  mem=31.90G  box=0.0121  obj=0.0002  cls=0.0000
+  [ 38/99][1300/2337]  mem=31.90G  box=0.0121  obj=0.0002  cls=0.0000
+  [ 38/99][1350/2337]  mem=31.90G  box=0.0122  obj=0.0002  cls=0.0000
+  [ 38/99][1400/2337]  mem=31.90G  box=0.0121  obj=0.0002  cls=0.0000
+  [ 38/99][1450/2337]  mem=31.90G  box=0.0121  obj=0.0002  cls=0.0000
+  [ 38/99][1500/2337]  mem=31.90G  box=0.0122  obj=0.0002  cls=0.0000
+  [ 38/99][1550/2337]  mem=31.90G  box=0.0122  obj=0.0002  cls=0.0000
+  [ 38/99][1600/2337]  mem=31.90G  box=0.0122  obj=0.0002  cls=0.0000
+  [ 38/99][1650/2337]  mem=31.90G  box=0.0121  obj=0.0002  cls=0.0000
+  [ 38/99][1700/2337]  mem=31.90G  box=0.0121  obj=0.0002  cls=0.0000
+  [ 38/99][1750/2337]  mem=31.90G  box=0.0122  obj=0.0002  cls=0.0000
+  [ 38/99][1800/2337]  mem=31.90G  box=0.0122  obj=0.0002  cls=0.0000
+  [ 38/99][1850/2337]  mem=31.90G  box=0.0122  obj=0.0002  cls=0.0000
+  [ 38/99][1900/2337]  mem=31.90G  box=0.0122  obj=0.0002  cls=0.0000
+  [ 38/99][1950/2337]  mem=31.90G  box=0.0122  obj=0.0002  cls=0.0000
+  [ 38/99][2000/2337]  mem=31.90G  box=0.0122  obj=0.0002  cls=0.0000
+  [ 38/99][2050/2337]  mem=31.90G  box=0.0122  obj=0.0002  cls=0.0000
+  [ 38/99][2100/2337]  mem=31.90G  box=0.0122  obj=0.0002  cls=0.0000
+  [ 38/99][2150/2337]  mem=31.90G  box=0.0122  obj=0.0002  cls=0.0000
+  [ 38/99][2200/2337]  mem=31.90G  box=0.0123  obj=0.0002  cls=0.0000
+  [ 38/99][2250/2337]  mem=31.90G  box=0.0123  obj=0.0002  cls=0.0000
+  [ 38/99][2300/2337]  mem=31.90G  box=0.0123  obj=0.0002  cls=0.0000
+
+Epoch  38/99  loss=0.0126  mAP@0.5=0.6527  mAP@0.5:0.95=0.6527
+
+  ✓ New best mAP@0.5 = 0.6527  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [ 39/99][   0/2337]  mem=31.90G  box=0.0080  obj=0.0002  cls=0.0000
+  [ 39/99][  50/2337]  mem=31.90G  box=0.0124  obj=0.0002  cls=0.0000
+  [ 39/99][ 100/2337]  mem=31.90G  box=0.0122  obj=0.0002  cls=0.0000
+  [ 39/99][ 150/2337]  mem=31.90G  box=0.0116  obj=0.0002  cls=0.0000
+  [ 39/99][ 200/2337]  mem=31.90G  box=0.0118  obj=0.0002  cls=0.0000
+  [ 39/99][ 250/2337]  mem=31.90G  box=0.0118  obj=0.0002  cls=0.0000
+  [ 39/99][ 300/2337]  mem=31.90G  box=0.0121  obj=0.0002  cls=0.0000
+  [ 39/99][ 350/2337]  mem=31.90G  box=0.0119  obj=0.0002  cls=0.0000
+  [ 39/99][ 400/2337]  mem=31.90G  box=0.0120  obj=0.0002  cls=0.0000
+  [ 39/99][ 450/2337]  mem=31.90G  box=0.0120  obj=0.0002  cls=0.0000
+  [ 39/99][ 500/2337]  mem=31.90G  box=0.0120  obj=0.0002  cls=0.0000
+  [ 39/99][ 550/2337]  mem=31.90G  box=0.0121  obj=0.0002  cls=0.0000
+  [ 39/99][ 600/2337]  mem=31.90G  box=0.0121  obj=0.0002  cls=0.0000
+  [ 39/99][ 650/2337]  mem=31.90G  box=0.0121  obj=0.0002  cls=0.0000
+  [ 39/99][ 700/2337]  mem=31.90G  box=0.0121  obj=0.0002  cls=0.0000
+  [ 39/99][ 750/2337]  mem=31.90G  box=0.0121  obj=0.0002  cls=0.0000
+  [ 39/99][ 800/2337]  mem=31.90G  box=0.0121  obj=0.0002  cls=0.0000
+  [ 39/99][ 850/2337]  mem=31.90G  box=0.0121  obj=0.0002  cls=0.0000
+  [ 39/99][ 900/2337]  mem=31.90G  box=0.0122  obj=0.0002  cls=0.0000
+  [ 39/99][ 950/2337]  mem=31.90G  box=0.0122  obj=0.0002  cls=0.0000
+  [ 39/99][1000/2337]  mem=31.90G  box=0.0122  obj=0.0002  cls=0.0000
+  [ 39/99][1050/2337]  mem=31.90G  box=0.0122  obj=0.0002  cls=0.0000
+  [ 39/99][1100/2337]  mem=31.90G  box=0.0122  obj=0.0002  cls=0.0000
+  [ 39/99][1150/2337]  mem=31.90G  box=0.0123  obj=0.0002  cls=0.0000
+  [ 39/99][1200/2337]  mem=31.90G  box=0.0122  obj=0.0002  cls=0.0000
+  [ 39/99][1250/2337]  mem=31.90G  box=0.0123  obj=0.0002  cls=0.0000
+  [ 39/99][1300/2337]  mem=31.90G  box=0.0123  obj=0.0002  cls=0.0000
+  [ 39/99][1350/2337]  mem=31.90G  box=0.0124  obj=0.0002  cls=0.0000
+  [ 39/99][1400/2337]  mem=31.90G  box=0.0123  obj=0.0002  cls=0.0000
+  [ 39/99][1450/2337]  mem=31.90G  box=0.0124  obj=0.0002  cls=0.0000
+  [ 39/99][1500/2337]  mem=31.90G  box=0.0124  obj=0.0002  cls=0.0000
+  [ 39/99][1550/2337]  mem=31.90G  box=0.0124  obj=0.0002  cls=0.0000
+  [ 39/99][1600/2337]  mem=31.90G  box=0.0124  obj=0.0002  cls=0.0000
+  [ 39/99][1650/2337]  mem=31.90G  box=0.0124  obj=0.0002  cls=0.0000
+  [ 39/99][1700/2337]  mem=31.90G  box=0.0124  obj=0.0002  cls=0.0000
+  [ 39/99][1750/2337]  mem=31.90G  box=0.0124  obj=0.0002  cls=0.0000
+  [ 39/99][1800/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 39/99][1850/2337]  mem=31.90G  box=0.0124  obj=0.0002  cls=0.0000
+  [ 39/99][1900/2337]  mem=31.90G  box=0.0124  obj=0.0002  cls=0.0000
+  [ 39/99][1950/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 39/99][2000/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 39/99][2050/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 39/99][2100/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 39/99][2150/2337]  mem=31.90G  box=0.0125  obj=0.0002  cls=0.0000
+  [ 39/99][2200/2337]  mem=31.90G  box=0.0124  obj=0.0002  cls=0.0000
+  [ 39/99][2250/2337]  mem=31.90G  box=0.0124  obj=0.0002  cls=0.0000
+  [ 39/99][2300/2337]  mem=31.90G  box=0.0124  obj=0.0002  cls=0.0000
+
+Epoch  39/99  loss=0.0124  mAP@0.5=0.6542  mAP@0.5:0.95=0.6542
+
+  ✓ New best mAP@0.5 = 0.6542  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [ 40/99][   0/2337]  mem=31.90G  box=0.0062  obj=0.0002  cls=0.0000

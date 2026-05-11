@@ -1,0 +1,221 @@
+========================================
+Stage 1 DDP: YOLOMG on Anti-UAV-RGBT
+Job ID:  22522864
+Node:    gcn26
+GPUs:    0,1,2,3
+Time:    Wed May  6 21:52:25 CEST 2026
+========================================
+
+Local scratch:
+Filesystem      Size  Used Avail Use% Mounted on
+wstor_scratch1  2.5P  550T  1.9P  23% /gpfs/scratch1
+
+Copying Anti-UAV-RGBT to GPFS scratch...
+Done in 174s.  Size: 5.1G
+
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+Stage 1 training  →  /projects/prjs2041/runs/stage1/antiuav_rgbt14
+Device: cuda:0  |  IMG_SIZE=640  EPOCHS=100  BS=16  world_size=4
+Loading datasets …
+  train: 149,528 frames  |  val: 61,999 frames
+Building YOLOMG from /projects/prjs2041/YOLOMG/models/dual_uav2.yaml …
+
+                 from  n    params  module                                  arguments                     
+
+                 from  n    params  module                                  arguments                     
+
+                 from  n    params  module                                  arguments                     
+
+                 from  n    params  module                                  arguments                     
+  0                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  0                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  0                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  0                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  1                -1  1       336  models.common.C3                        [8, 8]                        
+  1                -1  1       336  models.common.C3                        [8, 8]                        
+  1                -1  1       336  models.common.C3                        [8, 8]                        
+  1                -1  1       336  models.common.C3                        [8, 8]                        
+  2                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  2                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  2                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  2                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  3                -1  1       336  models.common.C3                        [8, 8, 1]                     
+  3                -1  1       336  models.common.C3                        [8, 8, 1]                     
+  3                -1  1       336  models.common.C3                        [8, 8, 1]                     
+  3                -1  1       336  models.common.C3                        [8, 8, 1]                     
+  4           [-1, 1]  1       130  models.common.Concat3                   [16, 1]                       
+  4           [-1, 1]  1       130  models.common.Concat3                   [16, 1]                       
+  4           [-1, 1]  1       130  models.common.Concat3                   [16, 1]                       
+  4           [-1, 1]  1       130  models.common.Concat3                   [16, 1]                       
+  5                -1  1      1248  models.common.C3                        [16, 16, 1]                   
+  6                -1  1      4672  models.common.Conv                      [16, 32, 3, 2]                
+  5                -1  1      1248  models.common.C3                        [16, 16, 1]                   
+  5                -1  1      1248  models.common.C3                        [16, 16, 1]                   
+  5                -1  1      1248  models.common.C3                        [16, 16, 1]                   
+  6                -1  1      4672  models.common.Conv                      [16, 32, 3, 2]                
+  6                -1  1      4672  models.common.Conv                      [16, 32, 3, 2]                
+  6                -1  1      4672  models.common.Conv                      [16, 32, 3, 2]                
+  7                -1  1      4800  models.common.C3                        [32, 32, 1]                   
+  8                -1  1     18560  models.common.Conv                      [32, 64, 3, 2]                
+  7                -1  1      4800  models.common.C3                        [32, 32, 1]                   
+  7                -1  1      4800  models.common.C3                        [32, 32, 1]                   
+  7                -1  1      4800  models.common.C3                        [32, 32, 1]                   
+  8                -1  1     18560  models.common.Conv                      [32, 64, 3, 2]                
+  8                -1  1     18560  models.common.Conv                      [32, 64, 3, 2]                
+  8                -1  1     18560  models.common.Conv                      [32, 64, 3, 2]                
+  9                -1  1     18816  models.common.C3                        [64, 64, 1]                   
+ 10                -1  1     73984  models.common.Conv                      [64, 128, 3, 2]               
+  9                -1  1     18816  models.common.C3                        [64, 64, 1]                   
+  9                -1  1     18816  models.common.C3                        [64, 64, 1]                   
+  9                -1  1     18816  models.common.C3                        [64, 64, 1]                   
+ 10                -1  1     73984  models.common.Conv                      [64, 128, 3, 2]               
+ 10                -1  1     73984  models.common.Conv                      [64, 128, 3, 2]               
+ 10                -1  1     73984  models.common.Conv                      [64, 128, 3, 2]               
+ 11                -1  3    156928  models.common.C3                        [128, 128, 3]                 
+ 11                -1  3    156928  models.common.C3                        [128, 128, 3]                 
+ 12                -1  1     41344  models.common.SPPF                      [128, 128, 5]                 
+ 11                -1  3    156928  models.common.C3                        [128, 128, 3]                 
+ 11                -1  3    156928  models.common.C3                        [128, 128, 3]                 
+ 13                -1  1     33280  models.common.Conv                      [128, 256, 1, 1]              
+ 12                -1  1     41344  models.common.SPPF                      [128, 128, 5]                 
+ 14                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 15           [-1, 9]  1         0  models.common.Concat                    [1]                           
+ 12                -1  1     41344  models.common.SPPF                      [128, 128, 5]                 
+ 13                -1  1     33280  models.common.Conv                      [128, 256, 1, 1]              
+ 12                -1  1     41344  models.common.SPPF                      [128, 128, 5]                 
+ 13                -1  1     33280  models.common.Conv                      [128, 256, 1, 1]              
+ 14                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 15           [-1, 9]  1         0  models.common.Concat                    [1]                           
+ 14                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 13                -1  1     33280  models.common.Conv                      [128, 256, 1, 1]              
+ 15           [-1, 9]  1         0  models.common.Concat                    [1]                           
+ 14                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 15           [-1, 9]  1         0  models.common.Concat                    [1]                           
+ 16                -1  1    312832  models.common.C3                        [320, 256, 1, False]          
+ 17                -1  1     33024  models.common.Conv                      [256, 128, 1, 1]              
+ 16                -1  1    312832  models.common.C3                        [320, 256, 1, False]          
+ 18                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 19           [-1, 6]  1         0  models.common.Concat                    [1]                           
+ 16                -1  1    312832  models.common.C3                        [320, 256, 1, False]          
+ 16                -1  1    312832  models.common.C3                        [320, 256, 1, False]          
+ 17                -1  1     33024  models.common.Conv                      [256, 128, 1, 1]              
+ 18                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 19           [-1, 6]  1         0  models.common.Concat                    [1]                           
+ 17                -1  1     33024  models.common.Conv                      [256, 128, 1, 1]              
+ 18                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 17                -1  1     33024  models.common.Conv                      [256, 128, 1, 1]              
+ 19           [-1, 6]  1         0  models.common.Concat                    [1]                           
+ 18                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 19           [-1, 6]  1         0  models.common.Concat                    [1]                           
+ 20                -1  1     78592  models.common.C3                        [160, 128, 1, False]          
+ 20                -1  1     78592  models.common.C3                        [160, 128, 1, False]          
+ 20                -1  1     78592  models.common.C3                        [160, 128, 1, False]          
+ 21                -1  1    147712  models.common.Conv                      [128, 128, 3, 2]              
+ 20                -1  1     78592  models.common.C3                        [160, 128, 1, False]          
+ 22          [-1, 16]  1         0  models.common.Concat                    [1]                           
+ 21                -1  1    147712  models.common.Conv                      [128, 128, 3, 2]              
+ 22          [-1, 16]  1         0  models.common.Concat                    [1]                           
+ 21                -1  1    147712  models.common.Conv                      [128, 128, 3, 2]              
+ 22          [-1, 16]  1         0  models.common.Concat                    [1]                           
+ 21                -1  1    147712  models.common.Conv                      [128, 128, 3, 2]              
+ 22          [-1, 16]  1         0  models.common.Concat                    [1]                           
+ 23                -1  1    329216  models.common.C3                        [384, 256, 1, False]          
+ 23                -1  1    329216  models.common.C3                        [384, 256, 1, False]          
+ 23                -1  1    329216  models.common.C3                        [384, 256, 1, False]          
+ 23                -1  1    329216  models.common.C3                        [384, 256, 1, False]          
+ 24                -1  1    590336  models.common.Conv                      [256, 256, 3, 2]              
+ 25          [-1, 12]  1         0  models.common.Concat                    [1]                           
+ 24                -1  1    590336  models.common.Conv                      [256, 256, 3, 2]              
+ 25          [-1, 12]  1         0  models.common.Concat                    [1]                           
+ 24                -1  1    590336  models.common.Conv                      [256, 256, 3, 2]              
+ 25          [-1, 12]  1         0  models.common.Concat                    [1]                           
+ 24                -1  1    590336  models.common.Conv                      [256, 256, 3, 2]              
+ 25          [-1, 12]  1         0  models.common.Concat                    [1]                           
+ 26                -1  1   1117184  models.common.C3                        [384, 512, 1, False]          
+ 27      [20, 23, 26]  1     16182  models.yolo.Detect                      [1, [[3, 2, 4, 3, 4, 3], [6, 4, 7, 5, 9, 6], [12, 7, 15, 9, 26, 14]], [128, 256, 512]]
+ 26                -1  1   1117184  models.common.C3                        [384, 512, 1, False]          
+ 26                -1  1   1117184  models.common.C3                        [384, 512, 1, False]          
+ 26                -1  1   1117184  models.common.C3                        [384, 512, 1, False]          
+ 27      [20, 23, 26]  1     16182  models.yolo.Detect                      [1, [[3, 2, 4, 3, 4, 3], [6, 4, 7, 5, 9, 6], [12, 7, 15, 9, 26, 14]], [128, 256, 512]]
+ 27      [20, 23, 26]  1     16182  models.yolo.Detect                      [1, [[3, 2, 4, 3, 4, 3], [6, 4, 7, 5, 9, 6], [12, 7, 15, 9, 26, 14]], [128, 256, 512]]
+ 27      [20, 23, 26]  1     16182  models.yolo.Detect                      [1, [[3, 2, 4, 3, 4, 3], [6, 4, 7, 5, 9, 6], [12, 7, 15, 9, 26, 14]], [128, 256, 512]]
+Model Summary: 318 layers, 2979976 parameters, 2979976 gradients, 91.5 GFLOPs
+
+Model Summary: 318 layers, 2979976 parameters, 2979976 gradients, 91.5 GFLOPs
+
+Model Summary: 318 layers, 2979976 parameters, 2979976 gradients, 91.5 GFLOPs
+
+Model Summary: 318 layers, 2979976 parameters, 2979976 gradients, 91.5 GFLOPs
+
+  Parameters: 2,979,976
+
+Starting training for 100 epochs …
+
+  [  0/99][   0/2337]  mem=1.99G  box=0.0873  obj=0.0015  cls=0.0000
+  [  0/99][  50/2337]  mem=23.11G  box=0.0509  obj=0.0015  cls=0.0000
+  [  0/99][ 100/2337]  mem=23.11G  box=0.0434  obj=0.0016  cls=0.0000
+  [  0/99][ 150/2337]  mem=23.11G  box=0.0407  obj=0.0015  cls=0.0000
+  [  0/99][ 200/2337]  mem=23.11G  box=0.0379  obj=0.0015  cls=0.0000
+  [  0/99][ 250/2337]  mem=23.11G  box=0.0357  obj=0.0015  cls=0.0000
+  [  0/99][ 300/2337]  mem=23.11G  box=0.0349  obj=0.0015  cls=0.0000
+  [  0/99][ 350/2337]  mem=23.11G  box=0.0341  obj=0.0015  cls=0.0000
+  [  0/99][ 400/2337]  mem=23.11G  box=0.0336  obj=0.0014  cls=0.0000
+  [  0/99][ 450/2337]  mem=23.11G  box=0.0330  obj=0.0014  cls=0.0000
+  [  0/99][ 500/2337]  mem=23.11G  box=0.0323  obj=0.0014  cls=0.0000
+  [  0/99][ 550/2337]  mem=23.11G  box=0.0319  obj=0.0014  cls=0.0000
+  [  0/99][ 600/2337]  mem=23.11G  box=0.0318  obj=0.0014  cls=0.0000
+  [  0/99][ 650/2337]  mem=23.11G  box=0.0317  obj=0.0014  cls=0.0000
+  [  0/99][ 700/2337]  mem=23.11G  box=0.0315  obj=0.0014  cls=0.0000
+  [  0/99][ 750/2337]  mem=23.11G  box=0.0312  obj=0.0013  cls=0.0000
+  [  0/99][ 800/2337]  mem=23.11G  box=0.0310  obj=0.0013  cls=0.0000
+  [  0/99][ 850/2337]  mem=23.11G  box=0.0308  obj=0.0013  cls=0.0000
+  [  0/99][ 900/2337]  mem=23.11G  box=0.0307  obj=0.0013  cls=0.0000
+  [  0/99][ 950/2337]  mem=23.11G  box=0.0305  obj=0.0013  cls=0.0000
+  [  0/99][1000/2337]  mem=23.11G  box=0.0303  obj=0.0013  cls=0.0000
+  [  0/99][1050/2337]  mem=23.11G  box=0.0302  obj=0.0013  cls=0.0000
+  [  0/99][1100/2337]  mem=23.11G  box=0.0300  obj=0.0013  cls=0.0000
+  [  0/99][1150/2337]  mem=23.11G  box=0.0299  obj=0.0013  cls=0.0000
+  [  0/99][1200/2337]  mem=23.11G  box=0.0299  obj=0.0013  cls=0.0000
+  [  0/99][1250/2337]  mem=23.11G  box=0.0298  obj=0.0013  cls=0.0000
+  [  0/99][1300/2337]  mem=23.11G  box=0.0296  obj=0.0013  cls=0.0000
+  [  0/99][1350/2337]  mem=23.11G  box=0.0294  obj=0.0013  cls=0.0000
+  [  0/99][1400/2337]  mem=23.11G  box=0.0294  obj=0.0013  cls=0.0000
+  [  0/99][1450/2337]  mem=23.11G  box=0.0293  obj=0.0013  cls=0.0000
+  [  0/99][1500/2337]  mem=23.11G  box=0.0292  obj=0.0013  cls=0.0000
+  [  0/99][1550/2337]  mem=23.11G  box=0.0292  obj=0.0013  cls=0.0000
+  [  0/99][1600/2337]  mem=23.11G  box=0.0290  obj=0.0012  cls=0.0000
+  [  0/99][1650/2337]  mem=23.11G  box=0.0289  obj=0.0012  cls=0.0000
+  [  0/99][1700/2337]  mem=23.11G  box=0.0289  obj=0.0012  cls=0.0000
+  [  0/99][1750/2337]  mem=23.11G  box=0.0287  obj=0.0012  cls=0.0000
+  [  0/99][1800/2337]  mem=23.11G  box=0.0287  obj=0.0012  cls=0.0000
+  [  0/99][1850/2337]  mem=23.11G  box=0.0285  obj=0.0012  cls=0.0000
+  [  0/99][1900/2337]  mem=23.11G  box=0.0284  obj=0.0012  cls=0.0000
+  [  0/99][1950/2337]  mem=23.11G  box=0.0282  obj=0.0012  cls=0.0000
+  [  0/99][2000/2337]  mem=23.11G  box=0.0281  obj=0.0012  cls=0.0000
+  [  0/99][2050/2337]  mem=23.11G  box=0.0280  obj=0.0012  cls=0.0000
+  [  0/99][2100/2337]  mem=23.11G  box=0.0279  obj=0.0012  cls=0.0000
+  [  0/99][2150/2337]  mem=23.11G  box=0.0278  obj=0.0012  cls=0.0000
+  [  0/99][2200/2337]  mem=23.11G  box=0.0277  obj=0.0012  cls=0.0000
+  [  0/99][2250/2337]  mem=23.11G  box=0.0276  obj=0.0012  cls=0.0000
+  [  0/99][2300/2337]  mem=23.11G  box=0.0275  obj=0.0012  cls=0.0000
+
+Epoch   0/99  loss=0.0288  mAP@0.5=0.0000  mAP@0.5:0.95=0.0000
+
+  ✓ New best mAP@0.5 = 0.0000  (saved /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt)
+  [  1/99][   0/2337]  mem=23.09G  box=0.0363  obj=0.0011  cls=0.0000
+  [  1/99][  50/2337]  mem=23.09G  box=0.0229  obj=0.0010  cls=0.0000
+  [  1/99][ 100/2337]  mem=23.09G  box=0.0227  obj=0.0010  cls=0.0000

@@ -1,0 +1,316 @@
+========================================
+Stage 1 DDP: YOLOMG on Anti-UAV-RGBT
+Job ID:  22487080
+Node:    gcn71
+GPUs:    0,1,2,3
+Time:    Tue May  5 16:45:07 CEST 2026
+========================================
+
+Local scratch:
+Filesystem      Size  Used Avail Use% Mounted on
+wstor_scratch1  2.5P  532T  1.9P  22% /gpfs/scratch1
+
+Copying Anti-UAV-RGBT to GPFS scratch...
+Done in 9s.  Size: 180K
+
+Pre-extracted frames found (no manifest, but JPEGs present) at /projects/prjs2041/datasets/Anti-UAV-RGBT-frames
+Copying frames to GPFS scratch...
+Done in 14326s.  Size: 10G
+
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+[AntiUAVRGBTFramesDataset] Using pre-extracted JPEGs from /scratch-local/knguyen1.22487080/Anti-UAV-RGBT-frames
+[AntiUAVRGBTFramesDataset] Using pre-extracted JPEGs from /scratch-local/knguyen1.22487080/Anti-UAV-RGBT-frames
+[AntiUAVRGBTFramesDataset] Using pre-extracted JPEGs from /scratch-local/knguyen1.22487080/Anti-UAV-RGBT-frames
+Stage 1 training  →  /projects/prjs2041/runs/stage1/antiuav_rgbt9
+Device: cuda:0  |  IMG_SIZE=640  EPOCHS=100  BS=16  world_size=4
+Loading datasets …
+  Using pre-extracted JPEG frames from /scratch-local/knguyen1.22487080/Anti-UAV-RGBT-frames
+[AntiUAVRGBTFramesDataset] Using pre-extracted JPEGs from /scratch-local/knguyen1.22487080/Anti-UAV-RGBT-frames
+[AntiUAVRGBTFramesDataset] Using pre-extracted JPEGs from /scratch-local/knguyen1.22487080/Anti-UAV-RGBT-frames[AntiUAVRGBTFramesDataset] Using pre-extracted JPEGs from /scratch-local/knguyen1.22487080/Anti-UAV-RGBT-frames
+[AntiUAVRGBTFramesDataset] Using pre-extracted JPEGs from /scratch-local/knguyen1.22487080/Anti-UAV-RGBT-frames
+[AntiUAVRGBTFramesDataset] Using pre-extracted JPEGs from /scratch-local/knguyen1.22487080/Anti-UAV-RGBT-frames
+
+  train: 149,528 frames  |  val: 61,999 frames
+Building YOLOMG from /projects/prjs2041/YOLOMG/models/dual_uav2.yaml …
+
+                 from  n    params  module                                  arguments                     
+
+                 from  n    params  module                                  arguments                     
+
+                 from  n    params  module                                  arguments                     
+
+                 from  n    params  module                                  arguments                     
+  0                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  0                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  0                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  0                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  1                -1  1       336  models.common.C3                        [8, 8]                        
+  1                -1  1       336  models.common.C3                        [8, 8]                        
+  1                -1  1       336  models.common.C3                        [8, 8]                        
+  1                -1  1       336  models.common.C3                        [8, 8]                        
+  2                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  2                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  2                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  2                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  3                -1  1       336  models.common.C3                        [8, 8, 1]                     
+  3                -1  1       336  models.common.C3                        [8, 8, 1]                     
+  3                -1  1       336  models.common.C3                        [8, 8, 1]                     
+  3                -1  1       336  models.common.C3                        [8, 8, 1]                     
+  4           [-1, 1]  1       130  models.common.Concat3                   [16, 1]                       
+  4           [-1, 1]  1       130  models.common.Concat3                   [16, 1]                       
+  4           [-1, 1]  1       130  models.common.Concat3                   [16, 1]                       
+  4           [-1, 1]  1       130  models.common.Concat3                   [16, 1]                       
+  5                -1  1      1248  models.common.C3                        [16, 16, 1]                   
+  5                -1  1      1248  models.common.C3                        [16, 16, 1]                   
+  6                -1  1      4672  models.common.Conv                      [16, 32, 3, 2]                
+  5                -1  1      1248  models.common.C3                        [16, 16, 1]                   
+  6                -1  1      4672  models.common.Conv                      [16, 32, 3, 2]                
+  5                -1  1      1248  models.common.C3                        [16, 16, 1]                   
+  6                -1  1      4672  models.common.Conv                      [16, 32, 3, 2]                
+  6                -1  1      4672  models.common.Conv                      [16, 32, 3, 2]                
+  7                -1  1      4800  models.common.C3                        [32, 32, 1]                   
+  7                -1  1      4800  models.common.C3                        [32, 32, 1]                   
+  7                -1  1      4800  models.common.C3                        [32, 32, 1]                   
+  8                -1  1     18560  models.common.Conv                      [32, 64, 3, 2]                
+  8                -1  1     18560  models.common.Conv                      [32, 64, 3, 2]                
+  7                -1  1      4800  models.common.C3                        [32, 32, 1]                   
+  8                -1  1     18560  models.common.Conv                      [32, 64, 3, 2]                
+  8                -1  1     18560  models.common.Conv                      [32, 64, 3, 2]                
+  9                -1  1     18816  models.common.C3                        [64, 64, 1]                   
+  9                -1  1     18816  models.common.C3                        [64, 64, 1]                   
+  9                -1  1     18816  models.common.C3                        [64, 64, 1]                   
+  9                -1  1     18816  models.common.C3                        [64, 64, 1]                   
+ 10                -1  1     73984  models.common.Conv                      [64, 128, 3, 2]               
+ 10                -1  1     73984  models.common.Conv                      [64, 128, 3, 2]               
+ 10                -1  1     73984  models.common.Conv                      [64, 128, 3, 2]               
+ 10                -1  1     73984  models.common.Conv                      [64, 128, 3, 2]               
+ 11                -1  3    156928  models.common.C3                        [128, 128, 3]                 
+ 11                -1  3    156928  models.common.C3                        [128, 128, 3]                 
+ 11                -1  3    156928  models.common.C3                        [128, 128, 3]                 
+ 11                -1  3    156928  models.common.C3                        [128, 128, 3]                 
+ 12                -1  1     41344  models.common.SPPF                      [128, 128, 5]                 
+ 12                -1  1     41344  models.common.SPPF                      [128, 128, 5]                 
+ 12                -1  1     41344  models.common.SPPF                      [128, 128, 5]                 
+ 13                -1  1     33280  models.common.Conv                      [128, 256, 1, 1]              
+ 13                -1  1     33280  models.common.Conv                      [128, 256, 1, 1]              
+ 12                -1  1     41344  models.common.SPPF                      [128, 128, 5]                 
+ 14                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 14                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 15           [-1, 9]  1         0  models.common.Concat                    [1]                           
+ 15           [-1, 9]  1         0  models.common.Concat                    [1]                           
+ 13                -1  1     33280  models.common.Conv                      [128, 256, 1, 1]              
+ 14                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 13                -1  1     33280  models.common.Conv                      [128, 256, 1, 1]              
+ 15           [-1, 9]  1         0  models.common.Concat                    [1]                           
+ 14                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 15           [-1, 9]  1         0  models.common.Concat                    [1]                           
+ 16                -1  1    312832  models.common.C3                        [320, 256, 1, False]          
+ 16                -1  1    312832  models.common.C3                        [320, 256, 1, False]          
+ 16                -1  1    312832  models.common.C3                        [320, 256, 1, False]          
+ 17                -1  1     33024  models.common.Conv                      [256, 128, 1, 1]              
+ 17                -1  1     33024  models.common.Conv                      [256, 128, 1, 1]              
+ 18                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 16                -1  1    312832  models.common.C3                        [320, 256, 1, False]          
+ 19           [-1, 6]  1         0  models.common.Concat                    [1]                           
+ 18                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 19           [-1, 6]  1         0  models.common.Concat                    [1]                           
+ 17                -1  1     33024  models.common.Conv                      [256, 128, 1, 1]              
+ 18                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 19           [-1, 6]  1         0  models.common.Concat                    [1]                           
+ 17                -1  1     33024  models.common.Conv                      [256, 128, 1, 1]              
+ 18                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 19           [-1, 6]  1         0  models.common.Concat                    [1]                           
+ 20                -1  1     78592  models.common.C3                        [160, 128, 1, False]          
+ 20                -1  1     78592  models.common.C3                        [160, 128, 1, False]          
+ 20                -1  1     78592  models.common.C3                        [160, 128, 1, False]          
+ 20                -1  1     78592  models.common.C3                        [160, 128, 1, False]          
+ 21                -1  1    147712  models.common.Conv                      [128, 128, 3, 2]              
+ 22          [-1, 16]  1         0  models.common.Concat                    [1]                           
+ 21                -1  1    147712  models.common.Conv                      [128, 128, 3, 2]              
+ 22          [-1, 16]  1         0  models.common.Concat                    [1]                           
+ 21                -1  1    147712  models.common.Conv                      [128, 128, 3, 2]              
+ 22          [-1, 16]  1         0  models.common.Concat                    [1]                           
+ 21                -1  1    147712  models.common.Conv                      [128, 128, 3, 2]              
+ 22          [-1, 16]  1         0  models.common.Concat                    [1]                           
+ 23                -1  1    329216  models.common.C3                        [384, 256, 1, False]          
+ 23                -1  1    329216  models.common.C3                        [384, 256, 1, False]          
+ 23                -1  1    329216  models.common.C3                        [384, 256, 1, False]          
+ 23                -1  1    329216  models.common.C3                        [384, 256, 1, False]          
+ 24                -1  1    590336  models.common.Conv                      [256, 256, 3, 2]              
+ 24                -1  1    590336  models.common.Conv                      [256, 256, 3, 2]              
+ 25          [-1, 12]  1         0  models.common.Concat                    [1]                           
+ 25          [-1, 12]  1         0  models.common.Concat                    [1]                           
+ 24                -1  1    590336  models.common.Conv                      [256, 256, 3, 2]              
+ 25          [-1, 12]  1         0  models.common.Concat                    [1]                           
+ 24                -1  1    590336  models.common.Conv                      [256, 256, 3, 2]              
+ 25          [-1, 12]  1         0  models.common.Concat                    [1]                           
+ 26                -1  1   1117184  models.common.C3                        [384, 512, 1, False]          
+ 26                -1  1   1117184  models.common.C3                        [384, 512, 1, False]          
+ 26                -1  1   1117184  models.common.C3                        [384, 512, 1, False]          
+ 27      [20, 23, 26]  1     16182  models.yolo.Detect                      [1, [[3, 2, 4, 3, 4, 3], [6, 4, 7, 5, 9, 6], [12, 7, 15, 9, 26, 14]], [128, 256, 512]]
+ 27      [20, 23, 26]  1     16182  models.yolo.Detect                      [1, [[3, 2, 4, 3, 4, 3], [6, 4, 7, 5, 9, 6], [12, 7, 15, 9, 26, 14]], [128, 256, 512]]
+ 27      [20, 23, 26]  1     16182  models.yolo.Detect                      [1, [[3, 2, 4, 3, 4, 3], [6, 4, 7, 5, 9, 6], [12, 7, 15, 9, 26, 14]], [128, 256, 512]]
+ 26                -1  1   1117184  models.common.C3                        [384, 512, 1, False]          
+ 27      [20, 23, 26]  1     16182  models.yolo.Detect                      [1, [[3, 2, 4, 3, 4, 3], [6, 4, 7, 5, 9, 6], [12, 7, 15, 9, 26, 14]], [128, 256, 512]]
+Model Summary: 318 layers, 2979976 parameters, 2979976 gradients, 91.5 GFLOPs
+
+Model Summary: 318 layers, 2979976 parameters, 2979976 gradients, 91.5 GFLOPs
+
+  Parameters: 2,979,976
+Model Summary: 318 layers, 2979976 parameters, 2979976 gradients, 91.5 GFLOPs
+
+Model Summary: 318 layers, 2979976 parameters, 2979976 gradients, 91.5 GFLOPs
+
+
+Starting training for 100 epochs …
+
+  [  0/99][   0/2337]  mem=1.99G  box=0.0872  obj=0.0015  cls=0.0000
+  [  0/99][  50/2337]  mem=23.11G  box=0.0509  obj=0.0015  cls=0.0000
+  [  0/99][ 100/2337]  mem=23.11G  box=0.0434  obj=0.0016  cls=0.0000
+  [  0/99][ 150/2337]  mem=23.11G  box=0.0407  obj=0.0015  cls=0.0000
+  [  0/99][ 200/2337]  mem=23.11G  box=0.0379  obj=0.0015  cls=0.0000
+  [  0/99][ 250/2337]  mem=23.11G  box=0.0357  obj=0.0015  cls=0.0000
+  [  0/99][ 300/2337]  mem=23.11G  box=0.0349  obj=0.0015  cls=0.0000
+  [  0/99][ 350/2337]  mem=23.11G  box=0.0340  obj=0.0015  cls=0.0000
+  [  0/99][ 400/2337]  mem=23.11G  box=0.0335  obj=0.0014  cls=0.0000
+  [  0/99][ 450/2337]  mem=23.11G  box=0.0328  obj=0.0014  cls=0.0000
+  [  0/99][ 500/2337]  mem=23.11G  box=0.0321  obj=0.0014  cls=0.0000
+  [  0/99][ 550/2337]  mem=23.11G  box=0.0317  obj=0.0014  cls=0.0000
+  [  0/99][ 600/2337]  mem=23.11G  box=0.0316  obj=0.0014  cls=0.0000
+  [  0/99][ 650/2337]  mem=23.11G  box=0.0315  obj=0.0014  cls=0.0000
+  [  0/99][ 700/2337]  mem=23.11G  box=0.0313  obj=0.0014  cls=0.0000
+  [  0/99][ 750/2337]  mem=23.11G  box=0.0310  obj=0.0014  cls=0.0000
+  [  0/99][ 800/2337]  mem=23.11G  box=0.0308  obj=0.0013  cls=0.0000
+  [  0/99][ 850/2337]  mem=23.11G  box=0.0307  obj=0.0013  cls=0.0000
+  [  0/99][ 900/2337]  mem=23.11G  box=0.0307  obj=0.0013  cls=0.0000
+  [  0/99][ 950/2337]  mem=23.11G  box=0.0305  obj=0.0013  cls=0.0000
+  [  0/99][1000/2337]  mem=23.11G  box=0.0303  obj=0.0013  cls=0.0000
+  [  0/99][1050/2337]  mem=23.11G  box=0.0302  obj=0.0013  cls=0.0000
+  [  0/99][1100/2337]  mem=23.11G  box=0.0300  obj=0.0013  cls=0.0000
+  [  0/99][1150/2337]  mem=23.11G  box=0.0300  obj=0.0013  cls=0.0000
+  [  0/99][1200/2337]  mem=23.11G  box=0.0300  obj=0.0013  cls=0.0000
+  [  0/99][1250/2337]  mem=23.11G  box=0.0299  obj=0.0013  cls=0.0000
+  [  0/99][1300/2337]  mem=23.11G  box=0.0297  obj=0.0013  cls=0.0000
+  [  0/99][1350/2337]  mem=23.11G  box=0.0296  obj=0.0013  cls=0.0000
+  [  0/99][1400/2337]  mem=23.11G  box=0.0295  obj=0.0013  cls=0.0000
+  [  0/99][1450/2337]  mem=23.11G  box=0.0295  obj=0.0013  cls=0.0000
+  [  0/99][1500/2337]  mem=23.11G  box=0.0294  obj=0.0013  cls=0.0000
+  [  0/99][1550/2337]  mem=23.11G  box=0.0294  obj=0.0012  cls=0.0000
+  [  0/99][1600/2337]  mem=23.11G  box=0.0292  obj=0.0012  cls=0.0000
+  [  0/99][1650/2337]  mem=23.11G  box=0.0292  obj=0.0012  cls=0.0000
+  [  0/99][1700/2337]  mem=23.11G  box=0.0291  obj=0.0012  cls=0.0000
+  [  0/99][1750/2337]  mem=23.11G  box=0.0290  obj=0.0012  cls=0.0000
+  [  0/99][1800/2337]  mem=23.11G  box=0.0289  obj=0.0012  cls=0.0000
+  [  0/99][1850/2337]  mem=23.11G  box=0.0288  obj=0.0012  cls=0.0000
+  [  0/99][1900/2337]  mem=23.11G  box=0.0286  obj=0.0012  cls=0.0000
+  [  0/99][1950/2337]  mem=23.11G  box=0.0285  obj=0.0012  cls=0.0000
+  [  0/99][2000/2337]  mem=23.11G  box=0.0284  obj=0.0012  cls=0.0000
+  [  0/99][2050/2337]  mem=23.11G  box=0.0283  obj=0.0012  cls=0.0000
+  [  0/99][2100/2337]  mem=23.11G  box=0.0282  obj=0.0012  cls=0.0000
+  [  0/99][2150/2337]  mem=23.11G  box=0.0281  obj=0.0012  cls=0.0000
+  [  0/99][2200/2337]  mem=23.11G  box=0.0280  obj=0.0012  cls=0.0000
+  [  0/99][2250/2337]  mem=23.11G  box=0.0279  obj=0.0012  cls=0.0000
+  [  0/99][2300/2337]  mem=23.11G  box=0.0278  obj=0.0012  cls=0.0000
+[ WARN:0@1991.096] global loadsave.cpp:278 findDecoder imread_('/scratch-local/knguyen1.22487080/Anti-UAV-RGBT-frames/val/20190926_133516_1_2/ir_000898.jpg'): can't open/read file: check file path/integrity
+[ WARN:0@1991.217] global loadsave.cpp:278 findDecoder imread_('/scratch-local/knguyen1.22487080/Anti-UAV-RGBT-frames/val/20190926_133516_1_2/ir_000927.jpg'): can't open/read file: check file path/integrity
+[ WARN:0@1991.513] global loadsave.cpp:278 findDecoder imread_('/scratch-local/knguyen1.22487080/Anti-UAV-RGBT-frames/val/20190926_133516_1_2/ir_000959.jpg'): can't open/read file: check file path/integrity
+[ WARN:0@1991.808] global loadsave.cpp:278 findDecoder imread_('/scratch-local/knguyen1.22487080/Anti-UAV-RGBT-frames/val/20190926_133516_1_2/ir_000991.jpg'): can't open/read file: check file path/integrity
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/projects/prjs2041/uav_code/train_stage1.py", line 622, in <module>
+[rank0]:     train(save_dir, device, rank=rank, world_size=world_size)
+[rank0]:   File "/projects/prjs2041/uav_code/train_stage1.py", line 490, in train
+[rank0]:     map50, mapxx = evaluate(ema.ema, val_loader, device, IMG_SIZE)
+[rank0]:   File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+[rank0]:     return func(*args, **kwargs)
+[rank0]:   File "/projects/prjs2041/uav_code/train_stage1.py", line 226, in evaluate
+[rank0]:     for imgs, imgs2, targets, *_ in loader:
+[rank0]:   File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/utils/data/dataloader.py", line 733, in __next__
+[rank0]:     data = self._next_data()
+[rank0]:   File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/utils/data/dataloader.py", line 1488, in _next_data
+[rank0]:     return self._process_data(data, worker_id)
+[rank0]:   File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/utils/data/dataloader.py", line 1550, in _process_data
+[rank0]:     data.reraise()
+[rank0]:   File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/_utils.py", line 750, in reraise
+[rank0]:     raise exception
+[rank0]: OSError: Caught OSError in DataLoader worker process 7.
+[rank0]: Original Traceback (most recent call last):
+[rank0]:   File "/projects/prjs2041/uav_code/datasets/antiuav_rgbt_frames.py", line 179, in _load_frame
+[rank0]:     frame = self._load_frame_jpeg(entry)
+[rank0]:   File "/projects/prjs2041/uav_code/datasets/antiuav_rgbt_frames.py", line 154, in _load_frame_jpeg
+[rank0]:     raise IOError(f'Failed to read JPEG: {p}')
+[rank0]: OSError: Failed to read JPEG: /scratch-local/knguyen1.22487080/Anti-UAV-RGBT-frames/val/20190926_133516_1_2/ir_000898.jpg
+
+[rank0]: During handling of the above exception, another exception occurred:
+
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/utils/data/_utils/worker.py", line 349, in _worker_loop
+[rank0]:     data = fetcher.fetch(index)  # type: ignore[possibly-undefined]
+[rank0]:   File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/utils/data/_utils/fetch.py", line 52, in fetch
+[rank0]:     data = [self.dataset[idx] for idx in possibly_batched_index]
+[rank0]:   File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/utils/data/_utils/fetch.py", line 52, in <listcomp>
+[rank0]:     data = [self.dataset[idx] for idx in possibly_batched_index]
+[rank0]:   File "/projects/prjs2041/uav_code/train_stage1.py", line 162, in __getitem__
+[rank0]:     sample = self.ds[idx]
+[rank0]:   File "/projects/prjs2041/uav_code/datasets/antiuav_rgbt_frames.py", line 204, in __getitem__
+[rank0]:     out = super().__getitem__(idx)
+[rank0]:   File "/projects/prjs2041/uav_code/datasets/base.py", line 69, in __getitem__
+[rank0]:     img, labels, mask = self._load_frame(entry)
+[rank0]:   File "/projects/prjs2041/uav_code/datasets/antiuav_rgbt_frames.py", line 182, in _load_frame
+[rank0]:     cap   = self._get_cap(self._ir_caps, entry['seq_dir'], 'infrared.mp4')
+[rank0]:   File "/projects/prjs2041/uav_code/datasets/antiuav_rgbt_frames.py", line 162, in _get_cap
+[rank0]:     raise IOError(f'Cannot open video: {video_path}')
+[rank0]: OSError: Cannot open video: /scratch-local/knguyen1.22487080/Anti-UAV-RGBT/val/20190926_133516_1_2/infrared.mp4
+
+[rank0]:[W505 21:20:57.349640820 ProcessGroupNCCL.cpp:1479] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+W0505 21:21:01.053543 626600 /gpfs/home3/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/api.py:900] Sending process 626640 closing signal SIGTERM
+W0505 21:21:01.055494 626600 /gpfs/home3/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/api.py:900] Sending process 626641 closing signal SIGTERM
+W0505 21:21:01.056007 626600 /gpfs/home3/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/api.py:900] Sending process 626642 closing signal SIGTERM
+E0505 21:21:03.022276 626600 /gpfs/home3/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/api.py:874] failed (exitcode: 1) local_rank: 0 (pid: 626639) of binary: /home/knguyen1/.conda/envs/uav_master/bin/python3.9
+Traceback (most recent call last):
+  File "/home/knguyen1/.conda/envs/uav_master/bin/torchrun", line 6, in <module>
+    sys.exit(main())
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/run.py", line 892, in main
+    run(args)
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/run.py", line 883, in run
+    elastic_launch(
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/launcher/api.py", line 139, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/launcher/api.py", line 270, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/projects/prjs2041/uav_code/train_stage1.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-05-05_21:21:01
+  host      : gcn71.local.snellius.surf.nl
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 626639)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+
+========================================
+Finished at: Tue May  5 21:21:03 CEST 2026
+Check results: /projects/prjs2041/runs/stage1/
+========================================

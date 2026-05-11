@@ -1,0 +1,320 @@
+Starting FD5 mask generation...
+Job ID: 22460009
+Node:   tcn286
+Time:   Mon May  4 15:40:03 CEST 2026
+
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+FD5 Motion Mask Generation → .npz
+==================================================
+Output: /projects/prjs2041/datasets/ARD100/masks_npz
+
+Sequences:   0%|          | 0/100 [00:00<?, ?seq/s]Sequences:   5%|▌         | 5/100 [08:21<2:38:50, 100.33s/seq]Sequences:   6%|▌         | 6/100 [14:10<4:03:35, 155.49s/seq]Sequences:   7%|▋         | 7/100 [20:07<5:16:25, 204.14s/seq]Sequences:   8%|▊         | 8/100 [25:46<6:05:57, 238.66s/seq]Sequences:   9%|▉         | 9/100 [33:22<7:30:13, 296.85s/seq]Sequences:  10%|█         | 10/100 [41:17<8:39:11, 346.13s/seq]Sequences:  11%|█         | 11/100 [46:46<8:26:26, 341.42s/seq]Sequences:  12%|█▏        | 12/100 [56:40<10:07:09, 413.97s/seq]Sequences:  13%|█▎        | 13/100 [1:04:18<10:18:54, 426.83s/seq]Sequences:  14%|█▍        | 14/100 [1:10:03<9:37:28, 402.89s/seq] Sequences:  15%|█▌        | 15/100 [1:15:44<9:04:48, 384.57s/seq]Sequences:  16%|█▌        | 16/100 [1:23:07<9:22:29, 401.78s/seq]Sequences:  17%|█▋        | 17/100 [1:29:34<9:10:03, 397.63s/seq]Sequences:  18%|█▊        | 18/100 [1:39:15<10:17:59, 452.19s/seq]Sequences:  19%|█▉        | 19/100 [1:46:55<10:13:47, 454.66s/seq]Sequences:  20%|██        | 20/100 [1:52:44<9:23:57, 422.97s/seq] Sequences:  21%|██        | 21/100 [1:58:06<8:37:04, 392.71s/seq]Sequences:  22%|██▏       | 22/100 [2:03:22<8:00:34, 369.68s/seq]Sequences:  23%|██▎       | 23/100 [2:08:15<7:25:07, 346.85s/seq]Sequences:  24%|██▍       | 24/100 [2:13:43<7:12:12, 341.21s/seq]Sequences:  25%|██▌       | 25/100 [2:16:55<6:10:17, 296.23s/seq]Sequences:  26%|██▌       | 26/100 [2:23:53<6:50:43, 333.03s/seq]Sequences:  27%|██▋       | 27/100 [2:31:45<7:35:46, 374.60s/seq]Sequences:  28%|██▊       | 28/100 [2:39:11<7:55:04, 395.90s/seq]Sequences:  29%|██▉       | 29/100 [2:47:50<8:32:07, 432.77s/seq]Sequences:  30%|███       | 30/100 [2:54:08<8:05:44, 416.35s/seq]Sequences:  31%|███       | 31/100 [3:03:33<8:50:24, 461.22s/seq]Sequences:  32%|███▏      | 32/100 [3:10:15<8:22:22, 443.27s/seq]Sequences:  33%|███▎      | 33/100 [3:16:32<7:52:45, 423.37s/seq]Sequences:  34%|███▍      | 34/100 [3:25:15<8:18:29, 453.18s/seq]Sequences:  35%|███▌      | 35/100 [3:33:39<8:27:28, 468.44s/seq]Sequences:  36%|███▌      | 36/100 [3:42:08<8:32:46, 480.73s/seq]Sequences:  37%|███▋      | 37/100 [3:58:43<11:06:55, 635.16s/seq]Sequences:  38%|███▊      | 38/100 [4:10:28<11:17:48, 655.94s/seq]Sequences:  39%|███▉      | 39/100 [4:19:37<10:34:19, 623.93s/seq]Sequences:  40%|████      | 40/100 [4:25:51<9:08:51, 548.86s/seq] Sequences:  41%|████      | 41/100 [4:39:17<10:15:30, 625.94s/seq]Sequences:  42%|████▏     | 42/100 [4:53:50<11:16:56, 700.29s/seq]Sequences:  43%|████▎     | 43/100 [5:03:47<10:35:46, 669.24s/seq]Sequences:  44%|████▍     | 44/100 [5:28:20<14:09:31, 910.21s/seq]Sequences:  45%|████▌     | 45/100 [5:47:31<15:00:36, 982.48s/seq]Sequences:  46%|████▌     | 46/100 [6:01:28<14:05:05, 938.99s/seq]Sequences:  47%|████▋     | 47/100 [6:07:53<11:22:30, 772.64s/seq]Sequences:  48%|████▊     | 48/100 [6:28:41<13:13:15, 915.30s/seq]Sequences:  49%|████▉     | 49/100 [6:40:56<12:12:01, 861.21s/seq]Sequences:  50%|█████     | 50/100 [6:50:29<10:45:40, 774.82s/seq]Sequences:  51%|█████     | 51/100 [6:56:52<8:56:38, 657.11s/seq] Sequences:  52%|█████▏    | 52/100 [7:10:34<9:25:18, 706.63s/seq]Sequences:  53%|█████▎    | 53/100 [7:22:36<9:17:08, 711.26s/seq]Sequences:  54%|█████▍    | 54/100 [7:32:31<8:38:38, 676.48s/seq]Sequences:  55%|█████▌    | 55/100 [7:40:49<7:47:05, 622.78s/seq]Sequences:  56%|█████▌    | 56/100 [7:46:57<6:40:37, 546.30s/seq]Sequences:  57%|█████▋    | 57/100 [7:54:39<6:13:32, 521.23s/seq]Sequences:  58%|█████▊    | 58/100 [8:04:07<6:14:32, 535.06s/seq]Sequences:  59%|█████▉    | 59/100 [8:12:11<5:55:08, 519.72s/seq]Sequences:  60%|██████    | 60/100 [8:15:49<4:46:10, 429.27s/seq]Sequences:  61%|██████    | 61/100 [8:22:54<4:38:19, 428.20s/seq]Sequences:  62%|██████▏   | 62/100 [8:31:03<4:42:34, 446.17s/seq]Sequences:  63%|██████▎   | 63/100 [8:36:41<4:15:08, 413.73s/seq]Sequences:  64%|██████▍   | 64/100 [8:42:59<4:01:53, 403.15s/seq]Sequences:  65%|██████▌   | 65/100 [8:49:10<3:49:34, 393.55s/seq]Sequences:  66%|██████▌   | 66/100 [8:57:48<4:04:06, 430.79s/seq]Sequences:  67%|██████▋   | 67/100 [9:06:15<4:09:32, 453.71s/seq]Sequences:  68%|██████▊   | 68/100 [9:13:29<3:58:51, 447.85s/seq]Sequences:  69%|██████▉   | 69/100 [9:21:55<4:00:17, 465.07s/seq]Sequences:  70%|███████   | 70/100 [9:35:25<4:44:20, 568.68s/seq]Sequences:  71%|███████   | 71/100 [9:43:58<4:26:46, 551.94s/seq]Sequences:  72%|███████▏  | 72/100 [9:49:22<3:45:43, 483.70s/seq]Sequences:  73%|███████▎  | 73/100 [9:58:49<3:48:51, 508.56s/seq]Sequences:  74%|███████▍  | 74/100 [10:04:24<3:17:50, 456.57s/seq]Sequences:  75%|███████▌  | 75/100 [10:12:38<3:14:50, 467.63s/seq]Sequences:  76%|███████▌  | 76/100 [10:19:19<2:59:03, 447.65s/seq]Sequences:  77%|███████▋  | 77/100 [10:26:05<2:46:48, 435.14s/seq]Sequences:  78%|███████▊  | 78/100 [10:32:49<2:36:10, 425.92s/seq]Sequences:  79%|███████▉  | 79/100 [10:40:00<2:29:34, 427.37s/seq]Sequences:  80%|████████  | 80/100 [10:47:03<2:22:01, 426.06s/seq]Sequences:  81%|████████  | 81/100 [10:54:34<2:17:19, 433.66s/seq]Sequences:  82%|████████▏ | 82/100 [11:01:39<2:09:19, 431.09s/seq]Sequences:  83%|████████▎ | 83/100 [11:09:33<2:05:46, 443.89s/seq]Sequences:  84%|████████▍ | 84/100 [11:16:57<1:58:24, 444.04s/seq]Sequences:  85%|████████▌ | 85/100 [11:23:54<1:48:55, 435.68s/seq]Sequences:  86%|████████▌ | 86/100 [11:29:59<1:36:43, 414.54s/seq]Sequences:  87%|████████▋ | 87/100 [11:43:35<1:55:57, 535.17s/seq]Sequences:  88%|████████▊ | 88/100 [11:52:12<1:45:54, 529.52s/seq]Sequences:  89%|████████▉ | 89/100 [12:03:28<1:45:09, 573.59s/seq]Sequences:  90%|█████████ | 90/100 [12:14:07<1:38:53, 593.32s/seq]Sequences:  91%|█████████ | 91/100 [12:23:53<1:28:38, 590.96s/seq]Sequences:  92%|█████████▏| 92/100 [12:38:56<1:31:16, 684.56s/seq]Sequences:  93%|█████████▎| 93/100 [12:53:36<1:26:42, 743.21s/seq]Sequences:  94%|█████████▍| 94/100 [13:06:30<1:15:14, 752.41s/seq]Sequences:  95%|█████████▌| 95/100 [13:22:43<1:08:12, 818.49s/seq]Sequences:  96%|█████████▌| 96/100 [13:30:07<47:05, 706.37s/seq]  Sequences:  97%|█████████▋| 97/100 [13:43:05<36:23, 727.69s/seq]Sequences:  98%|█████████▊| 98/100 [13:49:51<21:02, 631.23s/seq]Sequences:  99%|█████████▉| 99/100 [13:57:07<09:32, 572.55s/seq]Sequences: 100%|██████████| 100/100 [14:08:22<00:00, 603.45s/seq]Sequences: 100%|██████████| 100/100 [14:08:22<00:00, 509.03s/seq]
+
+[phantom19]
+  Saved: phantom19.npz  (2186 frames, 594.2 MB)
+
+[phantom20]
+  Saved: phantom20.npz  (1828 frames, 437.2 MB)
+
+[phantom28]
+  Saved: phantom28.npz  (1169 frames, 419.9 MB)
+
+[phantom29]
+  Saved: phantom29.npz  (1827 frames, 447.3 MB)
+
+[phantom30]
+  Saved: phantom30.npz  (1523 frames, 558.6 MB)
+
+[phantom32]
+  Saved: phantom32.npz  (1527 frames, 652.6 MB)
+
+[phantom36]
+  Saved: phantom36.npz  (1349 frames, 446.5 MB)
+
+[phantom40]
+  Saved: phantom40.npz  (2011 frames, 741.2 MB)
+
+[phantom42]
+  Saved: phantom42.npz  (1527 frames, 529.1 MB)
+
+[phantom43]
+  Saved: phantom43.npz  (1829 frames, 502.3 MB)
+
+[phantom44]
+  Saved: phantom44.npz  (1228 frames, 454.4 MB)
+
+[phantom46]
+  Saved: phantom46.npz  (1828 frames, 539.8 MB)
+
+[phantom63]
+  Saved: phantom63.npz  (1829 frames, 612.4 MB)
+
+[phantom65]
+  Saved: phantom65.npz  (2365 frames, 726.2 MB)
+
+[phantom66]
+  Saved: phantom66.npz  (1972 frames, 535.9 MB)
+
+[phantom68]
+  Saved: phantom68.npz  (1675 frames, 468.0 MB)
+
+[phantom70]
+  Saved: phantom70.npz  (1349 frames, 440.6 MB)
+
+[phantom71]
+  Saved: phantom71.npz  (1799 frames, 398.2 MB)
+
+[phantom74]
+  Saved: phantom74.npz  (1499 frames, 394.6 MB)
+
+[phantom75]
+  Saved: phantom75.npz  (1827 frames, 479.9 MB)
+
+[phantom76]
+  Saved: phantom76.npz  (1049 frames, 241.2 MB)
+
+[phantom77]
+  Saved: phantom77.npz  (1828 frames, 517.7 MB)
+
+[phantom78]
+  Saved: phantom78.npz  (2306 frames, 579.1 MB)
+
+[phantom80]
+  Saved: phantom80.npz  (1918 frames, 584.1 MB)
+
+[phantom81]
+  Saved: phantom81.npz  (2306 frames, 667.8 MB)
+
+[phantom82]
+  Saved: phantom82.npz  (1829 frames, 463.2 MB)
+
+[phantom84]
+  Saved: phantom84.npz  (1821 frames, 658.7 MB)
+
+[phantom85]
+  Saved: phantom85.npz  (1199 frames, 439.0 MB)
+
+[phantom86]
+  Saved: phantom86.npz  (1828 frames, 462.3 MB)
+
+[phantom87]
+  Saved: phantom87.npz  (1798 frames, 642.7 MB)
+
+[phantom89]
+  Saved: phantom89.npz  (1798 frames, 590.3 MB)
+
+[phantom90]
+  Saved: phantom90.npz  (1799 frames, 584.8 MB)
+
+[phantom101]
+  Saved: phantom101.npz  (3923 frames, 1223.9 MB)
+
+[phantom103]
+  Saved: phantom103.npz  (3386 frames, 911.7 MB)
+
+[phantom104]
+  Saved: phantom104.npz  (2722 frames, 697.8 MB)
+
+[phantom105]
+  Saved: phantom105.npz  (1469 frames, 443.4 MB)
+
+[phantom106]
+  Saved: phantom106.npz  (2723 frames, 1002.4 MB)
+
+[phantom107]
+  Saved: phantom107.npz  (2810 frames, 1055.9 MB)
+
+[phantom108]
+  Saved: phantom108.npz  (1979 frames, 837.3 MB)
+
+[phantom109]
+  Saved: phantom109.npz  (4524 frames, 2007.6 MB)
+
+[phantom111]
+  Saved: phantom111.npz  (3600 frames, 1482.8 MB)
+
+[phantom112]
+  Saved: phantom112.npz  (3177 frames, 996.4 MB)
+
+[phantom114]
+  Saved: phantom114.npz  (1529 frames, 426.5 MB)
+
+[phantom115]
+  Saved: phantom115.npz  (4373 frames, 1384.9 MB)
+
+[phantom116]
+  Saved: phantom116.npz  (2998 frames, 874.3 MB)
+
+[phantom117]
+  Saved: phantom117.npz  (2128 frames, 639.9 MB)
+
+[phantom118]
+  Saved: phantom118.npz  (1289 frames, 410.0 MB)
+
+[phantom120]
+  Saved: phantom120.npz  (3082 frames, 987.9 MB)
+
+[phantom132]
+  Saved: phantom132.npz  (2364 frames, 914.4 MB)
+
+[phantom137]
+  Saved: phantom137.npz  (1828 frames, 841.9 MB)
+
+[phantom138]
+  Saved: phantom138.npz  (1824 frames, 691.2 MB)
+
+[phantom139]
+  Saved: phantom139.npz  (1461 frames, 459.0 MB)
+
+[phantom140]
+  Saved: phantom140.npz  (1818 frames, 605.4 MB)
+
+[phantom142]
+  Saved: phantom142.npz  (2414 frames, 727.9 MB)
+
+[phantom143]
+  Saved: phantom143.npz  (2124 frames, 615.9 MB)
+
+[phantom145]
+  Saved: phantom145.npz  (926 frames, 302.7 MB)
+
+[phantom146]
+  Saved: phantom146.npz  (1822 frames, 528.5 MB)
+
+[phantom147]
+  Saved: phantom147.npz  (2119 frames, 595.7 MB)
+
+[phantom148]
+  Saved: phantom148.npz  (1529 frames, 455.4 MB)
+
+[phantom149]
+  Saved: phantom149.npz  (1349 frames, 423.6 MB)
+
+[phantom150]
+  Saved: phantom150.npz  (1349 frames, 470.0 MB)
+
+[phantom02]
+  Saved: phantom02.npz  (1799 frames, 587.3 MB)
+
+[phantom03]
+  Saved: phantom03.npz  (1799 frames, 572.8 MB)
+
+[phantom04]
+  Saved: phantom04.npz  (1499 frames, 494.8 MB)
+
+[phantom05]
+  Saved: phantom05.npz  (1799 frames, 596.1 MB)
+
+[phantom08]
+  Saved: phantom08.npz  (2788 frames, 1096.4 MB)
+
+[phantom22]
+  Saved: phantom22.npz  (2128 frames, 597.2 MB)
+
+[phantom39]
+  Saved: phantom39.npz  (1377 frames, 449.2 MB)
+
+[phantom41]
+  Saved: phantom41.npz  (1824 frames, 666.7 MB)
+
+[phantom45]
+  Saved: phantom45.npz  (1377 frames, 401.9 MB)
+
+[phantom47]
+  Saved: phantom47.npz  (2887 frames, 594.6 MB)
+
+[phantom50]
+  Saved: phantom50.npz  (1824 frames, 473.3 MB)
+
+[phantom54]
+  Saved: phantom54.npz  (1825 frames, 499.7 MB)
+
+[phantom55]
+  Saved: phantom55.npz  (1733 frames, 484.2 MB)
+
+[phantom56]
+  Saved: phantom56.npz  (2127 frames, 508.7 MB)
+
+[phantom57]
+  Saved: phantom57.npz  (1824 frames, 490.2 MB)
+
+[phantom58]
+  Saved: phantom58.npz  (2241 frames, 536.9 MB)
+
+[phantom60]
+  Saved: phantom60.npz  (2277 frames, 506.8 MB)
+
+[phantom61]
+  Saved: phantom61.npz  (1827 frames, 784.6 MB)
+
+[phantom64]
+  Saved: phantom64.npz  (1827 frames, 542.1 MB)
+
+[phantom73]
+  Saved: phantom73.npz  (2008 frames, 589.8 MB)
+
+[phantom79]
+  Saved: phantom79.npz  (1764 frames, 419.1 MB)
+
+[phantom92]
+  Saved: phantom92.npz  (2428 frames, 966.2 MB)
+
+[phantom93]
+  Saved: phantom93.npz  (1822 frames, 652.4 MB)
+
+[phantom94]
+  Saved: phantom94.npz  (2271 frames, 796.6 MB)
+
+[phantom95]
+  Saved: phantom95.npz  (1829 frames, 739.6 MB)
+
+[phantom97]
+  Saved: phantom97.npz  (1824 frames, 739.3 MB)
+
+[phantom102]
+  Saved: phantom102.npz  (3177 frames, 1069.1 MB)
+
+[phantom110]
+  Saved: phantom110.npz  (3424 frames, 1134.9 MB)
+
+[phantom113]
+  Saved: phantom113.npz  (2728 frames, 925.4 MB)
+
+[phantom119]
+  Saved: phantom119.npz  (3325 frames, 1118.5 MB)
+
+[phantom133]
+  Saved: phantom133.npz  (1829 frames, 518.9 MB)
+
+[phantom135]
+  Saved: phantom135.npz  (2424 frames, 1015.6 MB)
+
+[phantom136]
+  Saved: phantom136.npz  (1222 frames, 522.3 MB)
+
+[phantom141]
+  Saved: phantom141.npz  (1816 frames, 583.6 MB)
+
+[phantom144]
+  Saved: phantom144.npz  (2728 frames, 869.4 MB)
+
+==================================================
+Done.  Generated: 96  Skipped: 4  Failed: 0
+Output directory: /projects/prjs2041/datasets/ARD100/masks_npz
+Total .npz files: 100  (65420.9 MB)
+
+Finished at: Tue May  5 05:48:28 CEST 2026

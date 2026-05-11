@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pt
+*.pth
+*.onnx
+YOLOMG-main/runs/
+.ipynb_checkpoints/
+.DS_Store
+Thumbs.db
+CLAUDE.md

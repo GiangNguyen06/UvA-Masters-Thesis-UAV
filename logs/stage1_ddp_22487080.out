@@ -1,0 +1,17 @@
+========================================
+Stage 1 DDP: YOLOMG on Anti-UAV-RGBT
+Job ID:  22487080
+Node:    gcn71
+GPUs:    0,1,2,3
+Time:    Tue May  5 16:45:07 CEST 2026
+========================================
+
+Local scratch:
+Filesystem      Size  Used Avail Use% Mounted on
+wstor_scratch1  2.5P  532T  1.9P  22% /gpfs/scratch1
+
+Copying Anti-UAV-RGBT to GPFS scratch...
+Done in 9s.  Size: 180K
+
+Pre-extracted frames found (no manifest, but JPEGs present) at /projects/prjs2041/datasets/Anti-UAV-RGBT-frames
+Copying frames to GPFS scratch...

@@ -1,0 +1,441 @@
+% ============================================================
+% Weekly Meeting Report — Weeks 15--16
+% Topic: Environment Setup & Dataset Audit
+% ============================================================
+
+\section*{Weekly Progress Report — Weeks 15--16}
+\addcontentsline{toc}{section}{Weekly Progress Report — Weeks 15--16}
+
+\begin{tabular}{ll}
+    Date      & \today \\
+    Student   & Khac Duc Giang Nguyen \\
+    Supervisor & Dr.\ Seyed Sahand Mohammadi Ziabari \\
+    Phase     & Environment Setup \& Dataset Audit (Weeks 15--16) \\
+\end{tabular}
+
+\vspace{1em}
+
+% ------------------------------------------------------------
+\subsection*{1. Overview}
+
+This report documents the work completed during Weeks 15--16 of the
+thesis project. The primary objectives were to establish a reproducible
+working environment on the UvA Snellius supercomputer and to conduct a
+thorough audit of all four datasets prescribed in the thesis proposal.
+No model training has begun; the focus of this phase was entirely on
+infrastructure and data understanding, in line with the Environment Setup milestone.
+
+% ------------------------------------------------------------
+\subsection*{2. Snellius Environment Setup}
+
+A dedicated Conda environment (\texttt{uav\_master}, Python 3.9) was
+created on the Snellius HPC cluster under the project directory
+\texttt{/projects/prjs2041/}. Due to the constraints of the
+supercomputer architecture, a hybrid installation strategy was adopted:
+Conda was used only to create the Python sandbox, while \texttt{pip}
+(with \texttt{--default-timeout=1000}) was used to install all packages,
+bypassing the Conda dependency solver which is incompatible with login
+node resource limits.
+
+\subsubsection*{2.1 Installed Libraries}
+
+\begin{itemize}
+    \item Core deep learning (CUDA 11.8): \texttt{torch}
+          (2.7.1+cu118), \texttt{torchvision} (0.22.1+cu118),
+          \texttt{torchaudio} (2.7.1+cu118).
+    \item Computer vision and data processing:
+          \texttt{opencv-python}, \texttt{matplotlib},
+          \texttt{numpy} (2.0.2), \texttt{scipy}, \texttt{pandas}.
+    \item Utilities: \texttt{wget}, \texttt{shapely},
+          \texttt{PyYAML}, \texttt{tqdm}, \texttt{ipykernel}.
+\end{itemize}
+
+\subsubsection*{2.2 Roadblocks Encountered}
+
+Setting up the environment required resolving four non-trivial
+infrastructure problems specific to the Snellius HPC architecture.
+
+Problem 1 — \texttt{conda install} froze on the login node.
+Conda's dependency solver requires significant RAM and CPU. Login nodes
+(\texttt{int5}/\texttt{int6}) throttle both heavily, causing the process
+to freeze without error. Fixed by switching to \texttt{pip install} with
+an extended timeout.
+
+Problem 2 — Lmod module loading failure.
+Snellius uses a hierarchical module system where Conda is hidden until
+the correct software stack year is loaded. Fixed by running
+\texttt{module load 2023} before \texttt{module load Miniconda3/23.5.2-0}.
+
+Problem 3 — VS Code module hijacking (\texttt{ModuleNotFoundError: torch}).
+Even with the \texttt{uav\_master} environment active in the terminal,
+the system's own aliases intercepted the \texttt{python} command and
+pointed it to a different interpreter. Fixed by always calling the
+absolute path of the Conda Python binary:
+\begin{center}
+\texttt{/home/knguyen1/.conda/envs/uav\_master/bin/python}
+\end{center}
+
+Problem 4 — VS Code UI glitches and Pylance \texttt{SIGTERM} crashes.
+The Open OnDemand VS Code interface failed to auto-detect environments
+stored in hidden Linux directories (\texttt{.conda}). Fixed by creating
+\texttt{.vscode/settings.json} in the project folder, explicitly setting
+\texttt{python.defaultInterpreterPath} to the absolute Conda binary path.
+
+\subsubsection*{2.3 Standard Session Startup Procedure}
+
+Every new VS Code session on Snellius requires the following sequence
+before running any code:
+
+\begin{enumerate}
+    \item Launch VS Code via the SURF Open OnDemand portal
+          (\texttt{rome}/\texttt{genoa} partition, 4 cores, 16\,GB RAM
+          for data work; \texttt{gpu\_a100} for training).
+    \item Open workspace \texttt{/projects/prjs2041/uav\_code/} and a
+          new terminal.
+    \item Run the startup sequence:
+\begin{verbatim}
+module load 2023
+module load Miniconda3/23.5.2-0
+source activate uav_master
+\end{verbatim}
+    \item Run all scripts via the absolute path rather than the
+          \texttt{python} alias:
+\begin{verbatim}
+/home/knguyen1/.conda/envs/uav_master/bin/python script.py
+\end{verbatim}
+\end{enumerate}
+
+% ------------------------------------------------------------
+\subsection*{3. Dataset Extraction}
+
+All four raw dataset archives were transferred and extracted to
+\texttt{/projects/prjs2041/datasets/}. The CST Anti-UAV dataset required
+special handling: the primary concatenated archive
+(\texttt{combined\_archive.zip}) was found to be corrupt. Extraction was
+performed instead from the original eleven-part split archive
+(\texttt{CST-AntiUAV.zip} + \texttt{.z01}--\texttt{.z10}) using
+\texttt{p7zip}, loaded via the Snellius module system and executed as a
+dedicated SLURM batch job on the \texttt{rome} partition, yielding
+246,131 files across 226 folders. SLURM job submission and monitoring
+workflows are now established for future long-running training jobs.
+
+% ------------------------------------------------------------
+\subsection*{4. Dataset Storage Formats}
+
+Table~\ref{tab:storage} summarises the storage format and modality of
+each dataset. This distinction is critical for pipeline planning: two
+datasets store footage as raw video files and require a frame extraction
+step before any training data loader can read them, while the other two
+are already stored as pre-extracted image frames and are ready to use
+directly.
+
+\begin{table}[h]
+\centering
+\caption{Storage format and modality per dataset.}
+\label{tab:storage}
+\begin{tabular}{llll}
+\hline
+Dataset & Storage Format & Modality & Ready for training? \\
+\hline
+Anti-UAV-RGBT  & MP4 video (paired RGB + IR) & RGB + Thermal & No — extraction needed \\
+Anti-UAV410    & Pre-extracted frames (JPG)  & Thermal only  & Yes \\
+ARD100         & MP4 video                   & RGB only      & No — extraction needed \\
+CST Anti-UAV   & Pre-extracted frames (JPG)  & Thermal only  & Yes \\
+\hline
+\end{tabular}
+\end{table}
+
+\noindent Consequently, before any training pipeline can be assembled,
+frame extraction scripts must be written for Anti-UAV-RGBT (both the
+infrared and visible streams) and ARD100. This is the first concrete
+engineering task scheduled for the next phase.
+
+% ------------------------------------------------------------
+\subsection*{5. Dataset Audit}
+
+A Python audit script was written and executed across all four datasets
+to verify integrity, confirm annotation formats, and compute bounding
+box size distributions. The size categories follow the diagonal-length
+classification defined in the thesis proposal: tiny
+($d \leq 10$\,px), small ($d \in (10, 30]$\,px),
+normal ($d \in (30, 50]$\,px), and large ($d > 50$\,px).
+
+\subsubsection*{5.1 Anti-UAV-RGBT (T\textsubscript{1} Source Domain)}
+
+\begin{itemize}
+    \item Sequences: 91 \quad Frames: 85,374
+    \item Annotation format: Per-sequence JSON with \texttt{exist}
+          flags and \texttt{gt\_rect} bounding boxes in $[x, y, w, h]$
+          format; separate files for infrared (\texttt{infrared.json}) and
+          visible (\texttt{visible.json}) streams.
+    \item Temporal alignment: All 91 sequences confirmed to have
+          identical frame counts across IR and RGB streams — a prerequisite
+          for the Teacher-Student domain adaptation framework.
+    \item IR stream (Student input): 98.6\% of frames annotated
+          as visible; size distribution dominated by normal
+          (28.2\%) and large (68.4\%) targets.
+    \item RGB stream (Teacher input): 93.4\% visible;
+          98.0\% of annotated frames fall in the large category,
+          reflecting the higher spatial resolution of the visible-light
+          sensor relative to the IR sensor.
+\end{itemize}
+
+\subsubsection*{5.2 Anti-UAV410 (T\textsubscript{1} Target Domain)}
+
+\begin{itemize}
+    \item Sequences: 200 train / 90 val / 120 test = 410 total
+    \item Annotation format: Per-sequence JSON (same schema as
+          Anti-UAV-RGBT) plus global COCO-format JSON files under
+          \texttt{annotations/}.
+    \item Visibility: $\approx$97--98\% across all splits.
+    \item Size distribution (train): tiny 2.5\%, small 27.5\%,
+          normal 26.8\%, large 43.2\%. Notably more diverse in scale
+          than the RGBT source domain, with a substantial small/normal
+          proportion introducing an initial scale challenge even within
+          the T\textsubscript{1} modality-shift task.
+\end{itemize}
+
+\subsubsection*{5.3 ARD100 (Ego-Motion Stress Test)}
+
+\begin{itemize}
+    \item Sequences: 100 \quad Frames: 202,411
+    \item Annotation format: Pascal VOC XML, one file per frame,
+          with bounding boxes in $[\mathit{xmin}, \mathit{ymin},
+          \mathit{xmax}, \mathit{ymax}]$ format.
+    \item Visibility: 98.5\%.
+    \item Size distribution: Dominated by small targets
+          (75.3\%), consistent with the air-to-air capture scenario where
+          the target drone occupies a modest fraction of the frame.
+          This confirms ARD100 as a suitable stress test for the
+          Global Motion Compensation (GMC) module.
+\end{itemize}
+
+\subsubsection*{5.4 CST Anti-UAV (T\textsubscript{2} --- Extreme Scale Shift)}
+
+\begin{itemize}
+    \item Sequences: 120 train / 40 val / 60 test = 220 total
+    \item Annotation format: Per-sequence \texttt{gt.txt}
+          (comma-separated floating-point $[x, y, w, h]$) combined with
+          \texttt{IR\_label.json} for existence flags.
+    \item Visibility: 82--86\% — significantly lower than all
+          other datasets, consistent with the high prevalence of Thermal
+          Crossover events documented in the thesis proposal.
+    \item Size distribution (train): tiny 20.5\%, small 73.6\%,
+          normal 5.9\%, large $<$0.01\%. The near-complete absence of
+          large targets and the 14.1\% occlusion rate constitute a
+          qualitatively different detection regime from T\textsubscript{1}.
+\end{itemize}
+
+% ------------------------------------------------------------
+\subsection*{6. Key Findings Relevant to Hypothesis H1}
+
+The audit quantitatively confirms the scale-distribution shift
+hypothesised in H1. Table~\ref{tab:scale_shift} summarises the
+contrast between the T\textsubscript{1} target domain and the
+T\textsubscript{2} domain across the two most informative splits.
+
+\begin{table}[h]
+\centering
+\caption{Size distribution shift from T\textsubscript{1} to
+         T\textsubscript{2} (percentage of annotated frames).}
+\label{tab:scale_shift}
+\begin{tabular}{lcccc}
+\hline
+Dataset & Tiny & Small & Normal & Large \\
+\hline
+Anti-UAV-RGBT IR (T\textsubscript{1} src) & 0.1\% & 3.3\% & 28.2\% & 68.4\% \\
+Anti-UAV410 train (T\textsubscript{1} tgt) & 2.5\% & 27.5\% & 26.8\% & 43.2\% \\
+CST train (T\textsubscript{2})             & 20.5\% & 73.6\% & 5.9\% & $<$0.01\% \\
+\hline
+\end{tabular}
+\end{table}
+
+The shift from T\textsubscript{1} (43.2\% large) to T\textsubscript{2}
+(essentially 0\% large) represents a near-complete inversion of the
+scale distribution. Furthermore, the elevated occlusion rate in CST
+(14--18\% vs.\ 1--2\% in T\textsubscript{1} datasets) indicates a
+substantially higher frequency of Thermal Crossover events, directly
+relevant to RQ3 and the Evidential Uncertainty module.
+
+% ------------------------------------------------------------
+\subsection*{7. Data Processing Pipeline}
+
+Following the dataset audit, a full data processing pipeline was
+designed and submitted to the Snellius SLURM scheduler as a
+dependency-chained job sequence. The pipeline covers both datasets
+that require frame extraction and the annotation format conversions
+required before training.
+
+\subsubsection*{7.1 Rationale for Frame Extraction}
+
+The initial strategy was to pre-extract all video frames to individual
+JPEG files on disk before training. This decision was motivated by
+four considerations:
+
+Random access during training. Deep learning training requires
+randomly sampling frames across all sequences in each mini-batch.
+Retrieving a specific frame from an \texttt{.mp4} file requires
+seeking through the video from the nearest keyframe, which introduces
+unpredictable latency. Pre-extracted frames allow instant random
+access via a single file read, regardless of temporal position in the
+sequence.
+
+Format consistency across datasets. Anti-UAV410 and CST
+Anti-UAV are already distributed as pre-extracted JPEG frames. A
+unified frame-on-disk representation would allow a single PyTorch
+\texttt{Dataset} class to serve all four datasets without
+branching on input format.
+
+Decoupling data preparation from training. Pre-extracting
+frames separates the data preparation phase from the training phase.
+This is particularly important on shared HPC infrastructure where
+GPU compute nodes should not be burdened with video decoding overhead
+during time-limited GPU jobs.
+
+Reproducibility. Extracted frames are immutable snapshots,
+eliminating any dependency on codec versions or OpenCV build flags
+that could otherwise affect how frames are decoded at different
+points in time.
+
+\subsubsection*{7.2 SLURM Job Chain}
+
+Four jobs were submitted as a dependency chain, with Jobs 1a and 1b
+running in parallel:
+
+\begin{enumerate}
+    \item Job 1a --- \texttt{extract\_antiuav\_rgbt}: Extracts
+          frames from all infrared and visible \texttt{.mp4} video files
+          across the train, val, and test splits of Anti-UAV-RGBT
+          (318 sequences, both modalities). Includes a temporal alignment
+          verification step confirming IR and RGB frame counts match per
+          sequence.
+    \item Job 1b --- \texttt{extract\_ard100}: Extracts frames
+          from all ARD100 train and test \texttt{.mp4} videos (100
+          sequences). Frame naming is matched exactly to the XML
+          annotation filenames to ensure correct pairing.
+    \item Job 2 --- \texttt{prepare\_ard100} (starts after Job
+          1b): Creates the official train/test split
+          \texttt{ImageSets/Main/} files using the predefined YOLOMG
+          sequence split (65 train, 35 test), converts all Pascal VOC
+          XML annotations to YOLO \texttt{.txt} format, and generates
+          image path lists for the training framework.
+    \item Job 3 --- \texttt{gen\_masks} (starts after Job 2):
+          Generates pixel-level motion difference maps (\texttt{mask32})
+          for all 100 ARD100 sequences using the \texttt{FD5\_mask}
+          algorithm. These motion maps constitute YOLOMG's second input
+          stream alongside the RGB frames.
+\end{enumerate}
+
+\subsubsection*{7.3 Anti-UAV JSON to YOLO Conversion (Attempted)}
+
+A conversion script (\texttt{json2yolo.py}) was written to convert the
+JSON annotations of Anti-UAV-RGBT and Anti-UAV410 into YOLO
+\texttt{.txt} format, normalising bounding boxes from absolute pixel
+coordinates $[x, y, w, h]$ to normalised $[x_c, y_c, w, h]$ using the
+confirmed sensor resolution of $640 \times 512$ pixels.
+
+% ------------------------------------------------------------
+\subsection*{8. Infrastructure Roadblock: Inode Quota}
+
+Both the frame extraction pipeline and the JSON-to-YOLO conversion
+were terminated by the same underlying constraint: a per-project inode
+quota on \texttt{/projects/prjs2041/}. An inode is a filesystem entry
+representing a single file or directory; every extracted frame and
+every per-frame \texttt{.txt} label file consumes one inode.
+
+\subsubsection*{8.1 Scale of the Problem}
+
+The proposed approach would have generated approximately:
+
+\begin{itemize}
+    \item Frame files: Anti-UAV-RGBT ($318$ sequences $\times$
+          ${\sim}1{,}000$ frames $\times$ 2 modalities) $+$ ARD100
+          ($100$ sequences $\times$ ${\sim}2{,}000$ frames)
+          $\approx 836{,}000$ JPEG files.
+    \item Label files: One \texttt{.txt} per frame across
+          Anti-UAV-RGBT and Anti-UAV410
+          $\approx 800{,}000$ additional files.
+    \item Total: ${\sim}1.6$ million new filesystem inodes,
+          which exceeds the project directory quota.
+\end{itemize}
+
+The extraction job crashed at sequence 27/160 of the Anti-UAV-RGBT
+train split (\texttt{OSError: [Errno 122] Disk quota exceeded}), and
+the label conversion crashed at sequence 128/160.
+
+\subsubsection*{8.2 Revised Strategy: Native Format Reading via PyTorch Dataset Classes}
+
+The inode constraint motivates a fundamental redesign of the data
+loading strategy. Rather than converting all annotation formats to a
+common on-disk representation, the revised approach reads each
+dataset in its native format directly inside a PyTorch
+\texttt{Dataset} class. No intermediate files are written to disk.
+Table~\ref{tab:dataset_loading} summarises how each dataset is handled.
+
+\begin{table}[h]
+\centering
+\caption{Native-format loading strategy per dataset.}
+\label{tab:dataset_loading}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{llll}
+\hline
+Dataset & Frame source & Annotation source & Extra files written \\
+\hline
+Anti-UAV-RGBT  & \texttt{cv2.VideoCapture} on \texttt{.mp4} & \texttt{infrared.json} / \texttt{visible.json} & None \\
+Anti-UAV410    & \texttt{cv2.imread} on pre-extracted JPGs  & \texttt{IR\_label.json}                        & None \\
+ARD100         & \texttt{cv2.VideoCapture} on \texttt{.mp4} & Pascal VOC XML per frame                       & None \\
+CST Anti-UAV   & \texttt{cv2.imread} on pre-extracted JPGs  & \texttt{gt.txt} + \texttt{IR\_label.json}      & None \\
+\hline
+\end{tabular}%
+}
+\end{table}
+
+Why this works.
+Each \texttt{Dataset} class encapsulates all format-specific logic
+internally: video seeking, JSON parsing, XML parsing, bounding box
+normalisation, and the \texttt{exist} flag check. The rest of the
+training pipeline — the DataLoader, the model, the loss function —
+sees a uniform interface of \texttt{(image\_tensor, label\_tensor)}
+pairs regardless of which dataset is being read. This is preferable
+to the conversion approach even beyond the inode constraint, because
+it removes a brittle preprocessing stage and keeps the original
+annotation files as the single source of truth.
+
+What this achieves.
+The four Dataset classes will serve as the foundation for the entire
+experimental pipeline. The Teacher-Student UDA framework (T\textsubscript{1})
+requires a paired loader that returns synchronised RGB and IR frames
+from Anti-UAV-RGBT — this is only cleanly expressible as a Dataset
+class, not as a static file conversion. The Continual Learning
+curriculum ($T_1 \to T_2$) requires switching between datasets
+mid-training, which is straightforward when each dataset is a
+self-contained class. The Forgetting Measure evaluation requires
+replaying samples from earlier tasks, which maps naturally onto
+the rehearsal buffer reading from Dataset instances.
+
+Performance.
+The loading overhead of on-the-fly video decoding is mitigated by:
+(i) using multiple PyTorch DataLoader worker processes to prefetch
+batches in parallel; (ii) caching the current sequence's
+\texttt{VideoCapture} handle across consecutive frames; and (iii)
+running data loading asynchronously on CPU while the GPU executes the
+forward and backward passes.
+
+% ------------------------------------------------------------
+\subsection*{9. Next Steps}
+
+\begin{enumerate}
+    \item PyTorch Dataset classes: Implement a unified dataset
+          interface for all four annotation formats using on-the-fly
+          video reading for Anti-UAV-RGBT and ARD100, and direct image
+          reading for Anti-UAV410 and CST. This constitutes the primary
+          engineering task for the next session.
+    \item Motion mask generation for ARD100: Adapt
+          \texttt{generate\_mask5\_fixed.py} to generate motion
+          difference maps directly into memory during training, or
+          pre-compute and store them as a single compressed archive
+          per sequence to minimise inode usage.
+    \item Baseline training run: Establish the source-domain
+          RGB baseline (mAP on Anti-UAV-RGBT) as the starting point
+          for the Forgetting Measure calculation.
+\end{enumerate}
