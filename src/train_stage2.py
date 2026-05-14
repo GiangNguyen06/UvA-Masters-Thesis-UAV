@@ -84,7 +84,7 @@ SAVE_ROOT        = Path('/projects/prjs2041/runs/stage2')
 LOGS_DIR         = Path('/projects/prjs2041/logs')
 
 # Default Stage 1 weights (override via --weights argument)
-DEFAULT_STAGE1_WEIGHTS = Path('/projects/prjs2041/runs/stage1/antiuav_rgbt/weights/best.pt')
+DEFAULT_STAGE1_WEIGHTS = Path('/projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt')
 
 sys.path.insert(0, str(YOLOMG_ROOT))
 sys.path.insert(0, str(UAV_CODE))
@@ -302,7 +302,7 @@ def evaluate(model, loader, device, imgsz=640):
             if len(det) == 0:
                 if nl:
                     stats.append((
-                        torch.zeros(0, dtype=torch.bool),
+                        torch.zeros(0, 1, dtype=torch.bool),
                         torch.zeros(0), torch.zeros(0), tcls
                     ))
                 continue
@@ -312,7 +312,7 @@ def evaluate(model, loader, device, imgsz=640):
                 tbox = xywh2xyxy(gt[:, 1:5]) * imgsz
                 tbox = tbox.to(device)
                 iou  = box_iou(tbox, predn[:, :4])
-                correct = torch.zeros(len(det), dtype=torch.bool, device=device)
+                correct = torch.zeros(len(det), 1, dtype=torch.bool, device=device)
                 if iou.numel():
                     x = torch.where(iou >= MAP_IOU)
                     if x[0].shape[0]:
@@ -324,9 +324,9 @@ def evaluate(model, loader, device, imgsz=640):
                             matches = matches[matches[:, 2].argsort()[::-1]]
                             matches = matches[np.unique(matches[:, 1], return_index=True)[1]]
                             matches = matches[np.unique(matches[:, 0], return_index=True)[1]]
-                        correct[matches[:, 1].astype(int)] = True
+                        correct[matches[:, 1].astype(int), 0] = True
             else:
-                correct = torch.zeros(len(det), dtype=torch.bool)
+                correct = torch.zeros(len(det), 1, dtype=torch.bool)
 
             stats.append((
                 correct.cpu(),
@@ -341,7 +341,7 @@ def evaluate(model, loader, device, imgsz=640):
 
     stats = [np.concatenate(x, 0) for x in zip(*stats)]
     if len(stats) and stats[0].any():
-        _, _, ap, _, _ = ap_per_class(*stats, plot=False, names={0: 'UAV'})
+        _, _, _, _, _, ap, _ = ap_per_class(*stats, plot=False, names={0: 'UAV'})
         map50 = float(ap[:, 0].mean()) if ap.ndim == 2 else float(ap[0])
         mapxx = float(ap.mean())       if ap.ndim == 2 else float(ap.mean())
     else:
@@ -365,7 +365,7 @@ def load_model_from_ckpt(ckpt_path: Path, device: torch.device) -> Model:
     model.hyp   = HYP
     model.names = NAMES
 
-    ckpt = torch.load(str(ckpt_path), map_location=device)
+    ckpt = torch.load(str(ckpt_path), map_location=device, weights_only=False)
 
     # Prefer EMA weights (more stable than raw model weights)
     if 'ema' in ckpt and ckpt['ema'] is not None:
@@ -565,6 +565,7 @@ def train(save_dir: Path, device: torch.device, stage1_weights: Path):
         scheduler.step()
 
         # ── End-of-epoch evaluation ───────────────────────────────────────────
+        t_epoch = datetime.now().strftime('%H:%M:%S')
         map50_t2, _     = evaluate(ema.ema, val_loader_t2, device, IMG_SIZE)
         map50_t1, _     = evaluate(ema.ema, val_loader_t1, device, IMG_SIZE)
         lr_now          = optimizer.param_groups[0]['lr']
@@ -573,7 +574,7 @@ def train(save_dir: Path, device: torch.device, stage1_weights: Path):
         best_t1 = max(best_t1, map50_t1)
 
         log.info(
-            f'\nEpoch {epoch:3d}/{EPOCHS-1}  '
+            f'\nEpoch {epoch:3d}/{EPOCHS-1}  [{t_epoch}]  '
             f'loss={total_loss_val:.4f}  '
             f'mAP@0.5(T2/UAV410)={map50_t2:.4f}  '
             f'mAP@0.5(T1/RGBT)={map50_t1:.4f}\n'

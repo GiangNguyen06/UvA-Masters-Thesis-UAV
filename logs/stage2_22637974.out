@@ -1,0 +1,15 @@
+========================================
+Stage 2 DDP: Teacher-Student UDA on Anti-UAV410
+Job ID:  22637974
+Node:    gcn46
+GPUs:    0,1,2,3
+Weights: /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt
+Time:    Mon May 11 20:25:21 CEST 2026
+========================================
+
+/var/spool/slurm/slurmd/job22637974/slurm_script: line 49: torchrun: command not found
+
+========================================
+Finished at: Mon May 11 20:25:21 CEST 2026
+Check results: /projects/prjs2041/runs/stage2/
+========================================

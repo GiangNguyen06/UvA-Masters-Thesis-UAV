@@ -2,12 +2,10 @@
 # =============================================================
 # run_stage2.sh
 # Stage 2: Teacher-Student UDA — fine-tune YOLOMG on Anti-UAV410
+# 4×A100 DDP via torchrun --standalone --nproc_per_node=4
 #
 # Submit with:
 #   sbatch run_stage2.sh
-#
-# IMPORTANT: Edit STAGE1_WEIGHTS below to point to the best.pt
-# produced by Stage 1 (check /projects/prjs2041/runs/stage1/).
 #
 # Outputs:
 #   /projects/prjs2041/runs/stage2/antiuav410*/
@@ -21,43 +19,42 @@
 # Forgetting Measure:
 #   FM = stage2_t1_mAP.txt − stage1_mAP.txt   (negative → forgetting)
 # =============================================================
-#SBATCH --job-name=stage2_yolomg
+#SBATCH --job-name=stage2_ddp
 #SBATCH --partition=gpu_a100
-#SBATCH --gres=gpu:a100:1
-#SBATCH --time=24:00:00
+#SBATCH --gres=gpu:a100:4
+#SBATCH --time=72:00:00
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=8
-#SBATCH --mem=80G
+#SBATCH --cpus-per-task=32
+#SBATCH --mem=120G
 #SBATCH --output=/projects/prjs2041/logs/stage2_%j.out
 
-# ── Edit this path once Stage 1 has finished ──────────────────────────────
 STAGE1_WEIGHTS=/projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt
 
 PYTHON=/home/knguyen1/.conda/envs/uav_master/bin/python
-SCRIPT=/projects/prjs2041/uav_code/train_stage2.py
+TORCHRUN=/home/knguyen1/.conda/envs/uav_master/bin/torchrun
+SCRIPT=/projects/prjs2041/uav_code/train_stage2_ddp.py
 LOGS=/projects/prjs2041/logs
 
 mkdir -p $LOGS
 
 echo "========================================"
-echo "Stage 2: Teacher-Student UDA on Anti-UAV410"
+echo "Stage 2 DDP: Teacher-Student UDA on Anti-UAV410"
 echo "Job ID:  $SLURM_JOB_ID"
 echo "Node:    $SLURMD_NODENAME"
-echo "GPU:     $CUDA_VISIBLE_DEVICES"
+echo "GPUs:    $CUDA_VISIBLE_DEVICES"
 echo "Weights: $STAGE1_WEIGHTS"
 echo "Time:    $(date)"
 echo "========================================"
 echo ""
 
-$PYTHON $SCRIPT \
-    --weights   $STAGE1_WEIGHTS \
-    --epochs    50 \
+$TORCHRUN --standalone --nproc_per_node=4 $SCRIPT \
+    --weights    $STAGE1_WEIGHTS \
+    --epochs     50 \
     --batch-size 16 \
-    --imgsz     640 \
-    --workers   4 \
-    --kd-weight 1.0 \
-    --device    0 \
-    --name      antiuav410
+    --imgsz      640 \
+    --workers    4 \
+    --kd-weight  1.0 \
+    --name       antiuav410
 
 echo ""
 echo "========================================"
