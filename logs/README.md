@@ -6,7 +6,7 @@ SLURM output logs from Snellius (SURF HPC). Files named `.err` contain the actua
 
 ## Stage 1 — Supervised Training on Anti-UAV-RGBT
 
-### `stage1_rerun_23297129.out` ✅ CANONICAL
+### `stage1_rerun_23297129.out` — CANONICAL
 **Job:** 23297129 | A100 partition, 4×A100  
 **Result:** mAP@0.5 = **0.6725** at epoch 49/100 (early stopping patience=30)
 
@@ -24,7 +24,7 @@ Early stopping triggered at epoch 79 (best at epoch 49)
 
 Loss: `L_total = L_det + 1.0 × L_kd` where `L_kd` = MSE on P3/P4/P5 grids vs frozen Stage 1 teacher.
 
-### `stage2_seed42_23349658.err` ✅ PRIMARY SEED
+### `stage2_seed42_23349658.err` — PRIMARY SEED
 **Job:** 23349658 | H100 partition, 4×H100  
 **Result:** T2 mAP = 0.4264, T1 retained = 0.6658, **FM = −0.037**, best epoch 16/32
 
@@ -34,15 +34,15 @@ Best T1 mAP@0.5 (AntiUAVRGBT) = 0.6658
 Best epoch: 16  (early stopping patience=15)
 ```
 
-### `stage2_seed123_23349659.err` ✅ SEED 123
+### `stage2_seed123_23349659.err` — SEED 123
 **Job:** 23349659 | H100 partition, 4×H100  
 **Result:** T2 mAP = 0.4304, T1 retained = 0.6647, **FM = −0.028**, best epoch 15/32
 
-### `stage2_seed999_23349660.err` ⚠️ CANCELLED ep 29
+### `stage2_seed999_23349660.err` — CANCELLED ep 29
 **Job:** 23349660 | H100 partition, 4×H100  
 **Status:** Cancelled at epoch 29 by wall-time. Best checkpoint at ep. 29 was saved and used in CI aggregation below.
 
-### `s2_analysis_h100_23381446.out` ✅ CI AGGREGATION
+### `s2_analysis_h100_23381446.out` — CI AGGREGATION
 **Job:** 23381446 | `run_analysis_stage2_h100.sh` → `plot_multirun_ci.py`  
 **Result:** All 3 seeds aggregated → **FM = −0.033 ± 0.004** (95% CI), T1 retained = **0.640**
 
@@ -51,7 +51,7 @@ Also contains scale-stratified mAP for seed-42 checkpoint on T1 val:
 tiny=0.0012  small=0.2773  normal=0.6821  large=0.2828
 ```
 
-### `stage2_22688135.out` 📋 SINGLE-SEED PILOT (superseded)
+### `stage2_22688135.out` — SINGLE-SEED PILOT (superseded)
 **Job:** 22688135 | A100 partition, single GPU  
 **Result:** FM = −0.0153 at best epoch 10/26 — validated KD concept before DDP multi-seed run.
 
@@ -59,7 +59,7 @@ tiny=0.0012  small=0.2773  normal=0.6821  large=0.2828
 
 ## Parameter Drift Analysis
 
-### `drift_23392372.out` ✅ COSINE SIMILARITY S1→S2
+### `drift_23392372.out` — COSINE SIMILARITY S1→S2
 **Job:** 23392372 | `run_analysis_drift.sh` → `parameter_drift.py`  
 **Result:** Mean cosine similarity S1→S2 = **0.896** across 335 parameter tensors
 
@@ -74,7 +74,7 @@ Backbone shows low drift (features preserved), head shows higher drift (adapted 
 
 ## Stage 3 — Naive Baseline on CST Anti-UAV
 
-### `stage3_naive_23394054.err` ✅ CANONICAL
+### `stage3_naive_23394054.err` — CANONICAL
 **Job:** 23394054 | H100 partition, 4×H100  
 **Result:** FM = **−0.605** at best epoch 3, T3 mAP (CST) = 0.0829
 
@@ -84,7 +84,7 @@ T1 mAP at epoch 18 = 0.0168
 T1 by stratum at ep 18: tiny=0.0002  small=0.0192  normal=0.0190  large=0.0000
 ```
 
-### `eval_t1_23821658.out` ✅ T1 STRATUM BREAKDOWN AFTER S3
+### `eval_t1_23821658.out` — T1 STRATUM BREAKDOWN AFTER S3
 **Job:** 23821658 | `run_eval.sh` → `eval_full_analysis.py` on Stage 3 best checkpoint  
 **Result:** Per-stratum T1 mAP after Stage 3 (gradient starvation signature):
 
@@ -98,7 +98,7 @@ Large-target mAP collapses from 0.461 (after Stage 1) to **0.000** — reported 
 
 ## Scale-Stratified Herding Buffer
 
-### `build_buffers_23391452.out` ✅ BUFFER CONSTRUCTION
+### `build_buffers_23391452.out` — BUFFER CONSTRUCTION
 **Job:** 23391452 | `run_build_buffers.sh` → `build_herding_buffer.py`  
 **Checkpoint:** Stage 2 seed-42 best.pt on Anti-UAV-RGBT val (60,620 UAV-present frames)
 
@@ -139,7 +139,7 @@ Experimental comparison of SSH vs naive fine-tuning is left as future work.
 
 ## Tracking Evaluation
 
-### `track_cst_23824125.out` ✅ SOT TRACKING ON CST
+### `track_cst_23824125.out` — SOT TRACKING ON CST
 **Job:** 23824125 | `run_tracking_eval.sh` → `eval_tracking_cst.py`  
 **Checkpoint:** Stage 3 naive best (epoch 3) on CST val (40 sequences, 39,055 frames)
 

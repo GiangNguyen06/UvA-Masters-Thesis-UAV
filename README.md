@@ -20,10 +20,10 @@ Thermal infrared UAV detectors must remain accurate as operational datasets evol
 
 | | Question | Status |
 |---|---|---|
-| **H1** | Is catastrophic forgetting measurable under the three-stage curriculum? | ✅ Confirmed — FM = −0.605 |
-| **RQ1** | Does Knowledge Distillation preserve T1 performance during T2 domain shift? | ✅ Answered — FM = −0.033 ± 0.004 (95% retention) |
-| **RQ2** | Does scale-distribution shift characterise the forgetting pattern in Stage 3? | ✅ Answered — gradient starvation identified as mechanism |
-| **RQ3** | Does Scale-Stratified Herding mitigate large-target forgetting? | 🔬 Design contribution — buffer built, experimental validation blocked by compute budget |
+| **H1** | Is catastrophic forgetting measurable under the three-stage curriculum? | Confirmed — FM = −0.605 |
+| **RQ1** | Does Knowledge Distillation preserve T1 performance during T2 domain shift? | Answered — FM = −0.033 ± 0.004 (95% retention) |
+| **RQ2** | Does scale-distribution shift characterise the forgetting pattern in Stage 3? | Answered — gradient starvation identified as mechanism |
+| **RQ3** | Does Scale-Stratified Herding mitigate large-target forgetting? | Design contribution — buffer built, experimental validation blocked by compute budget |
 
 ---
 
@@ -31,10 +31,10 @@ Thermal infrared UAV detectors must remain accurate as operational datasets evol
 
 | Stage | Task | Dataset | Result |
 |-------|------|---------|--------|
-| 1 | Supervised baseline | Anti-UAV-RGBT (208,737 frames) | ✅ mAP@0.5 = **0.6725** |
-| 2 | KD fine-tuning | Anti-UAV410 (438,397 frames) | ✅ FM = **−0.033 ± 0.004** (3 seeds) |
-| 3 | Naive baseline | CST Anti-UAV (245,471 frames) | ✅ FM = **−0.605**, best at epoch 3 |
-| 3 | Scale-Stratified Herding | CST Anti-UAV | ❌ Cancelled — compute budget exhausted |
+| 1 | Supervised baseline | Anti-UAV-RGBT (208,737 frames) | mAP@0.5 = **0.6725** |
+| 2 | KD fine-tuning | Anti-UAV410 (438,397 frames) | FM = **−0.033 ± 0.004** (3 seeds) |
+| 3 | Naive baseline | CST Anti-UAV (245,471 frames) | FM = **−0.605**, best at epoch 3 |
+| 3 | Scale-Stratified Herding | CST Anti-UAV | Cancelled — compute budget exhausted |
 
 ---
 
