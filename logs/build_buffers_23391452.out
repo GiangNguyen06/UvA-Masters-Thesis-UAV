@@ -1,0 +1,224 @@
+==============================
+Build Replay Buffers (Stage 2 features)
+Job ID  : 23391452
+Node    : gcn109
+Started : Tue Jun  2 19:49:12 CEST 2026
+==============================
+Stage 2 weights: /projects/prjs2041/runs/stage2/seed42/weights/best.pt
+
+Copying Anti-UAV-RGBT to $TMPDIR ...
+Data ready: Tue Jun  2 19:50:08 CEST 2026
+
+--- Building HERDING buffer ---
+Scale-Stratified Herding Buffer Builder
+  Mode       : herding
+  Weights    : /projects/prjs2041/runs/stage2/seed42/weights/best.pt  (Stage 2)
+  Data       : /scratch-local/knguyen1.23391452/Anti-UAV-RGBT
+  K/stratum  : 75
+  Output     : /projects/prjs2041/runs/stage2/seed42/herding_buffer.pt
+
+Loading Stage 2 model …
+  Epoch 16  best_fitness=?
+
+Loading Anti-UAV-RGBT val (UAV-present frames only) …
+  60,620 UAV-present frames  |  1895 batches
+
+Extracting embeddings …
+  [50/1895] 1,600 frames processed
+  [100/1895] 3,200 frames processed
+  [150/1895] 4,800 frames processed
+  [200/1895] 6,400 frames processed
+  [250/1895] 8,000 frames processed
+  [300/1895] 9,600 frames processed
+  [350/1895] 11,200 frames processed
+  [400/1895] 12,800 frames processed
+  [450/1895] 14,400 frames processed
+  [500/1895] 16,000 frames processed
+  [550/1895] 17,600 frames processed
+  [600/1895] 19,200 frames processed
+  [650/1895] 20,800 frames processed
+  [700/1895] 22,400 frames processed
+  [750/1895] 24,000 frames processed
+  [800/1895] 25,600 frames processed
+  [850/1895] 27,200 frames processed
+  [900/1895] 28,800 frames processed
+  [950/1895] 30,400 frames processed
+  [1000/1895] 32,000 frames processed
+  [1050/1895] 33,600 frames processed
+  [1100/1895] 35,200 frames processed
+  [1150/1895] 36,800 frames processed
+  [1200/1895] 38,400 frames processed
+  [1250/1895] 40,000 frames processed
+  [1300/1895] 41,600 frames processed
+  [1350/1895] 43,200 frames processed
+  [1400/1895] 44,800 frames processed
+  [1450/1895] 46,400 frames processed
+  [1500/1895] 48,000 frames processed
+  [1550/1895] 49,600 frames processed
+  [1600/1895] 51,200 frames processed
+  [1650/1895] 52,800 frames processed
+  [1700/1895] 54,400 frames processed
+  [1750/1895] 56,000 frames processed
+  [1800/1895] 57,600 frames processed
+  [1850/1895] 59,200 frames processed
+
+  Total frames with embeddings: 60,620
+
+Stratum distribution:
+  tiny    :    197 frames
+  small   : 14,798 frames
+  normal  : 42,608 frames
+  large   :  3,017 frames
+
+Running greedy herding (k=75 per stratum) …
+  tiny    :    197 available → 75 selected
+  small   : 14,798 available → 75 selected
+  normal  : 42,608 available → 75 selected
+  large   :  3,017 available → 75 selected
+
+Building buffer from 300 exemplars …
+  Buffer saved : /projects/prjs2041/runs/stage2/seed42/herding_buffer.pt
+  Buffer size  : 273.6 KB
+
+Scale-Stratified Buffer  [HERDING]
+Weights   : /projects/prjs2041/runs/stage2/seed42/weights/best.pt  (Stage 2)
+K/stratum : 75
+Mode      : herding
+
+Stratum     Available   Selected
+-----------------------------------
+tiny              197         75
+small          14,798         75
+normal         42,608         75
+large           3,017         75
+-----------------------------------
+TOTAL          60,620        300
+
+Stats: /projects/prjs2041/runs/stage2/seed42/herding_buffer.txt
+Done.
+Herding buffer done: Tue Jun  2 19:55:48 CEST 2026
+
+--- Building RANDOM STRATIFIED buffer (ablation) ---
+Scale-Stratified Herding Buffer Builder
+  Mode       : random
+  Weights    : /projects/prjs2041/runs/stage2/seed42/weights/best.pt  (Stage 2)
+  Data       : /scratch-local/knguyen1.23391452/Anti-UAV-RGBT
+  K/stratum  : 75
+  Output     : /projects/prjs2041/runs/stage2/seed42/herding_buffer_random.pt
+
+Loading Stage 2 model …
+  Epoch 16  best_fitness=?
+
+Loading Anti-UAV-RGBT val (UAV-present frames only) …
+  60,620 UAV-present frames  |  1895 batches
+
+Extracting embeddings …
+  [50/1895] 1,600 frames processed
+  [100/1895] 3,200 frames processed
+  [150/1895] 4,800 frames processed
+  [200/1895] 6,400 frames processed
+  [250/1895] 8,000 frames processed
+  [300/1895] 9,600 frames processed
+  [350/1895] 11,200 frames processed
+  [400/1895] 12,800 frames processed
+  [450/1895] 14,400 frames processed
+  [500/1895] 16,000 frames processed
+  [550/1895] 17,600 frames processed
+  [600/1895] 19,200 frames processed
+  [650/1895] 20,800 frames processed
+  [700/1895] 22,400 frames processed
+  [750/1895] 24,000 frames processed
+  [800/1895] 25,600 frames processed
+  [850/1895] 27,200 frames processed
+  [900/1895] 28,800 frames processed
+  [950/1895] 30,400 frames processed
+  [1000/1895] 32,000 frames processed
+  [1050/1895] 33,600 frames processed
+  [1100/1895] 35,200 frames processed
+  [1150/1895] 36,800 frames processed
+  [1200/1895] 38,400 frames processed
+  [1250/1895] 40,000 frames processed
+  [1300/1895] 41,600 frames processed
+  [1350/1895] 43,200 frames processed
+  [1400/1895] 44,800 frames processed
+  [1450/1895] 46,400 frames processed
+  [1500/1895] 48,000 frames processed
+  [1550/1895] 49,600 frames processed
+  [1600/1895] 51,200 frames processed
+  [1650/1895] 52,800 frames processed
+  [1700/1895] 54,400 frames processed
+  [1750/1895] 56,000 frames processed
+  [1800/1895] 57,600 frames processed
+  [1850/1895] 59,200 frames processed
+
+  Total frames with embeddings: 60,620
+
+Stratum distribution:
+  tiny    :    197 frames
+  small   : 14,798 frames
+  normal  : 42,608 frames
+  large   :  3,017 frames
+
+Running random selection (k=75 per stratum) …
+  tiny    :    197 available → 75 selected
+  small   : 14,798 available → 75 selected
+  normal  : 42,608 available → 75 selected
+  large   :  3,017 available → 75 selected
+
+Building buffer from 300 exemplars …
+  Buffer saved : /projects/prjs2041/runs/stage2/seed42/herding_buffer_random.pt
+  Buffer size  : 289.7 KB
+
+Scale-Stratified Buffer  [RANDOM]
+Weights   : /projects/prjs2041/runs/stage2/seed42/weights/best.pt  (Stage 2)
+K/stratum : 75
+Mode      : random
+
+Stratum     Available   Selected
+-----------------------------------
+tiny              197         75
+small          14,798         75
+normal         42,608         75
+large           3,017         75
+-----------------------------------
+TOTAL          60,620        300
+
+Stats: /projects/prjs2041/runs/stage2/seed42/herding_buffer_random.txt
+Done.
+Random buffer done: Tue Jun  2 20:00:52 CEST 2026
+
+==============================
+Output files:
+-rw-rw----. 1 knguyen1 prjs2041 274K Jun  2 19:55 /projects/prjs2041/runs/stage2/seed42/herding_buffer.pt
+-rw-rw----. 1 knguyen1 prjs2041 290K Jun  2 20:00 /projects/prjs2041/runs/stage2/seed42/herding_buffer_random.pt
+
+Herding buffer stats:
+Scale-Stratified Buffer  [HERDING]
+Weights   : /projects/prjs2041/runs/stage2/seed42/weights/best.pt  (Stage 2)
+K/stratum : 75
+Mode      : herding
+
+Stratum     Available   Selected
+-----------------------------------
+tiny              197         75
+small          14,798         75
+normal         42,608         75
+large           3,017         75
+-----------------------------------
+TOTAL          60,620        300
+Random buffer stats:
+Scale-Stratified Buffer  [RANDOM]
+Weights   : /projects/prjs2041/runs/stage2/seed42/weights/best.pt  (Stage 2)
+K/stratum : 75
+Mode      : random
+
+Stratum     Available   Selected
+-----------------------------------
+tiny              197         75
+small          14,798         75
+normal         42,608         75
+large           3,017         75
+-----------------------------------
+TOTAL          60,620        300
+All done: Tue Jun  2 20:00:52 CEST 2026
+==============================

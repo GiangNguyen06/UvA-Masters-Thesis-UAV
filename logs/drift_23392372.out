@@ -1,0 +1,117 @@
+==============================
+Parameter Drift Analysis: Stage 1 → Stage 2
+Job ID  : 23392372
+Node    : tcn387
+Started : Tue Jun  2 20:33:27 CEST 2026
+==============================
+
+--- seed42 ---
+
+Parameter Drift Analysis
+  Stage 1 : /projects/prjs2041/runs/stage1/antiuav_rgbt15/weights/best.pt
+  Stage 2 : /projects/prjs2041/runs/stage2/seed42/weights/best.pt
+  Out dir : /projects/prjs2041/runs/stage2/seed42/drift
+
+Loading checkpoints …
+  Loaded best.pt  [EMA weights, epoch=49]
+  Loaded best.pt  [EMA weights, epoch=16]
+
+Computing drift for shared parameters …
+  335 parameters analysed
+
+Global relative L2 drift:
+  mean = 0.3492
+  max  = 4.2299  (model.4.spatial_attention.conv.weight)
+  min  = 0.0000
+Global cosine similarity:
+  mean = 0.917300
+  min  = -0.028416  (model.4.spatial_attention.conv.weight)
+
+  Drift stats CSV: /projects/prjs2041/runs/stage2/seed42/drift/drift_stats.csv
+
+Generating plots …
+  Saved: /projects/prjs2041/runs/stage2/seed42/drift/fig_drift_l2.png
+  Saved: /projects/prjs2041/runs/stage2/seed42/drift/fig_drift_cos.png
+  Saved: /projects/prjs2041/runs/stage2/seed42/drift/fig_drift_hist.png
+  Saved: /projects/prjs2041/runs/stage2/seed42/drift/fig_drift_groups.png
+
+All outputs in: /projects/prjs2041/runs/stage2/seed42/drift
+Done.
+
+--- seed123 ---
+
+Parameter Drift Analysis
+  Stage 1 : /projects/prjs2041/runs/stage1/antiuav_rgbt15/weights/best.pt
+  Stage 2 : /projects/prjs2041/runs/stage2/seed123/weights/best.pt
+  Out dir : /projects/prjs2041/runs/stage2/seed123/drift
+
+Loading checkpoints …
+  Loaded best.pt  [EMA weights, epoch=49]
+  Loaded best.pt  [EMA weights, epoch=15]
+
+Computing drift for shared parameters …
+  335 parameters analysed
+
+Global relative L2 drift:
+  mean = 0.3411
+  max  = 4.5303  (model.4.spatial_attention.conv.weight)
+  min  = 0.0000
+Global cosine similarity:
+  mean = 0.920950
+  min  = -0.048217  (model.4.spatial_attention.conv.weight)
+
+  Drift stats CSV: /projects/prjs2041/runs/stage2/seed123/drift/drift_stats.csv
+
+Generating plots …
+  Saved: /projects/prjs2041/runs/stage2/seed123/drift/fig_drift_l2.png
+  Saved: /projects/prjs2041/runs/stage2/seed123/drift/fig_drift_cos.png
+  Saved: /projects/prjs2041/runs/stage2/seed123/drift/fig_drift_hist.png
+  Saved: /projects/prjs2041/runs/stage2/seed123/drift/fig_drift_groups.png
+
+All outputs in: /projects/prjs2041/runs/stage2/seed123/drift
+Done.
+
+--- seed999 ---
+
+Parameter Drift Analysis
+  Stage 1 : /projects/prjs2041/runs/stage1/antiuav_rgbt15/weights/best.pt
+  Stage 2 : /projects/prjs2041/runs/stage2/seed999/weights/best.pt
+  Out dir : /projects/prjs2041/runs/stage2/seed999/drift
+
+Loading checkpoints …
+  Loaded best.pt  [EMA weights, epoch=49]
+  Loaded best.pt  [EMA weights, epoch=27]
+
+Computing drift for shared parameters …
+  335 parameters analysed
+
+Global relative L2 drift:
+  mean = 0.4258
+  max  = 5.7582  (model.4.spatial_attention.conv.weight)
+  min  = 0.0000
+Global cosine similarity:
+  mean = 0.895565
+  min  = -0.069259  (model.4.spatial_attention.conv.weight)
+
+  Drift stats CSV: /projects/prjs2041/runs/stage2/seed999/drift/drift_stats.csv
+
+Generating plots …
+  Saved: /projects/prjs2041/runs/stage2/seed999/drift/fig_drift_l2.png
+  Saved: /projects/prjs2041/runs/stage2/seed999/drift/fig_drift_cos.png
+  Saved: /projects/prjs2041/runs/stage2/seed999/drift/fig_drift_hist.png
+  Saved: /projects/prjs2041/runs/stage2/seed999/drift/fig_drift_groups.png
+
+All outputs in: /projects/prjs2041/runs/stage2/seed999/drift
+Done.
+
+==============================
+Done: Tue Jun  2 20:34:22 CEST 2026
+Results per seed:
+  /projects/prjs2041/runs/stage2/seed42/drift/
+  /projects/prjs2041/runs/stage2/seed123/drift/
+  /projects/prjs2041/runs/stage2/seed999/drift/
+
+Key figure: fig_drift_groups.png
+  backbone = low drift → Stage 1 features preserved
+  head     = higher drift → adapted to Anti-UAV410
+==============================

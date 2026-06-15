@@ -1,0 +1,73 @@
+==============================
+Job ID  : 23821658
+Node    : gcn33
+Started : Sun Jun 14 17:27:39 CEST 2026
+==============================
+Loading: /projects/prjs2041/runs/stage3/naive2/weights/best.pt
+  Epoch 3  best_fitness=?
+
+Loading Anti-UAV-RGBT val set from /projects/prjs2041/datasets/Anti-UAV-RGBT …
+  61,999 frames  |  1938 batches
+
+Running evaluation …
+  61995 images evaluated  |  60548 GT objects
+
+Computing overall metrics …
+  mAP@0.5    = 0.0761
+  Precision  = 0.1342
+  Recall     = 0.2521
+  F1         = 0.1752
+
+Computing scale-stratified metrics …
+  tiny     mAP@0.5 = 0.0004
+  small    mAP@0.5 = 0.0670
+  normal   mAP@0.5 = 0.0878
+  large    mAP@0.5 = 0.0000
+
+Computing per-sequence metrics …
+  67 sequences evaluated
+
+Generating figures …
+  Saved: /projects/prjs2041/analysis/stage3_naive/eval_t1/fig_pr_curve.png
+  Saved: /projects/prjs2041/analysis/stage3_naive/eval_t1/fig_conf_curve.png
+  Saved: /projects/prjs2041/analysis/stage3_naive/eval_t1/fig_scale_metrics.png
+  Saved: /projects/prjs2041/analysis/stage3_naive/eval_t1/fig_seq_metrics.png
+  Scale CSV: /projects/prjs2041/analysis/stage3_naive/eval_t1/scale_metrics.csv
+  Seq CSV:   /projects/prjs2041/analysis/stage3_naive/eval_t1/seq_metrics.csv
+
+=======================================================
+Full Analysis Summary — naive2 | Anti-UAV-RGBT val
+=======================================================
+
+--- Overall ---
+mAP@0.5          : 0.0761
+Precision        : 0.1342
+Recall           : 0.2521
+F1               : 0.1752
+
+--- Scale-stratified mAP@0.5 ---
+tiny    : 0.0004
+small   : 0.0670
+normal  : 0.0878
+large   : 0.0000
+
+--- Per-sequence (top 5 / bottom 5) ---
+20190926_183400_1_4            0.5359
+20190926_144550_1_7            0.3909
+20190925_222534_1_5            0.3503
+20190926_183941_1_5            0.3399
+20190925_131530_1_3            0.3325
+  ...
+20190925_130434_1_1            0.0000
+20190925_130434_1_2            0.0000
+20190925_205804_1_6            0.0000
+20190926_141816_1_2            0.0000
+20190926_142435_1_9            0.0000
+
+=======================================================
+
+All outputs in: /projects/prjs2041/analysis/stage3_naive/eval_t1
+Done.
+==============================
+Done: Sun Jun 14 17:37:59 CEST 2026
+==============================

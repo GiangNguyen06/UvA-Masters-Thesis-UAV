@@ -1,0 +1,1050 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+Stage 3 — NAIVE condition  →  /projects/prjs2041/runs/stage3/naive2
+Stage 2 weights : /projects/prjs2041/runs/stage2/seed42/weights/best.pt
+
+Loading datasets …
+  CST train: 127,991  val: 45,305
+  T1 val (RGBT): 61,999
+
+Loading Stage 2 weights from /projects/prjs2041/runs/stage2/seed42/weights/best.pt …
+
+                 from  n    params  module                                  arguments                     
+
+                 from  n    params  module                                  arguments                     
+
+                 from  n    params  module                                  arguments                     
+
+                 from  n    params  module                                  arguments                     
+  0                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  0                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  0                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  0                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  1                -1  1       336  models.common.C3                        [8, 8]                        
+  1                -1  1       336  models.common.C3                        [8, 8]                        
+  1                -1  1       336  models.common.C3                        [8, 8]                        
+  1                -1  1       336  models.common.C3                        [8, 8]                        
+  2                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  2                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  2                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  2                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  3                -1  1       336  models.common.C3                        [8, 8, 1]                     
+  3                -1  1       336  models.common.C3                        [8, 8, 1]                     
+  3                -1  1       336  models.common.C3                        [8, 8, 1]                     
+  3                -1  1       336  models.common.C3                        [8, 8, 1]                     
+  4           [-1, 1]  1       130  models.common.Concat3                   [16, 1]                       
+  4           [-1, 1]  1       130  models.common.Concat3                   [16, 1]                       
+  4           [-1, 1]  1       130  models.common.Concat3                   [16, 1]                       
+  4           [-1, 1]  1       130  models.common.Concat3                   [16, 1]                       
+  5                -1  1      1248  models.common.C3                        [16, 16, 1]                   
+  5                -1  1      1248  models.common.C3                        [16, 16, 1]                   
+  5                -1  1      1248  models.common.C3                        [16, 16, 1]                   
+  5                -1  1      1248  models.common.C3                        [16, 16, 1]                   
+  6                -1  1      4672  models.common.Conv                      [16, 32, 3, 2]                
+  6                -1  1      4672  models.common.Conv                      [16, 32, 3, 2]                
+  6                -1  1      4672  models.common.Conv                      [16, 32, 3, 2]                
+  6                -1  1      4672  models.common.Conv                      [16, 32, 3, 2]                
+  7                -1  1      4800  models.common.C3                        [32, 32, 1]                   
+  7                -1  1      4800  models.common.C3                        [32, 32, 1]                   
+  7                -1  1      4800  models.common.C3                        [32, 32, 1]                   
+  7                -1  1      4800  models.common.C3                        [32, 32, 1]                   
+  8                -1  1     18560  models.common.Conv                      [32, 64, 3, 2]                
+  8                -1  1     18560  models.common.Conv                      [32, 64, 3, 2]                
+  8                -1  1     18560  models.common.Conv                      [32, 64, 3, 2]                
+  8                -1  1     18560  models.common.Conv                      [32, 64, 3, 2]                
+  9                -1  1     18816  models.common.C3                        [64, 64, 1]                   
+  9                -1  1     18816  models.common.C3                        [64, 64, 1]                   
+  9                -1  1     18816  models.common.C3                        [64, 64, 1]                   
+  9                -1  1     18816  models.common.C3                        [64, 64, 1]                   
+ 10                -1  1     73984  models.common.Conv                      [64, 128, 3, 2]               
+ 10                -1  1     73984  models.common.Conv                      [64, 128, 3, 2]               
+ 10                -1  1     73984  models.common.Conv                      [64, 128, 3, 2]               
+ 10                -1  1     73984  models.common.Conv                      [64, 128, 3, 2]               
+ 11                -1  3    156928  models.common.C3                        [128, 128, 3]                 
+ 11                -1  3    156928  models.common.C3                        [128, 128, 3]                 
+ 11                -1  3    156928  models.common.C3                        [128, 128, 3]                 
+ 11                -1  3    156928  models.common.C3                        [128, 128, 3]                 
+ 12                -1  1     41344  models.common.SPPF                      [128, 128, 5]                 
+ 12                -1  1     41344  models.common.SPPF                      [128, 128, 5]                 
+ 12                -1  1     41344  models.common.SPPF                      [128, 128, 5]                 
+ 12                -1  1     41344  models.common.SPPF                      [128, 128, 5]                 
+ 13                -1  1     33280  models.common.Conv                      [128, 256, 1, 1]              
+ 13                -1  1     33280  models.common.Conv                      [128, 256, 1, 1]              
+ 13                -1  1     33280  models.common.Conv                      [128, 256, 1, 1]              
+ 14                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 14                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 15           [-1, 9]  1         0  models.common.Concat                    [1]                           
+ 13                -1  1     33280  models.common.Conv                      [128, 256, 1, 1]              
+ 15           [-1, 9]  1         0  models.common.Concat                    [1]                           
+ 14                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 15           [-1, 9]  1         0  models.common.Concat                    [1]                           
+ 14                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 15           [-1, 9]  1         0  models.common.Concat                    [1]                           
+ 16                -1  1    312832  models.common.C3                        [320, 256, 1, False]          
+ 16                -1  1    312832  models.common.C3                        [320, 256, 1, False]          
+ 16                -1  1    312832  models.common.C3                        [320, 256, 1, False]          
+ 16                -1  1    312832  models.common.C3                        [320, 256, 1, False]          
+ 17                -1  1     33024  models.common.Conv                      [256, 128, 1, 1]              
+ 17                -1  1     33024  models.common.Conv                      [256, 128, 1, 1]              
+ 18                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 17                -1  1     33024  models.common.Conv                      [256, 128, 1, 1]              
+ 18                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 19           [-1, 6]  1         0  models.common.Concat                    [1]                           
+ 19           [-1, 6]  1         0  models.common.Concat                    [1]                           
+ 18                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 17                -1  1     33024  models.common.Conv                      [256, 128, 1, 1]              
+ 19           [-1, 6]  1         0  models.common.Concat                    [1]                           
+ 18                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 19           [-1, 6]  1         0  models.common.Concat                    [1]                           
+ 20                -1  1     78592  models.common.C3                        [160, 128, 1, False]          
+ 20                -1  1     78592  models.common.C3                        [160, 128, 1, False]          
+ 20                -1  1     78592  models.common.C3                        [160, 128, 1, False]          
+ 20                -1  1     78592  models.common.C3                        [160, 128, 1, False]          
+ 21                -1  1    147712  models.common.Conv                      [128, 128, 3, 2]              
+ 21                -1  1    147712  models.common.Conv                      [128, 128, 3, 2]              
+ 22          [-1, 16]  1         0  models.common.Concat                    [1]                           
+ 22          [-1, 16]  1         0  models.common.Concat                    [1]                           
+ 21                -1  1    147712  models.common.Conv                      [128, 128, 3, 2]              
+ 22          [-1, 16]  1         0  models.common.Concat                    [1]                           
+ 21                -1  1    147712  models.common.Conv                      [128, 128, 3, 2]              
+ 22          [-1, 16]  1         0  models.common.Concat                    [1]                           
+ 23                -1  1    329216  models.common.C3                        [384, 256, 1, False]          
+ 23                -1  1    329216  models.common.C3                        [384, 256, 1, False]          
+ 23                -1  1    329216  models.common.C3                        [384, 256, 1, False]          
+ 23                -1  1    329216  models.common.C3                        [384, 256, 1, False]          
+ 24                -1  1    590336  models.common.Conv                      [256, 256, 3, 2]              
+ 24                -1  1    590336  models.common.Conv                      [256, 256, 3, 2]              
+ 25          [-1, 12]  1         0  models.common.Concat                    [1]                           
+ 25          [-1, 12]  1         0  models.common.Concat                    [1]                           
+ 24                -1  1    590336  models.common.Conv                      [256, 256, 3, 2]              
+ 25          [-1, 12]  1         0  models.common.Concat                    [1]                           
+ 24                -1  1    590336  models.common.Conv                      [256, 256, 3, 2]              
+ 25          [-1, 12]  1         0  models.common.Concat                    [1]                           
+ 26                -1  1   1117184  models.common.C3                        [384, 512, 1, False]          
+ 26                -1  1   1117184  models.common.C3                        [384, 512, 1, False]          
+ 26                -1  1   1117184  models.common.C3                        [384, 512, 1, False]          
+ 26                -1  1   1117184  models.common.C3                        [384, 512, 1, False]          
+ 27      [20, 23, 26]  1     16182  models.yolo.Detect                      [1, [[3, 2, 4, 3, 4, 3], [6, 4, 7, 5, 9, 6], [12, 7, 15, 9, 26, 14]], [128, 256, 512]]
+ 27      [20, 23, 26]  1     16182  models.yolo.Detect                      [1, [[3, 2, 4, 3, 4, 3], [6, 4, 7, 5, 9, 6], [12, 7, 15, 9, 26, 14]], [128, 256, 512]]
+ 27      [20, 23, 26]  1     16182  models.yolo.Detect                      [1, [[3, 2, 4, 3, 4, 3], [6, 4, 7, 5, 9, 6], [12, 7, 15, 9, 26, 14]], [128, 256, 512]]
+ 27      [20, 23, 26]  1     16182  models.yolo.Detect                      [1, [[3, 2, 4, 3, 4, 3], [6, 4, 7, 5, 9, 6], [12, 7, 15, 9, 26, 14]], [128, 256, 512]]
+Model Summary: 318 layers, 2979976 parameters, 2979976 gradients, 91.5 GFLOPs
+
+Model Summary: 318 layers, 2979976 parameters, 2979976 gradients, 91.5 GFLOPs
+
+Model Summary: 318 layers, 2979976 parameters, 2979976 gradients, 91.5 GFLOPs
+
+Model Summary: 318 layers, 2979976 parameters, 2979976 gradients, 91.5 GFLOPs
+
+
+Measuring Stage 2 T1 baseline (no gradient steps yet) …
+  mAP_T1_after_T2  = 0.6404
+  mAP_T1_after_T1  = 0.6725  (fixed ceiling)
+  Stage 2 forgetting = -0.0321
+
+Starting Stage 3 (naive) for 50 epochs …
+
+  [  0/49][   0/2000]  mem=2.11G  cst=0.0961  replay=0.0000
+  [  0/49][  50/2000]  mem=23.20G  cst=0.0936  replay=0.0000
+  [  0/49][ 100/2000]  mem=23.20G  cst=0.0931  replay=0.0000
+  [  0/49][ 150/2000]  mem=23.20G  cst=0.0925  replay=0.0000
+  [  0/49][ 200/2000]  mem=23.20G  cst=0.0919  replay=0.0000
+  [  0/49][ 250/2000]  mem=23.20G  cst=0.0914  replay=0.0000
+  [  0/49][ 300/2000]  mem=23.20G  cst=0.0906  replay=0.0000
+  [  0/49][ 350/2000]  mem=23.20G  cst=0.0899  replay=0.0000
+  [  0/49][ 400/2000]  mem=23.20G  cst=0.0895  replay=0.0000
+  [  0/49][ 450/2000]  mem=23.20G  cst=0.0888  replay=0.0000
+  [  0/49][ 500/2000]  mem=23.20G  cst=0.0884  replay=0.0000
+  [  0/49][ 550/2000]  mem=23.20G  cst=0.0877  replay=0.0000
+  [  0/49][ 600/2000]  mem=23.20G  cst=0.0870  replay=0.0000
+  [  0/49][ 650/2000]  mem=23.20G  cst=0.0865  replay=0.0000
+  [  0/49][ 700/2000]  mem=23.20G  cst=0.0860  replay=0.0000
+  [  0/49][ 750/2000]  mem=23.20G  cst=0.0855  replay=0.0000
+  [  0/49][ 800/2000]  mem=23.20G  cst=0.0848  replay=0.0000
+  [  0/49][ 850/2000]  mem=23.20G  cst=0.0843  replay=0.0000
+  [  0/49][ 900/2000]  mem=23.20G  cst=0.0838  replay=0.0000
+  [  0/49][ 950/2000]  mem=23.20G  cst=0.0833  replay=0.0000
+  [  0/49][1000/2000]  mem=23.20G  cst=0.0827  replay=0.0000
+  [  0/49][1050/2000]  mem=23.20G  cst=0.0823  replay=0.0000
+  [  0/49][1100/2000]  mem=23.20G  cst=0.0818  replay=0.0000
+  [  0/49][1150/2000]  mem=23.20G  cst=0.0815  replay=0.0000
+  [  0/49][1200/2000]  mem=23.20G  cst=0.0810  replay=0.0000
+  [  0/49][1250/2000]  mem=23.20G  cst=0.0806  replay=0.0000
+  [  0/49][1300/2000]  mem=23.20G  cst=0.0802  replay=0.0000
+  [  0/49][1350/2000]  mem=23.20G  cst=0.0797  replay=0.0000
+  [  0/49][1400/2000]  mem=23.20G  cst=0.0793  replay=0.0000
+  [  0/49][1450/2000]  mem=23.20G  cst=0.0788  replay=0.0000
+  [  0/49][1500/2000]  mem=23.20G  cst=0.0784  replay=0.0000
+  [  0/49][1550/2000]  mem=23.20G  cst=0.0780  replay=0.0000
+  [  0/49][1600/2000]  mem=23.20G  cst=0.0777  replay=0.0000
+  [  0/49][1650/2000]  mem=23.20G  cst=0.0773  replay=0.0000
+  [  0/49][1700/2000]  mem=23.20G  cst=0.0769  replay=0.0000
+  [  0/49][1750/2000]  mem=23.20G  cst=0.0765  replay=0.0000
+  [  0/49][1800/2000]  mem=23.20G  cst=0.0762  replay=0.0000
+  [  0/49][1850/2000]  mem=23.20G  cst=0.0759  replay=0.0000
+  [  0/49][1900/2000]  mem=23.20G  cst=0.0756  replay=0.0000
+  [  0/49][1950/2000]  mem=23.20G  cst=0.0752  replay=0.0000
+
+Epoch   0/49  loss=0.0749
+  T3: mAP@0.5=0.0421  P=0.1237  R=0.1162  F1=0.1198
+  T1: mAP@0.5=0.2064  fm_abs=-0.4661  fm_stage3=-0.4340
+  T1 by stratum: tiny=0.0414  small=0.1300  normal=0.2505  large=0.0101
+
+  ✓ New best T3 mAP@0.5 = 0.0421  fm_abs=-0.4661  fm_stage3=-0.4340  (saved /projects/prjs2041/runs/stage3/naive2/weights/best.pt)
+  [  1/49][   0/2000]  mem=21.77G  cst=0.0751  replay=0.0000
+  [  1/49][  50/2000]  mem=21.77G  cst=0.0604  replay=0.0000
+  [  1/49][ 100/2000]  mem=21.77G  cst=0.0592  replay=0.0000
+  [  1/49][ 150/2000]  mem=21.77G  cst=0.0591  replay=0.0000
+  [  1/49][ 200/2000]  mem=21.77G  cst=0.0596  replay=0.0000
+  [  1/49][ 250/2000]  mem=21.77G  cst=0.0593  replay=0.0000
+  [  1/49][ 300/2000]  mem=21.77G  cst=0.0592  replay=0.0000
+  [  1/49][ 350/2000]  mem=21.77G  cst=0.0589  replay=0.0000
+  [  1/49][ 400/2000]  mem=21.77G  cst=0.0586  replay=0.0000
+  [  1/49][ 450/2000]  mem=21.77G  cst=0.0583  replay=0.0000
+  [  1/49][ 500/2000]  mem=21.77G  cst=0.0582  replay=0.0000
+  [  1/49][ 550/2000]  mem=21.77G  cst=0.0580  replay=0.0000
+  [  1/49][ 600/2000]  mem=21.77G  cst=0.0577  replay=0.0000
+  [  1/49][ 650/2000]  mem=21.77G  cst=0.0576  replay=0.0000
+  [  1/49][ 700/2000]  mem=21.77G  cst=0.0574  replay=0.0000
+  [  1/49][ 750/2000]  mem=21.77G  cst=0.0571  replay=0.0000
+  [  1/49][ 800/2000]  mem=21.77G  cst=0.0571  replay=0.0000
+  [  1/49][ 850/2000]  mem=21.77G  cst=0.0570  replay=0.0000
+  [  1/49][ 900/2000]  mem=21.77G  cst=0.0568  replay=0.0000
+  [  1/49][ 950/2000]  mem=21.77G  cst=0.0567  replay=0.0000
+  [  1/49][1000/2000]  mem=21.77G  cst=0.0565  replay=0.0000
+  [  1/49][1050/2000]  mem=21.77G  cst=0.0563  replay=0.0000
+  [  1/49][1100/2000]  mem=21.77G  cst=0.0561  replay=0.0000
+  [  1/49][1150/2000]  mem=21.77G  cst=0.0560  replay=0.0000
+  [  1/49][1200/2000]  mem=21.77G  cst=0.0559  replay=0.0000
+  [  1/49][1250/2000]  mem=21.77G  cst=0.0557  replay=0.0000
+  [  1/49][1300/2000]  mem=21.77G  cst=0.0555  replay=0.0000
+  [  1/49][1350/2000]  mem=21.77G  cst=0.0554  replay=0.0000
+  [  1/49][1400/2000]  mem=21.77G  cst=0.0553  replay=0.0000
+  [  1/49][1450/2000]  mem=21.77G  cst=0.0551  replay=0.0000
+  [  1/49][1500/2000]  mem=21.77G  cst=0.0550  replay=0.0000
+  [  1/49][1550/2000]  mem=21.77G  cst=0.0549  replay=0.0000
+  [  1/49][1600/2000]  mem=21.77G  cst=0.0548  replay=0.0000
+  [  1/49][1650/2000]  mem=21.77G  cst=0.0547  replay=0.0000
+  [  1/49][1700/2000]  mem=21.77G  cst=0.0545  replay=0.0000
+  [  1/49][1750/2000]  mem=21.77G  cst=0.0544  replay=0.0000
+  [  1/49][1800/2000]  mem=21.77G  cst=0.0543  replay=0.0000
+  [  1/49][1850/2000]  mem=21.77G  cst=0.0542  replay=0.0000
+  [  1/49][1900/2000]  mem=21.77G  cst=0.0540  replay=0.0000
+  [  1/49][1950/2000]  mem=21.77G  cst=0.0539  replay=0.0000
+
+Epoch   1/49  loss=0.0537
+  T3: mAP@0.5=0.0655  P=0.1467  R=0.1169  F1=0.1301
+  T1: mAP@0.5=0.1271  fm_abs=-0.5454  fm_stage3=-0.5133
+  T1 by stratum: tiny=0.0045  small=0.0898  normal=0.1511  large=0.0001
+
+  ✓ New best T3 mAP@0.5 = 0.0655  fm_abs=-0.5454  fm_stage3=-0.5133  (saved /projects/prjs2041/runs/stage3/naive2/weights/best.pt)
+  [  2/49][   0/2000]  mem=23.45G  cst=0.0517  replay=0.0000
+  [  2/49][  50/2000]  mem=23.45G  cst=0.0489  replay=0.0000
+  [  2/49][ 100/2000]  mem=23.45G  cst=0.0486  replay=0.0000
+  [  2/49][ 150/2000]  mem=23.45G  cst=0.0477  replay=0.0000
+  [  2/49][ 200/2000]  mem=23.45G  cst=0.0479  replay=0.0000
+  [  2/49][ 250/2000]  mem=23.45G  cst=0.0478  replay=0.0000
+  [  2/49][ 300/2000]  mem=23.45G  cst=0.0477  replay=0.0000
+  [  2/49][ 350/2000]  mem=23.45G  cst=0.0478  replay=0.0000
+  [  2/49][ 400/2000]  mem=23.45G  cst=0.0477  replay=0.0000
+  [  2/49][ 450/2000]  mem=23.45G  cst=0.0475  replay=0.0000
+  [  2/49][ 500/2000]  mem=23.45G  cst=0.0475  replay=0.0000
+  [  2/49][ 550/2000]  mem=23.45G  cst=0.0474  replay=0.0000
+  [  2/49][ 600/2000]  mem=23.45G  cst=0.0473  replay=0.0000
+  [  2/49][ 650/2000]  mem=23.45G  cst=0.0474  replay=0.0000
+  [  2/49][ 700/2000]  mem=23.45G  cst=0.0472  replay=0.0000
+  [  2/49][ 750/2000]  mem=23.45G  cst=0.0471  replay=0.0000
+  [  2/49][ 800/2000]  mem=23.45G  cst=0.0470  replay=0.0000
+  [  2/49][ 850/2000]  mem=23.45G  cst=0.0470  replay=0.0000
+  [  2/49][ 900/2000]  mem=23.45G  cst=0.0470  replay=0.0000
+  [  2/49][ 950/2000]  mem=23.45G  cst=0.0469  replay=0.0000
+  [  2/49][1000/2000]  mem=23.45G  cst=0.0469  replay=0.0000
+  [  2/49][1050/2000]  mem=23.45G  cst=0.0469  replay=0.0000
+  [  2/49][1100/2000]  mem=23.45G  cst=0.0468  replay=0.0000
+  [  2/49][1150/2000]  mem=23.45G  cst=0.0468  replay=0.0000
+  [  2/49][1200/2000]  mem=23.45G  cst=0.0467  replay=0.0000
+  [  2/49][1250/2000]  mem=23.45G  cst=0.0467  replay=0.0000
+  [  2/49][1300/2000]  mem=23.45G  cst=0.0466  replay=0.0000
+  [  2/49][1350/2000]  mem=23.45G  cst=0.0466  replay=0.0000
+  [  2/49][1400/2000]  mem=23.45G  cst=0.0465  replay=0.0000
+  [  2/49][1450/2000]  mem=23.45G  cst=0.0465  replay=0.0000
+  [  2/49][1500/2000]  mem=23.45G  cst=0.0465  replay=0.0000
+  [  2/49][1550/2000]  mem=23.45G  cst=0.0464  replay=0.0000
+  [  2/49][1600/2000]  mem=23.45G  cst=0.0463  replay=0.0000
+  [  2/49][1650/2000]  mem=23.45G  cst=0.0463  replay=0.0000
+  [  2/49][1700/2000]  mem=23.45G  cst=0.0463  replay=0.0000
+  [  2/49][1750/2000]  mem=23.45G  cst=0.0463  replay=0.0000
+  [  2/49][1800/2000]  mem=23.45G  cst=0.0462  replay=0.0000
+  [  2/49][1850/2000]  mem=23.45G  cst=0.0462  replay=0.0000
+  [  2/49][1900/2000]  mem=23.45G  cst=0.0462  replay=0.0000
+  [  2/49][1950/2000]  mem=23.45G  cst=0.0461  replay=0.0000
+
+Epoch   2/49  loss=0.0461
+  T3: mAP@0.5=0.0739  P=0.2098  R=0.1131  F1=0.1470
+  T1: mAP@0.5=0.0817  fm_abs=-0.5908  fm_stage3=-0.5587
+  T1 by stratum: tiny=0.0007  small=0.0748  normal=0.0919  large=0.0000
+
+  ✓ New best T3 mAP@0.5 = 0.0739  fm_abs=-0.5908  fm_stage3=-0.5587  (saved /projects/prjs2041/runs/stage3/naive2/weights/best.pt)
+  [  3/49][   0/2000]  mem=23.45G  cst=0.0500  replay=0.0000
+  [  3/49][  50/2000]  mem=23.45G  cst=0.0433  replay=0.0000
+  [  3/49][ 100/2000]  mem=23.45G  cst=0.0427  replay=0.0000
+  [  3/49][ 150/2000]  mem=23.45G  cst=0.0430  replay=0.0000
+  [  3/49][ 200/2000]  mem=23.45G  cst=0.0429  replay=0.0000
+  [  3/49][ 250/2000]  mem=23.45G  cst=0.0429  replay=0.0000
+  [  3/49][ 300/2000]  mem=23.45G  cst=0.0428  replay=0.0000
+  [  3/49][ 350/2000]  mem=23.45G  cst=0.0427  replay=0.0000
+  [  3/49][ 400/2000]  mem=23.45G  cst=0.0426  replay=0.0000
+  [  3/49][ 450/2000]  mem=23.45G  cst=0.0425  replay=0.0000
+  [  3/49][ 500/2000]  mem=23.45G  cst=0.0425  replay=0.0000
+  [  3/49][ 550/2000]  mem=23.45G  cst=0.0425  replay=0.0000
+  [  3/49][ 600/2000]  mem=23.45G  cst=0.0425  replay=0.0000
+  [  3/49][ 650/2000]  mem=23.45G  cst=0.0424  replay=0.0000
+  [  3/49][ 700/2000]  mem=23.45G  cst=0.0425  replay=0.0000
+  [  3/49][ 750/2000]  mem=23.45G  cst=0.0424  replay=0.0000
+  [  3/49][ 800/2000]  mem=23.45G  cst=0.0425  replay=0.0000
+  [  3/49][ 850/2000]  mem=23.45G  cst=0.0424  replay=0.0000
+  [  3/49][ 900/2000]  mem=23.45G  cst=0.0424  replay=0.0000
+  [  3/49][ 950/2000]  mem=23.45G  cst=0.0424  replay=0.0000
+  [  3/49][1000/2000]  mem=23.45G  cst=0.0424  replay=0.0000
+  [  3/49][1050/2000]  mem=23.45G  cst=0.0424  replay=0.0000
+  [  3/49][1100/2000]  mem=23.45G  cst=0.0424  replay=0.0000
+  [  3/49][1150/2000]  mem=23.45G  cst=0.0424  replay=0.0000
+  [  3/49][1200/2000]  mem=23.45G  cst=0.0424  replay=0.0000
+  [  3/49][1250/2000]  mem=23.45G  cst=0.0424  replay=0.0000
+  [  3/49][1300/2000]  mem=23.45G  cst=0.0424  replay=0.0000
+  [  3/49][1350/2000]  mem=23.45G  cst=0.0423  replay=0.0000
+  [  3/49][1400/2000]  mem=23.45G  cst=0.0423  replay=0.0000
+  [  3/49][1450/2000]  mem=23.45G  cst=0.0423  replay=0.0000
+  [  3/49][1500/2000]  mem=23.45G  cst=0.0423  replay=0.0000
+  [  3/49][1550/2000]  mem=23.45G  cst=0.0423  replay=0.0000
+  [  3/49][1600/2000]  mem=23.45G  cst=0.0423  replay=0.0000
+  [  3/49][1650/2000]  mem=23.45G  cst=0.0422  replay=0.0000
+  [  3/49][1700/2000]  mem=23.45G  cst=0.0423  replay=0.0000
+  [  3/49][1750/2000]  mem=23.45G  cst=0.0422  replay=0.0000
+  [  3/49][1800/2000]  mem=23.45G  cst=0.0422  replay=0.0000
+  [  3/49][1850/2000]  mem=23.45G  cst=0.0421  replay=0.0000
+  [  3/49][1900/2000]  mem=23.45G  cst=0.0422  replay=0.0000
+  [  3/49][1950/2000]  mem=23.45G  cst=0.0421  replay=0.0000
+
+Epoch   3/49  loss=0.0422
+  T3: mAP@0.5=0.0829  P=0.2168  R=0.1301  F1=0.1626
+  T1: mAP@0.5=0.0680  fm_abs=-0.6045  fm_stage3=-0.5724
+  T1 by stratum: tiny=0.0006  small=0.0596  normal=0.0788  large=0.0000
+
+  ✓ New best T3 mAP@0.5 = 0.0829  fm_abs=-0.6045  fm_stage3=-0.5724  (saved /projects/prjs2041/runs/stage3/naive2/weights/best.pt)
+  [  4/49][   0/2000]  mem=23.45G  cst=0.0345  replay=0.0000
+  [  4/49][  50/2000]  mem=23.45G  cst=0.0413  replay=0.0000
+  [  4/49][ 100/2000]  mem=23.45G  cst=0.0400  replay=0.0000
+  [  4/49][ 150/2000]  mem=23.45G  cst=0.0398  replay=0.0000
+  [  4/49][ 200/2000]  mem=23.45G  cst=0.0400  replay=0.0000
+  [  4/49][ 250/2000]  mem=23.45G  cst=0.0397  replay=0.0000
+  [  4/49][ 300/2000]  mem=23.45G  cst=0.0397  replay=0.0000
+  [  4/49][ 350/2000]  mem=23.45G  cst=0.0399  replay=0.0000
+  [  4/49][ 400/2000]  mem=23.45G  cst=0.0399  replay=0.0000
+  [  4/49][ 450/2000]  mem=23.45G  cst=0.0399  replay=0.0000
+  [  4/49][ 500/2000]  mem=23.45G  cst=0.0398  replay=0.0000
+  [  4/49][ 550/2000]  mem=23.45G  cst=0.0397  replay=0.0000
+  [  4/49][ 600/2000]  mem=23.45G  cst=0.0397  replay=0.0000
+  [  4/49][ 650/2000]  mem=23.45G  cst=0.0397  replay=0.0000
+  [  4/49][ 700/2000]  mem=23.45G  cst=0.0398  replay=0.0000
+  [  4/49][ 750/2000]  mem=23.45G  cst=0.0397  replay=0.0000
+  [  4/49][ 800/2000]  mem=23.45G  cst=0.0397  replay=0.0000
+  [  4/49][ 850/2000]  mem=23.45G  cst=0.0397  replay=0.0000
+  [  4/49][ 900/2000]  mem=23.45G  cst=0.0398  replay=0.0000
+  [  4/49][ 950/2000]  mem=23.45G  cst=0.0398  replay=0.0000
+  [  4/49][1000/2000]  mem=23.45G  cst=0.0397  replay=0.0000
+  [  4/49][1050/2000]  mem=23.45G  cst=0.0397  replay=0.0000
+  [  4/49][1100/2000]  mem=23.45G  cst=0.0397  replay=0.0000
+  [  4/49][1150/2000]  mem=23.45G  cst=0.0397  replay=0.0000
+  [  4/49][1200/2000]  mem=23.45G  cst=0.0397  replay=0.0000
+  [  4/49][1250/2000]  mem=23.45G  cst=0.0397  replay=0.0000
+  [  4/49][1300/2000]  mem=23.45G  cst=0.0397  replay=0.0000
+  [  4/49][1350/2000]  mem=23.45G  cst=0.0396  replay=0.0000
+  [  4/49][1400/2000]  mem=23.45G  cst=0.0396  replay=0.0000
+  [  4/49][1450/2000]  mem=23.45G  cst=0.0396  replay=0.0000
+  [  4/49][1500/2000]  mem=23.45G  cst=0.0396  replay=0.0000
+  [  4/49][1550/2000]  mem=23.45G  cst=0.0396  replay=0.0000
+  [  4/49][1600/2000]  mem=23.45G  cst=0.0396  replay=0.0000
+  [  4/49][1650/2000]  mem=23.45G  cst=0.0396  replay=0.0000
+  [  4/49][1700/2000]  mem=23.45G  cst=0.0395  replay=0.0000
+  [  4/49][1750/2000]  mem=23.45G  cst=0.0395  replay=0.0000
+  [  4/49][1800/2000]  mem=23.45G  cst=0.0395  replay=0.0000
+  [  4/49][1850/2000]  mem=23.45G  cst=0.0395  replay=0.0000
+  [  4/49][1900/2000]  mem=23.45G  cst=0.0395  replay=0.0000
+  [  4/49][1950/2000]  mem=23.45G  cst=0.0395  replay=0.0000
+
+Epoch   4/49  loss=0.0396
+  T3: mAP@0.5=0.0655  P=0.1857  R=0.0987  F1=0.1289
+  T1: mAP@0.5=0.0571  fm_abs=-0.6154  fm_stage3=-0.5833
+  T1 by stratum: tiny=0.0003  small=0.0563  normal=0.0652  large=0.0000
+
+  [  5/49][   0/2000]  mem=23.45G  cst=0.0358  replay=0.0000
+  [  5/49][  50/2000]  mem=23.45G  cst=0.0375  replay=0.0000
+  [  5/49][ 100/2000]  mem=23.45G  cst=0.0384  replay=0.0000
+  [  5/49][ 150/2000]  mem=23.45G  cst=0.0383  replay=0.0000
+  [  5/49][ 200/2000]  mem=23.45G  cst=0.0383  replay=0.0000
+  [  5/49][ 250/2000]  mem=23.45G  cst=0.0383  replay=0.0000
+  [  5/49][ 300/2000]  mem=23.45G  cst=0.0381  replay=0.0000
+  [  5/49][ 350/2000]  mem=23.45G  cst=0.0381  replay=0.0000
+  [  5/49][ 400/2000]  mem=23.45G  cst=0.0381  replay=0.0000
+  [  5/49][ 450/2000]  mem=23.45G  cst=0.0381  replay=0.0000
+  [  5/49][ 500/2000]  mem=23.45G  cst=0.0381  replay=0.0000
+  [  5/49][ 550/2000]  mem=23.45G  cst=0.0381  replay=0.0000
+  [  5/49][ 600/2000]  mem=23.45G  cst=0.0380  replay=0.0000
+  [  5/49][ 650/2000]  mem=23.45G  cst=0.0380  replay=0.0000
+  [  5/49][ 700/2000]  mem=23.45G  cst=0.0380  replay=0.0000
+  [  5/49][ 750/2000]  mem=23.45G  cst=0.0379  replay=0.0000
+  [  5/49][ 800/2000]  mem=23.45G  cst=0.0379  replay=0.0000
+  [  5/49][ 850/2000]  mem=23.45G  cst=0.0379  replay=0.0000
+  [  5/49][ 900/2000]  mem=23.45G  cst=0.0379  replay=0.0000
+  [  5/49][ 950/2000]  mem=23.45G  cst=0.0379  replay=0.0000
+  [  5/49][1000/2000]  mem=23.45G  cst=0.0378  replay=0.0000
+  [  5/49][1050/2000]  mem=23.45G  cst=0.0378  replay=0.0000
+  [  5/49][1100/2000]  mem=23.45G  cst=0.0378  replay=0.0000
+  [  5/49][1150/2000]  mem=23.45G  cst=0.0378  replay=0.0000
+  [  5/49][1200/2000]  mem=23.45G  cst=0.0378  replay=0.0000
+  [  5/49][1250/2000]  mem=23.45G  cst=0.0378  replay=0.0000
+  [  5/49][1300/2000]  mem=23.45G  cst=0.0378  replay=0.0000
+  [  5/49][1350/2000]  mem=23.45G  cst=0.0378  replay=0.0000
+  [  5/49][1400/2000]  mem=23.45G  cst=0.0378  replay=0.0000
+  [  5/49][1450/2000]  mem=23.45G  cst=0.0377  replay=0.0000
+  [  5/49][1500/2000]  mem=23.45G  cst=0.0377  replay=0.0000
+  [  5/49][1550/2000]  mem=23.45G  cst=0.0377  replay=0.0000
+  [  5/49][1600/2000]  mem=23.45G  cst=0.0377  replay=0.0000
+  [  5/49][1650/2000]  mem=23.45G  cst=0.0376  replay=0.0000
+  [  5/49][1700/2000]  mem=23.45G  cst=0.0376  replay=0.0000
+  [  5/49][1750/2000]  mem=23.45G  cst=0.0376  replay=0.0000
+  [  5/49][1800/2000]  mem=23.45G  cst=0.0376  replay=0.0000
+  [  5/49][1850/2000]  mem=23.45G  cst=0.0375  replay=0.0000
+  [  5/49][1900/2000]  mem=23.45G  cst=0.0375  replay=0.0000
+  [  5/49][1950/2000]  mem=23.45G  cst=0.0375  replay=0.0000
+
+Epoch   5/49  loss=0.0376
+  T3: mAP@0.5=0.0705  P=0.1900  R=0.1099  F1=0.1392
+  T1: mAP@0.5=0.0527  fm_abs=-0.6198  fm_stage3=-0.5877
+  T1 by stratum: tiny=0.0004  small=0.0420  normal=0.0642  large=0.0000
+
+  [  6/49][   0/2000]  mem=23.45G  cst=0.0324  replay=0.0000
+  [  6/49][  50/2000]  mem=23.45G  cst=0.0364  replay=0.0000
+  [  6/49][ 100/2000]  mem=23.45G  cst=0.0364  replay=0.0000
+  [  6/49][ 150/2000]  mem=23.45G  cst=0.0367  replay=0.0000
+  [  6/49][ 200/2000]  mem=23.45G  cst=0.0368  replay=0.0000
+  [  6/49][ 250/2000]  mem=23.45G  cst=0.0367  replay=0.0000
+  [  6/49][ 300/2000]  mem=23.45G  cst=0.0365  replay=0.0000
+  [  6/49][ 350/2000]  mem=23.45G  cst=0.0363  replay=0.0000
+  [  6/49][ 400/2000]  mem=23.45G  cst=0.0363  replay=0.0000
+  [  6/49][ 450/2000]  mem=23.45G  cst=0.0363  replay=0.0000
+  [  6/49][ 500/2000]  mem=23.45G  cst=0.0363  replay=0.0000
+  [  6/49][ 550/2000]  mem=23.45G  cst=0.0362  replay=0.0000
+  [  6/49][ 600/2000]  mem=23.45G  cst=0.0363  replay=0.0000
+  [  6/49][ 650/2000]  mem=23.45G  cst=0.0364  replay=0.0000
+  [  6/49][ 700/2000]  mem=23.45G  cst=0.0364  replay=0.0000
+  [  6/49][ 750/2000]  mem=23.45G  cst=0.0363  replay=0.0000
+  [  6/49][ 800/2000]  mem=23.45G  cst=0.0363  replay=0.0000
+  [  6/49][ 850/2000]  mem=23.45G  cst=0.0363  replay=0.0000
+  [  6/49][ 900/2000]  mem=23.45G  cst=0.0363  replay=0.0000
+  [  6/49][ 950/2000]  mem=23.45G  cst=0.0363  replay=0.0000
+  [  6/49][1000/2000]  mem=23.45G  cst=0.0363  replay=0.0000
+  [  6/49][1050/2000]  mem=23.45G  cst=0.0362  replay=0.0000
+  [  6/49][1100/2000]  mem=23.45G  cst=0.0362  replay=0.0000
+  [  6/49][1150/2000]  mem=23.45G  cst=0.0362  replay=0.0000
+  [  6/49][1200/2000]  mem=23.45G  cst=0.0363  replay=0.0000
+  [  6/49][1250/2000]  mem=23.45G  cst=0.0363  replay=0.0000
+  [  6/49][1300/2000]  mem=23.45G  cst=0.0363  replay=0.0000
+  [  6/49][1350/2000]  mem=23.45G  cst=0.0362  replay=0.0000
+  [  6/49][1400/2000]  mem=23.45G  cst=0.0362  replay=0.0000
+  [  6/49][1450/2000]  mem=23.45G  cst=0.0363  replay=0.0000
+  [  6/49][1500/2000]  mem=23.45G  cst=0.0363  replay=0.0000
+  [  6/49][1550/2000]  mem=23.45G  cst=0.0363  replay=0.0000
+  [  6/49][1600/2000]  mem=23.45G  cst=0.0363  replay=0.0000
+  [  6/49][1650/2000]  mem=23.45G  cst=0.0363  replay=0.0000
+  [  6/49][1700/2000]  mem=23.45G  cst=0.0363  replay=0.0000
+  [  6/49][1750/2000]  mem=23.45G  cst=0.0363  replay=0.0000
+  [  6/49][1800/2000]  mem=23.45G  cst=0.0363  replay=0.0000
+  [  6/49][1850/2000]  mem=23.45G  cst=0.0363  replay=0.0000
+  [  6/49][1900/2000]  mem=23.45G  cst=0.0362  replay=0.0000
+  [  6/49][1950/2000]  mem=23.45G  cst=0.0362  replay=0.0000
+
+Epoch   6/49  loss=0.0360
+  T3: mAP@0.5=0.0628  P=0.1946  R=0.1149  F1=0.1445
+  T1: mAP@0.5=0.0482  fm_abs=-0.6243  fm_stage3=-0.5922
+  T1 by stratum: tiny=0.0003  small=0.0524  normal=0.0547  large=0.0000
+
+  [  7/49][   0/2000]  mem=23.45G  cst=0.0337  replay=0.0000
+  [  7/49][  50/2000]  mem=23.45G  cst=0.0354  replay=0.0000
+  [  7/49][ 100/2000]  mem=23.45G  cst=0.0351  replay=0.0000
+  [  7/49][ 150/2000]  mem=23.45G  cst=0.0350  replay=0.0000
+  [  7/49][ 200/2000]  mem=23.45G  cst=0.0347  replay=0.0000
+  [  7/49][ 250/2000]  mem=23.45G  cst=0.0345  replay=0.0000
+  [  7/49][ 300/2000]  mem=23.45G  cst=0.0345  replay=0.0000
+  [  7/49][ 350/2000]  mem=23.45G  cst=0.0346  replay=0.0000
+  [  7/49][ 400/2000]  mem=23.45G  cst=0.0345  replay=0.0000
+  [  7/49][ 450/2000]  mem=23.45G  cst=0.0345  replay=0.0000
+  [  7/49][ 500/2000]  mem=23.45G  cst=0.0345  replay=0.0000
+  [  7/49][ 550/2000]  mem=23.45G  cst=0.0345  replay=0.0000
+  [  7/49][ 600/2000]  mem=23.45G  cst=0.0345  replay=0.0000
+  [  7/49][ 650/2000]  mem=23.45G  cst=0.0345  replay=0.0000
+  [  7/49][ 700/2000]  mem=23.45G  cst=0.0345  replay=0.0000
+  [  7/49][ 750/2000]  mem=23.45G  cst=0.0346  replay=0.0000
+  [  7/49][ 800/2000]  mem=23.45G  cst=0.0346  replay=0.0000
+  [  7/49][ 850/2000]  mem=23.45G  cst=0.0346  replay=0.0000
+  [  7/49][ 900/2000]  mem=23.45G  cst=0.0346  replay=0.0000
+  [  7/49][ 950/2000]  mem=23.45G  cst=0.0346  replay=0.0000
+  [  7/49][1000/2000]  mem=23.45G  cst=0.0347  replay=0.0000
+  [  7/49][1050/2000]  mem=23.45G  cst=0.0347  replay=0.0000
+  [  7/49][1100/2000]  mem=23.45G  cst=0.0347  replay=0.0000
+  [  7/49][1150/2000]  mem=23.45G  cst=0.0347  replay=0.0000
+  [  7/49][1200/2000]  mem=23.45G  cst=0.0346  replay=0.0000
+  [  7/49][1250/2000]  mem=23.45G  cst=0.0346  replay=0.0000
+  [  7/49][1300/2000]  mem=23.45G  cst=0.0346  replay=0.0000
+  [  7/49][1350/2000]  mem=23.45G  cst=0.0346  replay=0.0000
+  [  7/49][1400/2000]  mem=23.45G  cst=0.0346  replay=0.0000
+  [  7/49][1450/2000]  mem=23.45G  cst=0.0346  replay=0.0000
+  [  7/49][1500/2000]  mem=23.45G  cst=0.0347  replay=0.0000
+  [  7/49][1550/2000]  mem=23.45G  cst=0.0346  replay=0.0000
+  [  7/49][1600/2000]  mem=23.45G  cst=0.0346  replay=0.0000
+  [  7/49][1650/2000]  mem=23.45G  cst=0.0346  replay=0.0000
+  [  7/49][1700/2000]  mem=23.45G  cst=0.0346  replay=0.0000
+  [  7/49][1750/2000]  mem=23.45G  cst=0.0346  replay=0.0000
+  [  7/49][1800/2000]  mem=23.45G  cst=0.0346  replay=0.0000
+  [  7/49][1850/2000]  mem=23.45G  cst=0.0346  replay=0.0000
+  [  7/49][1900/2000]  mem=23.45G  cst=0.0346  replay=0.0000
+  [  7/49][1950/2000]  mem=23.45G  cst=0.0346  replay=0.0000
+
+Epoch   7/49  loss=0.0347
+  T3: mAP@0.5=0.0756  P=0.1632  R=0.1306  F1=0.1451
+  T1: mAP@0.5=0.0393  fm_abs=-0.6332  fm_stage3=-0.6010
+  T1 by stratum: tiny=0.0002  small=0.0451  normal=0.0436  large=0.0000
+
+  [  8/49][   0/2000]  mem=23.45G  cst=0.0365  replay=0.0000
+  [  8/49][  50/2000]  mem=23.45G  cst=0.0335  replay=0.0000
+  [  8/49][ 100/2000]  mem=23.45G  cst=0.0336  replay=0.0000
+  [  8/49][ 150/2000]  mem=23.45G  cst=0.0335  replay=0.0000
+  [  8/49][ 200/2000]  mem=23.45G  cst=0.0334  replay=0.0000
+  [  8/49][ 250/2000]  mem=23.45G  cst=0.0334  replay=0.0000
+  [  8/49][ 300/2000]  mem=23.45G  cst=0.0335  replay=0.0000
+  [  8/49][ 350/2000]  mem=23.45G  cst=0.0334  replay=0.0000
+  [  8/49][ 400/2000]  mem=23.45G  cst=0.0335  replay=0.0000
+  [  8/49][ 450/2000]  mem=23.45G  cst=0.0335  replay=0.0000
+  [  8/49][ 500/2000]  mem=23.45G  cst=0.0335  replay=0.0000
+  [  8/49][ 550/2000]  mem=23.45G  cst=0.0334  replay=0.0000
+  [  8/49][ 600/2000]  mem=23.45G  cst=0.0334  replay=0.0000
+  [  8/49][ 650/2000]  mem=23.45G  cst=0.0335  replay=0.0000
+  [  8/49][ 700/2000]  mem=23.45G  cst=0.0335  replay=0.0000
+  [  8/49][ 750/2000]  mem=23.45G  cst=0.0335  replay=0.0000
+  [  8/49][ 800/2000]  mem=23.45G  cst=0.0335  replay=0.0000
+  [  8/49][ 850/2000]  mem=23.45G  cst=0.0335  replay=0.0000
+  [  8/49][ 900/2000]  mem=23.45G  cst=0.0334  replay=0.0000
+  [  8/49][ 950/2000]  mem=23.45G  cst=0.0335  replay=0.0000
+  [  8/49][1000/2000]  mem=23.45G  cst=0.0335  replay=0.0000
+  [  8/49][1050/2000]  mem=23.45G  cst=0.0335  replay=0.0000
+  [  8/49][1100/2000]  mem=23.45G  cst=0.0335  replay=0.0000
+  [  8/49][1150/2000]  mem=23.45G  cst=0.0335  replay=0.0000
+  [  8/49][1200/2000]  mem=23.45G  cst=0.0335  replay=0.0000
+  [  8/49][1250/2000]  mem=23.45G  cst=0.0334  replay=0.0000
+  [  8/49][1300/2000]  mem=23.45G  cst=0.0334  replay=0.0000
+  [  8/49][1350/2000]  mem=23.45G  cst=0.0335  replay=0.0000
+  [  8/49][1400/2000]  mem=23.45G  cst=0.0335  replay=0.0000
+  [  8/49][1450/2000]  mem=23.45G  cst=0.0335  replay=0.0000
+  [  8/49][1500/2000]  mem=23.45G  cst=0.0335  replay=0.0000
+  [  8/49][1550/2000]  mem=23.45G  cst=0.0335  replay=0.0000
+  [  8/49][1600/2000]  mem=23.45G  cst=0.0335  replay=0.0000
+  [  8/49][1650/2000]  mem=23.45G  cst=0.0335  replay=0.0000
+  [  8/49][1700/2000]  mem=23.45G  cst=0.0335  replay=0.0000
+  [  8/49][1750/2000]  mem=23.45G  cst=0.0335  replay=0.0000
+  [  8/49][1800/2000]  mem=23.45G  cst=0.0335  replay=0.0000
+  [  8/49][1850/2000]  mem=23.45G  cst=0.0335  replay=0.0000
+  [  8/49][1900/2000]  mem=23.45G  cst=0.0334  replay=0.0000
+  [  8/49][1950/2000]  mem=23.45G  cst=0.0335  replay=0.0000
+
+Epoch   8/49  loss=0.0336
+  T3: mAP@0.5=0.0664  P=0.1590  R=0.1254  F1=0.1402
+  T1: mAP@0.5=0.0499  fm_abs=-0.6226  fm_stage3=-0.5905
+  T1 by stratum: tiny=0.0003  small=0.0466  normal=0.0585  large=0.0000
+
+  [  9/49][   0/2000]  mem=23.45G  cst=0.0328  replay=0.0000
+  [  9/49][  50/2000]  mem=23.45G  cst=0.0333  replay=0.0000
+  [  9/49][ 100/2000]  mem=23.45G  cst=0.0328  replay=0.0000
+  [  9/49][ 150/2000]  mem=23.45G  cst=0.0327  replay=0.0000
+  [  9/49][ 200/2000]  mem=23.45G  cst=0.0326  replay=0.0000
+  [  9/49][ 250/2000]  mem=23.45G  cst=0.0325  replay=0.0000
+  [  9/49][ 300/2000]  mem=23.45G  cst=0.0326  replay=0.0000
+  [  9/49][ 350/2000]  mem=23.45G  cst=0.0327  replay=0.0000
+  [  9/49][ 400/2000]  mem=23.45G  cst=0.0327  replay=0.0000
+  [  9/49][ 450/2000]  mem=23.45G  cst=0.0327  replay=0.0000
+  [  9/49][ 500/2000]  mem=23.45G  cst=0.0327  replay=0.0000
+  [  9/49][ 550/2000]  mem=23.45G  cst=0.0327  replay=0.0000
+  [  9/49][ 600/2000]  mem=23.45G  cst=0.0327  replay=0.0000
+  [  9/49][ 650/2000]  mem=23.45G  cst=0.0327  replay=0.0000
+  [  9/49][ 700/2000]  mem=23.45G  cst=0.0327  replay=0.0000
+  [  9/49][ 750/2000]  mem=23.45G  cst=0.0327  replay=0.0000
+  [  9/49][ 800/2000]  mem=23.45G  cst=0.0327  replay=0.0000
+  [  9/49][ 850/2000]  mem=23.45G  cst=0.0327  replay=0.0000
+  [  9/49][ 900/2000]  mem=23.45G  cst=0.0328  replay=0.0000
+  [  9/49][ 950/2000]  mem=23.45G  cst=0.0328  replay=0.0000
+  [  9/49][1000/2000]  mem=23.45G  cst=0.0328  replay=0.0000
+  [  9/49][1050/2000]  mem=23.45G  cst=0.0328  replay=0.0000
+  [  9/49][1100/2000]  mem=23.45G  cst=0.0327  replay=0.0000
+  [  9/49][1150/2000]  mem=23.45G  cst=0.0327  replay=0.0000
+  [  9/49][1200/2000]  mem=23.45G  cst=0.0327  replay=0.0000
+  [  9/49][1250/2000]  mem=23.45G  cst=0.0328  replay=0.0000
+  [  9/49][1300/2000]  mem=23.45G  cst=0.0328  replay=0.0000
+  [  9/49][1350/2000]  mem=23.45G  cst=0.0329  replay=0.0000
+  [  9/49][1400/2000]  mem=23.45G  cst=0.0329  replay=0.0000
+  [  9/49][1450/2000]  mem=23.45G  cst=0.0329  replay=0.0000
+  [  9/49][1500/2000]  mem=23.45G  cst=0.0328  replay=0.0000
+  [  9/49][1550/2000]  mem=23.45G  cst=0.0328  replay=0.0000
+  [  9/49][1600/2000]  mem=23.45G  cst=0.0327  replay=0.0000
+  [  9/49][1650/2000]  mem=23.45G  cst=0.0327  replay=0.0000
+  [  9/49][1700/2000]  mem=23.45G  cst=0.0327  replay=0.0000
+  [  9/49][1750/2000]  mem=23.45G  cst=0.0327  replay=0.0000
+  [  9/49][1800/2000]  mem=23.45G  cst=0.0327  replay=0.0000
+  [  9/49][1850/2000]  mem=23.45G  cst=0.0327  replay=0.0000
+  [  9/49][1900/2000]  mem=23.45G  cst=0.0327  replay=0.0000
+  [  9/49][1950/2000]  mem=23.45G  cst=0.0327  replay=0.0000
+
+Epoch   9/49  loss=0.0326
+  T3: mAP@0.5=0.0689  P=0.1857  R=0.1162  F1=0.1430
+  T1: mAP@0.5=0.0382  fm_abs=-0.6343  fm_stage3=-0.6022
+  T1 by stratum: tiny=0.0002  small=0.0392  normal=0.0438  large=0.0000
+
+  [ 10/49][   0/2000]  mem=23.45G  cst=0.0291  replay=0.0000
+  [ 10/49][  50/2000]  mem=23.45G  cst=0.0318  replay=0.0000
+  [ 10/49][ 100/2000]  mem=23.45G  cst=0.0313  replay=0.0000
+  [ 10/49][ 150/2000]  mem=23.45G  cst=0.0313  replay=0.0000
+  [ 10/49][ 200/2000]  mem=23.45G  cst=0.0312  replay=0.0000
+  [ 10/49][ 250/2000]  mem=23.45G  cst=0.0311  replay=0.0000
+  [ 10/49][ 300/2000]  mem=23.45G  cst=0.0311  replay=0.0000
+  [ 10/49][ 350/2000]  mem=23.45G  cst=0.0312  replay=0.0000
+  [ 10/49][ 400/2000]  mem=23.45G  cst=0.0312  replay=0.0000
+  [ 10/49][ 450/2000]  mem=23.45G  cst=0.0313  replay=0.0000
+  [ 10/49][ 500/2000]  mem=23.45G  cst=0.0315  replay=0.0000
+  [ 10/49][ 550/2000]  mem=23.45G  cst=0.0316  replay=0.0000
+  [ 10/49][ 600/2000]  mem=23.45G  cst=0.0316  replay=0.0000
+  [ 10/49][ 650/2000]  mem=23.45G  cst=0.0315  replay=0.0000
+  [ 10/49][ 700/2000]  mem=23.45G  cst=0.0315  replay=0.0000
+  [ 10/49][ 750/2000]  mem=23.45G  cst=0.0316  replay=0.0000
+  [ 10/49][ 800/2000]  mem=23.45G  cst=0.0317  replay=0.0000
+  [ 10/49][ 850/2000]  mem=23.45G  cst=0.0317  replay=0.0000
+  [ 10/49][ 900/2000]  mem=23.45G  cst=0.0317  replay=0.0000
+  [ 10/49][ 950/2000]  mem=23.45G  cst=0.0317  replay=0.0000
+  [ 10/49][1000/2000]  mem=23.45G  cst=0.0317  replay=0.0000
+  [ 10/49][1050/2000]  mem=23.45G  cst=0.0317  replay=0.0000
+  [ 10/49][1100/2000]  mem=23.45G  cst=0.0318  replay=0.0000
+  [ 10/49][1150/2000]  mem=23.45G  cst=0.0318  replay=0.0000
+  [ 10/49][1200/2000]  mem=23.45G  cst=0.0317  replay=0.0000
+  [ 10/49][1250/2000]  mem=23.45G  cst=0.0317  replay=0.0000
+  [ 10/49][1300/2000]  mem=23.45G  cst=0.0317  replay=0.0000
+  [ 10/49][1350/2000]  mem=23.45G  cst=0.0318  replay=0.0000
+  [ 10/49][1400/2000]  mem=23.45G  cst=0.0318  replay=0.0000
+  [ 10/49][1450/2000]  mem=23.45G  cst=0.0318  replay=0.0000
+  [ 10/49][1500/2000]  mem=23.45G  cst=0.0318  replay=0.0000
+  [ 10/49][1550/2000]  mem=23.45G  cst=0.0318  replay=0.0000
+  [ 10/49][1600/2000]  mem=23.45G  cst=0.0318  replay=0.0000
+  [ 10/49][1650/2000]  mem=23.45G  cst=0.0318  replay=0.0000
+  [ 10/49][1700/2000]  mem=23.45G  cst=0.0318  replay=0.0000
+  [ 10/49][1750/2000]  mem=23.45G  cst=0.0318  replay=0.0000
+  [ 10/49][1800/2000]  mem=23.45G  cst=0.0318  replay=0.0000
+  [ 10/49][1850/2000]  mem=23.45G  cst=0.0318  replay=0.0000
+  [ 10/49][1900/2000]  mem=23.45G  cst=0.0318  replay=0.0000
+  [ 10/49][1950/2000]  mem=23.45G  cst=0.0319  replay=0.0000
+
+Epoch  10/49  loss=0.0317
+  T3: mAP@0.5=0.0707  P=0.1878  R=0.1195  F1=0.1461
+  T1: mAP@0.5=0.0339  fm_abs=-0.6386  fm_stage3=-0.6064
+  T1 by stratum: tiny=0.0001  small=0.0315  normal=0.0400  large=0.0000
+
+  [ 11/49][   0/2000]  mem=23.45G  cst=0.0324  replay=0.0000
+  [ 11/49][  50/2000]  mem=23.45G  cst=0.0310  replay=0.0000
+  [ 11/49][ 100/2000]  mem=23.45G  cst=0.0313  replay=0.0000
+  [ 11/49][ 150/2000]  mem=23.45G  cst=0.0309  replay=0.0000
+  [ 11/49][ 200/2000]  mem=23.45G  cst=0.0310  replay=0.0000
+  [ 11/49][ 250/2000]  mem=23.45G  cst=0.0309  replay=0.0000
+  [ 11/49][ 300/2000]  mem=23.45G  cst=0.0308  replay=0.0000
+  [ 11/49][ 350/2000]  mem=23.45G  cst=0.0307  replay=0.0000
+  [ 11/49][ 400/2000]  mem=23.45G  cst=0.0307  replay=0.0000
+  [ 11/49][ 450/2000]  mem=23.45G  cst=0.0307  replay=0.0000
+  [ 11/49][ 500/2000]  mem=23.45G  cst=0.0306  replay=0.0000
+  [ 11/49][ 550/2000]  mem=23.45G  cst=0.0307  replay=0.0000
+  [ 11/49][ 600/2000]  mem=23.45G  cst=0.0306  replay=0.0000
+  [ 11/49][ 650/2000]  mem=23.45G  cst=0.0306  replay=0.0000
+  [ 11/49][ 700/2000]  mem=23.45G  cst=0.0306  replay=0.0000
+  [ 11/49][ 750/2000]  mem=23.45G  cst=0.0307  replay=0.0000
+  [ 11/49][ 800/2000]  mem=23.45G  cst=0.0307  replay=0.0000
+  [ 11/49][ 850/2000]  mem=23.45G  cst=0.0308  replay=0.0000
+  [ 11/49][ 900/2000]  mem=23.45G  cst=0.0308  replay=0.0000
+  [ 11/49][ 950/2000]  mem=23.45G  cst=0.0307  replay=0.0000
+  [ 11/49][1000/2000]  mem=23.45G  cst=0.0307  replay=0.0000
+  [ 11/49][1050/2000]  mem=23.45G  cst=0.0308  replay=0.0000
+  [ 11/49][1100/2000]  mem=23.45G  cst=0.0308  replay=0.0000
+  [ 11/49][1150/2000]  mem=23.45G  cst=0.0308  replay=0.0000
+  [ 11/49][1200/2000]  mem=23.45G  cst=0.0308  replay=0.0000
+  [ 11/49][1250/2000]  mem=23.45G  cst=0.0309  replay=0.0000
+  [ 11/49][1300/2000]  mem=23.45G  cst=0.0309  replay=0.0000
+  [ 11/49][1350/2000]  mem=23.45G  cst=0.0309  replay=0.0000
+  [ 11/49][1400/2000]  mem=23.45G  cst=0.0309  replay=0.0000
+  [ 11/49][1450/2000]  mem=23.45G  cst=0.0309  replay=0.0000
+  [ 11/49][1500/2000]  mem=23.45G  cst=0.0309  replay=0.0000
+  [ 11/49][1550/2000]  mem=23.45G  cst=0.0309  replay=0.0000
+  [ 11/49][1600/2000]  mem=23.45G  cst=0.0309  replay=0.0000
+  [ 11/49][1650/2000]  mem=23.45G  cst=0.0309  replay=0.0000
+  [ 11/49][1700/2000]  mem=23.45G  cst=0.0309  replay=0.0000
+  [ 11/49][1750/2000]  mem=23.45G  cst=0.0309  replay=0.0000
+  [ 11/49][1800/2000]  mem=23.45G  cst=0.0309  replay=0.0000
+  [ 11/49][1850/2000]  mem=23.45G  cst=0.0309  replay=0.0000
+  [ 11/49][1900/2000]  mem=23.45G  cst=0.0309  replay=0.0000
+  [ 11/49][1950/2000]  mem=23.45G  cst=0.0309  replay=0.0000
+
+Epoch  11/49  loss=0.0309
+  T3: mAP@0.5=0.0713  P=0.1882  R=0.1306  F1=0.1542
+  T1: mAP@0.5=0.0343  fm_abs=-0.6382  fm_stage3=-0.6060
+  T1 by stratum: tiny=0.0001  small=0.0336  normal=0.0403  large=0.0000
+
+  [ 12/49][   0/2000]  mem=23.45G  cst=0.0301  replay=0.0000
+  [ 12/49][  50/2000]  mem=23.45G  cst=0.0293  replay=0.0000
+  [ 12/49][ 100/2000]  mem=23.45G  cst=0.0298  replay=0.0000
+  [ 12/49][ 150/2000]  mem=23.45G  cst=0.0296  replay=0.0000
+  [ 12/49][ 200/2000]  mem=23.45G  cst=0.0294  replay=0.0000
+  [ 12/49][ 250/2000]  mem=23.45G  cst=0.0297  replay=0.0000
+  [ 12/49][ 300/2000]  mem=23.45G  cst=0.0297  replay=0.0000
+  [ 12/49][ 350/2000]  mem=23.45G  cst=0.0299  replay=0.0000
+  [ 12/49][ 400/2000]  mem=23.45G  cst=0.0299  replay=0.0000
+  [ 12/49][ 450/2000]  mem=23.45G  cst=0.0299  replay=0.0000
+  [ 12/49][ 500/2000]  mem=23.45G  cst=0.0299  replay=0.0000
+  [ 12/49][ 550/2000]  mem=23.45G  cst=0.0299  replay=0.0000
+  [ 12/49][ 600/2000]  mem=23.45G  cst=0.0300  replay=0.0000
+  [ 12/49][ 650/2000]  mem=23.45G  cst=0.0300  replay=0.0000
+  [ 12/49][ 700/2000]  mem=23.45G  cst=0.0300  replay=0.0000
+  [ 12/49][ 750/2000]  mem=23.45G  cst=0.0301  replay=0.0000
+  [ 12/49][ 800/2000]  mem=23.45G  cst=0.0302  replay=0.0000
+  [ 12/49][ 850/2000]  mem=23.45G  cst=0.0301  replay=0.0000
+  [ 12/49][ 900/2000]  mem=23.45G  cst=0.0301  replay=0.0000
+  [ 12/49][ 950/2000]  mem=23.45G  cst=0.0301  replay=0.0000
+  [ 12/49][1000/2000]  mem=23.45G  cst=0.0301  replay=0.0000
+  [ 12/49][1050/2000]  mem=23.45G  cst=0.0301  replay=0.0000
+  [ 12/49][1100/2000]  mem=23.45G  cst=0.0301  replay=0.0000
+  [ 12/49][1150/2000]  mem=23.45G  cst=0.0302  replay=0.0000
+  [ 12/49][1200/2000]  mem=23.45G  cst=0.0302  replay=0.0000
+  [ 12/49][1250/2000]  mem=23.45G  cst=0.0302  replay=0.0000
+  [ 12/49][1300/2000]  mem=23.45G  cst=0.0301  replay=0.0000
+  [ 12/49][1350/2000]  mem=23.45G  cst=0.0301  replay=0.0000
+  [ 12/49][1400/2000]  mem=23.45G  cst=0.0301  replay=0.0000
+  [ 12/49][1450/2000]  mem=23.45G  cst=0.0301  replay=0.0000
+  [ 12/49][1500/2000]  mem=23.45G  cst=0.0301  replay=0.0000
+  [ 12/49][1550/2000]  mem=23.45G  cst=0.0301  replay=0.0000
+  [ 12/49][1600/2000]  mem=23.45G  cst=0.0301  replay=0.0000
+  [ 12/49][1650/2000]  mem=23.45G  cst=0.0301  replay=0.0000
+  [ 12/49][1700/2000]  mem=23.45G  cst=0.0302  replay=0.0000
+  [ 12/49][1750/2000]  mem=23.45G  cst=0.0302  replay=0.0000
+  [ 12/49][1800/2000]  mem=23.45G  cst=0.0302  replay=0.0000
+  [ 12/49][1850/2000]  mem=23.45G  cst=0.0302  replay=0.0000
+  [ 12/49][1900/2000]  mem=23.45G  cst=0.0302  replay=0.0000
+  [ 12/49][1950/2000]  mem=23.45G  cst=0.0302  replay=0.0000
+
+Epoch  12/49  loss=0.0302
+  T3: mAP@0.5=0.0760  P=0.1813  R=0.1225  F1=0.1462
+  T1: mAP@0.5=0.0309  fm_abs=-0.6416  fm_stage3=-0.6094
+  T1 by stratum: tiny=0.0002  small=0.0292  normal=0.0360  large=0.0000
+
+  [ 13/49][   0/2000]  mem=23.45G  cst=0.0336  replay=0.0000
+  [ 13/49][  50/2000]  mem=23.45G  cst=0.0296  replay=0.0000
+  [ 13/49][ 100/2000]  mem=23.45G  cst=0.0294  replay=0.0000
+  [ 13/49][ 150/2000]  mem=23.45G  cst=0.0294  replay=0.0000
+  [ 13/49][ 200/2000]  mem=23.45G  cst=0.0291  replay=0.0000
+  [ 13/49][ 250/2000]  mem=23.45G  cst=0.0291  replay=0.0000
+  [ 13/49][ 300/2000]  mem=23.45G  cst=0.0292  replay=0.0000
+  [ 13/49][ 350/2000]  mem=23.45G  cst=0.0291  replay=0.0000
+  [ 13/49][ 400/2000]  mem=23.45G  cst=0.0292  replay=0.0000
+  [ 13/49][ 450/2000]  mem=23.45G  cst=0.0293  replay=0.0000
+  [ 13/49][ 500/2000]  mem=23.45G  cst=0.0293  replay=0.0000
+  [ 13/49][ 550/2000]  mem=23.45G  cst=0.0293  replay=0.0000
+  [ 13/49][ 600/2000]  mem=23.45G  cst=0.0293  replay=0.0000
+  [ 13/49][ 650/2000]  mem=23.45G  cst=0.0294  replay=0.0000
+  [ 13/49][ 700/2000]  mem=23.45G  cst=0.0294  replay=0.0000
+  [ 13/49][ 750/2000]  mem=23.45G  cst=0.0294  replay=0.0000
+  [ 13/49][ 800/2000]  mem=23.45G  cst=0.0293  replay=0.0000
+  [ 13/49][ 850/2000]  mem=23.45G  cst=0.0294  replay=0.0000
+  [ 13/49][ 900/2000]  mem=23.45G  cst=0.0294  replay=0.0000
+  [ 13/49][ 950/2000]  mem=23.45G  cst=0.0294  replay=0.0000
+  [ 13/49][1000/2000]  mem=23.45G  cst=0.0293  replay=0.0000
+  [ 13/49][1050/2000]  mem=23.45G  cst=0.0294  replay=0.0000
+  [ 13/49][1100/2000]  mem=23.45G  cst=0.0294  replay=0.0000
+  [ 13/49][1150/2000]  mem=23.45G  cst=0.0294  replay=0.0000
+  [ 13/49][1200/2000]  mem=23.45G  cst=0.0294  replay=0.0000
+  [ 13/49][1250/2000]  mem=23.45G  cst=0.0294  replay=0.0000
+  [ 13/49][1300/2000]  mem=23.45G  cst=0.0294  replay=0.0000
+  [ 13/49][1350/2000]  mem=23.45G  cst=0.0294  replay=0.0000
+  [ 13/49][1400/2000]  mem=23.45G  cst=0.0295  replay=0.0000
+  [ 13/49][1450/2000]  mem=23.45G  cst=0.0295  replay=0.0000
+  [ 13/49][1500/2000]  mem=23.45G  cst=0.0295  replay=0.0000
+  [ 13/49][1550/2000]  mem=23.45G  cst=0.0295  replay=0.0000
+  [ 13/49][1600/2000]  mem=23.45G  cst=0.0295  replay=0.0000
+  [ 13/49][1650/2000]  mem=23.45G  cst=0.0295  replay=0.0000
+  [ 13/49][1700/2000]  mem=23.45G  cst=0.0295  replay=0.0000
+  [ 13/49][1750/2000]  mem=23.45G  cst=0.0295  replay=0.0000
+  [ 13/49][1800/2000]  mem=23.45G  cst=0.0295  replay=0.0000
+  [ 13/49][1850/2000]  mem=23.45G  cst=0.0295  replay=0.0000
+  [ 13/49][1900/2000]  mem=23.45G  cst=0.0295  replay=0.0000
+  [ 13/49][1950/2000]  mem=23.45G  cst=0.0295  replay=0.0000
+
+Epoch  13/49  loss=0.0295
+  T3: mAP@0.5=0.0744  P=0.1949  R=0.1321  F1=0.1575
+  T1: mAP@0.5=0.0346  fm_abs=-0.6379  fm_stage3=-0.6058
+  T1 by stratum: tiny=0.0001  small=0.0341  normal=0.0409  large=0.0000
+
+  [ 14/49][   0/2000]  mem=23.45G  cst=0.0280  replay=0.0000
+  [ 14/49][  50/2000]  mem=23.45G  cst=0.0285  replay=0.0000
+  [ 14/49][ 100/2000]  mem=23.45G  cst=0.0287  replay=0.0000
+  [ 14/49][ 150/2000]  mem=23.45G  cst=0.0286  replay=0.0000
+  [ 14/49][ 200/2000]  mem=23.45G  cst=0.0286  replay=0.0000
+  [ 14/49][ 250/2000]  mem=23.45G  cst=0.0287  replay=0.0000
+  [ 14/49][ 300/2000]  mem=23.45G  cst=0.0290  replay=0.0000
+  [ 14/49][ 350/2000]  mem=23.45G  cst=0.0288  replay=0.0000
+  [ 14/49][ 400/2000]  mem=23.45G  cst=0.0288  replay=0.0000
+  [ 14/49][ 450/2000]  mem=23.45G  cst=0.0289  replay=0.0000
+  [ 14/49][ 500/2000]  mem=23.45G  cst=0.0288  replay=0.0000
+  [ 14/49][ 550/2000]  mem=23.45G  cst=0.0288  replay=0.0000
+  [ 14/49][ 600/2000]  mem=23.45G  cst=0.0288  replay=0.0000
+  [ 14/49][ 650/2000]  mem=23.45G  cst=0.0288  replay=0.0000
+  [ 14/49][ 700/2000]  mem=23.45G  cst=0.0288  replay=0.0000
+  [ 14/49][ 750/2000]  mem=23.45G  cst=0.0288  replay=0.0000
+  [ 14/49][ 800/2000]  mem=23.45G  cst=0.0287  replay=0.0000
+  [ 14/49][ 850/2000]  mem=23.45G  cst=0.0287  replay=0.0000
+  [ 14/49][ 900/2000]  mem=23.45G  cst=0.0287  replay=0.0000
+  [ 14/49][ 950/2000]  mem=23.45G  cst=0.0287  replay=0.0000
+  [ 14/49][1000/2000]  mem=23.45G  cst=0.0287  replay=0.0000
+  [ 14/49][1050/2000]  mem=23.45G  cst=0.0287  replay=0.0000
+  [ 14/49][1100/2000]  mem=23.45G  cst=0.0287  replay=0.0000
+  [ 14/49][1150/2000]  mem=23.45G  cst=0.0287  replay=0.0000
+  [ 14/49][1200/2000]  mem=23.45G  cst=0.0287  replay=0.0000
+  [ 14/49][1250/2000]  mem=23.45G  cst=0.0287  replay=0.0000
+  [ 14/49][1300/2000]  mem=23.45G  cst=0.0287  replay=0.0000
+  [ 14/49][1350/2000]  mem=23.45G  cst=0.0287  replay=0.0000
+  [ 14/49][1400/2000]  mem=23.45G  cst=0.0288  replay=0.0000
+  [ 14/49][1450/2000]  mem=23.45G  cst=0.0288  replay=0.0000
+  [ 14/49][1500/2000]  mem=23.45G  cst=0.0288  replay=0.0000
+  [ 14/49][1550/2000]  mem=23.45G  cst=0.0288  replay=0.0000
+  [ 14/49][1600/2000]  mem=23.45G  cst=0.0288  replay=0.0000
+  [ 14/49][1650/2000]  mem=23.45G  cst=0.0288  replay=0.0000
+  [ 14/49][1700/2000]  mem=23.45G  cst=0.0288  replay=0.0000
+  [ 14/49][1750/2000]  mem=23.45G  cst=0.0288  replay=0.0000
+  [ 14/49][1800/2000]  mem=23.45G  cst=0.0288  replay=0.0000
+  [ 14/49][1850/2000]  mem=23.45G  cst=0.0288  replay=0.0000
+  [ 14/49][1900/2000]  mem=23.45G  cst=0.0289  replay=0.0000
+  [ 14/49][1950/2000]  mem=23.45G  cst=0.0289  replay=0.0000
+
+Epoch  14/49  loss=0.0288
+  T3: mAP@0.5=0.0800  P=0.1904  R=0.1269  F1=0.1523
+  T1: mAP@0.5=0.0277  fm_abs=-0.6448  fm_stage3=-0.6127
+  T1 by stratum: tiny=0.0003  small=0.0286  normal=0.0327  large=0.0000
+
+  [ 15/49][   0/2000]  mem=23.45G  cst=0.0333  replay=0.0000
+  [ 15/49][  50/2000]  mem=23.45G  cst=0.0277  replay=0.0000
+  [ 15/49][ 100/2000]  mem=23.45G  cst=0.0281  replay=0.0000
+  [ 15/49][ 150/2000]  mem=23.45G  cst=0.0279  replay=0.0000
+  [ 15/49][ 200/2000]  mem=23.45G  cst=0.0279  replay=0.0000
+  [ 15/49][ 250/2000]  mem=23.45G  cst=0.0279  replay=0.0000
+  [ 15/49][ 300/2000]  mem=23.45G  cst=0.0278  replay=0.0000
+  [ 15/49][ 350/2000]  mem=23.45G  cst=0.0278  replay=0.0000
+  [ 15/49][ 400/2000]  mem=23.45G  cst=0.0278  replay=0.0000
+  [ 15/49][ 450/2000]  mem=23.45G  cst=0.0279  replay=0.0000
+  [ 15/49][ 500/2000]  mem=23.45G  cst=0.0279  replay=0.0000
+  [ 15/49][ 550/2000]  mem=23.45G  cst=0.0280  replay=0.0000
+  [ 15/49][ 600/2000]  mem=23.45G  cst=0.0279  replay=0.0000
+  [ 15/49][ 650/2000]  mem=23.45G  cst=0.0280  replay=0.0000
+  [ 15/49][ 700/2000]  mem=23.45G  cst=0.0280  replay=0.0000
+  [ 15/49][ 750/2000]  mem=23.45G  cst=0.0281  replay=0.0000
+  [ 15/49][ 800/2000]  mem=23.45G  cst=0.0281  replay=0.0000
+  [ 15/49][ 850/2000]  mem=23.45G  cst=0.0281  replay=0.0000
+  [ 15/49][ 900/2000]  mem=23.45G  cst=0.0280  replay=0.0000
+  [ 15/49][ 950/2000]  mem=23.45G  cst=0.0281  replay=0.0000
+  [ 15/49][1000/2000]  mem=23.45G  cst=0.0281  replay=0.0000
+  [ 15/49][1050/2000]  mem=23.45G  cst=0.0281  replay=0.0000
+  [ 15/49][1100/2000]  mem=23.45G  cst=0.0281  replay=0.0000
+  [ 15/49][1150/2000]  mem=23.45G  cst=0.0281  replay=0.0000
+  [ 15/49][1200/2000]  mem=23.45G  cst=0.0282  replay=0.0000
+  [ 15/49][1250/2000]  mem=23.45G  cst=0.0282  replay=0.0000
+  [ 15/49][1300/2000]  mem=23.45G  cst=0.0282  replay=0.0000
+  [ 15/49][1350/2000]  mem=23.45G  cst=0.0282  replay=0.0000
+  [ 15/49][1400/2000]  mem=23.45G  cst=0.0282  replay=0.0000
+  [ 15/49][1450/2000]  mem=23.45G  cst=0.0283  replay=0.0000
+  [ 15/49][1500/2000]  mem=23.45G  cst=0.0283  replay=0.0000
+  [ 15/49][1550/2000]  mem=23.45G  cst=0.0283  replay=0.0000
+  [ 15/49][1600/2000]  mem=23.45G  cst=0.0283  replay=0.0000
+  [ 15/49][1650/2000]  mem=23.45G  cst=0.0282  replay=0.0000
+  [ 15/49][1700/2000]  mem=23.45G  cst=0.0282  replay=0.0000
+  [ 15/49][1750/2000]  mem=23.45G  cst=0.0282  replay=0.0000
+  [ 15/49][1800/2000]  mem=23.45G  cst=0.0283  replay=0.0000
+  [ 15/49][1850/2000]  mem=23.45G  cst=0.0283  replay=0.0000
+  [ 15/49][1900/2000]  mem=23.45G  cst=0.0283  replay=0.0000
+  [ 15/49][1950/2000]  mem=23.45G  cst=0.0283  replay=0.0000
+
+Epoch  15/49  loss=0.0281
+  T3: mAP@0.5=0.0702  P=0.1979  R=0.1196  F1=0.1491
+  T1: mAP@0.5=0.0216  fm_abs=-0.6509  fm_stage3=-0.6188
+  T1 by stratum: tiny=0.0001  small=0.0214  normal=0.0254  large=0.0000
+
+  [ 16/49][   0/2000]  mem=23.45G  cst=0.0225  replay=0.0000
+  [ 16/49][  50/2000]  mem=23.45G  cst=0.0275  replay=0.0000
+  [ 16/49][ 100/2000]  mem=23.45G  cst=0.0271  replay=0.0000
+  [ 16/49][ 150/2000]  mem=23.45G  cst=0.0273  replay=0.0000
+  [ 16/49][ 200/2000]  mem=23.45G  cst=0.0274  replay=0.0000
+  [ 16/49][ 250/2000]  mem=23.45G  cst=0.0274  replay=0.0000
+  [ 16/49][ 300/2000]  mem=23.45G  cst=0.0273  replay=0.0000
+  [ 16/49][ 350/2000]  mem=23.45G  cst=0.0274  replay=0.0000
+  [ 16/49][ 400/2000]  mem=23.45G  cst=0.0275  replay=0.0000
+  [ 16/49][ 450/2000]  mem=23.45G  cst=0.0275  replay=0.0000
+  [ 16/49][ 500/2000]  mem=23.45G  cst=0.0275  replay=0.0000
+  [ 16/49][ 550/2000]  mem=23.45G  cst=0.0274  replay=0.0000
+  [ 16/49][ 600/2000]  mem=23.45G  cst=0.0275  replay=0.0000
+  [ 16/49][ 650/2000]  mem=23.45G  cst=0.0275  replay=0.0000
+  [ 16/49][ 700/2000]  mem=23.45G  cst=0.0274  replay=0.0000
+  [ 16/49][ 750/2000]  mem=23.45G  cst=0.0275  replay=0.0000
+  [ 16/49][ 800/2000]  mem=23.45G  cst=0.0275  replay=0.0000
+  [ 16/49][ 850/2000]  mem=23.45G  cst=0.0275  replay=0.0000
+  [ 16/49][ 900/2000]  mem=23.45G  cst=0.0275  replay=0.0000
+  [ 16/49][ 950/2000]  mem=23.45G  cst=0.0275  replay=0.0000
+  [ 16/49][1000/2000]  mem=23.45G  cst=0.0275  replay=0.0000
+  [ 16/49][1050/2000]  mem=23.45G  cst=0.0275  replay=0.0000
+  [ 16/49][1100/2000]  mem=23.45G  cst=0.0275  replay=0.0000
+  [ 16/49][1150/2000]  mem=23.45G  cst=0.0275  replay=0.0000
+  [ 16/49][1200/2000]  mem=23.45G  cst=0.0275  replay=0.0000
+  [ 16/49][1250/2000]  mem=23.45G  cst=0.0275  replay=0.0000
+  [ 16/49][1300/2000]  mem=23.45G  cst=0.0275  replay=0.0000
+  [ 16/49][1350/2000]  mem=23.45G  cst=0.0275  replay=0.0000
+  [ 16/49][1400/2000]  mem=23.45G  cst=0.0275  replay=0.0000
+  [ 16/49][1450/2000]  mem=23.45G  cst=0.0275  replay=0.0000
+  [ 16/49][1500/2000]  mem=23.45G  cst=0.0275  replay=0.0000
+  [ 16/49][1550/2000]  mem=23.45G  cst=0.0275  replay=0.0000
+  [ 16/49][1600/2000]  mem=23.45G  cst=0.0275  replay=0.0000
+  [ 16/49][1650/2000]  mem=23.45G  cst=0.0275  replay=0.0000
+  [ 16/49][1700/2000]  mem=23.45G  cst=0.0275  replay=0.0000
+  [ 16/49][1750/2000]  mem=23.45G  cst=0.0275  replay=0.0000
+  [ 16/49][1800/2000]  mem=23.45G  cst=0.0275  replay=0.0000
+  [ 16/49][1850/2000]  mem=23.45G  cst=0.0275  replay=0.0000
+  [ 16/49][1900/2000]  mem=23.45G  cst=0.0275  replay=0.0000
+  [ 16/49][1950/2000]  mem=23.45G  cst=0.0275  replay=0.0000
+
+Epoch  16/49  loss=0.0276
+  T3: mAP@0.5=0.0739  P=0.1888  R=0.1250  F1=0.1504
+  T1: mAP@0.5=0.0196  fm_abs=-0.6529  fm_stage3=-0.6208
+  T1 by stratum: tiny=0.0001  small=0.0193  normal=0.0234  large=0.0000
+
+  [ 17/49][   0/2000]  mem=23.45G  cst=0.0257  replay=0.0000
+  [ 17/49][  50/2000]  mem=23.45G  cst=0.0265  replay=0.0000
+  [ 17/49][ 100/2000]  mem=23.45G  cst=0.0263  replay=0.0000
+  [ 17/49][ 150/2000]  mem=23.45G  cst=0.0262  replay=0.0000
+  [ 17/49][ 200/2000]  mem=23.45G  cst=0.0263  replay=0.0000
+  [ 17/49][ 250/2000]  mem=23.45G  cst=0.0264  replay=0.0000
+  [ 17/49][ 300/2000]  mem=23.45G  cst=0.0266  replay=0.0000
+  [ 17/49][ 350/2000]  mem=23.45G  cst=0.0267  replay=0.0000
+  [ 17/49][ 400/2000]  mem=23.45G  cst=0.0266  replay=0.0000
+  [ 17/49][ 450/2000]  mem=23.45G  cst=0.0267  replay=0.0000
+  [ 17/49][ 500/2000]  mem=23.45G  cst=0.0267  replay=0.0000
+  [ 17/49][ 550/2000]  mem=23.45G  cst=0.0266  replay=0.0000
+  [ 17/49][ 600/2000]  mem=23.45G  cst=0.0267  replay=0.0000
+  [ 17/49][ 650/2000]  mem=23.45G  cst=0.0267  replay=0.0000
+  [ 17/49][ 700/2000]  mem=23.45G  cst=0.0268  replay=0.0000
+  [ 17/49][ 750/2000]  mem=23.45G  cst=0.0268  replay=0.0000
+  [ 17/49][ 800/2000]  mem=23.45G  cst=0.0268  replay=0.0000
+  [ 17/49][ 850/2000]  mem=23.45G  cst=0.0268  replay=0.0000
+  [ 17/49][ 900/2000]  mem=23.45G  cst=0.0268  replay=0.0000
+  [ 17/49][ 950/2000]  mem=23.45G  cst=0.0268  replay=0.0000
+  [ 17/49][1000/2000]  mem=23.45G  cst=0.0268  replay=0.0000
+  [ 17/49][1050/2000]  mem=23.45G  cst=0.0269  replay=0.0000
+  [ 17/49][1100/2000]  mem=23.45G  cst=0.0269  replay=0.0000
+  [ 17/49][1150/2000]  mem=23.45G  cst=0.0269  replay=0.0000
+  [ 17/49][1200/2000]  mem=23.45G  cst=0.0269  replay=0.0000
+  [ 17/49][1250/2000]  mem=23.45G  cst=0.0269  replay=0.0000
+  [ 17/49][1300/2000]  mem=23.45G  cst=0.0269  replay=0.0000
+  [ 17/49][1350/2000]  mem=23.45G  cst=0.0269  replay=0.0000
+  [ 17/49][1400/2000]  mem=23.45G  cst=0.0269  replay=0.0000
+  [ 17/49][1450/2000]  mem=23.45G  cst=0.0269  replay=0.0000
+  [ 17/49][1500/2000]  mem=23.45G  cst=0.0269  replay=0.0000
+  [ 17/49][1550/2000]  mem=23.45G  cst=0.0269  replay=0.0000
+  [ 17/49][1600/2000]  mem=23.45G  cst=0.0270  replay=0.0000
+  [ 17/49][1650/2000]  mem=23.45G  cst=0.0270  replay=0.0000
+  [ 17/49][1700/2000]  mem=23.45G  cst=0.0270  replay=0.0000
+  [ 17/49][1750/2000]  mem=23.45G  cst=0.0269  replay=0.0000
+  [ 17/49][1800/2000]  mem=23.45G  cst=0.0270  replay=0.0000
+  [ 17/49][1850/2000]  mem=23.45G  cst=0.0270  replay=0.0000
+  [ 17/49][1900/2000]  mem=23.45G  cst=0.0270  replay=0.0000
+  [ 17/49][1950/2000]  mem=23.45G  cst=0.0270  replay=0.0000
+
+Epoch  17/49  loss=0.0270
+  T3: mAP@0.5=0.0698  P=0.1920  R=0.1233  F1=0.1502
+  T1: mAP@0.5=0.0194  fm_abs=-0.6531  fm_stage3=-0.6210
+  T1 by stratum: tiny=0.0002  small=0.0197  normal=0.0225  large=0.0000
+
+  [ 18/49][   0/2000]  mem=23.45G  cst=0.0240  replay=0.0000
+  [ 18/49][  50/2000]  mem=23.45G  cst=0.0259  replay=0.0000
+  [ 18/49][ 100/2000]  mem=23.45G  cst=0.0261  replay=0.0000
+  [ 18/49][ 150/2000]  mem=23.45G  cst=0.0265  replay=0.0000
+  [ 18/49][ 200/2000]  mem=23.45G  cst=0.0265  replay=0.0000
+  [ 18/49][ 250/2000]  mem=23.45G  cst=0.0268  replay=0.0000
+  [ 18/49][ 300/2000]  mem=23.45G  cst=0.0268  replay=0.0000
+  [ 18/49][ 350/2000]  mem=23.45G  cst=0.0268  replay=0.0000
+  [ 18/49][ 400/2000]  mem=23.45G  cst=0.0268  replay=0.0000
+  [ 18/49][ 450/2000]  mem=23.45G  cst=0.0267  replay=0.0000
+  [ 18/49][ 500/2000]  mem=23.45G  cst=0.0267  replay=0.0000
+  [ 18/49][ 550/2000]  mem=23.45G  cst=0.0267  replay=0.0000
+  [ 18/49][ 600/2000]  mem=23.45G  cst=0.0267  replay=0.0000
+  [ 18/49][ 650/2000]  mem=23.45G  cst=0.0267  replay=0.0000
+  [ 18/49][ 700/2000]  mem=23.45G  cst=0.0266  replay=0.0000
+  [ 18/49][ 750/2000]  mem=23.45G  cst=0.0266  replay=0.0000
+  [ 18/49][ 800/2000]  mem=23.45G  cst=0.0266  replay=0.0000
+  [ 18/49][ 850/2000]  mem=23.45G  cst=0.0266  replay=0.0000
+  [ 18/49][ 900/2000]  mem=23.45G  cst=0.0266  replay=0.0000
+  [ 18/49][ 950/2000]  mem=23.45G  cst=0.0266  replay=0.0000
+  [ 18/49][1000/2000]  mem=23.45G  cst=0.0266  replay=0.0000
+  [ 18/49][1050/2000]  mem=23.45G  cst=0.0267  replay=0.0000
+  [ 18/49][1100/2000]  mem=23.45G  cst=0.0267  replay=0.0000
+  [ 18/49][1150/2000]  mem=23.45G  cst=0.0267  replay=0.0000
+  [ 18/49][1200/2000]  mem=23.45G  cst=0.0267  replay=0.0000
+  [ 18/49][1250/2000]  mem=23.45G  cst=0.0267  replay=0.0000
+  [ 18/49][1300/2000]  mem=23.45G  cst=0.0267  replay=0.0000
+  [ 18/49][1350/2000]  mem=23.45G  cst=0.0266  replay=0.0000
+  [ 18/49][1400/2000]  mem=23.45G  cst=0.0266  replay=0.0000
+  [ 18/49][1450/2000]  mem=23.45G  cst=0.0266  replay=0.0000
+  [ 18/49][1500/2000]  mem=23.45G  cst=0.0266  replay=0.0000
+  [ 18/49][1550/2000]  mem=23.45G  cst=0.0266  replay=0.0000
+  [ 18/49][1600/2000]  mem=23.45G  cst=0.0266  replay=0.0000
+  [ 18/49][1650/2000]  mem=23.45G  cst=0.0266  replay=0.0000
+  [ 18/49][1700/2000]  mem=23.45G  cst=0.0266  replay=0.0000
+  [ 18/49][1750/2000]  mem=23.45G  cst=0.0266  replay=0.0000
+  [ 18/49][1800/2000]  mem=23.45G  cst=0.0266  replay=0.0000
+  [ 18/49][1850/2000]  mem=23.45G  cst=0.0266  replay=0.0000
+  [ 18/49][1900/2000]  mem=23.45G  cst=0.0266  replay=0.0000
+  [ 18/49][1950/2000]  mem=23.45G  cst=0.0266  replay=0.0000
+
+Epoch  18/49  loss=0.0265
+  T3: mAP@0.5=0.0587  P=0.1686  R=0.1141  F1=0.1361
+  T1: mAP@0.5=0.0168  fm_abs=-0.6557  fm_stage3=-0.6236
+  T1 by stratum: tiny=0.0002  small=0.0192  normal=0.0190  large=0.0000
+
+Stopping training early as no improvement observed in last 15 epochs. Best results observed at epoch 3, best model saved as best.pt.
+To update EarlyStopping(patience=15) pass a new patience value, i.e. `python train.py --patience 300` or use `--patience 0` to disable EarlyStopping.
+Early stopping triggered.
+
+=================================================================
+Stage 3 (naive) complete.
+Best T3 mAP@0.5 (CST)       = 0.0829
+mAP_T1_after_T1 (ceiling)   = 0.6725
+mAP_T1_after_T2 (Stage 3 ref)= 0.6404
+fm_abs   at best T3 epoch   = -0.6045  (vs T1 ceiling)
+fm_stage3 at best T3 epoch  = -0.5724  (vs Stage 2 retention)
+=================================================================
+Results: /projects/prjs2041/runs/stage3/naive2/results.csv

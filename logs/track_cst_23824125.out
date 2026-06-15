@@ -1,0 +1,80 @@
+==============================
+Job ID  : 23824125
+Node    : gcn55
+Started : Sun Jun 14 18:47:42 CEST 2026
+==============================
+Loading: /projects/prjs2041/runs/stage3/naive2/weights/best.pt
+  Epoch 3  best_fitness=?
+
+Indexing CST Anti-UAV val from /projects/prjs2041/datasets/CST-AntiUAV …
+  40 sequences  |  45,305 frames total
+
+  [  1/40] building_41 … SR@0.5=0.000  PR@20=0.116  IDSW=0  GT=991
+  [  2/40] building_42 … SR@0.5=0.001  PR@20=0.137  IDSW=1  GT=1000
+  [  3/40] building_43 … SR@0.5=0.000  PR@20=0.033  IDSW=0  GT=1000
+  [  4/40] building_44 … SR@0.5=0.000  PR@20=0.208  IDSW=0  GT=961
+  [  5/40] building_45 … SR@0.5=0.000  PR@20=0.033  IDSW=0  GT=891
+  [  6/40] building_46 … SR@0.5=0.000  PR@20=0.407  IDSW=0  GT=875
+  [  7/40] building_47 … SR@0.5=0.001  PR@20=0.023  IDSW=1  GT=784
+  [  8/40] building_48 … SR@0.5=0.000  PR@20=0.048  IDSW=0  GT=992
+  [  9/40] building_49 … SR@0.5=0.000  PR@20=0.069  IDSW=0  GT=1000
+  [ 10/40] building_50 … SR@0.5=0.020  PR@20=0.195  IDSW=6  GT=989
+  [ 11/40] building_51 … SR@0.5=0.003  PR@20=0.489  IDSW=3  GT=933
+  [ 12/40] building_52 … SR@0.5=0.000  PR@20=0.064  IDSW=0  GT=1022
+  [ 13/40] building_53 … SR@0.5=0.011  PR@20=0.473  IDSW=4  GT=917
+  [ 14/40] building_54 … SR@0.5=0.205  PR@20=0.400  IDSW=25  GT=1106
+  [ 15/40] cn_mountains_21 … SR@0.5=0.000  PR@20=0.156  IDSW=0  GT=940
+  [ 16/40] cn_mountains_22 … SR@0.5=0.002  PR@20=0.198  IDSW=1  GT=870
+  [ 17/40] cn_mountains_23 … SR@0.5=0.034  PR@20=0.204  IDSW=5  GT=931
+  [ 18/40] cn_mountains_24 … SR@0.5=0.005  PR@20=0.102  IDSW=2  GT=1053
+  [ 19/40] cn_mountains_25 … SR@0.5=0.000  PR@20=0.112  IDSW=0  GT=1496
+  [ 20/40] cn_mountains_26 … SR@0.5=0.000  PR@20=0.047  IDSW=0  GT=1006
+  [ 21/40] cn_mountains_27 … SR@0.5=0.000  PR@20=0.000  IDSW=0  GT=1189
+  [ 22/40] cn_mountains_28 … SR@0.5=0.000  PR@20=0.007  IDSW=0  GT=886
+  [ 23/40] cn_mountains_29 … SR@0.5=0.000  PR@20=0.000  IDSW=0  GT=1100
+  [ 24/40] cn_sky_10 … SR@0.5=0.008  PR@20=0.686  IDSW=3  GT=972
+  [ 25/40] cn_sky_9 … SR@0.5=0.018  PR@20=0.378  IDSW=5  GT=715
+  [ 26/40] jungle_6 … SR@0.5=0.081  PR@20=0.711  IDSW=41  GT=1002
+  [ 27/40] urban-areas_27 … SR@0.5=0.002  PR@20=0.038  IDSW=2  GT=1169
+  [ 28/40] urban-areas_28 … SR@0.5=0.003  PR@20=0.550  IDSW=1  GT=904
+  [ 29/40] urban-areas_29 … SR@0.5=0.000  PR@20=0.029  IDSW=0  GT=1186
+  [ 30/40] urban-areas_30 … SR@0.5=0.000  PR@20=0.005  IDSW=0  GT=953
+  [ 31/40] urban-areas_31 … SR@0.5=0.002  PR@20=0.002  IDSW=2  GT=1104
+  [ 32/40] urban-areas_32 … SR@0.5=0.000  PR@20=0.002  IDSW=0  GT=1021
+  [ 33/40] urban-areas_33 … SR@0.5=0.000  PR@20=0.039  IDSW=0  GT=1394
+  [ 34/40] urban-areas_34 … SR@0.5=0.007  PR@20=0.039  IDSW=2  GT=1146
+  [ 35/40] water_14 … SR@0.5=0.025  PR@20=0.625  IDSW=13  GT=603
+  [ 36/40] water_15 … SR@0.5=0.002  PR@20=0.572  IDSW=1  GT=848
+  [ 37/40] water_16 … SR@0.5=0.000  PR@20=0.555  IDSW=0  GT=722
+  [ 38/40] water_17 … SR@0.5=0.015  PR@20=0.437  IDSW=7  GT=823
+  [ 39/40] water_18 … SR@0.5=0.004  PR@20=0.663  IDSW=2  GT=823
+  [ 40/40] water_19 … SR@0.5=0.018  PR@20=0.839  IDSW=8  GT=738
+
+=======================================================
+Tracking Evaluation Summary — naive2 | CST Anti-UAV val
+=======================================================
+Sequences evaluated : 40
+Total GT frames     : 39,055
+
+SR@0.5  (Success Rate IoU≥0.5) : 0.0119
+AUC-SR  (Success Plot AUC)     : 0.0388
+PR@20   (Precision ≤20px)      : 0.2189
+PR@10   (Precision ≤10px)      : 0.0810
+AUC-PR  (Precision Plot AUC)   : 0.2109
+Mean IoU (all GT frames)       : 0.0151
+Total IDSW                     : 135
+=======================================================
+
+Generating figures …
+  Saved: /projects/prjs2041/analysis/tracking_eval/fig_success_plot.png
+  Saved: /projects/prjs2041/analysis/tracking_eval/fig_precision_plot.png
+  Saved: /projects/prjs2041/analysis/tracking_eval/fig_seq_sr.png
+  Saved: /projects/prjs2041/analysis/tracking_eval/tracking_summary.txt
+  Saved: /projects/prjs2041/analysis/tracking_eval/seq_results.csv
+
+All outputs in: /projects/prjs2041/analysis/tracking_eval
+Done.
+==============================
+Done: Sun Jun 14 19:13:13 CEST 2026
+Outputs: /projects/prjs2041/analysis/tracking_eval/
+==============================

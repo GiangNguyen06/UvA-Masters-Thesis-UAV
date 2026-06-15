@@ -1,0 +1,401 @@
+==============================
+Job ID  : 23381446
+Node    : gcn127
+Started : Tue Jun  2 15:06:33 CEST 2026
+==============================
+
+Copying Anti-UAV410 to $TMPDIR ...
+Done in 797s
+
+=== Step 1: Multi-seed CI plots ===
+Loading runs matching: /projects/prjs2041/runs/stage2/seed*
+  Loaded: seed123  (31 epochs)
+  Loaded: seed42  (32 epochs)
+  Loaded: seed999  (29 epochs)
+
+Aligning epochs across 3 seeds ...
+  Common epochs: 0–28  (29 epochs)
+
+Generating plots ...
+  Saved: /projects/prjs2041/runs/stage2/ci_plots/fig_stage2_ci.png
+
+=================================================================
+Multi-seed Confidence Interval Summary  (n=3 seeds)
+=================================================================
+
+--- Peak T2 mAP@0.5 per seed ---
+  seed123               peak=0.4304  epoch=15
+  seed42                peak=0.4264  epoch=16
+  seed999               peak=0.4275  epoch=27
+  MEAN ± STD : 0.4281 ± 0.0017
+
+--- FM at peak T2 epoch per seed ---
+  seed123               FM=-0.0276  (epoch 15)
+  seed42                FM=-0.0369  (epoch 16)
+  seed999               FM=-0.0333  (epoch 27)
+  MEAN ± STD : -0.0326 ± 0.0038
+
+--- F1_T2 at peak T2 epoch per seed ---
+  seed123               F1=0.5181
+  seed42                F1=0.5174
+  seed999               F1=0.5153
+  MEAN ± STD : 0.5169 ± 0.0012
+
+=================================================================
+
+  Summary: /projects/prjs2041/runs/stage2/ci_plots/ci_summary.txt
+  Aggregated CSV: /projects/prjs2041/runs/stage2/ci_plots/agg_results.csv
+
+All outputs in: /projects/prjs2041/runs/stage2/ci_plots
+
+=== Step 2: Per-seed training curves ===
+  Processing seed42 ...
+Reading: /projects/prjs2041/runs/stage2/seed42/results.csv
+  32 epochs loaded  [Stage 2 format]  (cols: ['epoch', 'loss_box', 'loss_obj', 'loss_cls', 'loss_kd', 'loss_total', 'mAP50_T2', 'P_T2', 'R_T2', 'F1_T2', 'mAP50_T1', 'P_T1', 'R_T1', 'F1_T1', 'lr', 'loss_det', 'kd_ratio', 'FM'])
+
+  Saved: /projects/prjs2041/runs/stage2/seed42/analysis/fig_stage2_progress.png
+  Saved: /projects/prjs2041/runs/stage2/seed42/analysis/fig_loss_decomp_v2.png
+  Saved: /projects/prjs2041/runs/stage2/seed42/analysis/fig_lr_curve.png
+
+============================================================
+Stage 2 Training Analysis — Key Numbers
+============================================================
+
+Total epochs trained       : 32
+Early stopping triggered at: epoch 31
+
+--- T2 performance (Anti-UAV410 val) ---
+Peak T2 mAP@0.5            : 0.4264  (epoch 16)
+Final T2 mAP@0.5           : 0.4218
+
+--- T1 retention (Anti-UAV-RGBT val) ---
+T1 baseline (Stage 1)      : 0.6725
+Best T1 mAP during T2      : 0.6658  (epoch 0)
+FM (best T1 − baseline)    : -0.0067
+
+--- Forgetting Measure (FM = mAP_T1_after_T2 − T1_baseline) ---
+Min FM (max forgetting)    : -0.0473  (epoch 19)
+FM at peak T2 epoch        : -0.0369
+Final FM                   : -0.0372
+
+--- Loss decomposition ---
+L_det: epoch 0  = 0.0580   →  epoch 31 = 0.0233
+L_kd:  epoch 0  = 0.0791   →  epoch 31 = 0.0612
+kd/det ratio: epoch 0 = 1.36×  →  epoch 31 = 2.62×
+(at peak T2 epoch 16: kd/det = 2.44×)
+
+--- Stability-plasticity gap ---
+Peak T2 epoch              : 16
+Min FM epoch               : 19
+Gap                        : 3 epochs
+
+============================================================
+
+  Summary: /projects/prjs2041/runs/stage2/seed42/analysis/analysis_summary.txt
+
+  Extended CSV: /projects/prjs2041/runs/stage2/seed42/analysis/results_extended.csv
+
+All outputs in: /projects/prjs2041/runs/stage2/seed42/analysis
+Done.
+  Processing seed123 ...
+Reading: /projects/prjs2041/runs/stage2/seed123/results.csv
+  31 epochs loaded  [Stage 2 format]  (cols: ['epoch', 'loss_box', 'loss_obj', 'loss_cls', 'loss_kd', 'loss_total', 'mAP50_T2', 'P_T2', 'R_T2', 'F1_T2', 'mAP50_T1', 'P_T1', 'R_T1', 'F1_T1', 'lr', 'loss_det', 'kd_ratio', 'FM'])
+
+  Saved: /projects/prjs2041/runs/stage2/seed123/analysis/fig_stage2_progress.png
+  Saved: /projects/prjs2041/runs/stage2/seed123/analysis/fig_loss_decomp_v2.png
+  Saved: /projects/prjs2041/runs/stage2/seed123/analysis/fig_lr_curve.png
+
+============================================================
+Stage 2 Training Analysis — Key Numbers
+============================================================
+
+Total epochs trained       : 31
+Early stopping triggered at: epoch 30
+
+--- T2 performance (Anti-UAV410 val) ---
+Peak T2 mAP@0.5            : 0.4304  (epoch 15)
+Final T2 mAP@0.5           : 0.4161
+
+--- T1 retention (Anti-UAV-RGBT val) ---
+T1 baseline (Stage 1)      : 0.6725
+Best T1 mAP during T2      : 0.6647  (epoch 0)
+FM (best T1 − baseline)    : -0.0078
+
+--- Forgetting Measure (FM = mAP_T1_after_T2 − T1_baseline) ---
+Min FM (max forgetting)    : -0.0488  (epoch 10)
+FM at peak T2 epoch        : -0.0276
+Final FM                   : -0.0406
+
+--- Loss decomposition ---
+L_det: epoch 0  = 0.0580   →  epoch 30 = 0.0237
+L_kd:  epoch 0  = 0.0791   →  epoch 30 = 0.0614
+kd/det ratio: epoch 0 = 1.36×  →  epoch 30 = 2.59×
+(at peak T2 epoch 15: kd/det = 2.42×)
+
+--- Stability-plasticity gap ---
+Peak T2 epoch              : 15
+Min FM epoch               : 10
+Gap                        : 5 epochs
+
+============================================================
+
+  Summary: /projects/prjs2041/runs/stage2/seed123/analysis/analysis_summary.txt
+
+  Extended CSV: /projects/prjs2041/runs/stage2/seed123/analysis/results_extended.csv
+
+All outputs in: /projects/prjs2041/runs/stage2/seed123/analysis
+Done.
+  Processing seed999 ...
+Reading: /projects/prjs2041/runs/stage2/seed999/results.csv
+  29 epochs loaded  [Stage 2 format]  (cols: ['epoch', 'loss_box', 'loss_obj', 'loss_cls', 'loss_kd', 'loss_total', 'mAP50_T2', 'P_T2', 'R_T2', 'F1_T2', 'mAP50_T1', 'P_T1', 'R_T1', 'F1_T1', 'lr', 'loss_det', 'kd_ratio', 'FM'])
+
+  Saved: /projects/prjs2041/runs/stage2/seed999/analysis/fig_stage2_progress.png
+  Saved: /projects/prjs2041/runs/stage2/seed999/analysis/fig_loss_decomp_v2.png
+  Saved: /projects/prjs2041/runs/stage2/seed999/analysis/fig_lr_curve.png
+
+============================================================
+Stage 2 Training Analysis — Key Numbers
+============================================================
+
+Total epochs trained       : 29
+Early stopping triggered at: epoch 28
+
+--- T2 performance (Anti-UAV410 val) ---
+Peak T2 mAP@0.5            : 0.4275  (epoch 27)
+Final T2 mAP@0.5           : 0.4149
+
+--- T1 retention (Anti-UAV-RGBT val) ---
+T1 baseline (Stage 1)      : 0.6725
+Best T1 mAP during T2      : 0.6647  (epoch 0)
+FM (best T1 − baseline)    : -0.0078
+
+--- Forgetting Measure (FM = mAP_T1_after_T2 − T1_baseline) ---
+Min FM (max forgetting)    : -0.0480  (epoch 11)
+FM at peak T2 epoch        : -0.0333
+Final FM                   : -0.0336
+
+--- Loss decomposition ---
+L_det: epoch 0  = 0.0580   →  epoch 28 = 0.0245
+L_kd:  epoch 0  = 0.0791   →  epoch 28 = 0.0629
+kd/det ratio: epoch 0 = 1.36×  →  epoch 28 = 2.57×
+(at peak T2 epoch 27: kd/det = 2.56×)
+
+--- Stability-plasticity gap ---
+Peak T2 epoch              : 27
+Min FM epoch               : 11
+Gap                        : 16 epochs
+
+============================================================
+
+  Summary: /projects/prjs2041/runs/stage2/seed999/analysis/analysis_summary.txt
+
+  Extended CSV: /projects/prjs2041/runs/stage2/seed999/analysis/results_extended.csv
+
+All outputs in: /projects/prjs2041/runs/stage2/seed999/analysis
+Done.
+
+=== Step 3: Full evaluation per seed ===
+  Evaluating seed42 ...
+Loading: /projects/prjs2041/runs/stage2/seed42/weights/best.pt
+  Epoch 16  best_fitness=?
+
+Loading Anti-UAV410 val set from /scratch-local/knguyen1.23381446/Anti-UAV410 …
+  94,711 frames  |  2960 batches
+
+Running evaluation …
+  94337 images evaluated  |  92550 GT objects
+
+Computing overall metrics …
+  mAP@0.5    = 0.4179
+  Precision  = 0.6083
+  Recall     = 0.4400
+  F1         = 0.5106
+
+Computing scale-stratified metrics …
+  tiny     mAP@0.5 = 0.0015
+  small    mAP@0.5 = 0.2819
+  normal   mAP@0.5 = 0.6790
+  large    mAP@0.5 = 0.2701
+
+Computing per-sequence metrics …
+  90 sequences evaluated
+
+Generating figures …
+  Saved: /projects/prjs2041/runs/stage2/seed42/analysis/fig_pr_curve.png
+  Saved: /projects/prjs2041/runs/stage2/seed42/analysis/fig_conf_curve.png
+  Saved: /projects/prjs2041/runs/stage2/seed42/analysis/fig_scale_metrics.png
+  Saved: /projects/prjs2041/runs/stage2/seed42/analysis/fig_seq_metrics.png
+  Scale CSV: /projects/prjs2041/runs/stage2/seed42/analysis/scale_metrics.csv
+  Seq CSV:   /projects/prjs2041/runs/stage2/seed42/analysis/seq_metrics.csv
+
+=======================================================
+Full Analysis Summary — seed42 | Anti-UAV410 val
+=======================================================
+
+--- Overall ---
+mAP@0.5          : 0.4179
+Precision        : 0.6083
+Recall           : 0.4400
+F1               : 0.5106
+
+--- Scale-stratified mAP@0.5 ---
+tiny    : 0.0015
+small   : 0.2819
+normal  : 0.6790
+large   : 0.2701
+
+--- Per-sequence (top 5 / bottom 5) ---
+20190925_200320_1_8            0.9950
+20190926_144550_1_10           0.9950
+20190926_133516_1_2            0.9949
+20190926_143632_1_4            0.9942
+20190926_133516_1_3            0.9937
+  ...
+20190925_130434_1_1            0.0000
+3700000000002_105103_3         0.0000
+3700000000002_105103_8         0.0000
+3700000000002_105837_2         0.0000
+3700000000002_105103_6         0.0000
+
+=======================================================
+
+All outputs in: /projects/prjs2041/runs/stage2/seed42/analysis
+Done.
+  Evaluating seed123 ...
+Loading: /projects/prjs2041/runs/stage2/seed123/weights/best.pt
+  Epoch 15  best_fitness=?
+
+Loading Anti-UAV410 val set from /scratch-local/knguyen1.23381446/Anti-UAV410 …
+  94,711 frames  |  2960 batches
+
+Running evaluation …
+  94361 images evaluated  |  92550 GT objects
+
+Computing overall metrics …
+  mAP@0.5    = 0.4189
+  Precision  = 0.6112
+  Recall     = 0.4343
+  F1         = 0.5078
+
+Computing scale-stratified metrics …
+  tiny     mAP@0.5 = 0.0011
+  small    mAP@0.5 = 0.2752
+  normal   mAP@0.5 = 0.6803
+  large    mAP@0.5 = 0.2757
+
+Computing per-sequence metrics …
+  90 sequences evaluated
+
+Generating figures …
+  Saved: /projects/prjs2041/runs/stage2/seed123/analysis/fig_pr_curve.png
+  Saved: /projects/prjs2041/runs/stage2/seed123/analysis/fig_conf_curve.png
+  Saved: /projects/prjs2041/runs/stage2/seed123/analysis/fig_scale_metrics.png
+  Saved: /projects/prjs2041/runs/stage2/seed123/analysis/fig_seq_metrics.png
+  Scale CSV: /projects/prjs2041/runs/stage2/seed123/analysis/scale_metrics.csv
+  Seq CSV:   /projects/prjs2041/runs/stage2/seed123/analysis/seq_metrics.csv
+
+=======================================================
+Full Analysis Summary — seed123 | Anti-UAV410 val
+=======================================================
+
+--- Overall ---
+mAP@0.5          : 0.4189
+Precision        : 0.6112
+Recall           : 0.4343
+F1               : 0.5078
+
+--- Scale-stratified mAP@0.5 ---
+tiny    : 0.0011
+small   : 0.2752
+normal  : 0.6803
+large   : 0.2757
+
+--- Per-sequence (top 5 / bottom 5) ---
+20190925_200320_1_8            0.9950
+20190926_144550_1_10           0.9950
+20190926_143632_1_4            0.9942
+20190926_133516_1_2            0.9940
+20190926_133516_1_3            0.9937
+  ...
+20190925_130434_1_1            0.0000
+3700000000002_105103_3         0.0000
+3700000000002_105103_8         0.0000
+3700000000002_105837_2         0.0000
+3700000000002_105103_6         0.0000
+
+=======================================================
+
+All outputs in: /projects/prjs2041/runs/stage2/seed123/analysis
+Done.
+  Evaluating seed999 ...
+Loading: /projects/prjs2041/runs/stage2/seed999/weights/best.pt
+  Epoch 27  best_fitness=?
+
+Loading Anti-UAV410 val set from /scratch-local/knguyen1.23381446/Anti-UAV410 …
+  94,711 frames  |  2960 batches
+
+Running evaluation …
+  94366 images evaluated  |  92550 GT objects
+
+Computing overall metrics …
+  mAP@0.5    = 0.4222
+  Precision  = 0.6059
+  Recall     = 0.4378
+  F1         = 0.5083
+
+Computing scale-stratified metrics …
+  tiny     mAP@0.5 = 0.0012
+  small    mAP@0.5 = 0.2773
+  normal   mAP@0.5 = 0.6821
+  large    mAP@0.5 = 0.2828
+
+Computing per-sequence metrics …
+  90 sequences evaluated
+
+Generating figures …
+  Saved: /projects/prjs2041/runs/stage2/seed999/analysis/fig_pr_curve.png
+  Saved: /projects/prjs2041/runs/stage2/seed999/analysis/fig_conf_curve.png
+  Saved: /projects/prjs2041/runs/stage2/seed999/analysis/fig_scale_metrics.png
+  Saved: /projects/prjs2041/runs/stage2/seed999/analysis/fig_seq_metrics.png
+  Scale CSV: /projects/prjs2041/runs/stage2/seed999/analysis/scale_metrics.csv
+  Seq CSV:   /projects/prjs2041/runs/stage2/seed999/analysis/seq_metrics.csv
+
+=======================================================
+Full Analysis Summary — seed999 | Anti-UAV410 val
+=======================================================
+
+--- Overall ---
+mAP@0.5          : 0.4222
+Precision        : 0.6059
+Recall           : 0.4378
+F1               : 0.5083
+
+--- Scale-stratified mAP@0.5 ---
+tiny    : 0.0012
+small   : 0.2773
+normal  : 0.6821
+large   : 0.2828
+
+--- Per-sequence (top 5 / bottom 5) ---
+20190925_200320_1_8            0.9950
+20190926_144550_1_10           0.9950
+20190926_143632_1_4            0.9948
+20190926_133516_1_2            0.9948
+20190926_133516_1_3            0.9940
+  ...
+20190925_130434_1_1            0.0000
+3700000000002_105103_3         0.0000
+3700000000002_105103_8         0.0000
+3700000000002_105837_2         0.0000
+3700000000002_143252_3         0.0000
+
+=======================================================
+
+All outputs in: /projects/prjs2041/runs/stage2/seed999/analysis
+Done.
+
+==============================
+Done: Tue Jun  2 15:50:30 CEST 2026
+CI plots  : /projects/prjs2041/runs/stage2/ci_plots/
+Per-seed  : /projects/prjs2041/runs/stage2/seed{42,123,999}/analysis/
+==============================
