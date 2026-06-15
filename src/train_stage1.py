@@ -289,41 +289,57 @@ def evaluate(model, loader, device, imgsz=640):
 
 def compute_map(stats):
     """
-    Compute mAP@0.5 and mAP@0.5:0.95 from aggregated stats.
+    Compute mAP@0.5, mAP@0.5:0.95, precision, recall, and F1 from
+    aggregated per-image detection stats.
 
     Args:
-        stats : list of (correct, conf, pred_cls, target_cls) — can be the merged
-                list from multiple ranks.
+        stats : list of (correct, conf, pred_cls, target_cls) tuples —
+                collected from evaluate() and optionally merged across ranks.
 
     Returns:
-        map50 : float
-        mapxx : float
+        map50 : float  — mAP at IoU=0.5
+        mapxx : float  — mAP at IoU=0.5:0.95 (approx; Stage 1 uses single threshold)
+        prec  : float  — precision at optimal F1 threshold
+        rec   : float  — recall at optimal F1 threshold
+        f1_   : float  — F1 score at optimal threshold
     """
     if not stats:
-        return 0.0, 0.0
+        return 0.0, 0.0, 0.0, 0.0, 0.0
 
     stats = [np.concatenate(x, 0) for x in zip(*stats)]
     if len(stats) and stats[0].any():
-        _, _, _, _, _, ap, _ = ap_per_class(*stats, plot=False, names={0: 'UAV'})  # returns tp,fp,p,r,f1,ap,cls
+        # ap_per_class returns: (tp, fp, p, r, f1, ap, unique_classes)
+        # p, r, f1 are per-class values at the confidence threshold that
+        # maximises F1 — exactly what thesis analysis needs.
+        _, _, p, r, f1, ap, _ = ap_per_class(*stats, plot=False, names={0: 'UAV'})
         map50 = float(ap[:, 0].mean()) if ap.ndim == 2 else float(ap[0])
         mapxx = float(ap.mean())       if ap.ndim == 2 else float(ap.mean())
+        prec  = float(np.mean(p))
+        rec   = float(np.mean(r))
+        f1_   = float(np.mean(f1))
     else:
-        map50, mapxx = 0.0, 0.0
+        map50, mapxx, prec, rec, f1_ = 0.0, 0.0, 0.0, 0.0, 0.0
 
-    return map50, mapxx
+    return map50, mapxx, prec, rec, f1_
 
 
 # ══════════════════════════════════════════════════════════════════════════════
 # Training
 # ══════════════════════════════════════════════════════════════════════════════
 
-def train(save_dir: Path, device: torch.device, rank: int = -1, world_size: int = 1):
+def train(save_dir: Path, device: torch.device,
+          save_epoch_ckpts: bool = False, save_epoch_interval: int = 5,
+          rank: int = -1, local_rank: int = -1, world_size: int = 1):
     """
-    rank       : -1 = single-GPU (no DDP), 0..N-1 = DDP rank
+    rank       : global DDP rank (-1 = single-GPU / no DDP)
+    local_rank : GPU index on this node (-1 = single-GPU)
+                 Used for device_ids in DDP — differs from rank on multi-node.
     world_size : total number of DDP processes (1 = single-GPU)
     """
     is_main = rank in (-1, 0)   # only rank-0 logs / saves / evaluates
 
+    # Each rank gets its own seed so data shuffling differs across GPUs,
+    # but deterministically — same seed → same training run every time.
     init_seeds(SEED + rank if rank != -1 else SEED)
     if is_main:
         save_dir.mkdir(parents=True, exist_ok=True)
@@ -399,8 +415,11 @@ def train(save_dir: Path, device: torch.device, rank: int = -1, world_size: int 
 
     # Wrap with DDP — must come AFTER setting .nc / .hyp / .names so those
     # attrs survive on model.module (de_parallel will unwrap as needed).
+    # Use local_rank (GPU index on this node) for device_ids, not global rank —
+    # they differ on multi-node jobs. Falls back to rank for single-node.
     if rank != -1:
-        model = DDP(model, device_ids=[rank], output_device=rank,
+        gpu_id = local_rank if local_rank != -1 else rank
+        model = DDP(model, device_ids=[gpu_id], output_device=gpu_id,
                     find_unused_parameters=True)
 
     # ── Optimizer ─────────────────────────────────────────────────────────────
@@ -437,7 +456,8 @@ def train(save_dir: Path, device: torch.device, rank: int = -1, world_size: int 
         with open(csv_path, 'w', newline='') as f:
             writer = csv.writer(f)
             writer.writerow(['epoch', 'loss_box', 'loss_obj', 'loss_cls',
-                             'loss_total', 'mAP50', 'mAP50-95', 'lr'])
+                             'loss_total', 'mAP50', 'mAP50-95',
+                             'precision', 'recall', 'f1', 'lr'])
 
     # ── Training loop ─────────────────────────────────────────────────────────
     nb           = len(train_loader)
@@ -514,7 +534,7 @@ def train(save_dir: Path, device: torch.device, rank: int = -1, world_size: int 
         # and avoids NCCL timeout while ranks 1-3 sit idle for ~40 min.
         local_stats = evaluate(ema.ema, val_loader, device, IMG_SIZE)
 
-        map50, mapxx = 0.0, 0.0
+        map50, mapxx, prec, rec, f1_ = 0.0, 0.0, 0.0, 0.0, 0.0
         if rank != -1:
             # all_gather_object: each rank sends its stats list to every rank,
             # but only rank 0 will use the merged result.
@@ -524,10 +544,10 @@ def train(save_dir: Path, device: torch.device, rank: int = -1, world_size: int 
                 merged_stats = []
                 for s in all_stats_list:
                     merged_stats.extend(s)
-                map50, mapxx = compute_map(merged_stats)
+                map50, mapxx, prec, rec, f1_ = compute_map(merged_stats)
         else:
             # Single-GPU path
-            map50, mapxx = compute_map(local_stats)
+            map50, mapxx, prec, rec, f1_ = compute_map(local_stats)
 
         if is_main:
             lr_now = optimizer.param_groups[0]['lr']
@@ -535,14 +555,15 @@ def train(save_dir: Path, device: torch.device, rank: int = -1, world_size: int 
 
             log.info(
                 f'\nEpoch {epoch:3d}/{EPOCHS-1}  '
-                f'loss={total_loss:.4f}  mAP@0.5={map50:.4f}  mAP@0.5:0.95={mapxx:.4f}\n'
+                f'loss={total_loss:.4f}  mAP@0.5={map50:.4f}  mAP@0.5:0.95={mapxx:.4f}  '
+                f'P={prec:.4f}  R={rec:.4f}  F1={f1_:.4f}\n'
             )
 
             # CSV
             with open(csv_path, 'a', newline='') as f:
                 csv.writer(f).writerow([
                     epoch, mloss[0].item(), mloss[1].item(), mloss[2].item(),
-                    total_loss, map50, mapxx, lr_now
+                    total_loss, map50, mapxx, prec, rec, f1_, lr_now
                 ])
 
             # Checkpoint
@@ -557,6 +578,13 @@ def train(save_dir: Path, device: torch.device, rank: int = -1, world_size: int 
                 'date':         datetime.now().isoformat(),
             }
             torch.save(ckpt, last_path)
+
+            # Optional per-epoch checkpoint
+            if save_epoch_ckpts and (epoch % save_epoch_interval == 0 or epoch == EPOCHS - 1):
+                epoch_path = save_dir / 'weights' / f'epoch_{epoch:03d}.pt'
+                torch.save(ckpt, epoch_path)
+                log.info(f'  Epoch checkpoint saved: {epoch_path}')
+
             if map50 > best_fitness:
                 best_fitness = map50
                 torch.save(ckpt, best_path)
@@ -600,67 +628,68 @@ def train(save_dir: Path, device: torch.device, rank: int = -1, world_size: int 
 
 def parse_args():
     p = argparse.ArgumentParser(description='Stage 1: YOLOMG on AntiUAVRGBT')
-    p.add_argument('--epochs',       type=int, default=EPOCHS)
-    p.add_argument('--batch-size',   type=int, default=BATCH_SIZE)
-    p.add_argument('--imgsz',        type=int, default=IMG_SIZE)
-    p.add_argument('--workers',      type=int, default=WORKERS)
-    p.add_argument('--device',       type=str, default='')
-    p.add_argument('--name',         type=str, default='antiuav_rgbt')
-    p.add_argument('--dataset-root', type=str, default=str(DATASET_ROOT),
-                   help='Path to Anti-UAV-RGBT root. On HPC pass $TMPDIR '
-                        'copy to avoid NFS I/O bottleneck.')
-    p.add_argument('--frames-root',  type=str, default=None,
-                   help='Path to pre-extracted JPEG frames '
-                        '(output of extract_frames_antiuav_rgbt.py). '
-                        'If set, skips VideoCapture random seeks entirely.')
+    p.add_argument('--epochs',               type=int,   default=EPOCHS)
+    p.add_argument('--batch-size',           type=int,   default=BATCH_SIZE)
+    p.add_argument('--imgsz',                type=int,   default=IMG_SIZE)
+    p.add_argument('--workers',              type=int,   default=WORKERS)
+    p.add_argument('--device',               type=str,   default='')
+    p.add_argument('--name',                 type=str,   default='antiuav_rgbt')
+    p.add_argument('--seed',                 type=int,   default=SEED,
+                   help='Random seed for reproducibility')
+    p.add_argument('--dataset-root',         type=str,   default=str(DATASET_ROOT),
+                   help='Path to Anti-UAV-RGBT root.')
+    p.add_argument('--frames-root',          type=str,   default=None,
+                   help='Path to pre-extracted JPEG frames.')
+    p.add_argument('--save-epoch-ckpts',     action='store_true',
+                   help='Save a checkpoint every --save-epoch-interval epochs')
+    p.add_argument('--save-epoch-interval',  type=int,   default=5,
+                   help='Epoch stride for per-epoch checkpoint saving (default: 5)')
     return p.parse_args()
 
 
 if __name__ == '__main__':
     args = parse_args()
 
-    # Override globals from args
+    # Override gbals from args
     EPOCHS       = args.epochs
     BATCH_SIZE   = args.batch_size
     IMG_SIZE     = args.imgsz
     WORKERS      = args.workers
     DATASET_ROOT = Path(args.dataset_root)
     FRAMES_ROOT  = args.frames_root
+    SEED         = args.seed
 
     # ── DDP detection ────────────────────────────────────────────────────────
     # torchrun sets LOCAL_RANK / RANK / WORLD_SIZE automatically.
-    # If not set, fall back to single-GPU mode.
     local_rank  = int(os.environ.get('LOCAL_RANK', -1))
     rank        = int(os.environ.get('RANK',       -1))
     world_size  = int(os.environ.get('WORLD_SIZE',  1))
 
     if local_rank != -1:
         # DDP mode: each process is pinned to one GPU by torchrun
-        # Timeout set to 2 h: validation on rank 0 with VideoCapture takes
-        # ~40 min; the default 10-min NCCL watchdog kills waiting ranks.
+        # Timeout 2 h: val on rank 0 with VideoCapture can take ~40 min
         dist.init_process_group(backend='nccl', timeout=timedelta(hours=2))
         torch.cuda.set_device(local_rank)
         device = torch.device(f'cuda:{local_rank}')
     else:
         device = select_device(args.device)
 
-    # Only rank 0 creates the save_dir (others reuse the same path)
+    # Only rank 0 creates the save_dir; others reuse the same path
     LOGS_DIR.mkdir(parents=True, exist_ok=True)
     SAVE_ROOT.mkdir(parents=True, exist_ok=True)
     if rank in (-1, 0):
         save_dir = Path(increment_path(SAVE_ROOT / args.name, exist_ok=False))
-        # Broadcast the chosen path to other ranks so all use the same directory
-        if rank == 0:
-            path_str = str(save_dir)
     else:
-        save_dir = None   # filled in after broadcast below
+        save_dir = None  # filled in after broadcast
 
-    # Share the save_dir path across all ranks
+    # Share the chosen save_dir across all ranks via fixed-length tensor broadcast
     if rank != -1:
-        # Pack path into a fixed-length tensor and broadcast
         path_bytes = str(save_dir if rank == 0 else '').encode().ljust(512, b'\x00')
         path_t = torch.ByteTensor(list(path_bytes)).to(device)
         dist.broadcast(path_t, src=0)
         save_dir = Path(bytes(path_t.tolist()).rstrip(b'\x00').decode())
 
-    train(save_dir, device, rank=rank, world_size=world_size)
+    train(save_dir, device,
+          save_epoch_ckpts=args.save_epoch_ckpts,
+          save_epoch_interval=args.save_epoch_interval,
+          rank=rank, local_rank=local_rank, world_size=world_size)

@@ -1,118 +1,170 @@
-# UvA MSc Information Studies Thesis — UAV Detection with Continual Learning
+# Catastrophic Forgetting in Sequential Thermal Anti-UAV Detection
+### Gradient Starvation Under Scale-Distribution Shift
 
-**Author:** Khac Duc Giang Nguyen  
-**Institution:** University of Amsterdam, MSc Information Studies
+**Author:** Khac Duc Giang Nguyen (16265858)  
+**Supervisor:** Dr. Seyed Sahand Mohammadi Ziabari  
+**Institution:** University of Amsterdam — MSc Information Studies (Data Science)  
+**Submitted:** June 2026
 
-## Overview
+---
 
-This repository contains all code, SLURM job scripts, dataset wrappers, and progress logs
-for my MSc thesis on cross-domain continual learning for UAV detection.
+## What This Thesis Is About
 
-The core idea: train a dual-stream IR+motion detector (YOLOMG) on a large labelled dataset,
-then transfer it to a new domain without catastrophic forgetting, and measure how much it
-forgets using a Forgetting Measure (FM = mAP_T1_after_T2 − mAP_T1_after_T1).
+Thermal infrared UAV detectors must remain accurate as operational datasets evolve. Sequential fine-tuning on a new dataset destroys performance on previous ones — a phenomenon called catastrophic forgetting. This thesis trains YOLOMG through a three-stage curriculum of increasing scale difficulty, measures precisely *when*, *how much*, and *why* forgetting happens, and proposes Scale-Stratified Herding as a targeted remedy.
+
+**Core finding:** Scale-distribution shift (Stage 3, CST Anti-UAV: 97.7% tiny/small targets, 0% large) causes **18× more forgetting** than cross-domain adaptation (Stage 2, Anti-UAV410). The mechanism is **gradient starvation** — Stage 2→3 weight cosine similarity is 0.967 (weights barely moved) yet T1 mAP collapses from 0.640 to 0.068. Large-target detection reaches 0.000 mAP within the first training epoch.
+
+---
+
+## Research Questions
+
+| | Question | Status |
+|---|---|---|
+| **H1** | Is catastrophic forgetting measurable under the three-stage curriculum? | ✅ Confirmed — FM = −0.605 |
+| **RQ1** | Does Knowledge Distillation preserve T1 performance during T2 domain shift? | ✅ Answered — FM = −0.033 ± 0.004 (95% retention) |
+| **RQ2** | Does scale-distribution shift characterise the forgetting pattern in Stage 3? | ✅ Answered — gradient starvation identified as mechanism |
+| **RQ3** | Does Scale-Stratified Herding mitigate large-target forgetting? | 🔬 Design contribution — buffer built, experimental validation blocked by compute budget |
 
 ---
 
 ## Three-Stage Curriculum
 
-| Stage | Task | Dataset | Status |
+| Stage | Task | Dataset | Result |
 |-------|------|---------|--------|
-| 1 | Full supervision — establish T1 mAP ceiling | Anti-UAV-RGBT (149K/62K frames) | ✅ Done — mAP@0.5 = 0.6617 |
-| 2 | Teacher-Student UDA — cross-domain transfer | Anti-UAV410 (214K/95K frames) | ✅ Done — mAP@0.5 = 0.4181, FM = −0.0153 |
-| 3 | Continual fine-tuning (Scale-Stratified Herding) | CST | 🔜 Planned |
+| 1 | Supervised baseline | Anti-UAV-RGBT (208,737 frames) | ✅ mAP@0.5 = **0.6725** |
+| 2 | KD fine-tuning | Anti-UAV410 (438,397 frames) | ✅ FM = **−0.033 ± 0.004** (3 seeds) |
+| 3 | Naive baseline | CST Anti-UAV (245,471 frames) | ✅ FM = **−0.605**, best at epoch 3 |
+| 3 | Scale-Stratified Herding | CST Anti-UAV | ❌ Cancelled — compute budget exhausted |
+
+---
+
+## Key Results
+
+### Stage 1 — T1 Baseline
+
+| Metric | Value |
+|--------|-------|
+| mAP@0.5 | **0.6725** |
+| Best epoch | 49 / 100 |
+| Tiny-stratum mAP | 0.009 |
+| Small-stratum mAP | 0.579 |
+| Normal-stratum mAP | 0.719 |
+| Large-stratum mAP | 0.461 |
+| Training | ~40 h (4×A100, Snellius) |
+
+### Stage 2 — Knowledge Distillation (3 seeds: 42, 123, 999)
+
+Loss: `L_total = L_det + λ_kd × L_kd`, where `L_kd` = MSE between student and frozen teacher at P3/P4/P5. `λ_kd = 1.0`.
+
+| Metric | Value |
+|--------|-------|
+| T2 mAP@0.5 (Anti-UAV410) | **0.428 ± 0.002** |
+| T1 mAP@0.5 retained | 0.640 |
+| Forgetting Measure FM | **−0.033 ± 0.004** |
+| T1 retention | **95%** |
+| Mean cosine sim S1→S2 | **0.911** |
+| Best T2 epoch (seed 42) | 16 / 32 |
+
+<details>
+<summary>Epoch-level breakdown (seed 42, 32 epochs)</summary>
+
+| Epoch | L_det | L_kd | kd/det | T2 mAP | FM |
+|-------|-------|------|--------|--------|----|
+| 0 | 0.0580 | 0.0791 | 1.36 | 0.403 | −0.007 |
+| 5 | 0.0355 | 0.0768 | 2.16 | 0.419 | −0.035 |
+| 10 | 0.0317 | 0.0739 | 2.33 | 0.406 | −0.046 |
+| 15 | 0.0293 | 0.0712 | 2.43 | 0.417 | −0.042 |
+| **16** | **0.0289** | **0.0705** | **2.44** | **0.426** | **−0.037** |
+| 20 | 0.0273 | 0.0677 | 2.48 | 0.419 | −0.041 |
+| 25 | 0.0256 | 0.0648 | 2.54 | 0.415 | −0.044 |
+| 31 | 0.0233 | 0.0612 | 2.62 | 0.422 | −0.037 |
+
+</details>
+
+### Stage 3 — Naive Baseline (no replay, 18 epochs)
+
+| Metric | Value |
+|--------|-------|
+| FM (best checkpoint, ep. 3) | **−0.605** |
+| T1 mAP@0.5 at ep. 3 | 0.068 |
+| T1 mAP@0.5 at ep. 18 | 0.017 |
+| Large-stratum T1 mAP | **0.000** (from 0.461 after Stage 1) |
+| Normal-stratum T1 mAP | 0.079 (from 0.719) |
+| Small-stratum T1 mAP | 0.060 |
+| Mean cosine sim S2→S3 | **0.967** |
+
+**Gradient starvation signature:** cosine sim S2→S3 (0.967) is *higher* than S1→S2 (0.911), yet forgetting is 18× worse. Weights barely moved — large-target features received zero gradient signal because CST has 0% large targets vs. 85.1% normal+large in Stage 1.
+
+---
+
+## Scale-Stratified Herding (Design Contribution)
+
+Buffer built and verified using Stage 2 seed-42 checkpoint on Anti-UAV-RGBT val (60,620 UAV-present frames). Experimental comparison against naive fine-tuning is left as future work.
+
+| Stratum | Eligible frames | Selected | Sampling rate |
+|---------|----------------|----------|---------------|
+| Tiny (<16 px) | 197 | 75 | 38.1% |
+| Small (16–32 px) | 14,798 | 75 | 0.5% |
+| Normal (32–64 px) | 42,608 | 75 | 0.2% |
+| Large (>64 px) | 3,017 | 75 | 2.5% |
+| **Total** | 60,620 | **300** | — |
 
 ---
 
 ## Model: YOLOMG
 
-Dual-input YOLOv5-based detector (Guo et al., 2025):
+Dual-input YOLOv5-based detector (Guo et al., 2025). YOLOMG was selected because the original thesis scope included motion-based drone detection using the mask32 channel. As the scope narrowed to a continual learning protocol, the motion channel was fixed to zeros throughout — Anti-UAV-RGBT and Anti-UAV410 provide insufficient inter-frame motion signal at the acquisition distances and frame rates available, and pre-computing motion masks for three large datasets was not feasible within the compute budget.
 
 - `img1`: IR appearance frame
-- `img2`: Motion mask via Concat3 layer
-- 318 layers, ~3M parameters, 640×640 input
-
-At Stages 1 and 2, `img2 = zeros` (datasets have no precomputed motion masks).  
-Model config: `YOLOMG-main/models/dual_uav2.yaml`
-
----
-
-## Stage 1 Results
-
-| Metric | Value |
-|--------|-------|
-| mAP@0.5 | **0.6617** |
-| mAP@0.5:0.95 | **0.2900** |
-| Best epoch | 54 / 99 |
-| Training time | ~40 h (4×A100, Snellius HPC) |
-
-mAP@0.5:0.95 is lower than mAP@0.5, which is expected for small UAV targets —
-strict IoU thresholds are hard to satisfy when objects are only a few pixels wide.
-
----
-
-## Stage 2 Results
-
-Stage 2 implements Teacher-Student Unsupervised Domain Adaptation (UDA) on Anti-UAV410.
-The student is fine-tuned on Anti-UAV410 ground-truth annotations while a frozen copy of
-the Stage 1 model (teacher) provides a knowledge distillation signal to prevent forgetting:
-
-```
-L_total = L_det + λ_kd × L_kd
-```
-
-where `L_kd` is the MSE between student and teacher raw prediction grids at scales P3/P4/P5,
-computed before NMS. `λ_kd = 1.0`.
-
-**Job:** 22688135 — 4×A100, node gcn54, 72 h limit  
-**Completed:** 14 May 2026 — early stopping triggered at epoch 25 (patience = 15, best T2 at epoch 10)
-
-| Metric | Value |
-|--------|-------|
-| Best T2 mAP@0.5 (Anti-UAV410) | **0.4181** (epoch 10) |
-| Best T1 mAP@0.5 after T2 (Anti-UAV-RGBT) | **0.6464** (epoch 9) |
-| Forgetting Measure (FM) | **−0.0153** |
-| Total epochs | 26 (early stopping) |
-| Wall time | ~22 h (4×A100) |
-
-The FM of −0.0153 means the model retained 98.5% of its original Anti-UAV-RGBT performance
-after full Stage 2 training on Anti-UAV410. The KD loss at λ=1.0 effectively prevented
-catastrophic forgetting (unconstrained fine-tuning typically causes 20–40 pp collapse).
-
-Selected epoch-level results:
-
-| Epoch | Loss | T2 mAP@0.5 | T1 mAP@0.5 | FM |
-|-------|------|------------|------------|-----|
-| 0  | 0.1393 | 0.3976 | 0.6429 | −0.019 |
-| 5  | 0.1181 | 0.4131 | 0.6422 | −0.020 |
-| 7  | 0.1160 | 0.4165 | 0.6450 | −0.017 |
-| **10** | **0.1121** | **0.4181** | 0.6409 | −0.021 |
-| 15 | 0.1072 | 0.4024 | 0.6338 | −0.028 |
-| 20 | 0.1026 | 0.3977 | 0.6308 | −0.033 |
-| 25 | 0.0975 | 0.3969 | 0.6254 | −0.036 |
-
-![Stage 2 learning curves](docs/stage2_progress.png)
+- `img2`: zeros (motion channel — unused in this study)
+- 318 layers, 335 named parameter tensors, 640×512 input
+- Config: `YOLOMG-main/models/dual_uav2.yaml`
 
 ---
 
 ## Repository Structure
 
 ```
-YOLOMG-main/                  YOLOMG model source (Guo et al., 2025)
+YOLOMG-main/                     YOLOMG detector source (Guo et al., 2025)
 src/
-  datasets/                   Dataset wrappers (Anti-UAV-RGBT, ARD100, CST, Anti-UAV410)
-  train_stage1.py             Stage 1 DDP training (4×A100)
-  train_stage2.py             Stage 2 single-GPU training
-  train_stage2_ddp.py         Stage 2 DDP training (4×A100)
-  eval_stage1.py              Standalone eval — proper 10-threshold mAP@0.5:0.95
-  run_stage1_ddp.sh           SLURM job: Stage 1
-  run_eval_stage1.sh          SLURM job: standalone eval
-  run_stage2_ddp.sh           SLURM job: Stage 2 DDP (72 h, 4×A100)
-  meeting_2.tex               Supervisor meeting log — Week 17–18
-  meeting_3.tex               Supervisor meeting log — Week 19–20 (Stage 2 results)
-logs/                         SLURM output logs (all jobs, weeks 17–20)
+  datasets/                      Dataset loaders
+    antiuav_rgbt.py              Anti-UAV-RGBT (video, cv2.VideoCapture)
+    antiuav410.py                Anti-UAV410 (JPEG frames)
+    cst.py                       CST Anti-UAV (JPEG frames)
+    ard100.py                    ARD100 (motion mask pre-computation only)
+    base.py                      BaseUAVDataset
+  train_stage1.py                Stage 1 supervised training (DDP)
+  train_stage2.py / _ddp.py      Stage 2 KD fine-tuning (single-GPU / DDP)
+  train_stage3.py                Stage 3 naive baseline + herding replay
+  build_herding_buffer.py        Scale-Stratified Herding buffer construction
+  eval_full_analysis.py          Per-stratum mAP, PR curves, per-seq mAP
+  eval_stage1.py                 Stage 1 checkpoint evaluation
+  eval_tracking_cst.py           SOT tracking eval on CST (SR@0.5, PR@20, IDSW)
+  visualise_detections_rgbt.py   Bounding-box overlay frames
+  parameter_drift.py             Inter-stage cosine similarity analysis
+  compute_drift_s2s3.py          S2→S3 parameter drift (layer-group breakdown)
+  plot_training_analysis.py      Training curve plots
+  plot_scale_distribution.py     Scale distribution bar charts
+  plot_multirun_ci.py            Multi-seed CI plots
+  audit_datasets.py              Dataset sanity checks
+  json2yolo.py                   Annotation format conversion
+  run_stage1_ddp.sh              SLURM: Stage 1 (4×A100, 72 h)
+  run_stage2_ddp.sh              SLURM: Stage 2 DDP (4×H100)
+  run_stage3_naive.sh            SLURM: Stage 3 naive baseline
+  run_stage3_herding.sh          SLURM: Stage 3 herding (cancelled)
+  run_eval.sh                    SLURM: full evaluation
+  run_tracking_eval.sh           SLURM: tracking evaluation
+  run_vis.sh                     SLURM: detection visualisation
+  run_analysis_drift.sh          SLURM: parameter drift analysis
+  run_analysis_stage2.sh         SLURM: Stage 2 multi-seed aggregation
+  run_build_buffers.sh           SLURM: herding buffer construction
+logs/                            SLURM output logs (see logs/README.md)
 docs/
-  stage2_progress.png         Stage 2 learning curves (T2 mAP, T1 mAP, loss, FM)
+  stage2_progress.png            Stage 2 training curves
+src/figures/                     Generated paper figures
+  fig_size_distribution.png/pdf  Scale distribution across datasets
+  fig_frame_counts.png/pdf       Frame counts per dataset split
+  fig_visibility.png/pdf         Target visibility rates
 ```
 
 ---
@@ -120,57 +172,34 @@ docs/
 ## Installation (Snellius HPC)
 
 ```bash
+module load 2023
+module load Miniconda3/23.5.2-0
 conda create -n uav_master python=3.9
 conda activate uav_master
-pip install torch==2.0.1 torchvision==0.15.2 --index-url https://download.pytorch.org/whl/cu118
-pip install opencv-python-headless numpy scipy matplotlib pyyaml tqdm
+pip install torch==2.7.1+cu118 torchvision==0.22.1+cu118 torchaudio==2.7.1+cu118 \
+    --index-url https://download.pytorch.org/whl/cu118
+pip install opencv-python-headless numpy==2.0.2 scipy pandas pyyaml tqdm
+```
+
+Always use the absolute interpreter path on Snellius:
+```bash
+/home/knguyen1/.conda/envs/uav_master/bin/python script.py
 ```
 
 ---
 
-## Running
+## Implementation Notes
 
-### Stage 1
-```bash
-sbatch src/run_stage1_ddp.sh
-sbatch src/run_eval_stage1.sh   # after training — computes real mAP@0.5:0.95
-```
+**SLURM GPU syntax:** `--gres=gpu:a100:1` or `--gres=gpu:h100:1`. A100 ≈ 128 SBU/GPU-hour; H100 ≈ 768 SBU/GPU-hour.
 
-### Stage 2
-```bash
-sbatch src/run_stage2_ddp.sh
-# Reads:  runs/stage1/antiuav_rgbt14/weights/best.pt
-# Writes: runs/stage2/antiuav410*/weights/best.pt
-#         runs/stage2/antiuav410*/stage2_t2_mAP.txt
-#         runs/stage2/antiuav410*/stage2_t1_mAP.txt
-```
+**DDP:** `torchrun --standalone --nproc_per_node=4`, NCCL backend. Use `find_unused_parameters=True` — the zero motion channel leaves `backbone1` without gradients.
 
----
+**CSTDataset:** `IR_label.json` uses key `gt` (not `gt_rect`); images at `{seq}/{frame:06d}.jpg` (1-based, 6-digit).
 
-## Key Implementation Notes
+**Size bins (UAV-specific):** tiny <16 px, small 16–32 px, normal 32–64 px, large ≥64 px (longest bbox side). Standard COCO bins (32/96/192 px) are inappropriate for sub-100 px thermal UAV targets.
 
-**DDP:** `torchrun --standalone --nproc_per_node=4`, NCCL backend, 2 h timeout.
-Always use the absolute path to `torchrun` in SLURM scripts — the conda environment
-PATH is not inherited by the job scheduler.
+**VideoCapture:** `persistent_workers=False` — with `True`, workers accumulate RAM and kill long jobs (observed at Stage 1 epoch 83; best checkpoint at epoch 49 was safe).
 
-**Distributed validation:** all 4 ranks validate in parallel via `DistributedSampler` +
-`all_gather_object`, cutting val time from ~40 min to ~10 min per epoch.
+**ap_per_class (YOLOMG-specific):** returns 7 values; `correct` array must be shape `(N, num_iou_thresholds)`.
 
-**ap_per_class (YOLOMG-specific):** returns 7 values (not 5 like standard YOLOv5) and
-requires a 2D `correct` array of shape `(N, num_iou_thresholds)`. Training uses `(N,1)`,
-standalone eval uses `(N,10)` for accurate mAP@0.5:0.95.
-
-**Workers:** use `persistent_workers=False`. With `True`, VideoCapture workers accumulate
-CPU RAM over long jobs and trigger OOM. Stage 1 job 22522864 was killed at epoch 83
-for this reason; best checkpoint was already saved at epoch 54.
-
-**Teacher-Student KD:** the teacher model runs as a plain `nn.Module` (not DDP-wrapped),
-frozen under `torch.no_grad()`. Student uses `find_unused_parameters=True` because
-`img2=zeros` skips the motion branch (backbone1), leaving those parameters without
-gradients.
-
-**Dataset copying:** copy mp4 files to GPFS scratch before training (~73 s for 5.1 GB).
-Do NOT pre-extract JPEG frames — same speed as VideoCapture but costs 4 h to copy 211K files.
-
-**SLURM time limits:** Stage 1 requires ~43 h wall time (50 epochs × ~51 min/epoch at
-batch 16 on 4×A100). Set `--time=72:00:00` to be safe.
+**Total compute used:** ~113,140 SBU of a 120,000 SBU allocation (budget exhausted after Stage 3 herding crash-fix cycles).

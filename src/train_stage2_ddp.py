@@ -323,25 +323,39 @@ def _collect_stats(model, loader, device, imgsz=640):
     return stats
 
 
-def _compute_map(all_stats):
-    """Compute mAP@0.5 and mAP@0.5:0.95 from aggregated stats."""
+def _compute_metrics(all_stats):
+    """
+    Compute mAP@0.5, mAP@0.5:0.95, and per-class P/R/F1 at the optimal
+    confidence threshold (highest mean F1) from aggregated stats.
+
+    Returns: (map50, mapxx, precision, recall, f1)
+    All scalar floats (mean across classes, single-class = UAV).
+    """
     if not all_stats:
-        return 0.0, 0.0
+        return 0.0, 0.0, 0.0, 0.0, 0.0
     s = [np.concatenate(x, 0) for x in zip(*all_stats)]
     if len(s) and s[0].any():
-        _, _, _, _, _, ap, _ = ap_per_class(*s, plot=False, names={0: 'UAV'})
+        # ap_per_class returns: (tp, fp, p, r, f1, ap, unique_classes)
+        # p, r, f1 are arrays of shape (num_classes,) at the optimal threshold
+        _, _, p, r, f1, ap, _ = ap_per_class(*s, plot=False, names={0: 'UAV'})
         map50 = float(ap[:, 0].mean()) if ap.ndim == 2 else float(ap[0])
         mapxx = float(ap.mean())       if ap.ndim == 2 else float(ap.mean())
+        prec  = float(np.mean(p))
+        rec   = float(np.mean(r))
+        f1_   = float(np.mean(f1))
     else:
-        map50, mapxx = 0.0, 0.0
-    return map50, mapxx
+        map50, mapxx, prec, rec, f1_ = 0.0, 0.0, 0.0, 0.0, 0.0
+    return map50, mapxx, prec, rec, f1_
 
 
 def evaluate_ddp(model, loader, device, imgsz, rank, world_size):
     """
     Distributed evaluation: each rank collects stats on its shard,
-    all_gather_object sends everything to rank 0 for mAP computation.
+    all_gather_object sends everything to rank 0 for metric computation.
     Prevents NCCL idle-rank timeout (root cause of Stage 1 job 22501881).
+
+    Returns: (map50, mapxx, precision, recall, f1) — all float.
+    Non-rank-0 processes return (0,0,0,0,0).
     """
     local_stats = _collect_stats(model, loader, device, imgsz)
 
@@ -355,9 +369,9 @@ def evaluate_ddp(model, loader, device, imgsz, rank, world_size):
         all_stats = []
         for shard in gathered:
             all_stats.extend(shard)
-        return _compute_map(all_stats)
+        return _compute_metrics(all_stats)
     else:
-        return 0.0, 0.0
+        return 0.0, 0.0, 0.0, 0.0, 0.0
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -397,6 +411,7 @@ def load_model_from_ckpt(ckpt_path: Path, device: torch.device) -> Model:
 # ══════════════════════════════════════════════════════════════════════════════
 
 def train(save_dir: Path, device: torch.device, stage1_weights: Path,
+          save_epoch_ckpts: bool = False, save_epoch_interval: int = 5,
           rank: int = -1, local_rank: int = -1, world_size: int = 1):
 
     is_main    = rank in (-1, 0)
@@ -541,7 +556,10 @@ def train(save_dir: Path, device: torch.device, stage1_weights: Path,
         with open(csv_path, 'w', newline='') as f:
             csv.writer(f).writerow([
                 'epoch', 'loss_box', 'loss_obj', 'loss_cls', 'loss_kd',
-                'loss_total', 'mAP50_T2', 'mAP50_T1', 'lr'
+                'loss_total',
+                'mAP50_T2', 'P_T2', 'R_T2', 'F1_T2',
+                'mAP50_T1', 'P_T1', 'R_T1', 'F1_T1',
+                'lr',
             ])
 
     # ── Training loop ─────────────────────────────────────────────────────────
@@ -638,10 +656,10 @@ def train(save_dir: Path, device: torch.device, stage1_weights: Path,
         t_epoch  = datetime.now().strftime('%H:%M:%S') if is_main else ''
         eval_model = ema.ema if ema is not None else de_parallel(student)
 
-        map50_t2, _ = evaluate_ddp(eval_model, val_loader_t2,
-                                    device, IMG_SIZE, rank, world_size)
-        map50_t1, _ = evaluate_ddp(eval_model, val_loader_t1,
-                                    device, IMG_SIZE, rank, world_size)
+        map50_t2, _, p_t2, r_t2, f1_t2 = evaluate_ddp(
+            eval_model, val_loader_t2, device, IMG_SIZE, rank, world_size)
+        map50_t1, _, p_t1, r_t1, f1_t1 = evaluate_ddp(
+            eval_model, val_loader_t1, device, IMG_SIZE, rank, world_size)
 
         lr_now         = optimizer.param_groups[0]['lr']
         total_loss_val = mloss.sum().item()
@@ -653,8 +671,8 @@ def train(save_dir: Path, device: torch.device, stage1_weights: Path,
             log.info(
                 f'\nEpoch {epoch:3d}/{EPOCHS-1}  [{t_epoch}]  '
                 f'loss={total_loss_val:.4f}  '
-                f'mAP@0.5(T2/UAV410)={map50_t2:.4f}  '
-                f'mAP@0.5(T1/RGBT)={map50_t1:.4f}\n'
+                f'T2: mAP@0.5={map50_t2:.4f}  P={p_t2:.4f}  R={r_t2:.4f}  F1={f1_t2:.4f}  '
+                f'T1: mAP@0.5={map50_t1:.4f}  P={p_t1:.4f}  R={r_t1:.4f}  F1={f1_t1:.4f}\n'
             )
 
             with open(csv_path, 'a', newline='') as f:
@@ -662,7 +680,10 @@ def train(save_dir: Path, device: torch.device, stage1_weights: Path,
                     epoch,
                     mloss[0].item(), mloss[1].item(),
                     mloss[2].item(), mloss[3].item(),
-                    total_loss_val, map50_t2, map50_t1, lr_now
+                    total_loss_val,
+                    map50_t2, p_t2, r_t2, f1_t2,
+                    map50_t1, p_t1, r_t1, f1_t1,
+                    lr_now,
                 ])
 
             ckpt = {
@@ -678,6 +699,13 @@ def train(save_dir: Path, device: torch.device, stage1_weights: Path,
                 'date':      datetime.now().isoformat(),
             }
             torch.save(ckpt, last_path)
+
+            # ── Optional per-epoch checkpoint ─────────────────────────
+            if save_epoch_ckpts and (epoch % save_epoch_interval == 0 or epoch == EPOCHS - 1):
+                epoch_path = save_dir / 'weights' / f'epoch_{epoch:03d}.pt'
+                torch.save(ckpt, epoch_path)
+                log.info(f'  Epoch checkpoint saved: {epoch_path}')
+
             if map50_t2 > best_t2:
                 best_t2 = map50_t2
                 torch.save(ckpt, best_path)
@@ -720,14 +748,21 @@ def train(save_dir: Path, device: torch.device, stage1_weights: Path,
 
 def parse_args():
     p = argparse.ArgumentParser(description='Stage 2: Teacher-Student UDA on AntiUAV410')
-    p.add_argument('--weights',    type=str, default=str(DEFAULT_STAGE1_WEIGHTS))
-    p.add_argument('--epochs',     type=int, default=EPOCHS)
-    p.add_argument('--batch-size', type=int, default=BATCH_SIZE)
-    p.add_argument('--imgsz',      type=int, default=IMG_SIZE)
-    p.add_argument('--workers',    type=int, default=WORKERS)
-    p.add_argument('--device',     type=str, default='')
-    p.add_argument('--kd-weight',  type=float, default=KD_WEIGHT)
-    p.add_argument('--name',       type=str, default='antiuav410')
+    p.add_argument('--weights',              type=str,   default=str(DEFAULT_STAGE1_WEIGHTS))
+    p.add_argument('--epochs',               type=int,   default=EPOCHS)
+    p.add_argument('--batch-size',           type=int,   default=BATCH_SIZE)
+    p.add_argument('--imgsz',                type=int,   default=IMG_SIZE)
+    p.add_argument('--workers',              type=int,   default=WORKERS)
+    p.add_argument('--device',               type=str,   default='')
+    p.add_argument('--kd-weight',            type=float, default=KD_WEIGHT)
+    p.add_argument('--name',                 type=str,   default='antiuav410')
+    p.add_argument('--seed',                 type=int,   default=SEED,
+                   help='Random seed (change for multi-run confidence intervals)')
+    p.add_argument('--save-epoch-ckpts',     action='store_true',
+                   help='Save a checkpoint every --save-epoch-interval epochs '
+                        '(enables per-epoch P/R/F1 re-evaluation)')
+    p.add_argument('--save-epoch-interval',  type=int,   default=5,
+                   help='Epoch stride for per-epoch checkpoint saving (default: 5)')
     return p.parse_args()
 
 
@@ -739,6 +774,7 @@ if __name__ == '__main__':
     IMG_SIZE   = args.imgsz
     WORKERS    = args.workers
     KD_WEIGHT  = args.kd_weight
+    SEED       = args.seed
 
     # ── DDP setup ─────────────────────────────────────────────────────────────
     LOCAL_RANK = int(os.environ.get('LOCAL_RANK', -1))
@@ -774,4 +810,6 @@ if __name__ == '__main__':
         save_dir = Path(obj[0])
 
     train(save_dir, device, stage1_weights=Path(args.weights),
+          save_epoch_ckpts=args.save_epoch_ckpts,
+          save_epoch_interval=args.save_epoch_interval,
           rank=RANK, local_rank=LOCAL_RANK, world_size=WORLD_SIZE)
