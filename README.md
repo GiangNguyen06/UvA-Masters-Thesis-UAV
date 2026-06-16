@@ -190,7 +190,7 @@ Always use the absolute interpreter path on Snellius:
 
 ## Implementation Notes
 
-**SLURM GPU syntax:** `--gres=gpu:a100:1` or `--gres=gpu:h100:1`. A100 ≈ 128 SBU/GPU-hour; H100 ≈ 768 SBU/GPU-hour.
+**SLURM GPU syntax:** `--gres=gpu:a100:1` or `--gres=gpu:h100:1`. A100 ≈ 128 SBU/GPU-hour; H100 ≈ 192 SBU/GPU-hour (768 SBU/wall-hour for a 4-GPU job).
 
 **DDP:** `torchrun --standalone --nproc_per_node=4`, NCCL backend. Use `find_unused_parameters=True` — the zero motion channel leaves `backbone1` without gradients.
 
