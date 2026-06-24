@@ -1,0 +1,296 @@
+==============================
+Build replay buffers from TRAIN split
+Job ID  : 24193905
+Node    : gcn19
+Started : Wed Jun 24 20:07:56 CEST 2026
+==============================
+--- Herding buffer (train split) ---
+Scale-Stratified Herding Buffer Builder
+  Mode       : herding
+  Weights    : /projects/prjs2041/runs/stage2/seed42/weights/best.pt  (Stage 2)
+  Data       : /projects/prjs2041/datasets/Anti-UAV-RGBT
+  K/stratum  : 75
+  Output     : /projects/prjs2041/runs/stage2/seed42/herding_buffer_train.pt
+
+Loading Stage 2 model …
+  Epoch 16  best_fitness=?
+
+Loading Anti-UAV-RGBT train (UAV-present frames only) …
+  148,368 UAV-present frames  |  4637 batches
+
+Extracting embeddings …
+  [50/4637] 1,600 frames processed
+  [100/4637] 3,200 frames processed
+  [150/4637] 4,800 frames processed
+  [200/4637] 6,400 frames processed
+  [250/4637] 8,000 frames processed
+  [300/4637] 9,600 frames processed
+  [350/4637] 11,200 frames processed
+  [400/4637] 12,800 frames processed
+  [450/4637] 14,400 frames processed
+  [500/4637] 16,000 frames processed
+  [550/4637] 17,600 frames processed
+  [600/4637] 19,200 frames processed
+  [650/4637] 20,800 frames processed
+  [700/4637] 22,400 frames processed
+  [750/4637] 24,000 frames processed
+  [800/4637] 25,600 frames processed
+  [850/4637] 27,200 frames processed
+  [900/4637] 28,800 frames processed
+  [950/4637] 30,400 frames processed
+  [1000/4637] 32,000 frames processed
+  [1050/4637] 33,600 frames processed
+  [1100/4637] 35,200 frames processed
+  [1150/4637] 36,800 frames processed
+  [1200/4637] 38,400 frames processed
+  [1250/4637] 40,000 frames processed
+  [1300/4637] 41,600 frames processed
+  [1350/4637] 43,200 frames processed
+  [1400/4637] 44,800 frames processed
+  [1450/4637] 46,400 frames processed
+  [1500/4637] 48,000 frames processed
+  [1550/4637] 49,600 frames processed
+  [1600/4637] 51,200 frames processed
+  [1650/4637] 52,800 frames processed
+  [1700/4637] 54,400 frames processed
+  [1750/4637] 56,000 frames processed
+  [1800/4637] 57,600 frames processed
+  [1850/4637] 59,200 frames processed
+  [1900/4637] 60,800 frames processed
+  [1950/4637] 62,400 frames processed
+  [2000/4637] 64,000 frames processed
+  [2050/4637] 65,600 frames processed
+  [2100/4637] 67,200 frames processed
+  [2150/4637] 68,800 frames processed
+  [2200/4637] 70,400 frames processed
+  [2250/4637] 72,000 frames processed
+  [2300/4637] 73,600 frames processed
+  [2350/4637] 75,200 frames processed
+  [2400/4637] 76,800 frames processed
+  [2450/4637] 78,400 frames processed
+  [2500/4637] 80,000 frames processed
+  [2550/4637] 81,600 frames processed
+  [2600/4637] 83,200 frames processed
+  [2650/4637] 84,800 frames processed
+  [2700/4637] 86,400 frames processed
+  [2750/4637] 88,000 frames processed
+  [2800/4637] 89,600 frames processed
+  [2850/4637] 91,200 frames processed
+  [2900/4637] 92,800 frames processed
+  [2950/4637] 94,400 frames processed
+  [3000/4637] 96,000 frames processed
+  [3050/4637] 97,600 frames processed
+  [3100/4637] 99,200 frames processed
+  [3150/4637] 100,800 frames processed
+  [3200/4637] 102,400 frames processed
+  [3250/4637] 104,000 frames processed
+  [3300/4637] 105,600 frames processed
+  [3350/4637] 107,200 frames processed
+  [3400/4637] 108,800 frames processed
+  [3450/4637] 110,400 frames processed
+  [3500/4637] 112,000 frames processed
+  [3550/4637] 113,600 frames processed
+  [3600/4637] 115,200 frames processed
+  [3650/4637] 116,800 frames processed
+  [3700/4637] 118,400 frames processed
+  [3750/4637] 120,000 frames processed
+  [3800/4637] 121,600 frames processed
+  [3850/4637] 123,200 frames processed
+  [3900/4637] 124,800 frames processed
+  [3950/4637] 126,400 frames processed
+  [4000/4637] 128,000 frames processed
+  [4050/4637] 129,600 frames processed
+  [4100/4637] 131,200 frames processed
+  [4150/4637] 132,800 frames processed
+  [4200/4637] 134,400 frames processed
+  [4250/4637] 136,000 frames processed
+  [4300/4637] 137,600 frames processed
+  [4350/4637] 139,200 frames processed
+  [4400/4637] 140,800 frames processed
+  [4450/4637] 142,400 frames processed
+  [4500/4637] 144,000 frames processed
+  [4550/4637] 145,600 frames processed
+  [4600/4637] 147,200 frames processed
+
+  Total frames with embeddings: 148,368
+
+Stratum distribution:
+  tiny    :  1,091 frames
+  small   : 43,560 frames
+  normal  : 98,929 frames
+  large   :  4,788 frames
+
+Running greedy herding (k=75 per stratum) …
+  tiny    :  1,091 available → 75 selected
+  small   : 43,560 available → 75 selected
+  normal  : 98,929 available → 75 selected
+  large   :  4,788 available → 75 selected
+
+Building buffer from 300 exemplars …
+  Buffer saved : /projects/prjs2041/runs/stage2/seed42/herding_buffer_train.pt
+  Buffer size  : 281.1 KB
+
+Scale-Stratified Buffer  [HERDING]
+Weights   : /projects/prjs2041/runs/stage2/seed42/weights/best.pt  (Stage 2)
+K/stratum : 75
+Mode      : herding
+
+Stratum     Available   Selected
+-----------------------------------
+tiny            1,091         75
+small          43,560         75
+normal         98,929         75
+large           4,788         75
+-----------------------------------
+TOTAL         148,368        300
+
+Stats: /projects/prjs2041/runs/stage2/seed42/herding_buffer_train.txt
+Done.
+--- Random-stratified buffer (train split) ---
+Scale-Stratified Herding Buffer Builder
+  Mode       : random
+  Weights    : /projects/prjs2041/runs/stage2/seed42/weights/best.pt  (Stage 2)
+  Data       : /projects/prjs2041/datasets/Anti-UAV-RGBT
+  K/stratum  : 75
+  Output     : /projects/prjs2041/runs/stage2/seed42/herding_buffer_random_train.pt
+
+Loading Stage 2 model …
+  Epoch 16  best_fitness=?
+
+Loading Anti-UAV-RGBT train (UAV-present frames only) …
+  148,368 UAV-present frames  |  4637 batches
+
+Extracting embeddings …
+  [50/4637] 1,600 frames processed
+  [100/4637] 3,200 frames processed
+  [150/4637] 4,800 frames processed
+  [200/4637] 6,400 frames processed
+  [250/4637] 8,000 frames processed
+  [300/4637] 9,600 frames processed
+  [350/4637] 11,200 frames processed
+  [400/4637] 12,800 frames processed
+  [450/4637] 14,400 frames processed
+  [500/4637] 16,000 frames processed
+  [550/4637] 17,600 frames processed
+  [600/4637] 19,200 frames processed
+  [650/4637] 20,800 frames processed
+  [700/4637] 22,400 frames processed
+  [750/4637] 24,000 frames processed
+  [800/4637] 25,600 frames processed
+  [850/4637] 27,200 frames processed
+  [900/4637] 28,800 frames processed
+  [950/4637] 30,400 frames processed
+  [1000/4637] 32,000 frames processed
+  [1050/4637] 33,600 frames processed
+  [1100/4637] 35,200 frames processed
+  [1150/4637] 36,800 frames processed
+  [1200/4637] 38,400 frames processed
+  [1250/4637] 40,000 frames processed
+  [1300/4637] 41,600 frames processed
+  [1350/4637] 43,200 frames processed
+  [1400/4637] 44,800 frames processed
+  [1450/4637] 46,400 frames processed
+  [1500/4637] 48,000 frames processed
+  [1550/4637] 49,600 frames processed
+  [1600/4637] 51,200 frames processed
+  [1650/4637] 52,800 frames processed
+  [1700/4637] 54,400 frames processed
+  [1750/4637] 56,000 frames processed
+  [1800/4637] 57,600 frames processed
+  [1850/4637] 59,200 frames processed
+  [1900/4637] 60,800 frames processed
+  [1950/4637] 62,400 frames processed
+  [2000/4637] 64,000 frames processed
+  [2050/4637] 65,600 frames processed
+  [2100/4637] 67,200 frames processed
+  [2150/4637] 68,800 frames processed
+  [2200/4637] 70,400 frames processed
+  [2250/4637] 72,000 frames processed
+  [2300/4637] 73,600 frames processed
+  [2350/4637] 75,200 frames processed
+  [2400/4637] 76,800 frames processed
+  [2450/4637] 78,400 frames processed
+  [2500/4637] 80,000 frames processed
+  [2550/4637] 81,600 frames processed
+  [2600/4637] 83,200 frames processed
+  [2650/4637] 84,800 frames processed
+  [2700/4637] 86,400 frames processed
+  [2750/4637] 88,000 frames processed
+  [2800/4637] 89,600 frames processed
+  [2850/4637] 91,200 frames processed
+  [2900/4637] 92,800 frames processed
+  [2950/4637] 94,400 frames processed
+  [3000/4637] 96,000 frames processed
+  [3050/4637] 97,600 frames processed
+  [3100/4637] 99,200 frames processed
+  [3150/4637] 100,800 frames processed
+  [3200/4637] 102,400 frames processed
+  [3250/4637] 104,000 frames processed
+  [3300/4637] 105,600 frames processed
+  [3350/4637] 107,200 frames processed
+  [3400/4637] 108,800 frames processed
+  [3450/4637] 110,400 frames processed
+  [3500/4637] 112,000 frames processed
+  [3550/4637] 113,600 frames processed
+  [3600/4637] 115,200 frames processed
+  [3650/4637] 116,800 frames processed
+  [3700/4637] 118,400 frames processed
+  [3750/4637] 120,000 frames processed
+  [3800/4637] 121,600 frames processed
+  [3850/4637] 123,200 frames processed
+  [3900/4637] 124,800 frames processed
+  [3950/4637] 126,400 frames processed
+  [4000/4637] 128,000 frames processed
+  [4050/4637] 129,600 frames processed
+  [4100/4637] 131,200 frames processed
+  [4150/4637] 132,800 frames processed
+  [4200/4637] 134,400 frames processed
+  [4250/4637] 136,000 frames processed
+  [4300/4637] 137,600 frames processed
+  [4350/4637] 139,200 frames processed
+  [4400/4637] 140,800 frames processed
+  [4450/4637] 142,400 frames processed
+  [4500/4637] 144,000 frames processed
+  [4550/4637] 145,600 frames processed
+  [4600/4637] 147,200 frames processed
+
+  Total frames with embeddings: 148,368
+
+Stratum distribution:
+  tiny    :  1,091 frames
+  small   : 43,560 frames
+  normal  : 98,929 frames
+  large   :  4,788 frames
+
+Running random selection (k=75 per stratum) …
+  tiny    :  1,091 available → 75 selected
+  small   : 43,560 available → 75 selected
+  normal  : 98,929 available → 75 selected
+  large   :  4,788 available → 75 selected
+
+Building buffer from 300 exemplars …
+  Buffer saved : /projects/prjs2041/runs/stage2/seed42/herding_buffer_random_train.pt
+  Buffer size  : 298.3 KB
+
+Scale-Stratified Buffer  [RANDOM]
+Weights   : /projects/prjs2041/runs/stage2/seed42/weights/best.pt  (Stage 2)
+K/stratum : 75
+Mode      : random
+
+Stratum     Available   Selected
+-----------------------------------
+tiny            1,091         75
+small          43,560         75
+normal         98,929         75
+large           4,788         75
+-----------------------------------
+TOTAL         148,368        300
+
+Stats: /projects/prjs2041/runs/stage2/seed42/herding_buffer_random_train.txt
+Done.
+==============================
+Output files:
+-rw-rw----. 1 knguyen1 prjs2041 299K Jun 24 20:48 /projects/prjs2041/runs/stage2/seed42/herding_buffer_random_train.pt
+-rw-rw----. 1 knguyen1 prjs2041 282K Jun 24 20:29 /projects/prjs2041/runs/stage2/seed42/herding_buffer_train.pt
+Done: Wed Jun 24 20:48:37 CEST 2026
+==============================

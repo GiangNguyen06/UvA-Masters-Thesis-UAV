@@ -1,0 +1,52 @@
+==============================
+Per-stratum T1 eval — Stage 2 seeds 123 and 999
+Job ID  : 24193902
+Started : Wed Jun 24 20:07:44 CEST 2026
+==============================
+--- Seed 123 ---
+
+Anti-UAV-RGBT val split: 61,999 frames
+
+Evaluating After Stage 1: /projects/prjs2041/runs/stage1/antiuav_rgbt15/weights/best.pt
+Evaluating After Stage 2: /projects/prjs2041/runs/stage2/seed123/weights/best.pt
+
+========================================================================
+PER-STRATUM T1 mAP@0.5 on Anti-UAV-RGBT val split
+========================================================================
+Stratum              After Stage 1     After Stage 2
+tiny                         0.009             0.020
+small                        0.578             0.560
+normal                       0.719             0.684
+large                        0.461             0.499
+Overall                      0.673             0.640
+========================================================================
+
+Large-stratum T1 mAP:  after S1 = 0.461  ->  after S2 = 0.499   (drop = +0.038)
+If close, KD genuinely preserved the large stratum; if it has already dropped, the 95% overall figure is partly T1/T2 scale overlap.
+
+Saved: /projects/prjs2041/runs/diagnostics/stratum_t1/seed123/stratum_t1_val.csv
+--- Seed 999 ---
+
+Anti-UAV-RGBT val split: 61,999 frames
+
+Evaluating After Stage 1: /projects/prjs2041/runs/stage1/antiuav_rgbt15/weights/best.pt
+Evaluating After Stage 2: /projects/prjs2041/runs/stage2/seed999/weights/best.pt
+
+========================================================================
+PER-STRATUM T1 mAP@0.5 on Anti-UAV-RGBT val split
+========================================================================
+Stratum              After Stage 1     After Stage 2
+tiny                         0.009             0.013
+small                        0.578             0.552
+normal                       0.719             0.687
+large                        0.461             0.487
+Overall                      0.673             0.641
+========================================================================
+
+Large-stratum T1 mAP:  after S1 = 0.461  ->  after S2 = 0.487   (drop = +0.027)
+If close, KD genuinely preserved the large stratum; if it has already dropped, the 95% overall figure is partly T1/T2 scale overlap.
+
+Saved: /projects/prjs2041/runs/diagnostics/stratum_t1/seed999/stratum_t1_val.csv
+==============================
+Done: Wed Jun 24 20:48:26 CEST 2026
+==============================

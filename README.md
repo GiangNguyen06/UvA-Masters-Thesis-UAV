@@ -26,7 +26,7 @@ Thermal infrared UAV detectors must remain accurate as operational datasets evol
 | **H1** | Is catastrophic forgetting measurable under the three-stage curriculum? | FM = −0.605; scale shift drives 18× more forgetting than domain shift |
 | **RQ1** | Does Knowledge Distillation preserve T1 performance during T2 domain shift? | FM = −0.033 ± 0.004 across three seeds; 95% T1 retention |
 | **RQ2** | Does scale-distribution shift characterise the forgetting pattern in Stage 3? | Large-target collapse to 0.000 mAP despite cosine sim 0.987; evidence points to scale-conditioned gradient imbalance |
-| **RQ3** | Does Scale-Stratified Herding mitigate large-target forgetting? | Buffer built and integrated; empirical comparison left as future work |
+| **RQ3** | Does Scale-Stratified Herding mitigate large-target forgetting? | SSH reduced FM from −0.605 to −0.311 (49% less forgetting); large-target mAP recovered from 0.000 to 0.079 |
 
 ---
 
@@ -47,7 +47,7 @@ Thermal infrared UAV detectors must remain accurate as operational datasets evol
 | 1 | Supervised baseline | Anti-UAV-RGBT (208,737 frames) | mAP@0.5 = **0.6725** |
 | 2 | KD fine-tuning | Anti-UAV410 (438,397 frames) | FM = **−0.033 ± 0.004** (3 seeds) |
 | 3 | Naive baseline | CST Anti-UAV (245,471 frames) | FM = **−0.605**, best at epoch 3 |
-| 3 | Scale-Stratified Herding | CST Anti-UAV | Buffer built and integrated; empirical comparison left as future work |
+| 3 | Scale-Stratified Herding (SSH) | CST Anti-UAV | FM = **−0.311** at best checkpoint (ep. 2); large-target mAP 0.000 → **0.079** |
 
 ---
 
@@ -72,12 +72,24 @@ Loss: `L_total = L_det + λ_kd × L_kd`, where `L_kd` = MSE between student and 
 | Metric | Value |
 |--------|-------|
 | T2 mAP@0.5 (Anti-UAV410) | **0.428 ± 0.002** |
-| T1 mAP@0.5 retained | 0.640 |
+| T1 mAP@0.5 retained | **0.640 ± 0.001** (3 seeds) |
 | Forgetting Measure FM | **−0.033 ± 0.004** |
 | T1 retention | **95%** |
 | Mean cosine sim S1→S2 (all-params) | **0.911** (per-seed: 0.917 / 0.921 / 0.896) |
 | Mean cosine sim S1→S2 (learnable-only) | **0.935** (seed 42) |
 | Best T2 epoch (seed 42) | 16 / 32 |
+
+Per-stratum T1 mAP after Stage 2 (mean ± std, 3 seeds):
+
+| Stratum | After S1 | After S2 (mean ± std) |
+|---------|----------|----------------------|
+| tiny | 0.009 | 0.018 ± 0.005 |
+| small | 0.579 | 0.559 ± 0.006 |
+| normal | 0.719 | 0.684 ± 0.004 |
+| large | 0.461 | **0.494 ± 0.006** |
+| overall | 0.673 | **0.640 ± 0.001** |
+
+KD preserves — and marginally improves — large-target detection across all three seeds (0.461 → 0.494), making the Stage 3 collapse to 0.000 more striking.
 
 <details>
 <summary>Epoch-level breakdown (seed 42, 32 epochs)</summary>
@@ -111,6 +123,23 @@ Loss: `L_total = L_det + λ_kd × L_kd`, where `L_kd` = MSE between student and 
 | P5 head gradient ratio RGBT/CST | **1.7×** (0.654 vs 0.387) |
 
 **Candidate mechanism — scale-conditioned gradient imbalance:** learnable-parameter cosine similarity S2→S3 is 0.987 — weights barely moved — yet forgetting is 18× worse than Stage 2. Large-target features received no positive gradient signal from CST's distribution (0% large targets). BN running statistics drift 2× more than conv weights, suggesting the network adapts its normalisation to CST's tiny-target distribution while gradient-updated parameters remain largely unchanged. The P5 head gradient ratio RGBT/CST = 1.7× provides direct evidence of large-target gradient starvation, though a definitive causal mechanism remains tentative.
+
+### Stage 3 — Scale-Stratified Herding (SSH, seed 42, 5 epochs)
+
+Buffer: 300 exemplars (75 per stratum) sampled from the **training** split of Anti-UAV-RGBT via greedy feature-space selection using the Stage 2 model. Replay ratio: 25% of each batch (4 replay samples per 16 CST samples). Replay weight: 4.0.
+
+| Metric | Naive baseline | SSH |
+|--------|---------------|-----|
+| Best checkpoint epoch | 3 | **2** |
+| T3 mAP@0.5 (CST) | 0.083 | 0.064 |
+| T1 mAP@0.5 at best ep. | 0.068 | **0.362** |
+| FM (vs T1 ceiling) | −0.605 | **−0.311** |
+| Tiny-stratum T1 mAP | 0.001 | 0.093 |
+| Small-stratum T1 mAP | 0.067 | 0.232 |
+| Normal-stratum T1 mAP | 0.088 | 0.415 |
+| Large-stratum T1 mAP | **0.000** | **0.079** |
+
+SSH reduces forgetting by ~49% relative to the naive baseline (FM −0.311 vs −0.605). Large-target mAP recovers from complete absence (0.000) to 0.079. The replay loss decays steadily across epochs (0.033 → 0.004), indicating the network adapts quickly to the exemplar signal. T3 performance is modestly lower than naive (0.064 vs 0.083), reflecting the plasticity–stability trade-off inherent to replay-based methods.
 
 ---
 

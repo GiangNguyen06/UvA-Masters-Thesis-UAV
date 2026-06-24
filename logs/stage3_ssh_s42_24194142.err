@@ -1,0 +1,407 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+Stage 3 — HERDING condition  →  /projects/prjs2041/runs/stage3/ssh_s42
+Stage 2 weights : /projects/prjs2041/runs/stage2/seed42/weights/best.pt
+Replay buffer   : /projects/prjs2041/runs/stage2/seed42/herding_buffer_train.pt
+Replay ratio    : 25% of each batch  (4 samples)
+Replay weight   : 4.0
+
+Loading datasets …
+  CST train: 127,991  val: 45,305
+  T1 val (RGBT): 61,999
+  Replay: 300 exemplars
+  Replay batch size: 4 per step
+
+Loading Stage 2 weights from /projects/prjs2041/runs/stage2/seed42/weights/best.pt …
+
+                 from  n    params  module                                  arguments                     
+
+                 from  n    params  module                                  arguments                     
+
+                 from  n    params  module                                  arguments                     
+  0                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+
+                 from  n    params  module                                  arguments                     
+  0                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  1                -1  1       336  models.common.C3                        [8, 8]                        
+  2                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  0                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  1                -1  1       336  models.common.C3                        [8, 8]                        
+  2                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  3                -1  1       336  models.common.C3                        [8, 8, 1]                     
+  0                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  1                -1  1       336  models.common.C3                        [8, 8]                        
+  4           [-1, 1]  1       130  models.common.Concat3                   [16, 1]                       
+  2                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  3                -1  1       336  models.common.C3                        [8, 8, 1]                     
+  1                -1  1       336  models.common.C3                        [8, 8]                        
+  4           [-1, 1]  1       130  models.common.Concat3                   [16, 1]                       
+  5                -1  1      1248  models.common.C3                        [16, 16, 1]                   
+  2                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  3                -1  1       336  models.common.C3                        [8, 8, 1]                     
+  6                -1  1      4672  models.common.Conv                      [16, 32, 3, 2]                
+  4           [-1, 1]  1       130  models.common.Concat3                   [16, 1]                       
+  5                -1  1      1248  models.common.C3                        [16, 16, 1]                   
+  3                -1  1       336  models.common.C3                        [8, 8, 1]                     
+  6                -1  1      4672  models.common.Conv                      [16, 32, 3, 2]                
+  4           [-1, 1]  1       130  models.common.Concat3                   [16, 1]                       
+  5                -1  1      1248  models.common.C3                        [16, 16, 1]                   
+  7                -1  1      4800  models.common.C3                        [32, 32, 1]                   
+  6                -1  1      4672  models.common.Conv                      [16, 32, 3, 2]                
+  7                -1  1      4800  models.common.C3                        [32, 32, 1]                   
+  8                -1  1     18560  models.common.Conv                      [32, 64, 3, 2]                
+  5                -1  1      1248  models.common.C3                        [16, 16, 1]                   
+  8                -1  1     18560  models.common.Conv                      [32, 64, 3, 2]                
+  6                -1  1      4672  models.common.Conv                      [16, 32, 3, 2]                
+  7                -1  1      4800  models.common.C3                        [32, 32, 1]                   
+  9                -1  1     18816  models.common.C3                        [64, 64, 1]                   
+  8                -1  1     18560  models.common.Conv                      [32, 64, 3, 2]                
+  7                -1  1      4800  models.common.C3                        [32, 32, 1]                   
+ 10                -1  1     73984  models.common.Conv                      [64, 128, 3, 2]               
+  8                -1  1     18560  models.common.Conv                      [32, 64, 3, 2]                
+  9                -1  1     18816  models.common.C3                        [64, 64, 1]                   
+  9                -1  1     18816  models.common.C3                        [64, 64, 1]                   
+ 10                -1  1     73984  models.common.Conv                      [64, 128, 3, 2]               
+  9                -1  1     18816  models.common.C3                        [64, 64, 1]                   
+ 10                -1  1     73984  models.common.Conv                      [64, 128, 3, 2]               
+ 10                -1  1     73984  models.common.Conv                      [64, 128, 3, 2]               
+ 11                -1  3    156928  models.common.C3                        [128, 128, 3]                 
+ 12                -1  1     41344  models.common.SPPF                      [128, 128, 5]                 
+ 11                -1  3    156928  models.common.C3                        [128, 128, 3]                 
+ 13                -1  1     33280  models.common.Conv                      [128, 256, 1, 1]              
+ 11                -1  3    156928  models.common.C3                        [128, 128, 3]                 
+ 14                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 15           [-1, 9]  1         0  models.common.Concat                    [1]                           
+ 11                -1  3    156928  models.common.C3                        [128, 128, 3]                 
+ 12                -1  1     41344  models.common.SPPF                      [128, 128, 5]                 
+ 13                -1  1     33280  models.common.Conv                      [128, 256, 1, 1]              
+ 12                -1  1     41344  models.common.SPPF                      [128, 128, 5]                 
+ 14                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 15           [-1, 9]  1         0  models.common.Concat                    [1]                           
+ 13                -1  1     33280  models.common.Conv                      [128, 256, 1, 1]              
+ 14                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 15           [-1, 9]  1         0  models.common.Concat                    [1]                           
+ 16                -1  1    312832  models.common.C3                        [320, 256, 1, False]          
+ 17                -1  1     33024  models.common.Conv                      [256, 128, 1, 1]              
+ 18                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 19           [-1, 6]  1         0  models.common.Concat                    [1]                           
+ 16                -1  1    312832  models.common.C3                        [320, 256, 1, False]          
+ 17                -1  1     33024  models.common.Conv                      [256, 128, 1, 1]              
+ 18                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 16                -1  1    312832  models.common.C3                        [320, 256, 1, False]          
+ 19           [-1, 6]  1         0  models.common.Concat                    [1]                           
+ 20                -1  1     78592  models.common.C3                        [160, 128, 1, False]          
+ 17                -1  1     33024  models.common.Conv                      [256, 128, 1, 1]              
+ 18                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 19           [-1, 6]  1         0  models.common.Concat                    [1]                           
+ 21                -1  1    147712  models.common.Conv                      [128, 128, 3, 2]              
+ 22          [-1, 16]  1         0  models.common.Concat                    [1]                           
+ 20                -1  1     78592  models.common.C3                        [160, 128, 1, False]          
+ 20                -1  1     78592  models.common.C3                        [160, 128, 1, False]          
+ 21                -1  1    147712  models.common.Conv                      [128, 128, 3, 2]              
+ 22          [-1, 16]  1         0  models.common.Concat                    [1]                           
+ 21                -1  1    147712  models.common.Conv                      [128, 128, 3, 2]              
+ 22          [-1, 16]  1         0  models.common.Concat                    [1]                           
+ 12                -1  1     41344  models.common.SPPF                      [128, 128, 5]                 
+ 13                -1  1     33280  models.common.Conv                      [128, 256, 1, 1]              
+ 23                -1  1    329216  models.common.C3                        [384, 256, 1, False]          
+ 14                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 15           [-1, 9]  1         0  models.common.Concat                    [1]                           
+ 23                -1  1    329216  models.common.C3                        [384, 256, 1, False]          
+ 23                -1  1    329216  models.common.C3                        [384, 256, 1, False]          
+ 16                -1  1    312832  models.common.C3                        [320, 256, 1, False]          
+ 24                -1  1    590336  models.common.Conv                      [256, 256, 3, 2]              
+ 25          [-1, 12]  1         0  models.common.Concat                    [1]                           
+ 17                -1  1     33024  models.common.Conv                      [256, 128, 1, 1]              
+ 18                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 19           [-1, 6]  1         0  models.common.Concat                    [1]                           
+ 24                -1  1    590336  models.common.Conv                      [256, 256, 3, 2]              
+ 24                -1  1    590336  models.common.Conv                      [256, 256, 3, 2]              
+ 25          [-1, 12]  1         0  models.common.Concat                    [1]                           
+ 25          [-1, 12]  1         0  models.common.Concat                    [1]                           
+ 20                -1  1     78592  models.common.C3                        [160, 128, 1, False]          
+ 21                -1  1    147712  models.common.Conv                      [128, 128, 3, 2]              
+ 22          [-1, 16]  1         0  models.common.Concat                    [1]                           
+ 23                -1  1    329216  models.common.C3                        [384, 256, 1, False]          
+ 26                -1  1   1117184  models.common.C3                        [384, 512, 1, False]          
+ 27      [20, 23, 26]  1     16182  models.yolo.Detect                      [1, [[3, 2, 4, 3, 4, 3], [6, 4, 7, 5, 9, 6], [12, 7, 15, 9, 26, 14]], [128, 256, 512]]
+ 26                -1  1   1117184  models.common.C3                        [384, 512, 1, False]          
+ 26                -1  1   1117184  models.common.C3                        [384, 512, 1, False]          
+ 24                -1  1    590336  models.common.Conv                      [256, 256, 3, 2]              
+ 25          [-1, 12]  1         0  models.common.Concat                    [1]                           
+ 27      [20, 23, 26]  1     16182  models.yolo.Detect                      [1, [[3, 2, 4, 3, 4, 3], [6, 4, 7, 5, 9, 6], [12, 7, 15, 9, 26, 14]], [128, 256, 512]]
+ 27      [20, 23, 26]  1     16182  models.yolo.Detect                      [1, [[3, 2, 4, 3, 4, 3], [6, 4, 7, 5, 9, 6], [12, 7, 15, 9, 26, 14]], [128, 256, 512]]
+ 26                -1  1   1117184  models.common.C3                        [384, 512, 1, False]          
+ 27      [20, 23, 26]  1     16182  models.yolo.Detect                      [1, [[3, 2, 4, 3, 4, 3], [6, 4, 7, 5, 9, 6], [12, 7, 15, 9, 26, 14]], [128, 256, 512]]
+Model Summary: 318 layers, 2979976 parameters, 2979976 gradients, 91.5 GFLOPs
+
+Model Summary: 318 layers, 2979976 parameters, 2979976 gradients, 91.5 GFLOPs
+
+Model Summary: 318 layers, 2979976 parameters, 2979976 gradients, 91.5 GFLOPs
+
+Model Summary: 318 layers, 2979976 parameters, 2979976 gradients, 91.5 GFLOPs
+
+
+Measuring Stage 2 T1 baseline (no gradient steps yet) …
+  mAP_T1_after_T2  = 0.6404
+  mAP_T1_after_T1  = 0.6725  (fixed ceiling)
+  Stage 2 forgetting = -0.0321
+
+Starting Stage 3 (herding) for 5 epochs …
+
+  [  0/4][   0/2000]  mem=1.68G  cst=0.0961  replay=0.0901
+  [  0/4][  50/2000]  mem=23.23G  cst=0.0937  replay=0.0639
+  [  0/4][ 100/2000]  mem=23.23G  cst=0.0934  replay=0.0668
+  [  0/4][ 150/2000]  mem=23.23G  cst=0.0930  replay=0.0635
+  [  0/4][ 200/2000]  mem=23.23G  cst=0.0924  replay=0.0636
+  [  0/4][ 250/2000]  mem=23.23G  cst=0.0920  replay=0.0604
+  [  0/4][ 300/2000]  mem=23.23G  cst=0.0912  replay=0.0597
+  [  0/4][ 350/2000]  mem=23.23G  cst=0.0906  replay=0.0591
+  [  0/4][ 400/2000]  mem=23.23G  cst=0.0902  replay=0.0576
+  [  0/4][ 450/2000]  mem=23.23G  cst=0.0895  replay=0.0563
+  [  0/4][ 500/2000]  mem=23.23G  cst=0.0890  replay=0.0552
+  [  0/4][ 550/2000]  mem=23.23G  cst=0.0884  replay=0.0540
+  [  0/4][ 600/2000]  mem=23.23G  cst=0.0877  replay=0.0526
+  [  0/4][ 650/2000]  mem=23.23G  cst=0.0872  replay=0.0513
+  [  0/4][ 700/2000]  mem=23.23G  cst=0.0866  replay=0.0505
+  [  0/4][ 750/2000]  mem=23.23G  cst=0.0861  replay=0.0494
+  [  0/4][ 800/2000]  mem=23.23G  cst=0.0854  replay=0.0481
+  [  0/4][ 850/2000]  mem=23.23G  cst=0.0849  replay=0.0472
+  [  0/4][ 900/2000]  mem=23.23G  cst=0.0844  replay=0.0460
+  [  0/4][ 950/2000]  mem=23.23G  cst=0.0838  replay=0.0449
+  [  0/4][1000/2000]  mem=23.23G  cst=0.0833  replay=0.0438
+  [  0/4][1050/2000]  mem=23.23G  cst=0.0828  replay=0.0429
+  [  0/4][1100/2000]  mem=23.23G  cst=0.0824  replay=0.0421
+  [  0/4][1150/2000]  mem=23.23G  cst=0.0820  replay=0.0412
+  [  0/4][1200/2000]  mem=23.23G  cst=0.0816  replay=0.0404
+  [  0/4][1250/2000]  mem=23.23G  cst=0.0811  replay=0.0396
+  [  0/4][1300/2000]  mem=23.23G  cst=0.0807  replay=0.0389
+  [  0/4][1350/2000]  mem=23.23G  cst=0.0802  replay=0.0382
+  [  0/4][1400/2000]  mem=23.23G  cst=0.0798  replay=0.0376
+  [  0/4][1450/2000]  mem=23.23G  cst=0.0794  replay=0.0371
+  [  0/4][1500/2000]  mem=23.23G  cst=0.0789  replay=0.0366
+  [  0/4][1550/2000]  mem=23.23G  cst=0.0785  replay=0.0360
+  [  0/4][1600/2000]  mem=23.23G  cst=0.0782  replay=0.0355
+  [  0/4][1650/2000]  mem=23.23G  cst=0.0778  replay=0.0351
+  [  0/4][1700/2000]  mem=23.23G  cst=0.0774  replay=0.0346
+  [  0/4][1750/2000]  mem=23.23G  cst=0.0770  replay=0.0342
+  [  0/4][1800/2000]  mem=23.23G  cst=0.0767  replay=0.0338
+  [  0/4][1850/2000]  mem=23.23G  cst=0.0764  replay=0.0335
+  [  0/4][1900/2000]  mem=23.23G  cst=0.0761  replay=0.0331
+  [  0/4][1950/2000]  mem=23.23G  cst=0.0758  replay=0.0328
+
+Epoch   0/4  loss=0.1080
+  T3: mAP@0.5=0.0351  P=0.0859  R=0.1184  F1=0.0996
+  T1: mAP@0.5=0.4226  fm_abs=-0.2499  fm_stage3=-0.2177
+  T1 by stratum: tiny=0.5354  small=0.2940  normal=0.4839  large=0.1371
+
+  ✓ New best T3 mAP@0.5 = 0.0351  fm_abs=-0.2499  fm_stage3=-0.2177  (saved /projects/prjs2041/runs/stage3/ssh_s42/weights/best.pt)
+  [  1/4][   0/2000]  mem=21.82G  cst=0.0709  replay=0.0275
+  [  1/4][  50/2000]  mem=21.82G  cst=0.0609  replay=0.0206
+  [  1/4][ 100/2000]  mem=21.82G  cst=0.0601  replay=0.0190
+  [  1/4][ 150/2000]  mem=21.82G  cst=0.0599  replay=0.0184
+  [  1/4][ 200/2000]  mem=21.82G  cst=0.0604  replay=0.0189
+  [  1/4][ 250/2000]  mem=21.82G  cst=0.0601  replay=0.0186
+  [  1/4][ 300/2000]  mem=21.82G  cst=0.0600  replay=0.0184
+  [  1/4][ 350/2000]  mem=21.82G  cst=0.0597  replay=0.0181
+  [  1/4][ 400/2000]  mem=21.82G  cst=0.0594  replay=0.0178
+  [  1/4][ 450/2000]  mem=21.82G  cst=0.0592  replay=0.0176
+  [  1/4][ 500/2000]  mem=21.82G  cst=0.0591  replay=0.0171
+  [  1/4][ 550/2000]  mem=21.82G  cst=0.0589  replay=0.0171
+  [  1/4][ 600/2000]  mem=21.82G  cst=0.0587  replay=0.0169
+  [  1/4][ 650/2000]  mem=21.82G  cst=0.0586  replay=0.0167
+  [  1/4][ 700/2000]  mem=21.82G  cst=0.0583  replay=0.0166
+  [  1/4][ 750/2000]  mem=21.82G  cst=0.0581  replay=0.0165
+  [  1/4][ 800/2000]  mem=21.82G  cst=0.0581  replay=0.0163
+  [  1/4][ 850/2000]  mem=21.82G  cst=0.0579  replay=0.0161
+  [  1/4][ 900/2000]  mem=21.82G  cst=0.0578  replay=0.0160
+  [  1/4][ 950/2000]  mem=21.82G  cst=0.0576  replay=0.0159
+  [  1/4][1000/2000]  mem=21.82G  cst=0.0574  replay=0.0158
+  [  1/4][1050/2000]  mem=21.82G  cst=0.0572  replay=0.0157
+  [  1/4][1100/2000]  mem=21.82G  cst=0.0570  replay=0.0155
+  [  1/4][1150/2000]  mem=21.82G  cst=0.0569  replay=0.0154
+  [  1/4][1200/2000]  mem=21.82G  cst=0.0568  replay=0.0153
+  [  1/4][1250/2000]  mem=21.82G  cst=0.0567  replay=0.0152
+  [  1/4][1300/2000]  mem=21.82G  cst=0.0565  replay=0.0151
+  [  1/4][1350/2000]  mem=21.82G  cst=0.0564  replay=0.0150
+  [  1/4][1400/2000]  mem=21.82G  cst=0.0562  replay=0.0150
+  [  1/4][1450/2000]  mem=21.82G  cst=0.0561  replay=0.0149
+  [  1/4][1500/2000]  mem=21.82G  cst=0.0560  replay=0.0148
+  [  1/4][1550/2000]  mem=21.82G  cst=0.0558  replay=0.0147
+  [  1/4][1600/2000]  mem=21.82G  cst=0.0557  replay=0.0147
+  [  1/4][1650/2000]  mem=21.82G  cst=0.0556  replay=0.0146
+  [  1/4][1700/2000]  mem=21.82G  cst=0.0554  replay=0.0145
+  [  1/4][1750/2000]  mem=21.82G  cst=0.0553  replay=0.0144
+  [  1/4][1800/2000]  mem=21.82G  cst=0.0552  replay=0.0144
+  [  1/4][1850/2000]  mem=21.82G  cst=0.0551  replay=0.0143
+  [  1/4][1900/2000]  mem=21.82G  cst=0.0549  replay=0.0143
+  [  1/4][1950/2000]  mem=21.82G  cst=0.0549  replay=0.0143
+
+Epoch   1/4  loss=0.0689
+  T3: mAP@0.5=0.0487  P=0.1376  R=0.0987  F1=0.1150
+  T1: mAP@0.5=0.4102  fm_abs=-0.2623  fm_stage3=-0.2302
+  T1 by stratum: tiny=0.2627  small=0.2631  normal=0.4681  large=0.1187
+
+  ✓ New best T3 mAP@0.5 = 0.0487  fm_abs=-0.2623  fm_stage3=-0.2302  (saved /projects/prjs2041/runs/stage3/ssh_s42/weights/best.pt)
+  [  2/4][   0/2000]  mem=21.82G  cst=0.0462  replay=0.0123
+  [  2/4][  50/2000]  mem=21.82G  cst=0.0488  replay=0.0099
+  [  2/4][ 100/2000]  mem=21.82G  cst=0.0488  replay=0.0099
+  [  2/4][ 150/2000]  mem=21.82G  cst=0.0479  replay=0.0097
+  [  2/4][ 200/2000]  mem=21.82G  cst=0.0481  replay=0.0099
+  [  2/4][ 250/2000]  mem=21.82G  cst=0.0480  replay=0.0098
+  [  2/4][ 300/2000]  mem=21.82G  cst=0.0479  replay=0.0100
+  [  2/4][ 350/2000]  mem=21.82G  cst=0.0481  replay=0.0098
+  [  2/4][ 400/2000]  mem=21.82G  cst=0.0480  replay=0.0098
+  [  2/4][ 450/2000]  mem=21.82G  cst=0.0478  replay=0.0098
+  [  2/4][ 500/2000]  mem=21.82G  cst=0.0478  replay=0.0098
+  [  2/4][ 550/2000]  mem=21.82G  cst=0.0476  replay=0.0097
+  [  2/4][ 600/2000]  mem=21.82G  cst=0.0476  replay=0.0096
+  [  2/4][ 650/2000]  mem=21.82G  cst=0.0476  replay=0.0096
+  [  2/4][ 700/2000]  mem=21.82G  cst=0.0475  replay=0.0096
+  [  2/4][ 750/2000]  mem=21.82G  cst=0.0474  replay=0.0095
+  [  2/4][ 800/2000]  mem=21.82G  cst=0.0473  replay=0.0095
+  [  2/4][ 850/2000]  mem=21.82G  cst=0.0473  replay=0.0095
+  [  2/4][ 900/2000]  mem=21.82G  cst=0.0473  replay=0.0095
+  [  2/4][ 950/2000]  mem=21.82G  cst=0.0472  replay=0.0094
+  [  2/4][1000/2000]  mem=21.82G  cst=0.0472  replay=0.0094
+  [  2/4][1050/2000]  mem=21.82G  cst=0.0472  replay=0.0094
+  [  2/4][1100/2000]  mem=21.82G  cst=0.0472  replay=0.0094
+  [  2/4][1150/2000]  mem=21.82G  cst=0.0471  replay=0.0094
+  [  2/4][1200/2000]  mem=21.82G  cst=0.0471  replay=0.0094
+  [  2/4][1250/2000]  mem=21.82G  cst=0.0470  replay=0.0094
+  [  2/4][1300/2000]  mem=21.82G  cst=0.0470  replay=0.0094
+  [  2/4][1350/2000]  mem=21.82G  cst=0.0469  replay=0.0094
+  [  2/4][1400/2000]  mem=21.82G  cst=0.0469  replay=0.0094
+  [  2/4][1450/2000]  mem=21.82G  cst=0.0469  replay=0.0094
+  [  2/4][1500/2000]  mem=21.82G  cst=0.0468  replay=0.0094
+  [  2/4][1550/2000]  mem=21.82G  cst=0.0468  replay=0.0094
+  [  2/4][1600/2000]  mem=21.82G  cst=0.0467  replay=0.0093
+  [  2/4][1650/2000]  mem=21.82G  cst=0.0467  replay=0.0093
+  [  2/4][1700/2000]  mem=21.82G  cst=0.0467  replay=0.0093
+  [  2/4][1750/2000]  mem=21.82G  cst=0.0467  replay=0.0093
+  [  2/4][1800/2000]  mem=21.82G  cst=0.0466  replay=0.0093
+  [  2/4][1850/2000]  mem=21.82G  cst=0.0466  replay=0.0093
+  [  2/4][1900/2000]  mem=21.82G  cst=0.0466  replay=0.0093
+  [  2/4][1950/2000]  mem=21.82G  cst=0.0465  replay=0.0092
+
+Epoch   2/4  loss=0.0557
+  T3: mAP@0.5=0.0645  P=0.1686  R=0.1025  F1=0.1275
+  T1: mAP@0.5=0.3619  fm_abs=-0.3106  fm_stage3=-0.2785
+  T1 by stratum: tiny=0.0928  small=0.2319  normal=0.4151  large=0.0787
+
+  ✓ New best T3 mAP@0.5 = 0.0645  fm_abs=-0.3106  fm_stage3=-0.2785  (saved /projects/prjs2041/runs/stage3/ssh_s42/weights/best.pt)
+  [  3/4][   0/2000]  mem=23.50G  cst=0.0521  replay=0.0132
+  [  3/4][  50/2000]  mem=23.50G  cst=0.0432  replay=0.0081
+  [  3/4][ 100/2000]  mem=23.50G  cst=0.0427  replay=0.0070
+  [  3/4][ 150/2000]  mem=23.50G  cst=0.0429  replay=0.0070
+  [  3/4][ 200/2000]  mem=23.50G  cst=0.0426  replay=0.0068
+  [  3/4][ 250/2000]  mem=23.50G  cst=0.0426  replay=0.0066
+  [  3/4][ 300/2000]  mem=23.50G  cst=0.0424  replay=0.0065
+  [  3/4][ 350/2000]  mem=23.50G  cst=0.0424  replay=0.0065
+  [  3/4][ 400/2000]  mem=23.50G  cst=0.0423  replay=0.0065
+  [  3/4][ 450/2000]  mem=23.50G  cst=0.0421  replay=0.0064
+  [  3/4][ 500/2000]  mem=23.50G  cst=0.0422  replay=0.0064
+  [  3/4][ 550/2000]  mem=23.50G  cst=0.0421  replay=0.0064
+  [  3/4][ 600/2000]  mem=23.50G  cst=0.0420  replay=0.0064
+  [  3/4][ 650/2000]  mem=23.50G  cst=0.0419  replay=0.0063
+  [  3/4][ 700/2000]  mem=23.50G  cst=0.0420  replay=0.0063
+  [  3/4][ 750/2000]  mem=23.50G  cst=0.0420  replay=0.0063
+  [  3/4][ 800/2000]  mem=23.50G  cst=0.0420  replay=0.0064
+  [  3/4][ 850/2000]  mem=23.50G  cst=0.0419  replay=0.0063
+  [  3/4][ 900/2000]  mem=23.50G  cst=0.0420  replay=0.0063
+  [  3/4][ 950/2000]  mem=23.50G  cst=0.0420  replay=0.0063
+  [  3/4][1000/2000]  mem=23.50G  cst=0.0420  replay=0.0063
+  [  3/4][1050/2000]  mem=23.50G  cst=0.0420  replay=0.0063
+  [  3/4][1100/2000]  mem=23.50G  cst=0.0420  replay=0.0063
+  [  3/4][1150/2000]  mem=23.50G  cst=0.0420  replay=0.0063
+  [  3/4][1200/2000]  mem=23.50G  cst=0.0420  replay=0.0063
+  [  3/4][1250/2000]  mem=23.50G  cst=0.0420  replay=0.0063
+  [  3/4][1300/2000]  mem=23.50G  cst=0.0420  replay=0.0063
+  [  3/4][1350/2000]  mem=23.50G  cst=0.0420  replay=0.0063
+  [  3/4][1400/2000]  mem=23.50G  cst=0.0420  replay=0.0063
+  [  3/4][1450/2000]  mem=23.50G  cst=0.0420  replay=0.0063
+  [  3/4][1500/2000]  mem=23.50G  cst=0.0420  replay=0.0063
+  [  3/4][1550/2000]  mem=23.50G  cst=0.0420  replay=0.0063
+  [  3/4][1600/2000]  mem=23.50G  cst=0.0420  replay=0.0062
+  [  3/4][1650/2000]  mem=23.50G  cst=0.0419  replay=0.0062
+  [  3/4][1700/2000]  mem=23.50G  cst=0.0419  replay=0.0062
+  [  3/4][1750/2000]  mem=23.50G  cst=0.0419  replay=0.0062
+  [  3/4][1800/2000]  mem=23.50G  cst=0.0419  replay=0.0062
+  [  3/4][1850/2000]  mem=23.50G  cst=0.0419  replay=0.0062
+  [  3/4][1900/2000]  mem=23.50G  cst=0.0419  replay=0.0062
+  [  3/4][1950/2000]  mem=23.50G  cst=0.0419  replay=0.0062
+
+Epoch   3/4  loss=0.0482
+  T3: mAP@0.5=0.0592  P=0.1504  R=0.0957  F1=0.1170
+  T1: mAP@0.5=0.3732  fm_abs=-0.2993  fm_stage3=-0.2671
+  T1 by stratum: tiny=0.0975  small=0.2128  normal=0.4334  large=0.1036
+
+  [  4/4][   0/2000]  mem=23.50G  cst=0.0318  replay=0.0097
+  [  4/4][  50/2000]  mem=23.50G  cst=0.0413  replay=0.0054
+  [  4/4][ 100/2000]  mem=23.50G  cst=0.0398  replay=0.0052
+  [  4/4][ 150/2000]  mem=23.50G  cst=0.0396  replay=0.0049
+  [  4/4][ 200/2000]  mem=23.50G  cst=0.0398  replay=0.0048
+  [  4/4][ 250/2000]  mem=23.50G  cst=0.0394  replay=0.0048
+  [  4/4][ 300/2000]  mem=23.50G  cst=0.0393  replay=0.0047
+  [  4/4][ 350/2000]  mem=23.50G  cst=0.0393  replay=0.0047
+  [  4/4][ 400/2000]  mem=23.50G  cst=0.0394  replay=0.0047
+  [  4/4][ 450/2000]  mem=23.50G  cst=0.0393  replay=0.0046
+  [  4/4][ 500/2000]  mem=23.50G  cst=0.0392  replay=0.0045
+  [  4/4][ 550/2000]  mem=23.50G  cst=0.0391  replay=0.0045
+  [  4/4][ 600/2000]  mem=23.50G  cst=0.0391  replay=0.0045
+  [  4/4][ 650/2000]  mem=23.50G  cst=0.0391  replay=0.0045
+  [  4/4][ 700/2000]  mem=23.50G  cst=0.0392  replay=0.0045
+  [  4/4][ 750/2000]  mem=23.50G  cst=0.0391  replay=0.0044
+  [  4/4][ 800/2000]  mem=23.50G  cst=0.0391  replay=0.0044
+  [  4/4][ 850/2000]  mem=23.50G  cst=0.0391  replay=0.0044
+  [  4/4][ 900/2000]  mem=23.50G  cst=0.0391  replay=0.0044
+  [  4/4][ 950/2000]  mem=23.50G  cst=0.0391  replay=0.0044
+  [  4/4][1000/2000]  mem=23.50G  cst=0.0391  replay=0.0044
+  [  4/4][1050/2000]  mem=23.50G  cst=0.0390  replay=0.0043
+  [  4/4][1100/2000]  mem=23.50G  cst=0.0390  replay=0.0043
+  [  4/4][1150/2000]  mem=23.50G  cst=0.0390  replay=0.0044
+  [  4/4][1200/2000]  mem=23.50G  cst=0.0390  replay=0.0044
+  [  4/4][1250/2000]  mem=23.50G  cst=0.0390  replay=0.0044
+  [  4/4][1300/2000]  mem=23.50G  cst=0.0390  replay=0.0043
+  [  4/4][1350/2000]  mem=23.50G  cst=0.0390  replay=0.0043
+  [  4/4][1400/2000]  mem=23.50G  cst=0.0389  replay=0.0043
+  [  4/4][1450/2000]  mem=23.50G  cst=0.0389  replay=0.0043
+  [  4/4][1500/2000]  mem=23.50G  cst=0.0389  replay=0.0043
+  [  4/4][1550/2000]  mem=23.50G  cst=0.0389  replay=0.0043
+  [  4/4][1600/2000]  mem=23.50G  cst=0.0389  replay=0.0043
+  [  4/4][1650/2000]  mem=23.50G  cst=0.0389  replay=0.0043
+  [  4/4][1700/2000]  mem=23.50G  cst=0.0389  replay=0.0043
+  [  4/4][1750/2000]  mem=23.50G  cst=0.0389  replay=0.0043
+  [  4/4][1800/2000]  mem=23.50G  cst=0.0389  replay=0.0043
+  [  4/4][1850/2000]  mem=23.50G  cst=0.0389  replay=0.0043
+  [  4/4][1900/2000]  mem=23.50G  cst=0.0389  replay=0.0043
+  [  4/4][1950/2000]  mem=23.50G  cst=0.0388  replay=0.0043
+
+Epoch   4/4  loss=0.0433
+  T3: mAP@0.5=0.0604  P=0.1590  R=0.0978  F1=0.1211
+  T1: mAP@0.5=0.3635  fm_abs=-0.3090  fm_stage3=-0.2769
+  T1 by stratum: tiny=0.1155  small=0.2187  normal=0.4217  large=0.0852
+
+
+=================================================================
+Stage 3 (herding) complete.
+Best T3 mAP@0.5 (CST)       = 0.0645
+mAP_T1_after_T1 (ceiling)   = 0.6725
+mAP_T1_after_T2 (Stage 3 ref)= 0.6404
+fm_abs   at best T3 epoch   = -0.3106  (vs T1 ceiling)
+fm_stage3 at best T3 epoch  = -0.2785  (vs Stage 2 retention)
+=================================================================
+Results: /projects/prjs2041/runs/stage3/ssh_s42/results.csv

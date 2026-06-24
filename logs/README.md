@@ -163,11 +163,30 @@ Large-target mAP collapses from 0.461 (after Stage 1) to **0.000** — reported 
 
 ---
 
+## Per-Stratum T1 Evaluation — Stage 2 (3 seeds)
+
+### `stratum_s2_seeds_24193902.out` — S2 STRATUM EVAL SEEDS 123 AND 999
+**Job:** 24193902 | `run_eval_stratum_s2_seeds.sh` → `eval_stratum_t1.py`  
+**Purpose:** Complete the After-S2 column across all three seeds so it can be reported as mean ± std.
+
+```
+Stratum    After S1   Seed 42   Seed 123   Seed 999   Mean ± std
+tiny        0.009      0.022      0.020      0.013    0.018 ± 0.005
+small       0.579      0.564      0.560      0.552    0.559 ± 0.006
+normal      0.719      0.680      0.684      0.687    0.684 ± 0.004
+large       0.461      0.496      0.499      0.487    0.494 ± 0.006
+overall     0.673      0.640      0.640      0.641    0.640 ± 0.001
+```
+
+KD preserves large-target mAP across all three seeds (0.461 → 0.494 mean). Overall retention is 0.640 ± 0.001 — essentially zero variance, confirming the KD result is seed-independent.
+
+---
+
 ## Scale-Stratified Herding Buffer
 
-### `build_buffers_23391452.out` — BUFFER CONSTRUCTION
+### `build_buffers_23391452.out` — BUFFER CONSTRUCTION (val split, original)
 **Job:** 23391452 | `run_build_buffers.sh` → `build_herding_buffer.py`  
-**Checkpoint:** Stage 2 seed-42 best.pt on Anti-UAV-RGBT val (60,620 UAV-present frames)
+**Checkpoint:** Stage 2 seed-42 best.pt on Anti-UAV-RGBT **val** (60,620 UAV-present frames)
 
 ```
 Stratum     Available   Selected
@@ -178,13 +197,60 @@ large           3,017         75
 TOTAL          60,620        300
 ```
 
-Both herding and random-stratified variants built. Herding buffer at `/projects/prjs2041/runs/stage2/seed42/herding_buffer.pt`.
+Note: val-split buffer overlaps with T1 evaluation set — superseded by train-split rebuild below.
+
+### `build_buf_train_24193905.out` — BUFFER REBUILD (train split) — CANONICAL
+**Job:** 24193905 | `run_build_buffer_train.sh` → `build_herding_buffer.py --split train`  
+**Checkpoint:** Stage 2 seed-42 best.pt on Anti-UAV-RGBT **train** (148,368 UAV-present frames)
+
+```
+Stratum     Available   Selected
+tiny            1,091         75
+small          43,560         75
+normal         98,929         75
+large           4,788         75
+TOTAL         148,368        300
+```
+
+Train split has 2.4× more frames than val. Both herding and random-stratified variants built from train split. Saved: `herding_buffer_train.pt`, `herding_buffer_random_train.pt`.
 
 ---
 
-## Stage 3 — Herding Attempts (budget exhaustion)
+## Stage 3 — Scale-Stratified Herding (SSH)
 
-All herding jobs were cancelled by Snellius before convergence. The replay loss was active and the training loop was functional, but compute budget ran out.
+### `stage3_ssh_s42_24194142.err` — SSH TRAINING — CANONICAL
+**Job:** 24194142 | `run_stage3_ssh_s42.sh` → `train_stage3.py --replay-mode herding`  
+**Buffer:** `herding_buffer_train.pt` (300 exemplars, train split)  
+**Config:** seed 42, 5 epochs, replay ratio 25%, replay weight 4.0, 4×A100
+
+```
+Epoch   T3 mAP   T1 mAP   FM (abs)   FM (stage3)   large T1
+  0     0.035    0.423    −0.250      −0.218        0.137
+  1     0.049    0.410    −0.262      −0.230        0.119
+  2*    0.065    0.362    −0.311      −0.279        0.079  ← best T3
+  3     0.059    0.373    −0.299      −0.267        0.104
+  4     0.060    0.364    −0.309      −0.277        0.085
+
+* Best checkpoint saved at epoch 2.
+```
+
+**Comparison with naive baseline (best at epoch 3):**
+
+| | Naive | SSH |
+|--|-------|-----|
+| FM (vs T1 ceiling) | −0.605 | **−0.311** |
+| T1 mAP overall | 0.068 | **0.362** |
+| Large-stratum T1 | 0.000 | **0.079** |
+| Small-stratum T1 | 0.067 | **0.232** |
+| Normal-stratum T1 | 0.088 | **0.415** |
+
+SSH reduces forgetting by ~49%. Large-target mAP recovers from complete absence to 0.079. T3 performance is modestly lower (0.065 vs 0.083), reflecting the plasticity–stability trade-off.
+
+---
+
+## Stage 3 — Herding Attempts (earlier, budget exhaustion)
+
+All prior herding jobs were cancelled by Snellius before convergence.
 
 ### `stage3_herding_23425651.err` — Attempt 1
 **Job:** 23425651 | Cancelled at epoch 0 during DDP init issue.
@@ -199,8 +265,6 @@ All herding jobs were cancelled by Snellius before convergence. The replay loss 
 Epoch 0: cst=0.077  replay=0.148  T1 mAP=0.008
 [2026-06-04T01:44:34] JOB 23449442 CANCELLED DUE TO SIGNAL Terminated
 ```
-
-Experimental comparison of SSH vs naive fine-tuning is left as future work.
 
 ---
 
