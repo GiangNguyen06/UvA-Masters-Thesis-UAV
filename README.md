@@ -14,6 +14,9 @@ Thermal infrared UAV detectors must remain accurate as operational datasets evol
 
 **Core finding:** Scale-distribution shift (Stage 3, CST Anti-UAV: 97.7% tiny/small targets, 0% large) causes **18× more forgetting** than cross-domain adaptation (Stage 2, Anti-UAV410). Inter-stage cosine similarity is 0.967 over all parameters (0.987 over gradient-updated weights alone) — weights barely moved — yet T1 mAP collapses from 0.640 to 0.068. Large-target detection reaches 0.000 mAP within the first training epoch. The evidence is consistent with a **scale-conditioned gradient imbalance** — a refinement of gradient starvation — as a candidate forgetting mechanism: the large stratum receives no positive gradient signal from CST's distribution, while BatchNorm running statistics drift roughly 2× more than the trained weights (L2-rel ≈ 0.24 vs 0.12), suggesting the network adapts its normalisation to the new distribution while the gradient-updated parameters remain largely unchanged.
 
+![Detection comparison across stages](docs/figures/fig_vis_comparison.png)
+*Same sequence: Stage 1 (T1 ceiling, mAP=0.672) correctly detects the UAV; Stage 2 (after KD, mAP=0.640) retains detection; Stage 3 (after naive fine-tuning on CST) — mAP collapses to 0.068.*
+
 ---
 
 ## Research Questions
@@ -24,6 +27,16 @@ Thermal infrared UAV detectors must remain accurate as operational datasets evol
 | **RQ1** | Does Knowledge Distillation preserve T1 performance during T2 domain shift? | FM = −0.033 ± 0.004 across three seeds; 95% T1 retention |
 | **RQ2** | Does scale-distribution shift characterise the forgetting pattern in Stage 3? | Large-target collapse to 0.000 mAP despite cosine sim 0.987; evidence points to scale-conditioned gradient imbalance |
 | **RQ3** | Does Scale-Stratified Herding mitigate large-target forgetting? | Buffer built and integrated; empirical comparison left as future work |
+
+---
+
+## Visualisations
+
+![Scale distribution across datasets](docs/figures/fig_size_distribution.png)
+*Scale distribution per dataset. CST Anti-UAV has 67% tiny and 0% large targets — the root cause of large-target forgetting in Stage 3.*
+
+![Stage 3 forgetting dynamics](docs/figures/fig_stage3_progress.png)
+*(A) T3 detection peaks at epoch 3 then plateaus. (B) T1 retention collapses immediately and keeps declining. (C) Per-stratum breakdown: large-target mAP hits 0.000 by epoch 1. (D) FM reaches −0.605.*
 
 ---
 
