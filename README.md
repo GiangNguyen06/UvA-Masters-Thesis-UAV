@@ -12,7 +12,7 @@
 
 Thermal infrared UAV detectors must remain accurate as operational datasets evolve. Sequential fine-tuning on a new dataset destroys performance on previous ones — a phenomenon called catastrophic forgetting. This thesis trains YOLOMG through a three-stage curriculum of increasing scale difficulty, measures precisely *when*, *how much*, and *why* forgetting happens, and proposes Scale-Stratified Herding as a targeted remedy.
 
-**Core finding:** Scale-distribution shift (Stage 3, CST Anti-UAV: 97.7% tiny/small targets, 0% large) causes **18× more forgetting** than cross-domain adaptation (Stage 2, Anti-UAV410). The mechanism is **gradient starvation** — Stage 2→3 weight cosine similarity is 0.967 (weights barely moved) yet T1 mAP collapses from 0.640 to 0.068. Large-target detection reaches 0.000 mAP within the first training epoch.
+**Core finding:** Scale-distribution shift (Stage 3, CST Anti-UAV: 97.7% tiny/small targets, 0% large) causes **18× more forgetting** than cross-domain adaptation (Stage 2, Anti-UAV410). The mechanism is **gradient starvation** — learnable-parameter cosine similarity S2→S3 is 0.987 (weights barely moved) yet T1 mAP collapses from 0.640 to 0.068. Large-target detection reaches 0.000 mAP within the first training epoch. BN running statistics drift 2× more than gradient-updated weights (L2-rel ≈ 0.24 vs 0.12), confirming that the network re-estimates normalisation stats for CST's tiny-target distribution while conv weights remain largely unchanged.
 
 ---
 
@@ -62,7 +62,8 @@ Loss: `L_total = L_det + λ_kd × L_kd`, where `L_kd` = MSE between student and 
 | T1 mAP@0.5 retained | 0.640 |
 | Forgetting Measure FM | **−0.033 ± 0.004** |
 | T1 retention | **95%** |
-| Mean cosine sim S1→S2 | **0.911** |
+| Mean cosine sim S1→S2 (all-params) | **0.911** (per-seed: 0.917 / 0.921 / 0.896) |
+| Mean cosine sim S1→S2 (learnable-only) | **0.935** (seed 42) |
 | Best T2 epoch (seed 42) | 16 / 32 |
 
 <details>
@@ -81,7 +82,7 @@ Loss: `L_total = L_det + λ_kd × L_kd`, where `L_kd` = MSE between student and 
 
 </details>
 
-### Stage 3 — Naive Baseline (no replay, 18 epochs)
+### Stage 3 — Naive Baseline (no replay, 19 epochs)
 
 | Metric | Value |
 |--------|-------|
@@ -91,9 +92,12 @@ Loss: `L_total = L_det + λ_kd × L_kd`, where `L_kd` = MSE between student and 
 | Large-stratum T1 mAP | **0.000** (from 0.461 after Stage 1) |
 | Normal-stratum T1 mAP | 0.079 (from 0.719) |
 | Small-stratum T1 mAP | 0.060 |
-| Mean cosine sim S2→S3 | **0.967** |
+| Mean cosine sim S2→S3 (all-params) | **0.967** |
+| Mean cosine sim S2→S3 (learnable-only) | **0.987** |
+| BN running-stat drift (L2-rel) | **0.24** vs learnable weights 0.12 |
+| P5 head gradient ratio RGBT/CST | **1.7×** (0.654 vs 0.387) |
 
-**Gradient starvation signature:** cosine sim S2→S3 (0.967) is *higher* than S1→S2 (0.911), yet forgetting is 18× worse. Weights barely moved — large-target features received zero gradient signal because CST has 0% large targets vs. 85.1% normal+large in Stage 1.
+**Gradient starvation signature:** learnable-parameter cosine similarity S2→S3 is 0.987 — weights barely moved — yet forgetting is 18× worse than Stage 2. Large-target features received zero gradient signal because CST has 0% large targets. BN running statistics drift 2× more than conv weights, indicating the network adapts its normalisation to CST's tiny-target distribution while the gradient-updated parameters remain largely frozen.
 
 ---
 
@@ -147,17 +151,33 @@ src/
   plot_scale_distribution.py     Scale distribution bar charts
   plot_multirun_ci.py            Multi-seed CI plots
   audit_datasets.py              Dataset sanity checks
+  test_datasets.py               Dataset loader unit tests
   json2yolo.py                   Annotation format conversion
+  grad_starvation_diagnostic.py  Gradient norm diagnostic per head (P3/P4/P5)
+  eval_stratum_t1.py             Per-stratum T1 mAP across all three stages
+  parameter_drift.py             Inter-stage cosine similarity (--learnable-only flag)
   run_stage1_ddp.sh              SLURM: Stage 1 (4×A100, 72 h)
+  run_stage1.sh                  SLURM: Stage 1 single-GPU
+  run_stage1_rerun.sh            SLURM: Stage 1 rerun from checkpoint
   run_stage2_ddp.sh              SLURM: Stage 2 DDP (4×H100)
+  run_stage2.sh                  SLURM: Stage 2 single-GPU
   run_stage3_naive.sh            SLURM: Stage 3 naive baseline
   run_stage3_herding.sh          SLURM: Stage 3 herding (cancelled)
+  run_stage3_random_stratified.sh SLURM: Stage 3 random-stratified replay
   run_eval.sh                    SLURM: full evaluation
+  run_eval_pr_s3.sh              SLURM: PR curve evaluation Stage 3
   run_tracking_eval.sh           SLURM: tracking evaluation
   run_vis.sh                     SLURM: detection visualisation
-  run_analysis_drift.sh          SLURM: parameter drift analysis
+  run_analysis_drift.sh          SLURM: parameter drift analysis (all-params)
+  run_drift_s2s3.sh              SLURM: S2→S3 drift analysis
+  run_drift_s2s3_learnable.sh    SLURM: S2→S3 learnable-only drift
+  run_grad_diagnostic.sh         SLURM: gradient starvation diagnostic
+  run_eval_stratum_t1.sh         SLURM: per-stratum T1 evaluation
   run_analysis_stage2.sh         SLURM: Stage 2 multi-seed aggregation
   run_build_buffers.sh           SLURM: herding buffer construction
+  run_data_pipeline.sh           SLURM: full data extraction pipeline
+  run_generate_masks.sh          SLURM: motion mask generation
+analysis/                        Per-layer drift CSVs and figures (see analysis/)
 logs/                            SLURM output logs (see logs/README.md)
 docs/
   stage2_progress.png            Stage 2 training curves

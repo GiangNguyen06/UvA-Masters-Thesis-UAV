@@ -59,16 +59,83 @@ tiny=0.0012  small=0.2773  normal=0.6821  large=0.2828
 
 ## Parameter Drift Analysis
 
-### `drift_23392372.out` — COSINE SIMILARITY S1→S2
+### `drift_23392372.out` — COSINE SIMILARITY S1→S2 (all-params, early run)
 **Job:** 23392372 | `run_analysis_drift.sh` → `parameter_drift.py`  
-**Result:** Mean cosine similarity S1→S2 = **0.896** across 335 parameter tensors
+**Result:** Mean cosine similarity S1→S2 = **0.896** (early/weighted version — superseded by recomputed 0.911)
+
+### `drift_s1s2_learnable_23962900.out` — COSINE SIMILARITY S1→S2 (learnable-only)
+**Job:** 23962900 | `run_drift_s2s3_learnable.sh` → `parameter_drift.py --learnable-only`  
+**Result:** Mean cosine similarity S1→S2 = **0.935** across 204 learnable tensors (requires_grad=True)
+
+Excludes BN running_mean / running_var / num_batches_tracked. Outputs in `/projects/prjs2041/analysis/drift_s1s2/`.
+
+### `drift_s2s3_23937817.out` — COSINE SIMILARITY S2→S3 (all-params)
+**Job:** 23937817 | `run_drift_s2s3.sh` → `parameter_drift.py`  
+**Result:** Mean cosine similarity S2→S3 = **0.967** across 335 parameter tensors
+
+### `drift_s2s3_learnable_23962901.out` — COSINE SIMILARITY S2→S3 (learnable-only)
+**Job:** 23962901 | `run_drift_s2s3_learnable.sh` → `parameter_drift.py --learnable-only`  
+**Result:** Mean cosine similarity S2→S3 = **0.987** across 204 learnable tensors
 
 ```
-Global cosine similarity: mean = 0.895565
-min = -0.069  (model.4.spatial_attention.conv.weight)
+BN running_mean L2-rel: 0.236   (BN buffers drift 2× more than gradient-updated weights)
+BN running_var  L2-rel: 0.231
+Learnable L2-rel:       0.122
 ```
 
-Backbone shows low drift (features preserved), head shows higher drift (adapted to Anti-UAV410). Contrast with S2→S3 cosine sim = **0.967** in `compute_drift_s2s3.py` output — weights barely moved but T1 mAP collapsed, confirming gradient starvation rather than bulk overwriting.
+Backbone shows low drift (features preserved), head shows higher drift. Learnable-only cosine S2→S3 (0.987) is higher than S1→S2 (0.935), yet forgetting is 18× worse — confirming gradient starvation rather than bulk weight overwriting. Outputs in `/projects/prjs2041/analysis/drift_s2s3/`.
+
+---
+
+## Gradient Starvation Diagnostic
+
+### `grad_diag_24144797.out` — GRADIENT NORM PER DETECTION HEAD
+**Job:** 24144797 | `run_grad_diagnostic.sh` → `grad_starvation_diagnostic.py`  
+**Checkpoint:** Stage 2 seed-999 best.pt  
+**Result:** Per-head mean gradient norm under CST training vs Anti-UAV-RGBT batches:
+
+```
+head                 CST (Stage 3, 0% large)   RGBT (T1, all)       RGBT (large GT only)
+P3 (small)           0.5311 ± 0.1706            0.0003 ± 0.0000      0.0003 ± 0.0000
+P4 (medium)          0.2874 ± 0.0663            0.4507 ± 0.5699      0.0003 ± 0.0000
+P5 (large)           0.3866 ± 0.1128            0.6535 ± 0.1900      0.2207 ± 0.6231
+
+Large-head (P5) gradient:  RGBT / CST = 1.7×   (CST=0.387, RGBT=0.654)
+```
+
+P5 gradient under CST is 1.7× lower than under RGBT — direct evidence of starvation of the large-target pathway. Saved: `/projects/prjs2041/runs/diagnostics/grad_starvation/seed999/grad_starvation_summary.csv`.
+
+---
+
+## Per-Stratum T1 Evaluation
+
+### `stratum_t1_24155665.out` — PER-STRATUM T1 mAP ON TEST SET
+**Job:** 24155665 | `run_eval_stratum_t1.sh` → `eval_stratum_t1.py`  
+**Result:** Per-stratum T1 mAP after each stage (Anti-UAV-RGBT **test** split, 85,374 frames):
+
+```
+Stratum         After Stage 1   After Stage 2   After Stage 3
+tiny            0.000           0.038           0.002
+small           0.250           0.313           0.052
+normal          0.551           0.519           0.050
+large           0.669           0.728           0.000
+Overall         0.504           0.489           0.045
+```
+
+### `stratum_t1_24163620.out` — PER-STRATUM T1 mAP ON VAL SET
+**Job:** 24163620 | `run_eval_stratum_t1.sh` → `eval_stratum_t1.py`  
+**Result:** Per-stratum T1 mAP after each stage (Anti-UAV-RGBT **val** split):
+
+```
+Stratum         After Stage 1   After Stage 2   After Stage 3
+tiny            0.009           0.022           0.000
+small           0.578           0.564           0.067
+normal          0.719           0.680           0.088
+large           0.461           0.496           0.000
+Overall         0.673           0.637           0.076
+```
+
+Val split matches the T1 ceiling used in the thesis (0.673 ≈ 0.6725). Large-stratum mAP collapses from 0.461 → 0.496 (KD preserved it in Stage 2) → **0.000** after Stage 3. Saved: `/projects/prjs2041/runs/diagnostics/stratum_t1/`.
 
 ---
 
