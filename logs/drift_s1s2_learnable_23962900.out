@@ -1,0 +1,63 @@
+==============================
+Job ID  : 23962900
+Node    : tcn472
+Started : Wed Jun 17 12:27:49 CEST 2026
+Mode    : learnable-only (requires_grad=True)
+Transition: S1 -> S2
+==============================
+
+Parameter Drift Analysis
+  Stage 1 checkpoint : /projects/prjs2041/runs/stage1/antiuav_rgbt15/weights/best.pt
+  Stage 2 checkpoint : /projects/prjs2041/runs/stage2/seed42/weights/best.pt
+  Out dir              : /projects/prjs2041/analysis/drift_s1s2
+
+Loading checkpoints …
+  Loaded best.pt  [EMA weights, epoch=49]
+  Loaded best.pt  [EMA weights, epoch=16]
+
+Identifying learnable parameters (requires_grad=True) ...
+  Learnable parameters: 204 (out of 400 total state_dict keys)
+
+Computing drift for shared parameters …
+  Learnable-only filter: 204/335 parameters retained
+  204 parameters analysed
+
+Global relative L2 drift (Stage 1 → Stage 2):
+  mean = 0.2985
+  max  = 4.2299  (model.4.spatial_attention.conv.weight)
+  min  = 0.0000
+Global cosine similarity:
+  mean = 0.934914
+  min  = -0.028416  (model.4.spatial_attention.conv.weight)
+
+Per-group cosine similarity -- unweighted tensor mean (Stage 1 -> Stage 2):
+  backbone    cos=0.9752  L2-rel=0.1599  (36 tensors)
+  neck        cos=0.9044  L2-rel=0.3945  (75 tensors)
+  head        cos=0.9425  L2-rel=0.2412  (3 tensors)
+  other       cos=0.9440  L2-rel=0.2759  (90 tensors)
+
+BN running-stat drift (forward-pass EMA buffers, excluded from records):
+  learnable weights (reference)  cos=0.9349  L2-rel=0.2985
+  running_mean ( 65 buffers)   cos=0.8872  L2-rel=0.4955
+  running_var  ( 65 buffers)   cos=0.8908  L2-rel=0.3673  (cosine uninformative; use L2-rel)
+  -> Interpret BN shift via L2-rel: if BN L2-rel >> learnable L2-rel,
+     forgetting is from BN-stat adaptation, not gradient-updated weights.
+
+  Drift stats CSV: /projects/prjs2041/analysis/drift_s1s2/drift_stats_learnable.csv
+
+Generating plots …
+  Saved: /projects/prjs2041/analysis/drift_s1s2/fig_drift_l2_learnable.png
+  Saved: /projects/prjs2041/analysis/drift_s1s2/fig_drift_cos_learnable.png
+  Saved: /projects/prjs2041/analysis/drift_s1s2/fig_drift_hist_learnable.png
+  Saved: /projects/prjs2041/analysis/drift_s1s2/fig_drift_groups_learnable.png
+
+All outputs in: /projects/prjs2041/analysis/drift_s1s2
+Done.
+==============================
+Done: Wed Jun 17 12:28:04 CEST 2026
+Results: /projects/prjs2041/analysis/drift_s1s2/
+Key outputs:
+  drift_stats_learnable.csv       — raw per-layer numbers
+  fig_drift_groups_learnable.png  — backbone vs neck vs head
+Per-group unweighted cosine printed to stdout above.
+==============================

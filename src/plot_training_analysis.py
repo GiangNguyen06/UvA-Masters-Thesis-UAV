@@ -26,7 +26,7 @@ Usage:
       --out-dir /projects/prjs2041/runs/stage2/stage2_uda1/analysis \
       --t1-baseline 0.6617
 
-  # Or just run in the stage2 run dir (auto-discovers results.csv):
+  # Or run directly in the stage2 run dir (auto-discovers results.csv):
   cd /projects/prjs2041/runs/stage2/stage2_uda1
   python /projects/prjs2041/uav_code/plot_training_analysis.py
 """

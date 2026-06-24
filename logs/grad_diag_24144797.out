@@ -1,0 +1,95 @@
+==============================
+Gradient starvation diagnostic
+Job ID  : 24144797
+Started : Tue Jun 23 14:00:38 CEST 2026
+==============================
+
+### Stage 2 seed 42  ->  /projects/prjs2041/runs/stage2/seed42/weights/best.pt
+
+Gradient starvation diagnostic
+  weights : /projects/prjs2041/runs/stage2/seed42/weights/best.pt
+  device  : cuda:0
+  batches : 60 x bs 16
+
+Measuring CST (Stage 3 distribution, 0% large) ...
+  [CST] measured 60 batches (mean GT/batch = 13.7)
+Measuring Anti-UAV-RGBT (T1 distribution, has large) ...
+  [RGBT] measured 60 batches (mean GT/batch = 15.6)
+Measuring Anti-UAV-RGBT, LARGE-ONLY control ...
+  [RGBT-large-only] measured 60 batches (mean GT/batch = 1.7)
+
+==============================================================================
+PER-HEAD GRADIENT NORM  (mean +/- std over batches)
+==============================================================================
+head                 CST (Stage 3, 0% large)     RGBT (T1, all strata)      RGBT (large GT only)
+P3 (stride 2) [small]        0.4831 +/- 0.1453        0.0003 +/- 0.0000        0.0003 +/- 0.0000
+P4 (stride 4) [medium]        0.2671 +/- 0.0527        0.4057 +/- 0.5071        0.0003 +/- 0.0000
+P5 (stride 8) [large]        0.4051 +/- 0.1093        0.5986 +/- 0.1769        0.2302 +/- 0.6452
+TOTAL (all params)       10.0711 +/- 3.6365        8.5024 +/- 4.2981        1.6191 +/- 4.4592
+==============================================================================
+
+Large-head (P5) gradient:  RGBT / CST = 1.5x   (CST=0.4051, RGBT=0.5986)
+Near-zero P5 gradient under CST = direct evidence of starvation of the large-target pathway.
+
+Saved summary: /projects/prjs2041/runs/diagnostics/grad_starvation/seed42/grad_starvation_summary.csv
+
+### Stage 2 seed 123  ->  /projects/prjs2041/runs/stage2/seed123/weights/best.pt
+
+Gradient starvation diagnostic
+  weights : /projects/prjs2041/runs/stage2/seed123/weights/best.pt
+  device  : cuda:0
+  batches : 60 x bs 16
+
+Measuring CST (Stage 3 distribution, 0% large) ...
+  [CST] measured 60 batches (mean GT/batch = 13.7)
+Measuring Anti-UAV-RGBT (T1 distribution, has large) ...
+  [RGBT] measured 60 batches (mean GT/batch = 15.6)
+Measuring Anti-UAV-RGBT, LARGE-ONLY control ...
+  [RGBT-large-only] measured 60 batches (mean GT/batch = 1.7)
+
+==============================================================================
+PER-HEAD GRADIENT NORM  (mean +/- std over batches)
+==============================================================================
+head                 CST (Stage 3, 0% large)     RGBT (T1, all strata)      RGBT (large GT only)
+P3 (stride 2) [small]        0.5171 +/- 0.1703        0.0003 +/- 0.0000        0.0003 +/- 0.0000
+P4 (stride 4) [medium]        0.2790 +/- 0.0596        0.4205 +/- 0.5336        0.0003 +/- 0.0000
+P5 (stride 8) [large]        0.3729 +/- 0.1052        0.5916 +/- 0.1716        0.2288 +/- 0.6405
+TOTAL (all params)        9.6847 +/- 4.0436        8.6846 +/- 5.7463        1.5507 +/- 4.2550
+==============================================================================
+
+Large-head (P5) gradient:  RGBT / CST = 1.6x   (CST=0.3729, RGBT=0.5916)
+Near-zero P5 gradient under CST = direct evidence of starvation of the large-target pathway.
+
+Saved summary: /projects/prjs2041/runs/diagnostics/grad_starvation/seed123/grad_starvation_summary.csv
+
+### Stage 2 seed 999  ->  /projects/prjs2041/runs/stage2/seed999/weights/best.pt
+
+Gradient starvation diagnostic
+  weights : /projects/prjs2041/runs/stage2/seed999/weights/best.pt
+  device  : cuda:0
+  batches : 60 x bs 16
+
+Measuring CST (Stage 3 distribution, 0% large) ...
+  [CST] measured 60 batches (mean GT/batch = 13.7)
+Measuring Anti-UAV-RGBT (T1 distribution, has large) ...
+  [RGBT] measured 60 batches (mean GT/batch = 15.6)
+Measuring Anti-UAV-RGBT, LARGE-ONLY control ...
+  [RGBT-large-only] measured 60 batches (mean GT/batch = 1.7)
+
+==============================================================================
+PER-HEAD GRADIENT NORM  (mean +/- std over batches)
+==============================================================================
+head                 CST (Stage 3, 0% large)     RGBT (T1, all strata)      RGBT (large GT only)
+P3 (stride 2) [small]        0.5311 +/- 0.1706        0.0003 +/- 0.0000        0.0003 +/- 0.0000
+P4 (stride 4) [medium]        0.2874 +/- 0.0663        0.4507 +/- 0.5699        0.0003 +/- 0.0000
+P5 (stride 8) [large]        0.3866 +/- 0.1128        0.6535 +/- 0.1900        0.2207 +/- 0.6231
+TOTAL (all params)       11.1751 +/- 4.3494        9.6271 +/- 5.6828        1.6426 +/- 4.3960
+==============================================================================
+
+Large-head (P5) gradient:  RGBT / CST = 1.7x   (CST=0.3866, RGBT=0.6535)
+Near-zero P5 gradient under CST = direct evidence of starvation of the large-target pathway.
+
+Saved summary: /projects/prjs2041/runs/diagnostics/grad_starvation/seed999/grad_starvation_summary.csv
+==============================
+Done: Tue Jun 23 14:09:26 CEST 2026
+==============================

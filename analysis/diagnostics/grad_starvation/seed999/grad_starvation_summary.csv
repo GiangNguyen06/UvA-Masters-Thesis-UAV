@@ -1,0 +1,10 @@
+condition,head,scale,stride,grad_norm_mean,grad_norm_std,n_batches,lbox_mean,lobj_mean,lcls_mean
+"CST (Stage 3, 0% large)",P3,small,2,0.531077,0.170569,60,0.096485,0.001081,0.000000
+"CST (Stage 3, 0% large)",P4,medium,4,0.287442,0.066262,60,0.096485,0.001081,0.000000
+"CST (Stage 3, 0% large)",P5,large,8,0.386589,0.112824,60,0.096485,0.001081,0.000000
+"RGBT (T1, all strata)",P3,small,2,0.000346,0.000006,60,0.020349,0.000246,0.000000
+"RGBT (T1, all strata)",P4,medium,4,0.450743,0.569903,60,0.020349,0.000246,0.000000
+"RGBT (T1, all strata)",P5,large,8,0.653487,0.190022,60,0.020349,0.000246,0.000000
+RGBT (large GT only),P3,small,2,0.000346,0.000009,60,0.001174,0.000099,0.000000
+RGBT (large GT only),P4,medium,4,0.000277,0.000002,60,0.001174,0.000099,0.000000
+RGBT (large GT only),P5,large,8,0.220659,0.623147,60,0.001174,0.000099,0.000000

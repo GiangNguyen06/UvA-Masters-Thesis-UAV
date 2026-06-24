@@ -1,0 +1,30 @@
+==============================
+Per-stratum T1 evaluation (S1 / S2 / S3)
+Job ID  : 24163620
+Started : Tue Jun 23 23:15:12 CEST 2026
+==============================
+
+Anti-UAV-RGBT val split: 61,999 frames
+
+Evaluating After Stage 1: /projects/prjs2041/runs/stage1/antiuav_rgbt15/weights/best.pt
+Evaluating After Stage 2: /projects/prjs2041/runs/stage2/seed42/weights/best.pt
+Evaluating After Stage 3: /projects/prjs2041/runs/stage3/naive2/weights/best.pt
+
+========================================================================
+PER-STRATUM T1 mAP@0.5 on Anti-UAV-RGBT val split
+========================================================================
+Stratum              After Stage 1     After Stage 2     After Stage 3
+tiny                         0.009             0.022             0.000
+small                        0.578             0.564             0.067
+normal                       0.719             0.680             0.088
+large                        0.461             0.496             0.000
+Overall                      0.673             0.637             0.076
+========================================================================
+
+Large-stratum T1 mAP:  after S1 = 0.461  ->  after S2 = 0.496   (drop = +0.036)
+If close, KD genuinely preserved the large stratum; if it has already dropped, the 95% overall figure is partly T1/T2 scale overlap.
+
+Saved: /projects/prjs2041/runs/diagnostics/stratum_t1/stratum_t1_val.csv
+==============================
+Done: Tue Jun 23 23:45:33 CEST 2026
+==============================

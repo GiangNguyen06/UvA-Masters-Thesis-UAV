@@ -7,7 +7,7 @@
 #   per-epoch checkpoints every 5 epochs
 #
 # Uses 4× A100 DDP (same as the original run).
-# Will NOT overwrite your existing run — increment_path auto-creates a new dir:
+# Will NOT overwrite existing runs — increment_path auto-creates a new dir:
 #   /projects/prjs2041/runs/stage1/antiuav_rgbt15/  (or next available number)
 #
 # Submit with:

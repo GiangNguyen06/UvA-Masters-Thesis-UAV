@@ -1,0 +1,44 @@
+==============================
+Job ID  : 23937817
+Node    : tcn119
+Started : Tue Jun 16 19:35:14 CEST 2026
+==============================
+
+Parameter Drift Analysis
+  Stage 2 checkpoint : /projects/prjs2041/runs/stage2/seed42/weights/best.pt
+  Stage 3 (naive) checkpoint : /projects/prjs2041/runs/stage3/naive2/weights/best.pt
+  Out dir              : /projects/prjs2041/analysis/drift_s2s3
+
+Loading checkpoints …
+  Loaded best.pt  [EMA weights, epoch=16]
+  Loaded best.pt  [EMA weights, epoch=3]
+
+Computing drift for shared parameters …
+  335 parameters analysed
+
+Global relative L2 drift (Stage 2 → Stage 3 (naive)):
+  mean = 0.1650
+  max  = 0.8113  (model.26.cv3.bn.running_var)
+  min  = 0.0000
+Global cosine similarity:
+  mean = 0.967647
+  min  = 0.000000  (model.2.bn.running_mean)
+
+  Drift stats CSV: /projects/prjs2041/analysis/drift_s2s3/drift_stats.csv
+
+Generating plots …
+  Saved: /projects/prjs2041/analysis/drift_s2s3/fig_drift_l2.png
+  Saved: /projects/prjs2041/analysis/drift_s2s3/fig_drift_cos.png
+  Saved: /projects/prjs2041/analysis/drift_s2s3/fig_drift_hist.png
+  Saved: /projects/prjs2041/analysis/drift_s2s3/fig_drift_groups.png
+
+All outputs in: /projects/prjs2041/analysis/drift_s2s3
+Done.
+==============================
+Done: Tue Jun 16 19:35:39 CEST 2026
+Results: /projects/prjs2041/analysis/drift_s2s3/
+Key figures:
+  fig_drift_groups.png  — backbone vs neck vs head drift
+  fig_drift_cos.png     — per-layer cosine similarity
+  drift_stats.csv       — raw per-layer numbers
+==============================
