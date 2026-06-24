@@ -1,5 +1,5 @@
 # Catastrophic Forgetting in Sequential Thermal Anti-UAV Detection
-### Gradient Starvation Under Scale-Distribution Shift
+### Scale-Conditioned Gradient Imbalance as a Candidate Forgetting Mechanism
 
 **Author:** Khac Duc Giang Nguyen (16265858)  
 **Supervisor:** Dr. Seyed Sahand Mohammadi Ziabari  
