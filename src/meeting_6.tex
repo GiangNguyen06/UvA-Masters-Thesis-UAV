@@ -1,0 +1,580 @@
+% ============================================================
+% Weekly Meeting Report — Week 24
+% Topic: Supervisor Feedback on Draft; Per-Layer Drift Analysis
+% ============================================================
+
+\section*{Supervisor Feedback \& Response Analysis}
+\addcontentsline{toc}{section}{Supervisor Feedback \& Response Analysis}
+
+\begin{tabular}{ll}
+    \textbf{Date}       & 16~June~2026 \\
+    \textbf{Student}    & Khac Duc Giang Nguyen \\
+    \textbf{Supervisor} & Dr.\ Seyed Sahand Mohammadi Ziabari \\
+    \textbf{Phase}      & Post-draft review; analysis jobs; response to supervisor \\
+\end{tabular}
+
+\vspace{1em}
+
+% ------------------------------------------------------------
+\subsection*{1. Overview}
+
+This report covers the period 5--16~June~2026 (Week~24). The supervisor
+returned written feedback on the thesis draft, raising six points requiring
+deeper investigation or stronger evidence. This report documents each point,
+our analysis of what can be answered from existing data, what requires new
+experiments, and what goes into the limitations section. Two additional
+analysis jobs were submitted on Snellius (jobs 23937817 and the existing
+eval output from 23821658 was re-examined). Total additional compute used:
+$\approx$1~SBU.
+
+% ------------------------------------------------------------
+\subsection*{2. Supervisor Feedback --- Full Text}
+
+The supervisor's email, received 16~June~2026, raised six points:
+
+\begin{enumerate}
+    \item \textbf{Gradient starvation hypothesis is indirect.}
+    High cosine similarity alone does not prove starvation over localised
+    changes in a few critical layers. Have gradients been measured by target
+    stratum directly, or is the claim inferred from dataset composition?
+
+    \item \textbf{Large-target collapse after one epoch.}
+    Could this reflect calibration failure rather than forgetting? Recall,
+    confidence distributions, and false positives should be analysed separately.
+
+    \item \textbf{Normal stratum also collapses despite CST containing
+    some normal targets.}
+    Why is the remaining gradient insufficient to preserve those representations?
+
+    \item \textbf{Stage~2 KD / detection ratio increasing.}
+    The rising kd/det ratio suggests distillation increasingly dominates
+    optimisation. Without a $\lambda$ ablation (0, 0.33, 1.0) or scheduled
+    $\lambda_{\mathrm{kd}}$, it is unclear whether KD constrains adaptation
+    too strongly.
+
+    \item \textbf{Stage~2 tiny AP $\approx$ 0.}
+    If the model never learned tiny targets before Stage~3, is Stage~3 tiny
+    collapse measuring forgetting or failure to learn an entirely new capability?
+
+    \item \textbf{Central claim depends on separating gradient starvation
+    from broader distribution shift.}
+    How can missing-scale gradients be distinguished from changes in
+    background statistics, thermal characteristics, or annotation noise?
+\end{enumerate}
+
+% ------------------------------------------------------------
+\subsection*{3. Compute Remaining \& New Jobs Submitted}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{ll}
+\hline
+Budget at Meeting~5      & $\approx$6,860 SBU remaining \\
+Job 23937817 (drift\_s2s3, rome CPU) & $\approx$1 SBU \\
+\textbf{Remaining after this session} & \textbf{$\approx$6,859 SBU} \\
+\hline
+\end{tabular}
+\end{table}
+
+\noindent Two analysis tasks were identified:
+\begin{enumerate}
+    \item \texttt{run\_drift\_s2s3.sh} --- per-layer-group parameter drift
+    S2$\to$S3 using \texttt{parameter\_drift.py}. Submitted to the \texttt{rome}
+    CPU partition. Completed in 25~seconds (job~23937817).
+    \item PR curves and recall distributions for T1~val after Stage~3 ---
+    these already existed from job~23821658 at
+    \texttt{/projects/prjs2041/analysis/stage3\_naive/eval\_t1/}.
+    No new job required.
+\end{enumerate}
+
+% ------------------------------------------------------------
+\subsection*{4. Point-by-Point Response}
+
+% ----
+\subsubsection*{4.1 Gradient Starvation Is Indirect (Point~1)}
+
+\textbf{Status: Partially addressed --- strengthened by new data, structural
+argument added.}
+
+\vspace{0.5em}
+\noindent\textbf{New evidence from job~23937817.} \texttt{parameter\_drift.py}
+was run comparing Stage~2 seed-42 best.pt to Stage~3 naive best.pt. 335 parameters
+analysed. Summary for learnable parameters only (BN running stats excluded):
+
+\begin{table}[h]
+\centering
+\caption{Per-layer-group parameter drift S2$\to$S3 (learnable params only).}
+\small
+\begin{tabular}{lrrrr}
+\hline
+\textbf{Group} & \textbf{N} & \textbf{Cos mean} & \textbf{Cos min} & \textbf{L2 mean} \\
+\hline
+backbone & 36 & 0.9951 & 0.9626 & 0.069 \\
+head     &  3 & 0.9894 & 0.9697 & 0.100 \\
+other    & 91 & 0.9911 & 0.9596 & 0.102 \\
+neck     & 75 & 0.9772 & 0.8683 & 0.171 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[h]
+\centering
+\begin{minipage}{0.48\linewidth}
+    \includegraphics[width=\linewidth]{media/meetings/fig_drift_groups.png}
+    \caption{Per-layer-group cosine similarity S2$\to$S3. Neck adapts most; head is effectively frozen.}
+\end{minipage}\hfill
+\begin{minipage}{0.48\linewidth}
+    \includegraphics[width=\linewidth, height=0.35\textheight, keepaspectratio]{media/meetings/fig_drift_cos.png}
+    \caption{Per-layer cosine similarity dot plot. No layer shows localised large change.}
+\end{minipage}
+\end{figure}
+
+\noindent\textbf{Interpretation.}
+\begin{itemize}
+    \item No layer group shows substantial change: all learnable-parameter
+    cosine similarities are $>$0.96. The supervisor's concern about
+    ``localised changes in a few critical layers'' is answered empirically:
+    no such layer exists. The lowest cosine similarity in the head group
+    is 0.9697 (\texttt{model.24.conv.weight}).
+    \item \textbf{Backbone is the most stable} (cos~0.9951) --- feature
+    extraction is essentially unchanged. The model's visual representation
+    of large targets still exists in the weights.
+    \item \textbf{Neck changed the most} (cos~0.9772, min~0.8683) --- the
+    feature pyramid network adapted to encode CST's tiny/small distribution.
+    This shifts the feature space the detection head receives, creating a
+    mismatch for large-target representations that the head never adapted to.
+    \item \textbf{Head barely moved} (cos~0.9894) --- the detection prediction
+    layers are effectively frozen. This is precisely what gradient starvation
+    predicts: 0\% large targets in CST $\to$ zero positive gradient flows into
+    the large-anchor detection outputs $\to$ those weights never update.
+\end{itemize}
+
+\noindent\textbf{Structural argument (not just empirical).}
+In YOLOMG with P3/P4/P5 multi-scale outputs, large targets are detected
+by the P5 branch (stride~32, coarsest grid). CST Anti-UAV has 0\% large
+targets (longest bounding box side $\geq$64\,px). During Stage~3 training,
+the detection loss contribution from large-target boxes at the P5 output is
+identically zero --- not small, but mathematically zero. This is not a
+hypothesis about gradient flow; it is a direct consequence of the detection
+loss function~\cite{pezeshki2021gradient}. The empirical finding (head barely
+moved, cos~0.9894) is consistent with and provides supporting evidence for
+this structural argument. Masip et al.~\cite{masip2026face}
+characterise catastrophic forgetting mechanistically as feature
+\emph{rotation} or capacity reduction rather than bulk weight overwriting ---
+the high per-layer cosine similarities here are precisely what that framework
+predicts when gradient absence (rather than gradient interference) is the
+operative mechanism.
+
+\vspace{0.5em}
+\noindent\textbf{What is still missing.} Actual gradient magnitudes per layer per
+target stratum were not logged during Stage~3 training. This would require
+re-running Stage~3 with per-batch gradient hooks --- not feasible within the
+compute budget. This limitation is acknowledged in the thesis.
+
+\vspace{0.5em}
+\noindent\textbf{Thesis update.} The per-layer-group drift table and
+\texttt{fig\_drift\_groups.png} should be added to Chapter~4 (Results),
+alongside the S1$\to$S2 comparison. The argument should be reframed:
+per-layer analysis rules out localised overwriting; structural analysis
+explains why large-target gradient starvation is mechanically inevitable;
+direct gradient measurement is left as future work.
+
+% ----
+\subsubsection*{4.2 Large-Target Collapse: Calibration or Forgetting? (Point~2)}
+
+\textbf{Status: Fully answered from existing data --- no new experiments needed.}
+
+\vspace{0.5em}
+\noindent The PR curves and confidence distributions from job~23821658 already
+exist locally at \texttt{analysis/stage\_3/stage3\_naive/eval\_t1/}. Key numbers
+from \texttt{metrics\_summary.txt}:
+
+\begin{table}[h]
+\centering
+\caption{T1 val evaluation after Stage~3 naive (job~23821658).}
+\small
+\begin{tabular}{lr}
+\hline
+\textbf{Metric} & \textbf{Value} \\
+\hline
+Overall mAP@0.5          & 0.0761 \\
+Overall Precision        & 0.1342 \\
+Overall Recall           & 0.2521 \\
+Overall F1               & 0.1752 \\
+Tiny mAP@0.5             & 0.0004 \\
+Small mAP@0.5            & 0.0670 \\
+Normal mAP@0.5           & 0.0878 \\
+Large mAP@0.5            & \textbf{0.0000} \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[h]
+\centering
+\begin{minipage}{0.48\linewidth}
+    \includegraphics[width=\linewidth]{media/meetings/fig_pr_curve.png}
+    \caption{PR curve on T1 val after Stage~3. Large-stratum curve is absent (AP\,=\,0).}
+\end{minipage}\hfill
+\begin{minipage}{0.48\linewidth}
+    \includegraphics[width=\linewidth]{media/meetings/fig_conf_curve.png}
+    \caption{P/R/F1 vs confidence threshold. No operating point recovers large-target recall.}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.6\linewidth]{media/meetings/fig_scale_metrics.png}
+\caption{Per-stratum mAP@0.5 after Stage~3. Large stratum: 0.000; small stratum remains non-zero (0.067).}
+\end{figure}
+
+\noindent\textbf{Why large mAP\,=\,0.000 rules out calibration failure.}
+Average Precision (AP) is computed by integrating the precision-recall
+curve across \textit{all} confidence thresholds (using the 101-point
+interpolation). AP\,=\,0.000 means that at \textit{every} confidence
+threshold, either recall\,=\,0 (no large targets detected) or
+precision\,=\,0 (every detection is a false positive). Calibration failure
+means confidence is miscalibrated but detection still occurs --- it would
+manifest as non-zero recall with shifted precision. AP\,=\,0 rules this
+out definitively. The model detects no large targets under any operating
+point. This is true forgetting, not miscalibration.
+
+\vspace{0.5em}
+\noindent The \texttt{fig\_conf\_curve.png} (P/R/F1 vs confidence threshold)
+and \texttt{fig\_pr\_curve.png} are available and can be included in the
+thesis as supporting evidence.
+
+\vspace{0.5em}
+\noindent\textbf{Thesis update.} Add one sentence: ``Large-stratum AP\,=\,0.000
+is computed by integrating over all confidence thresholds; miscalibrated
+confidence would produce non-zero recall at some threshold. The zero-AP
+result confirms complete loss of large-target detection rather than
+confidence drift.'' Include \texttt{fig\_conf\_curve.png} in the appendix.
+
+% ----
+\subsubsection*{4.3 Normal Stratum Also Collapses (Point~3)}
+
+\textbf{Status: Addressable by argument; exact CST normal percentage
+should be confirmed from dataset audit.}
+
+\vspace{0.5em}
+\noindent CST Anti-UAV scale distribution: 67.3\,\% tiny, 30.4\,\% small,
+$\approx$2.3\,\% normal, 0\,\% large (from earlier dataset audit). The
+2.3\,\% normal fraction means normal-target gradient signal exists but is
+severely imbalanced relative to Stage~1 training (where normal comprised
+$\approx$60\,\% of targets).
+
+\vspace{0.5em}
+\noindent\textbf{Why the remaining gradient is insufficient:}
+\begin{enumerate}
+    \item \textbf{Gradient imbalance.} During each Stage~3 batch, $\approx$97.7\,\%
+    of gradient signal comes from tiny/small targets and $\approx$2.3\,\% from
+    normal targets. The optimiser update is dominated by tiny/small loss terms.
+    Normal-target representations are pushed toward a compromise that serves
+    the dominant distribution~\cite{molahasani2023continual,he2024gradientreweighting}.
+    \item \textbf{Feature distribution shift in the neck.} The neck adapts to
+    CST's tiny/small dominant distribution (cos~0.9772, most changed of all
+    groups in the per-layer analysis). Even if the head's normal-anchor weights
+    were preserved, the neck now maps normal-sized CST inputs through a feature
+    space optimised for tiny/small detection. This breaks the feature-to-detection
+    correspondence for normal-sized Stage~1 targets, even though some normal
+    gradient does flow.
+    \item \textbf{Domain gap within the normal stratum.} CST normal targets
+    (2.3\,\%) likely differ in thermal appearance, background clutter, and
+    acquisition distance from Anti-UAV-RGBT normal targets ($\approx$60\,\%).
+    The gradient from CST normal instances may update normal-target representations
+    toward a CST-specific distribution rather than preserving the Stage~1
+    distribution.
+\end{enumerate}
+
+\noindent\textbf{Thesis update.} Add the gradient imbalance framing:
+``Although CST contains $\approx$2.3\,\% normal-sized targets, the
+gradient signal from these instances ($\approx$2.3\,\% of batch
+gradient) is insufficient to counteract two effects: the dominant
+tiny/small gradient pushing the feature pyramid toward smaller-scale
+representations, and the thermal domain gap between CST normal
+instances and Anti-UAV-RGBT normal instances.''
+
+% ----
+\subsubsection*{4.4 $\lambda_{\mathrm{kd}}$ Ablation Not Performed (Point~4)}
+
+\textbf{Status: Genuine gap --- goes in limitations.}
+
+\vspace{0.5em}
+\noindent Three Stage~2 seed runs all used $\lambda_{\mathrm{kd}}\,=\,1.0$.
+The single-seed pilot (job~22688135, A100 partition, FM\,=\,$-$0.0153) used
+a different architecture and DDP setup and is not a clean $\lambda\,=\,0$
+baseline. No controlled $\lambda$ ablation (0, 0.33, 1.0) was run.
+
+\vspace{0.5em}
+\noindent\textbf{What the data does show:}
+\begin{itemize}
+    \item The kd/det ratio rises from 1.36$\times$ at epoch~0 to 2.44$\times$
+    at epoch~16 (best checkpoint). KD increasingly dominates optimisation.
+    \item FM\,=\,$-$0.033\,$\pm$\,0.004 is the empirical result under this
+    regime. Whether a lower $\lambda$ would achieve similar T1 retention
+    with better T2 adaptation cannot be determined.
+    \item The rising ratio is a concern the supervisor correctly identifies:
+    it is possible the model converges to a suboptimal T2 mAP because the
+    KD loss prevents the student from fully adapting.
+\end{itemize}
+
+\noindent\textbf{Cost estimate for ablation:} Two additional Stage~2 runs
+($\lambda\,=\,0$ and $\lambda\,=\,0.33$), each $\approx$4$\times$H100
+for $\approx$18\,h $\approx$~13,824~SBU per run. Total: $\approx$27,648~SBU.
+Budget remaining: $\approx$6,859~SBU. \textbf{Not feasible.}
+
+\vspace{0.5em}
+\noindent\textbf{Thesis update.} Add to limitations: ``A $\lambda$ ablation
+(0, 0.33, 1.0) would be required to confirm whether $\lambda_{\mathrm{kd}}\,=\,1.0$
+represents an optimal balance or over-constrains T2 task adaptation. The
+increasing kd/det ratio (1.36$\times$$\to$2.44$\times$) suggests distillation
+dominates optimisation at later epochs, potentially limiting T2 mAP. This
+ablation is left as future work.''
+
+% ----
+\subsubsection*{4.5 Tiny AP $\approx$ 0 in Stage~2 --- Forgetting or Unlearned? (Point~5)}
+
+\textbf{Status: Fully answered from existing data --- no new experiments needed.}
+
+\vspace{0.5em}
+\noindent T1 (Anti-UAV-RGBT val) tiny-stratum mAP by stage:
+
+\begin{table}[h]
+\centering
+\caption{Tiny-stratum mAP@0.5 across all stages.}
+\small
+\begin{tabular}{lrl}
+\hline
+\textbf{Stage} & \textbf{Tiny mAP@0.5} & \textbf{Note} \\
+\hline
+After Stage~1 & 0.009 & Never learned well --- only 197/60,620 val frames are tiny \\
+After Stage~2 & $\approx$0.001 & Small decline from a near-zero baseline \\
+After Stage~3 & 0.0004 & Near zero --- consistent with baseline \\
+\hline
+\end{tabular}
+\end{table}
+
+\noindent\textbf{Interpretation.} The model never achieved meaningful
+tiny-target AP in Stage~1 (mAP\,=\,0.009), because Anti-UAV-RGBT contains
+only 197 tiny-stratum frames out of 60,620 UAV-present val frames (0.3\,\%).
+The supervisor's concern is valid: the Stage~3 tiny ``collapse'' (0.009
+$\to$ 0.0004) is not forgetting of a learned capability; it is near-zero
+before and after. The FM formula ($\mathrm{FM} = \mathrm{mAP}_{T1} -
+0.6725$) uses \textit{overall} mAP, not per-stratum mAP. The overall FM
+is dominated by the normal and large strata, where true forgetting occurs.
+
+\vspace{0.5em}
+\noindent\textbf{What the data does show for tiny:}
+The tiny stratum is a \textit{pre-existing detection failure}, not a
+consequence of continual learning. It is correctly excluded from the
+gradient starvation argument. The supervisor's point is a valid catch ---
+the thesis should be explicit.
+
+\vspace{0.5em}
+\noindent\textbf{Thesis update.} Add to the per-stratum discussion in
+Chapter~4: ``The tiny stratum (mAP\,=\,0.009 after Stage~1) was never
+reliably detected, reflecting the rarity of tiny-stratum instances in
+Anti-UAV-RGBT (197 of 60,620 val frames, 0.3\,\%). Stage~3 tiny collapse
+(0.009$\to$0.0004) reflects a pre-existing detection failure rather than
+catastrophic forgetting of a learned capability. The gradient starvation
+argument applies specifically to the normal and large strata, which were
+reliably detected after Stage~1 (mAP\,=\,0.719 and 0.461 respectively)
+and collapsed substantially after Stage~3.''
+
+% ----
+\subsubsection*{4.6 Separating Gradient Starvation from Broader Distribution Shift (Point~6)}
+
+\textbf{Status: Genuine limitation --- goes in limitations.}
+
+\vspace{0.5em}
+\noindent CST Anti-UAV differs from Anti-UAV-RGBT in multiple ways simultaneously:
+\begin{itemize}
+    \item Scale distribution (97.7\,\% tiny/small vs.\ $\approx$15\,\% tiny/small)
+    \item Background statistics (indoor/outdoor controlled vs.\ outdoor flight)
+    \item Thermal characteristics (possibly different sensor models, acquisition conditions)
+    \item Annotation noise (different annotation protocols across datasets)
+    \item Camera motion (static camera in CST vs.\ handheld in RGBT)
+\end{itemize}
+
+\noindent All of these co-occur in the Stage~3 transition. The gradient starvation
+hypothesis attributes forgetting to the scale distribution gap. The supervisor
+correctly notes that the evidence is circumstantial.
+
+\vspace{0.5em}
+\noindent\textbf{What would distinguish them:}
+The clean ablation would be to train Stage~3 on CST filtered to normal+large
+targets only (preserving scale distribution) and measure whether T1 normal/large
+forgetting is reduced. This would isolate scale-gradient starvation from domain
+shift. CST has 0\% large targets, making a large-target-only control impossible;
+but a normal-only condition could in principle be constructed.
+
+\vspace{0.5em}
+\noindent\textbf{Cost estimate:} Filter CST to normal targets ($\approx$2.3\,\%
+of frames), retrain Stage~3 on this subset, evaluate T1 normal forgetting.
+Approximately 4$\times$H100, $\approx$10--15\,h $\approx$ 7,680--11,520~SBU.
+\textbf{Not feasible.}
+
+\vspace{0.5em}
+\noindent\textbf{Best available argument from existing data:}
+\begin{enumerate}
+    \item The collapse is \textit{stratum-specific} and matches exactly the
+    scale gap between datasets. Large-target mAP collapses to 0.000; small-target
+    mAP (where CST provides gradient) remains non-zero (0.067). If background/thermal
+    distribution shift were the primary driver, forgetting would be expected to be
+    more uniform across strata rather than concentrated in the absent stratum.
+    \item The weight change is minimal and uniform across layers (per-layer drift
+    analysis, Section~4.1). Distribution shift typically drives larger weight
+    changes; the high cosine similarity is more consistent with gradient absence
+    than with active domain interference.
+\end{enumerate}
+
+\noindent\textbf{Thesis update.} Add to limitations: ``The gradient starvation
+hypothesis cannot be fully isolated from other confounding factors in the
+Stage~2$\to$3 transition, including thermal appearance characteristics,
+background statistics, and annotation protocol differences. The control
+experiment --- Stage~3 training on CST normal+large targets only --- would
+require $\approx$7,680~SBU and is left as future work. The stratum-specificity
+of the collapse (large-target mAP\,$\to$\,0.000 while small-target mAP remains
+0.067) and the minimal weight change across all layers (mean cosine sim~0.968)
+are consistent with gradient starvation as the primary mechanism, but
+corroborating evidence from direct gradient measurement or a scale-controlled
+ablation is needed for a definitive conclusion.''
+
+% ------------------------------------------------------------
+\subsection*{5. Summary Table --- Response Status}
+
+\begin{table}[h]
+\centering
+\caption{Supervisor feedback response status.}
+\small
+\begin{tabular}{p{0.04\linewidth}p{0.32\linewidth}p{0.16\linewidth}p{0.38\linewidth}}
+\hline
+\textbf{\#} & \textbf{Point} & \textbf{Status} & \textbf{Action} \\
+\hline
+1 & Cosine sim $\neq$ gradient starvation &
+    Partially addressed &
+    Per-layer breakdown added; structural argument strengthened;
+    direct gradient measurement in future work. \\[4pt]
+2 & Calibration vs.\ forgetting &
+    Fully answered &
+    Large AP\,=\,0 rules out calibration.
+    Add PR curve figure and one sentence. \\[4pt]
+3 & Normal collapses despite CST normal targets &
+    Addressed by argument &
+    Gradient imbalance + neck feature shift.
+    Add to thesis discussion. \\[4pt]
+4 & $\lambda$ ablation missing &
+    Genuine gap / limitations &
+    Not feasible ($\approx$27,648~SBU needed).
+    Acknowledge in limitations. \\[4pt]
+5 & Tiny AP\,=\,0 in Stage~2 &
+    Fully answered &
+    Tiny never learned (0.009 after S1).
+    Add one paragraph clarifying per-stratum forgetting. \\[4pt]
+6 & Cannot separate starvation from domain shift &
+    Genuine gap / limitations &
+    Not feasible ($\approx$7,680~SBU needed).
+    Best available argument documented. Acknowledge in limitations. \\
+\hline
+\end{tabular}
+\end{table}
+
+% ------------------------------------------------------------
+\subsection*{6. New Analysis Outputs Available}
+
+\begin{table}[h]
+\centering
+\caption{New figures and data produced this session.}
+\small
+\begin{tabular}{p{0.40\linewidth}p{0.52\linewidth}}
+\hline
+\textbf{File} & \textbf{Use} \\
+\hline
+\texttt{analysis/stage\_3/drift\_s2s3/fig\_drift\_groups.png}
+& Per-layer-group cosine sim S2$\to$S3 --- addresses Point~1. \\
+\texttt{analysis/stage\_3/drift\_s2s3/fig\_drift\_cos.png}
+& Per-layer cosine similarity dot plot. \\
+\texttt{analysis/stage\_3/drift\_s2s3/fig\_drift\_l2.png}
+& Per-layer relative L2 drift dot plot. \\
+\texttt{analysis/stage\_3/drift\_s2s3/drift\_stats.csv}
+& Raw per-layer numbers (335 params). \\
+\texttt{analysis/stage\_3/stage3\_naive/eval\_t1/fig\_pr\_curve.png}
+& Full PR curve on T1 val after Stage~3 --- addresses Point~2. \\
+\texttt{analysis/stage\_3/stage3\_naive/eval\_t1/fig\_conf\_curve.png}
+& P/R/F1 vs.\ confidence threshold --- addresses Point~2. \\
+\texttt{analysis/stage\_3/stage3\_naive/eval\_t1/scale\_metrics.csv}
+& Per-stratum mAP numbers --- addresses Points~2, 3, 5. \\
+\hline
+\end{tabular}
+\end{table}
+
+% ------------------------------------------------------------
+\subsection*{7. Thesis Updates Required}
+
+Based on the above analysis, the following additions/edits are needed
+in the thesis before the next supervisor response:
+
+\begin{enumerate}
+    \item \textbf{Chapter~4 Results --- add per-layer drift table} (Section~4.1
+    of this report). Show backbone/neck/head/other cosine sim for S2$\to$S3,
+    alongside S1$\to$S2 for comparison. Add \texttt{fig\_drift\_groups.png}.
+
+    \item \textbf{Chapter~4 Results --- add PR curve clarification} (Section~4.2).
+    One sentence explaining AP\,=\,0 $\Rightarrow$ recall\,=\,0 at all thresholds
+    $\Rightarrow$ not calibration failure. Add \texttt{fig\_conf\_curve.png} in
+    appendix.
+
+    \item \textbf{Chapter~4 Results --- clarify tiny stratum} (Section~4.5).
+    Explicitly state that tiny-stratum AP was near-zero after Stage~1 (0.009)
+    and Stage~3 tiny collapse is not meaningful forgetting.
+
+    \item \textbf{Chapter~4/5 --- add gradient imbalance argument for normal}
+    (Section~4.3). 2.3\,\% normal in CST cannot preserve representations tuned
+    on 60\,\% normal in Stage~1.
+
+    \item \textbf{Chapter~5 Limitations --- add $\lambda$ ablation gap}
+    (Section~4.4). Acknowledge the kd/det ratio observation and the missing
+    controlled ablation.
+
+    \item \textbf{Chapter~5 Limitations --- add distribution shift separation gap}
+    (Section~4.6). Acknowledge cannot fully isolate gradient starvation from
+    thermal/background domain shift. Describe the control experiment that would
+    be needed.
+\end{enumerate}
+
+% ------------------------------------------------------------
+\subsection*{8. Key Numbers for Reference}
+
+\begin{table}[h]
+\centering
+\caption{All key numbers confirmed as of 16~June~2026.}
+\small
+\begin{tabular}{llr}
+\hline
+\textbf{Stage} & \textbf{Metric} & \textbf{Value} \\
+\hline
+S1 & T1 mAP@0.5 (ceiling) & 0.6725 \\
+S1 & Tiny-stratum mAP@0.5 & 0.009 \\
+S1 & Normal-stratum mAP@0.5 & 0.719 \\
+S1 & Large-stratum mAP@0.5 & 0.461 \\
+\hline
+S2 & FM (3 seeds) & $-$0.033\,$\pm$\,0.004 \\
+S2 & T1 retained & 0.640 \\
+S2 & Mean cosine sim S1$\to$S2 & 0.911 \\
+S2 & kd/det ratio at best epoch & 2.44$\times$ \\
+\hline
+S3 naive & FM & $-$0.605 \\
+S3 naive & T1 mAP@0.5 (post-training eval) & 0.0761 \\
+S3 naive & Large-stratum T1 mAP@0.5 & 0.0000 \\
+S3 naive & Normal-stratum T1 mAP@0.5 & 0.0878 \\
+S3 naive & Small-stratum T1 mAP@0.5 & 0.0670 \\
+S3 naive & Tiny-stratum T1 mAP@0.5 & 0.0004 \\
+S3 naive & Mean cosine sim S2$\to$S3 (global) & 0.9676 \\
+S3 naive & Cosine sim backbone (learnable) & 0.9951 \\
+S3 naive & Cosine sim neck (learnable) & 0.9772 \\
+S3 naive & Cosine sim head (learnable) & 0.9894 \\
+\hline
+\end{tabular}
+\end{table}
+

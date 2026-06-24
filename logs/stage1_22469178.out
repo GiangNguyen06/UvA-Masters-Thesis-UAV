@@ -1,0 +1,13 @@
+========================================
+Stage 1: YOLOMG on Anti-UAV-RGBT
+Job ID:  22469178
+Node:    gcn62
+GPU:     0
+Time:    Mon May  4 23:11:52 CEST 2026
+========================================
+
+Local scratch space:
+Filesystem      Size  Used Avail Use% Mounted on
+wstor_scratch1  2.5P  512T  2.0P  21% /gpfs/scratch1
+Copying Anti-UAV-RGBT to local NVMe (/scratch-local/knguyen1.22469178/Anti-UAV-RGBT)...
+[2026-05-04T23:12:02.205] error: *** JOB 22469178 ON gcn62 CANCELLED AT 2026-05-04T23:12:02 DUE to SIGNAL Terminated ***

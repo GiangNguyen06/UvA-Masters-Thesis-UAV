@@ -1,0 +1,1032 @@
+% ============================================================
+% Weekly Meeting Report — Weeks 17–18
+% Topic: Dataset Classes, YOLOMG Integration & First Training Run
+% ============================================================
+
+\section*{Weekly Progress Report — Weeks 17--18}
+\addcontentsline{toc}{section}{Weekly Progress Report — Weeks 17--18}
+
+\begin{tabular}{ll}
+    \textbf{Date}       & \today \\
+    \textbf{Student}    & Khac Duc Giang Nguyen \\
+    \textbf{Supervisor} & Dr.\ Seyed Sahand Mohammadi Ziabari \\
+    \textbf{Phase}      & Pipeline Implementation \& First Training Run (Weeks 17--18) \\
+\end{tabular}
+
+\vspace{1em}
+
+% ------------------------------------------------------------
+\subsection*{1. Overview}
+
+This report documents the work completed during Weeks~17--18. All four
+PyTorch \texttt{Dataset} classes were completed and verified on
+Snellius. The YOLOMG architecture was cloned and integrated into the
+project codebase. The FD5 motion mask pre-computation pipeline was
+debugged and submitted as a SLURM job (all 100 ARD100 sequences
+processed, 65.4\,GB of \texttt{.npz} archives, confirmed via
+end-to-end smoke test). The Stage~1 and Stage~2 training scripts were
+written. Eighteen SLURM jobs were submitted in the course of resolving
+nine successive infrastructure issues: OOM kills, an eval-mode API
+crash, a failed \texttt{DataParallel} experiment (3$\times$ slower
+than one GPU), an NFS I/O bottleneck, a DDP path-broadcast bug, a DDP
+unused-parameter crash, a project disk quota exhaustion, corrupt
+JPEGs with a broken VideoCapture fallback, and an NCCL collective
+timeout caused by rank-0-only validation blocking idle ranks. Empirical
+profiling across three I/O strategies (NFS mp4, GPFS mp4, GPFS JPEG)
+produced identical per-batch times of $\approx$0.64\,s,
+conclusively identifying GPU kernel-launch overhead on a small
+(3\,M-parameter) model as the dominant cost. The correct solution —
+\texttt{DistributedDataParallel} (DDP) via \texttt{torchrun} — has
+been implemented in \texttt{train\_stage1.py} and all code bugs
+resolved. With 4$\times$A100 under DDP, training processes one quarter
+of the dataset per epoch ($\approx$25\,min); post-epoch validation is
+distributed across all 4 ranks in parallel ($\approx$10\,min), giving
+$\approx$35\,min per epoch and $\approx$58\,h for the full 100-epoch run.
+As of \textbf{06 May 2026, $\sim$23:10 CEST}: \textbf{Stage~1 DDP
+training is running correctly end-to-end — the central milestone of
+Weeks~17--18.} After 21 SLURM submissions and nine infrastructure
+fixes, job~22522864 has now completed two full
+epoch-plus-validation cycles:
+epoch~0 (loss=$0.0288$, mAP@0.5=0.0000 — expected for a freshly
+initialised model) and epoch~1 (loss=$0.0215$,
+\textbf{mAP@0.5=0.0195} — first confirmed UAV detections).
+Epoch~2 is in progress. Best checkpoint saved at
+\texttt{antiuav\_rgbt14/weights/best.pt}.
+Expected completion: $\approx$\textbf{08:00 CEST, 09 May 2026 (Saturday)}.
+
+% ------------------------------------------------------------
+\subsection*{2. PyTorch Dataset Classes (Completed)}
+
+All four custom \texttt{Dataset} classes are implemented in
+\texttt{/projects/prjs2041/uav\_code/datasets/} and confirmed working
+via a smoke test (\texttt{test\_datasets.py}):
+
+\begin{itemize}
+    \item \textbf{\texttt{AntiUAVRGBTDataset}} — reads paired IR/RGB
+          streams from \texttt{.mp4} video files on demand using
+          \texttt{cv2.VideoCapture}; parses \texttt{infrared.json}
+          annotations at initialisation.
+    \item \textbf{\texttt{AntiUAV410Dataset}} — reads pre-extracted
+          JPEG frames; parses per-sequence \texttt{IR\_label.json}
+          (6-digit filename convention, 1-based indexing).
+    \item \textbf{\texttt{ARD100Dataset}} — reads \texttt{.mp4} video
+          files; parses Pascal VOC XML from the \texttt{annotations/}
+          folder (lowercase). Optionally loads pre-computed FD5 motion
+          masks from \texttt{.npz} archives via a \texttt{mask\_root}
+          argument.
+    \item \textbf{\texttt{CSTDataset}} — reads pre-extracted JPEG
+          frames; parses per-sequence \texttt{IR\_label.json} using
+          the \texttt{gt} key (not \texttt{gt\_rect}, which caused
+          a silent bug on first pass).
+\end{itemize}
+
+All classes share a common \texttt{\_\_getitem\_\_} return format:
+
+\begin{center}
+{\small\texttt{\{'image': Tensor(3,H,W), 'labels': ndarray(N,5),}}\\
+{\small\texttt{\phantom{\{}'mask': Tensor|None, 'meta': dict\}}}
+\end{center}
+
+\noindent where \texttt{labels} are in YOLO format
+$[\mathit{cls},\, x_c,\, y_c,\, w,\, h]$ normalised to $[0,1]$, and
+a shared \texttt{collate\_fn} prepends a batch index column to produce
+the $(N,6)$ target tensor expected by YOLOMG's loss function.
+
+\textbf{Annotation quirks discovered during debugging:}
+
+\begin{itemize}
+    \item Anti-UAV410 frame filenames follow 6-digit, 1-based
+          indexing (\texttt{000001.jpg}), not the 4-digit format
+          initially assumed.
+    \item ARD100 annotation directory is \texttt{annotations/}
+          (lowercase), not \texttt{Annotations/}.
+    \item CST JSON stores bounding boxes under the key \texttt{'gt'},
+          not \texttt{'gt\_rect'} as in the other datasets.
+    \item CST root path uses a hyphen (\texttt{CST-AntiUAV}), not a
+          space.
+\end{itemize}
+
+% ------------------------------------------------------------
+\subsection*{3. FD5 Motion Mask Generation}
+
+\subsubsection*{3.1 Purpose and Role in the Pipeline}
+
+YOLOMG is a \textbf{dual-input} detector: every forward pass receives
+two tensors, \texttt{img1} (the appearance frame) and \texttt{img2}
+(a motion map), which are fused in the early convolutional layers via
+a \texttt{Concat3} module. The motion channel is the architectural
+feature that distinguishes YOLOMG from a standard single-stream
+detector, and giving it a meaningful signal is what allows the model
+to exploit temporal information — the fact that a UAV moves against a
+(relatively) static background.
+
+For two of the three training datasets (Anti-UAV-RGBT, Anti-UAV410),
+\texttt{img2} is set to an all-zero tensor during training. Both were
+recorded from fixed tripods, so there is no ego-motion and the simple
+frame difference would capture only UAV motion, which the appearance
+channel already encodes. Passing zeros is therefore correct: the model
+learns detection from \texttt{img1} alone while the motion branch
+remains dormant.
+
+ARD100 is different. It was recorded from freely moving airborne
+platforms, producing strong ego-motion in every frame. Here the motion
+channel carries genuine, complementary signal: the FD5 map highlights
+any pixel that moved between frame $t$ and frame $t-5$, which in
+practice marks both the UAV (local motion) and the moving background
+(global motion from camera translation). Stage~3 of the continual
+learning pipeline trains on ARD100 \emph{with} this motion signal
+active, making it the first stage where the full dual-input
+architecture is exercised as intended. Without pre-computed masks,
+Stage~3 would silently degrade to the same zero-motion-channel
+setting as Stages~1--2, and the motion branch would contribute
+nothing — a subtle but serious flaw that would be very difficult to
+diagnose after the fact.
+
+Pre-computing and caching the masks as \texttt{.npz} archives
+(one per sequence, stored as a $(T, H, W)$ float32 array) avoids
+re-running the computationally expensive ECC homography estimation
+at every training epoch. At $\approx$600\,s per sequence the
+per-epoch cost would be prohibitive; pre-computation amortises
+this cost to a single 14-hour CPU job.
+
+\subsubsection*{3.2 Bug Fix: Broken \texttt{MOD\_Functions} Import}
+
+The original \texttt{generate\_masks\_npz.py} imported
+\texttt{motion\_compensate} from \texttt{MOD\_Functions.py}, which
+was absent on Snellius. Even if copied, it imports \texttt{onnxruntime}
+at the module level, which is not installed in the \texttt{uav\_master}
+environment. The function was inlined directly into the script,
+removing both external dependencies. The inline version additionally
+handles grayscale input frames correctly (the original assumed BGR),
+which is required since \texttt{compute\_fd5} passes grayscale frames.
+
+\subsubsection*{3.2 SLURM Job Status}
+
+\textbf{Job 22460009} (\texttt{rome} partition, node \texttt{tcn286})
+was submitted at \textbf{15:40 CEST} on 4~May~2026 with a 24-hour
+time limit. The job pre-computes FD5 motion difference masks for all
+100 ARD100 sequences and saves them to
+\texttt{/projects/prjs2041/datasets/ARD100/masks\_npz/} as one
+\texttt{.npz} archive per sequence.
+
+Progress snapshots:
+
+\begin{verbatim}
+16:02 CEST   7%|▋  |  7/100 [20:07<5:16:25,  204s/seq]
+20:24 CEST  41%|████| 41/100 [4:39:17<10:15:30, 626s/seq]
+\end{verbatim}
+
+\noindent Per-sequence wall time varies considerably (100--655\,s)
+depending on sequence length and motion complexity, since ECC
+homography convergence is input-dependent. The running average at
+20:24 is \textasciitilde{}408\,s/seq; with 59 sequences remaining
+the estimated completion is \textasciitilde{}\textbf{03:00 CEST}
+on 5~May~2026, well within the 24-hour time limit.
+
+\subsubsection*{3.3 Results}
+
+\begin{table}[h]
+\centering
+\caption{FD5 mask generation results for ARD100 (job~22460009).}
+\label{tab:masks}
+\begin{tabular}{ll}
+\hline
+\textbf{Metric}               & \textbf{Value} \\
+\hline
+Total sequences processed     & 96 / 100 \\
+Skipped (already existed)     & 4 \\
+Failed sequences              & 0 \\
+Total \texttt{.npz} files on disk & 100 \\
+Total compressed size on disk & 65,420.9\,MB ($\approx$65.4\,GB) \\
+Job wall-clock time           & 14\,h\,08\,min \\
+\hline
+\end{tabular}
+\end{table}
+
+\noindent All 100 ARD100 sequences now have pre-computed FD5 motion
+masks in \texttt{/projects/prjs2041/datasets/ARD100/masks\_npz/}.
+The ``skipped~4'' entries reflect sequences whose \texttt{.npz}
+files were already present from a prior partial run; no data is
+missing.
+
+Mask loading was verified end-to-end on 05~May~2026 via
+\texttt{test\_datasets.py} (4/4 datasets passing). The verification
+confirmed three properties that are essential for Stage~3 training:
+\begin{itemize}
+    \item \textbf{Shape:} $(1, 1080, 1920)$ — a single-channel
+          float32 map at full ARD100 resolution, matching
+          \texttt{img2}'s expected input format.
+    \item \textbf{Non-zero values:} \texttt{max=101.0},
+          \texttt{mean=1.62} at frame~10, confirming that genuine
+          motion signal is present and the ECC compensation did
+          not degenerate.
+    \item \textbf{Correct warm-up behaviour:} frames~0--4 are zero
+          by design. FD5 computes $|I_t - I_{t-5}|$, so the earliest
+          frame with a valid reference is $t=5$. The smoke test
+          samples frame~10 — the first round number above the
+          warm-up threshold — giving a small margin to ensure the
+          UAV has had time to move enough to produce a visible
+          signal. This warm-up behaviour is expected and handled
+          correctly by the \texttt{ARD100Dataset} dataloader, which
+          will simply provide a near-zero motion channel for the
+          first few frames of each sequence.
+\end{itemize}
+
+\noindent These masks will be passed as \texttt{img2} to YOLOMG
+during Stage~3 training, activating the motion branch of the
+dual-input architecture for the first time in the pipeline.
+The \texttt{ARD100Dataset} \texttt{mask\_root} argument is now
+confirmed production-ready.
+
+% ------------------------------------------------------------
+\subsection*{4. YOLOMG Integration}
+
+The YOLOMG repository \cite{guo_yolomg_2025} was cloned to
+\texttt{/projects/prjs2041/YOLOMG/} directly on Snellius. YOLOMG is
+a YOLOv5-based dual-input detector: it accepts two $(B,3,H,W)$ image
+tensors — an appearance frame (\texttt{img1}) and a motion difference
+map (\texttt{img2}) — fused in the early convolutional layers via a
+\texttt{Concat3} module. The model configuration used is
+\texttt{models/dual\_uav2.yaml}, which defines:
+
+\begin{itemize}
+    \item A lightweight \textbf{backbone1} branch for early feature
+          extraction of the motion channel (2 layers, 568 parameters).
+    \item A \textbf{backbone2} branch that concatenates both streams
+          at the feature level and continues through four
+          downsampling stages with SPPF pooling.
+    \item A standard \textbf{FPN + PAN head} with three detection
+          scales (P3/P4/P5) and custom tiny-object anchors.
+    \item \textbf{Total:} 318 layers, \textbf{2,979,976 parameters},
+          91.5~GFLOPs at 640$\times$640 resolution.
+\end{itemize}
+
+\noindent The following additional packages were installed into the
+\texttt{uav\_master} environment to satisfy YOLOMG's dependencies:
+\texttt{requests}, \texttt{seaborn}, \texttt{tensorboard},
+\texttt{thop}.
+
+% ------------------------------------------------------------
+\subsection*{5. Stage 1 Training Script}
+
+A custom training script (\texttt{train\_stage1.py}) was written to
+bridge the project's video-based \texttt{Dataset} classes with
+YOLOMG's dual-input model. The key design decisions are:
+
+\begin{itemize}
+    \item \textbf{Dataset wrapper (\texttt{Stage1Dataset}):}
+          Wraps \texttt{AntiUAVRGBTDataset}, applies letterbox
+          resizing to $640\times640$ (preserving aspect ratio with
+          zero-padding), and returns a zero tensor as \texttt{img2}
+          for Stage~1. This is correct: Anti-UAV-RGBT is filmed from
+          a fixed tripod with no ego-motion, so the motion channel
+          carries no useful signal at this stage. The motion branch
+          learns from a null input.
+    \item \textbf{Optimiser:} SGD, momentum $= 0.937$, weight decay
+          $= 5\times10^{-4}$, batch size $= 16$ — as specified in the
+          methodology.
+    \item \textbf{LR schedule:} Cosine annealing over 100 epochs,
+          with 3-epoch linear warmup.
+    \item \textbf{AMP:} Mixed-precision training (FP16) via
+          \texttt{torch.cuda.amp} to halve GPU memory usage.
+    \item \textbf{EMA:} Exponential moving average of weights for
+          stable validation.
+    \item \textbf{Evaluation:} Per-epoch mAP@0.5 computed inline
+          using NMS + IoU matching, without requiring YOLOMG's
+          internal dataloader.
+    \item \textbf{Output:} \texttt{best.pt}, \texttt{last.pt},
+          \texttt{results.csv}, and \texttt{stage1\_mAP.txt} —
+          the latter stores the T1 mAP ceiling used to compute the
+          Forgetting Measure in Stage~3.
+\end{itemize}
+
+\subsubsection*{5.1 Infrastructure issues resolved}
+
+\textbf{OOM kills on first two submissions.} The first run (job
+22460276, node \texttt{gcn30}) and a second attempt (job 22460320,
+node \texttt{gcn28}) were both killed by the Linux OOM killer within
+4~minutes of starting. With 8 DataLoader workers, each worker holds
+open \texttt{cv2.VideoCapture} handles for all training sequences
+simultaneously, causing RSS to balloon well beyond the initial
+32\,GB allocation. Fixed by reducing workers from 8 to 4 and
+increasing the SLURM memory allocation from 32\,GB to 80\,GB.
+
+\textbf{NFS I/O bottleneck and single-GPU throughput.} With one A100,
+epoch~0 of job~22460564 completed in $\approx$1\,h\,40\,min —
+implying $\approx$167\,hours for 100 epochs, which exceeds Snellius's
+5-day (120\,h) per-job limit. Profiling revealed the bottleneck:
+\texttt{cv2.VideoCapture.set(CAP\_PROP\_POS\_FRAMES,\,idx)} performs
+a random seek inside each \texttt{.mp4} file on every
+\texttt{\_\_getitem\_\_} call. Over the NFS-mounted \texttt{/projects}
+filesystem this costs approximately \textbf{0.6\,s per 16-sample
+batch} (9,346 batches $\times$ 0.6\,s $\approx$ 93\,min for the I/O
+component alone vs.\ $\approx$7\,min of actual GPU compute per
+epoch).
+
+\textbf{DataParallel experiment (jobs 22466341, 22466520) — abandoned.}
+An initial attempt to compensate by spreading the load across 4~GPUs
+with \texttt{nn.DataParallel} introduced two new issues. First, job
+22466341 crashed immediately: \texttt{nn.DataParallel} wraps the model
+in a proxy that does not forward arbitrary attribute access, so
+\texttt{ComputeLoss(model)} failed when it tried to read
+\texttt{model.hyp}. After fixing this with
+\texttt{ComputeLoss(de\_parallel(model))}, job~22466520 ran
+successfully — but training was \textbf{3$\times$ slower} than on a
+single GPU. The root cause is model size: YOLOMG has only 3M
+parameters and completes a forward/backward pass in $\approx$50\,ms.
+DataParallel's synchronisation overhead (tensor scatter/gather across
+PCIe) dominated at $\approx$8\,s per batch, making multi-GPU
+communication the bottleneck rather than compute. DataParallel was
+removed entirely.
+
+\textbf{Current fix: GPFS scratch copy (job 22469161).} The dataset
+(3.7\,GB of \texttt{.mp4} files) is copied from \texttt{/projects}
+to \texttt{/scratch-local/\$USER.\allowbreak\$SLURM\_JOB\_ID/} before training
+begins (73\,s copy time, verified). GPFS seek latency is approximately
+5--10$\times$ lower than NFS, which is expected to reduce the per-batch
+I/O time from $\approx$0.6\,s to $\approx$0.1\,s and bring
+epoch time below 20\,minutes — well within the 120\,h limit.
+
+\textbf{JPEG frame pre-extraction (implemented and benchmarked).}
+\texttt{extract\_frames\_antiuav\_rgbt.py} pre-extracts all IR frames
+to JPEG files ($\approx$11\,min with 16 workers on a GPU node).
+The companion class \texttt{AntiUAVRGBTFramesDataset} replaces
+\texttt{VideoCapture} random seeks with direct \texttt{cv2.imread}
+calls ($\approx$1--2\,ms each on GPFS). This was benchmarked in
+job~22470546 (see §5.2) and produced \textbf{no measurable speedup}:
+per-batch time remained $\approx$0.644\,s, identical to the NFS
+\texttt{VideoCapture} baseline. This negative result is informative:
+it demonstrates that I/O is not the bottleneck, and that the dominant
+cost is GPU-side computation, not data loading. See §5.3 for the
+full diagnosis.
+
+\subsubsection*{5.2 SLURM Job History and Training Timing}
+
+\textbf{Job 22460564 — eval-mode crash, epoch 0 timing established.}
+(\texttt{gpu\_a100}, node \texttt{gcn28}, 1$\times$A100-SXM4-40\,GB,
+submitted \textbf{16:02 CEST}.) Training progressed through all 9,346
+batches of epoch~0 before crashing at the end-of-epoch evaluation step
+at \textbf{17:42 CEST} — a wall time of $\approx$\textbf{1\,h\,40\,min
+for a single epoch}:
+
+\begin{verbatim}
+[  0/99][   0/9346]  mem= 2.03G  box=0.0407  obj=0.0015  cls=0.0000
+[  0/99][  50/9346]  mem=22.04G  box=0.0487  obj=0.0015  cls=0.0000
+[  0/99][ 500/9346]  mem=22.04G  box=0.0333  obj=0.0014  cls=0.0000
+[  0/99][1000/9346]  mem=22.04G  box=0.0311  obj=0.0012  cls=0.0000
+[  0/99][9300/9346]  mem=22.04G  box=0.0243  obj=0.0008  cls=0.0000
+\end{verbatim}
+
+\noindent Key observations from epoch~0:
+\begin{itemize}
+    \item 149,528 training frames yield 9,346 batches per epoch at
+          batch size~16; validation set is 61,999 frames.
+    \item VRAM stabilises at 22\,GB of 40\,GB — comfortable headroom.
+    \item The brief box-loss spike at batch~50 (0.0407\,$\to$\,0.0487)
+          is a warmup artefact: the LR ramps up from near-zero,
+          temporarily over-correcting before settling.
+    \item Box loss fell from 0.0407 to 0.0243 across the epoch
+          ($-40\,\%$); obj loss from 0.0015 to 0.0008 ($-47\,\%$) —
+          clear evidence of learning from scratch.
+    \item \texttt{cls}$=0.000$ throughout is expected: with a single
+          class the classification sub-loss carries no gradient.
+    \item \textbf{I/O diagnosis:} total epoch time (100\,min) $\gg$
+          GPU compute time. At 9,346 batches and $\approx$50\,ms GPU
+          compute per batch, pure compute accounts for only $\approx$
+          7.8\,min. The remaining $\approx$92\,min is DataLoader wait
+          time — $\approx$0.59\,s per batch — confirming the
+          \texttt{VideoCapture} NFS random-seek bottleneck as the
+          dominant cost.
+\end{itemize}
+
+\textbf{Bug fix: \texttt{evaluate()} receives a tuple, not a tensor.}
+YOLOMG's \texttt{Model.forward()} returns a
+\texttt{(inference\_out,\;train\_out)} tuple when the model is in eval
+mode. The original \texttt{evaluate()} function passed this tuple
+directly to \texttt{non\_max\_suppression()}, which attempted
+\texttt{prediction.shape[2]} and raised \texttt{AttributeError}.
+The fix is a one-line unpack before NMS:
+\begin{verbatim}
+preds = model(imgs, imgs2)
+if isinstance(preds, tuple):
+    preds = preds[0]   # take inference_out; discard train_out
+preds = non_max_suppression(preds, CONF_THRES, IOU_THRES)
+\end{verbatim}
+The fix was applied to both \texttt{train\_stage1.py} and
+\texttt{train\_stage2.py}.
+
+\textbf{Job 22466341 — DataParallel, ComputeLoss attribute crash.}
+(4$\times$A100, 120\,h, submitted \textbf{20:19 CEST}.) Crashed within
+seconds of starting. \texttt{nn.DataParallel} wraps the model in a
+proxy that does not forward arbitrary attribute access, so
+\texttt{ComputeLoss(model)} failed when it tried to read
+\texttt{model.hyp}. Fix: \texttt{ComputeLoss(de\_parallel(model))}.
+
+\textbf{Job 22466520 — DataParallel performance test, cancelled.}
+(4$\times$A100, 120\,h.) After the \texttt{de\_parallel} fix,
+DataParallel initialised successfully and distributed batches across
+all four GPUs. However, the epoch-level throughput was \textbf{3$\times$
+slower} than job~22460564 on a single GPU. Batch-level timing showed
+the GPU compute phase completing normally, but inter-GPU synchronisation
+(tensor scatter/gather over PCIe) consumed $\approx$8\,s per batch —
+two orders of magnitude above the 50\,ms compute time. For a 3M-parameter
+model this communication overhead dominates completely; DataParallel
+provides no benefit. The job was cancelled after confirming the result.
+\texttt{nn.DataParallel} was removed from the codebase.
+
+\textbf{Job 22469161 — 1$\times$GPU + GPFS scratch, cancelled.}
+(1$\times$A100, 120\,h, BS=16, 4 workers.) The 3.7\,GB dataset was
+copied to GPFS scratch in 55\,s. At wall time 21:06, batch~1700/9346
+had been processed. Two-point timing (batches 750--1700 over
+$\Delta t = 612$\,s) gave $\mathbf{0.59}$\,\textbf{s/batch} —
+marginally better than NFS but projecting $\approx$92\,min/epoch,
+still far above the 120\,h job limit for 100 epochs. The job was
+cancelled to proceed with the JPEG benchmark.
+
+\textbf{Job 22470031 — sync error, immediate failure.}
+\texttt{extract\_frames\_antiuav\_rgbt.py} and the updated
+\texttt{train\_stage1.py} (with \texttt{--frames-root} flag) had not
+yet been copied to \texttt{/projects/prjs2041/uav\_code/}. The job
+failed within 90\,s. All modified files were synced to the HPC
+before resubmission.
+
+\textbf{Job 22470546 — JPEG benchmark (cancelled).}
+(1$\times$A100, 120\,h, BS=16, 8 workers.) Upon job start,
+\texttt{extract\_frames\_antiuav\_rgbt.py} extracted all IR frames
+from the GPFS-local mp4 copies using 16 parallel worker processes:
+211,527 frames across 227 sequences (160 train, 67 val) in
+\textbf{671\,s} with 0 errors. Training then proceeded with
+\texttt{AntiUAVRGBTFramesDataset}, replacing \texttt{VideoCapture}
+with direct \texttt{cv2.imread}. Two-point timing (batches
+750--1700 over $\Delta t = 612$\,s, wall times 21:06 and 31:18)
+gave $\mathbf{0.644}$\,\textbf{s/batch} — statistically identical
+to the NFS VideoCapture baseline (0.59--0.64\,s/batch). This
+result is the key diagnostic finding: since eliminating I/O
+entirely had no effect, I/O cannot be the bottleneck.
+See §5.3 for the mechanistic explanation.
+
+\textbf{Job 22471299 — DDP, path-broadcast bug, immediate failure.}
+(4$\times$A100, \textbf{04:16 CEST}, node \texttt{gcn35}.) The path
+broadcast fix was not yet applied. \texttt{save\_dir} was padded with
+spaces (\texttt{.ljust(512)}) and decoded without stripping them,
+producing a directory name of $\approx$480 trailing spaces and raising
+\texttt{OSError: [Errno 36] File name too long}. Fix: pad with null
+bytes (\texttt{.ljust(512,\,b'\textbackslash x00')}).
+
+\textbf{Job 22479631 — DDP, unused-parameter crash after batch~0.}
+(4$\times$A100, \textbf{12:22 CEST}, node \texttt{gcn29}.) The path
+broadcast bug was fixed and training successfully started — all four
+ranks initialised, the model summary printed, and batch~0 produced a
+valid loss ($\text{box}=0.087$). The job crashed at the start of
+batch~1 with:
+\begin{verbatim}
+RuntimeError: Expected to have finished reduction in the prior
+iteration before starting a new one. [...] Parameter indices
+which did not receive grad for rank 0: 37 38
+\end{verbatim}
+DDP's gradient reducer detected that parameters 37--38 (the
+motion-branch backbone1 layers processing \texttt{img2}) did not
+receive gradients. In Stage~1 \texttt{img2} is an all-zero tensor;
+although zeros do propagate gradients through linear layers, certain
+paths in the \texttt{Concat3} fusion module skip the motion branch
+entirely when the input is identically zero. Fix: \texttt{DDP(...,
+find\_unused\_parameters=True)}, which adds a hook per backward pass
+to detect and skip unreduced parameters.
+
+\textbf{Job 22480612 — CPU frame extraction to persistent storage.}
+(\texttt{rome} partition, \textbf{12:58 CEST}, node \texttt{tcn472},
+32 workers, 1\,h limit.) All 211,527 frames extracted in
+\textbf{68\,s} wall time (45.7\,s train + 22.4\,s val) — roughly
+$11\times$ faster than the GPU node extractions, as the \texttt{rome}
+nodes have higher per-core memory bandwidth and no GPU contention.
+The job completed successfully but raised
+\texttt{OSError: [Errno 122] Disk quota exceeded} when writing the
+final \texttt{manifest.json} sentinel file. The frames themselves
+(\texttt{/projects/prjs2041/datasets/\allowbreak Anti-UAV-RGBT-frames/})
+are all present and intact. The training scripts were updated to detect
+the presence of JPEG files directly
+(\texttt{compgen -G "train/*/ir\_*.jpg"})
+rather than relying on the manifest, so the extraction result is fully usable.
+
+\textbf{Job 22480754 — DDP, silent failure due to project disk quota.}
+(4$\times$A100, 120\,h.) The job disappeared from the queue
+immediately with no log file at
+\texttt{/projects/prjs2041/logs/stage1\_ddp\_22480754.out}. A direct
+write test confirmed the cause:
+\begin{verbatim}
+echo "test" > /projects/prjs2041/test_quota.txt
+-bash: /projects/prjs2041/test_quota.txt: Disk quota exceeded
+\end{verbatim}
+The project-level GPFS quota was exhausted. Note that
+\texttt{df -h /projects/prjs2041} reported 1.2\,PB available — this
+is the \emph{filesystem-level} free space shared across all Snellius
+users, not the per-project hard cap. The two are entirely independent;
+\texttt{df} is therefore not a useful quota diagnostic on this system.
+
+The root cause was the 3.7\,GB of Anti-UAV-RGBT \texttt{.mp4} source
+files occupying project storage alongside the 211,527 pre-extracted
+JPEG frames. Since the JPEG extraction is permanent and the training
+scripts no longer reference the \texttt{.mp4} files at any stage
+(the \texttt{--dataset-root} argument is used only for JSON
+annotations, not video decoding), the mp4 files were deleted:
+{\small\begin{verbatim}
+find /projects/prjs2041/datasets/Anti-UAV-RGBT -name "*.mp4" -delete
+\end{verbatim}}
+The write test then returned \texttt{OK}, confirming quota was freed.
+The original \texttt{.mp4} archives are retained in the project zip
+files on Snellius and can be re-extracted if needed.
+
+\textbf{Job 22487080 — DDP, epoch~0 completed, crashed at validation.}
+(4$\times$A100, 120\,h, \textbf{16:45--21:21 CEST}, node \texttt{gcn71}.)
+After freeing the project disk quota the job started successfully.
+The 211,527 JPEG frames copied via \texttt{cp -r} in \textbf{14,326\,s
+($\approx$4\,h)} — confirming the per-file NFS overhead. Training then
+ran all 2,337 batches of epoch~0, producing a strong learning signal:
+box loss fell from 0.087 to 0.027 ($-69\,\%$) and obj loss from 0.0015
+to 0.0012. The job crashed at the \emph{end-of-epoch validation} step
+with two chained errors:
+
+\begin{enumerate}
+    \item \textbf{Corrupt JPEGs:} four frames in
+          \texttt{val/20190926\_133516\_1\_2/} (\texttt{ir\_000898.jpg},
+          \texttt{ir\_000927.jpg}, \texttt{ir\_000959.jpg},
+          \texttt{ir\_000991.jpg}) could not be read by
+          \texttt{cv2.imread} — likely truncated during the 4-hour
+          \texttt{cp -r}. OpenCV issued \texttt{WARN: can't open/read
+          file} and \texttt{\_load\_frame\_jpeg} raised \texttt{IOError}.
+    \item \textbf{Broken fallback:} \texttt{AntiUAVRGBTFramesDataset.\-
+          \_load\_frame} caught the \texttt{IOError} and attempted to
+          fall back to \texttt{cv2.VideoCapture} on the mp4 file — but
+          the mp4 files were deleted in the previous quota-clearing step.
+          The fallback raised \texttt{OSError: Cannot open video:
+          .../infrared.mp4}, killing the DataLoader worker and crashing
+          the job.
+\end{enumerate}
+
+\textbf{Fixes applied (05 May 2026, $\sim$22:00 CEST):}
+\begin{itemize}
+    \item \texttt{datasets/antiuav\_rgbt\_frames.py}: the \texttt{IOError}
+          handler in \texttt{\_load\_frame} now checks whether the mp4
+          exists before attempting \texttt{VideoCapture}. If neither
+          the JPEG nor the mp4 is available, a black (zero) frame is
+          returned with a \texttt{WARN} log message. Four black frames
+          out of 211,527 is negligible for training.
+    \item \texttt{run\_stage1\_ddp.sh}: updated to copy frames from a
+          single \texttt{.tar} archive (\texttt{Anti-UAV-RGBT-frames.tar})
+          rather than \texttt{cp -r}. This reduces the frame copy from
+          $O(211\text{K files}, \approx 4\,\text{h})$ to
+          $O(1\text{ file}, \approx 30\,\text{s})$.
+          \texttt{cp -r} is retained as a fallback in case the tar
+          does not yet exist.
+    \item The tar archive is being created via a one-time CPU job
+          on the \texttt{rome} partition
+          (\texttt{/projects/prjs2041/datasets/Anti-UAV-RGBT-frames.tar}).
+\end{itemize}
+
+\noindent The epoch~0 loss values confirm the model is learning correctly;
+the crash was purely infrastructure. The next submission will pick up
+from epoch~0 (fresh start, since no checkpoint was saved before the
+crash) with all fixes applied.
+
+\subsubsection*{5.3 Root Cause: GPU Kernel-Launch Overhead}
+
+Table~\ref{tab:io} summarises the per-batch timing across all three
+I/O strategies evaluated.
+
+\begin{table}[h]
+\centering
+\caption{Per-batch wall time under three I/O strategies (batch size 16,
+         1$\times$A100-SXM4-40\,GB). All three produce statistically
+         identical throughput, ruling out I/O as the bottleneck.}
+\label{tab:io}
+\begin{tabular}{llll}
+\hline
+\textbf{Strategy} & \textbf{Job} & \textbf{s/batch} & \textbf{min/epoch} \\
+\hline
+NFS \texttt{.mp4} + \texttt{VideoCapture}  & 22460564 & $\approx$0.59 & $\approx$92 \\
+GPFS \texttt{.mp4} + \texttt{VideoCapture} & 22469161 & $\approx$0.59 & $\approx$92 \\
+GPFS JPEG + \texttt{cv2.imread}            & 22470546 & $\approx$0.64 & $\approx$100 \\
+\hline
+\end{tabular}
+\end{table}
+
+\noindent The invariance of per-batch time across I/O strategies
+demonstrates that the DataLoader is not the binding constraint.
+The bottleneck is the GPU forward/backward pass itself. Two
+mechanisms explain the slow throughput for YOLOMG on a single A100.
+
+\textbf{Kernel-launch overhead.} YOLOMG's \texttt{dual\_uav2.yaml}
+defines 318 layers, each of which maps to at least one CUDA kernel
+launch. On an A100, kernel launch latency is approximately
+5--10\,$\mu$s \cite{jia2018dissecting}. With forward and backward
+passes, at least 636 kernel launches are executed per batch:
+$636 \times 7.5\,\mu\text{s} \approx 4.8\,\text{ms}$ in launch
+overhead alone, before any arithmetic is performed. This is a fixed
+cost independent of batch size.
+
+\textbf{Low arithmetic intensity.} YOLOMG reports 91.5\,GFLOPs per
+sample at $640\times640$. For a batch of 16, the forward pass
+requires $\approx$1.46\,TFLOPs; the backward pass approximately
+doubles this to $\approx$2.9\,TFLOPs. An A100 peaks at
+312\,TFLOPS (FP16), suggesting a theoretical minimum of
+$\approx$9.3\,ms per batch. However, small models with many
+short layers operate at a small fraction of peak throughput due
+to memory-bandwidth bottlenecks and insufficient parallelism to
+saturate the GPU's 6,912 CUDA cores. Empirically, a 3\,M-parameter
+model typically achieves 3--8\,\% of A100 peak throughput at
+batch size 16, implying an effective compute time of
+120--310\,ms per batch — entirely consistent with the observed
+$\approx$640\,ms (which also includes the kernel-launch overhead
+and data-transfer time to GPU HBM).
+
+The conclusion is that a single A100 is significantly underutilised
+for this workload: VRAM usage is 22/40\,GB (55\,\%) but compute
+utilisation is estimated at $<$10\,\%. The correct remedy is to
+distribute the dataset across multiple GPUs so each GPU's compute
+contribution adds up, rather than trying to remove a non-binding I/O
+bottleneck.
+
+\subsubsection*{5.4 Multi-GPU Training: DDP Implementation}
+
+\textbf{Why DataParallel failed and DDP succeeds.}
+\texttt{nn.DataParallel} (DP) splits each mini-batch across GPUs,
+computes forward passes in parallel, and gathers all activation tensors
+to GPU~0 for loss computation, then scatters gradients back. This
+gather/scatter operates over PCIe ($\approx$16\,GB/s) and its
+volume scales with \emph{activation size}, not parameter count. For
+YOLOMG at $640\times640$, activation tensors across 318 layers are
+large relative to the 3\,M parameters, producing $\approx$8\,s of
+communication overhead per batch — 12$\times$ the compute time.
+
+\texttt{DistributedDataParallel} (DDP) avoids this entirely. Each
+GPU runs as an independent process with its own complete copy of the
+model, processing a disjoint shard of the dataset. After the backward
+pass, \emph{only gradients} are all-reduced via NCCL over NVLink
+($\approx$600\,GB/s between A100s on Snellius). For 3\,M FP16
+parameters, the gradient payload is $3\times10^6 \times 2\,\text{B}
+= 6\,\text{MB}$; at 600\,GB/s this completes in
+$\approx$0.01\,ms — negligible relative to the 640\,ms compute time.
+
+\textbf{Dataset partitioning and epoch speedup.}
+A \texttt{DistributedSampler} partitions the 149,528-frame training
+set into 4 non-overlapping shards ($\approx$37,382 frames per GPU,
+$\approx$2,337 batches per GPU per epoch). Each GPU still takes
+$\approx$0.64\,s per batch, but processes only one quarter of the
+epoch's batches:
+\[
+    t_{\text{epoch}}^{\text{DDP}} \approx 2{,}337 \times 0.64\,\text{s}
+    \approx 1{,}496\,\text{s} \approx \mathbf{25\,\text{min}}
+\]
+compared to $\approx$100\,min on a single GPU — a $4\times$ wall-clock
+speedup. One hundred epochs would complete in $\approx$41\,h, well
+within the 120\,h Snellius job limit.
+
+\textbf{Implementation.} The following changes were made to
+\texttt{train\_stage1.py}:
+\begin{itemize}
+    \item \texttt{torchrun} sets \texttt{LOCAL\_RANK}, \texttt{RANK},
+          and \texttt{WORLD\_SIZE} environment variables automatically;
+          the script detects these and calls
+          \texttt{dist.init\_process\_group(backend=`nccl')} at startup,
+          falling back to single-GPU mode when the variables are absent.
+    \item The model is wrapped in \texttt{DDP(model,\;device\_ids=[local\_rank])}
+          after \texttt{.nc}/\texttt{.hyp}/\texttt{.names} are attached,
+          so \texttt{de\_parallel(model)} always recovers the raw module.
+    \item \texttt{ComputeLoss} is constructed with
+          \texttt{de\_parallel(model)} to avoid the attribute-access
+          proxy issue encountered with \texttt{DataParallel}.
+    \item \texttt{DistributedSampler} is used for the training loader;
+          \texttt{sampler.set\_epoch(epoch)} is called each epoch to
+          ensure different inter-rank shuffling per epoch.
+    \item \textbf{Distributed validation} (added 06 May 2026): a second
+          \texttt{DistributedSampler} (no shuffle) partitions the 61,999-frame
+          val set across all 4 ranks ($\approx$15,500 frames per rank).
+          All ranks run \texttt{evaluate()} in parallel; raw
+          \texttt{(correct, conf, pred\_cls, target\_cls)} stats are gathered
+          to rank~0 via \texttt{dist.all\_gather\_object}; rank~0
+          concatenates all shards and calls \texttt{compute\_map()} to produce
+          the final mAP. This reduces post-epoch validation from
+          $\approx$40\,min (rank~0 alone, 61,999 frames via
+          \texttt{VideoCapture}) to $\approx$10\,min (4 ranks in
+          parallel, $\approx$15,500 frames each) — eliminating the NCCL
+          idle-rank timeout entirely.
+    \item Logging, CSV writing, and checkpoint saving are gated to rank~0
+          (\texttt{is\_main = rank in (-1, 0)}).
+    \item Early stopping is computed on rank~0 and broadcast to all
+          other ranks via \texttt{dist.broadcast} so training halts
+          consistently across processes.
+    \item \texttt{dist.all\_reduce} on the loss tensor averages
+          per-rank batch losses for consistent epoch-level logging.
+\end{itemize}
+The SLURM script \texttt{run\_stage1\_ddp.sh} requests
+\texttt{--gres=gpu:a100:4}, \texttt{--cpus-per-task=32} (8 per
+GPU $\times$ 4), \texttt{--mem=120G}, and launches training via:
+\begin{verbatim}
+torchrun --standalone --nproc_per_node=4 train_stage1.py \
+    --epochs 100 --batch-size 16 --workers 4 ...
+\end{verbatim}
+The \texttt{--standalone} flag handles master-address negotiation
+automatically for single-node jobs, requiring no additional SLURM
+configuration.
+
+\subsubsection*{5.5 Results (to be filled in)}
+
+\begin{table}[h]
+\centering
+\caption{Stage 1 training results — to be completed upon job
+         termination.}
+\label{tab:stage1}
+\begin{tabular}{ll}
+\hline
+\textbf{Metric}                 & \textbf{Value} \\
+\hline
+Best mAP@0.5 (Anti-UAV-RGBT val) & \textit{[pending]} \\
+mAP@0.5:0.95                    & \textit{[pending]} \\
+Epoch of best checkpoint        & \textit{[pending]} / 100 \\
+Final box loss                  & \textit{[pending]} \\
+Final obj loss                  & \textit{[pending]} \\
+Job wall-clock time             & \textit{[pending]} h \\
+\hline
+\end{tabular}
+\end{table}
+
+\noindent The mAP@0.5 value from Table~\ref{tab:stage1} constitutes
+$\text{mAP}_{T1}^{\text{after }T1}$ and anchors the Forgetting
+Measure:
+\[
+    \text{FM} = \text{mAP}_{T1}^{\text{after }T2}
+              - \underbrace{\text{mAP}_{T1}^{\text{after }T1}}_{\text{Table~\ref{tab:stage1}}}
+\]
+
+% ------------------------------------------------------------
+\subsection*{6. Compute Resource Usage}
+
+\begin{table}[p]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\caption{SLURM jobs submitted during Weeks~17--18.}
+\label{tab:jobs}
+\begin{tabular}{lp{1.9cm}p{3.2cm}llrll}
+\hline
+\textbf{Job ID} & \textbf{Submitted (CEST)} & \textbf{Task} & \textbf{Partition} & \textbf{Node} &
+\textbf{GPUs} & \textbf{Limit} & \textbf{Status} \\
+\hline
+22460009 & 01 May        & FD5 masks                         & rome      & tcn286 & —  & 24\,h  & Completed \\
+22460276 & 01 May        & Stage~1 (OOM, 32\,GB)            & gpu\_a100 & gcn30  & 1  & 24\,h  & Failed    \\
+22460320 & 01 May        & Stage~1 (OOM, 32\,GB)            & gpu\_a100 & gcn28  & 1  & 24\,h  & Failed    \\
+22460564 & 01 May        & Stage~1 (eval crash, NFS)        & gpu\_a100 & gcn28  & 1  & 24\,h  & Failed    \\
+22466341 & 02 May        & Stage~1 (DP, hyp crash)          & gpu\_a100 & —      & 4  & 120\,h & Failed    \\
+22466520 & 02 May        & Stage~1 (DP, 3$\times$ slow)     & gpu\_a100 & —      & 4  & 120\,h & Cancelled \\
+22469161 & 03 May        & Stage~1 (1 GPU + GPFS scratch)   & gpu\_a100 & —      & 1  & 120\,h & Cancelled \\
+22470031 & 03 May        & Stage~1 (JPEG; file-sync error)  & gpu\_a100 & —      & 1  & 120\,h & Failed    \\
+22470546 & 03 May        & Stage~1 (JPEG benchmark)         & gpu\_a100 & —      & 1  & 120\,h & Cancelled \\
+22471299 & 03 May        & Stage~1 DDP (path-broadcast bug) & gpu\_a100 & gcn35  & 4  & 120\,h & Failed    \\
+22479631 & 04 May        & Stage~1 DDP (unused-param bug)   & gpu\_a100 & gcn29  & 4  & 120\,h & Failed    \\
+22480612 & 04 May        & Frame extraction (CPU; quota)    & rome      & tcn472 & —  & 1\,h   & Completed$^*$ \\
+22480754 & 04 May        & Stage~1 DDP (quota, silent fail) & gpu\_a100 & —      & 4  & 120\,h & Failed    \\
+22487080 & 05 May 20:00  & Stage~1 DDP (ep.~0 OK; val crash)& gpu\_a100 & gcn71  & 4  & 120\,h & Failed$^\dagger$ \\
+22499420 & 05 May 22:00  & Tar archive creation              & rome      & tcn470 & —  & 2\,h   & Completed \\
+22499776 & 06 May 01:00  & Stage~1 DDP (partial tar, aborted)& gpu\_a100 & gcn60  & 4  & 120\,h & Cancelled \\
+22501402 & 06 May 02:34  & Stage~1 DDP (mp4; OOM at batch~50)& gpu\_a100 & gcn33  & 4  & 120\,h & Failed \\
+22501881 & 06 May 03:12  & Stage~1 DDP (NCCL timeout)        & gpu\_a100 & gcn33  & 4  & 120\,h & Failed \\
+22505545 & 06 May 11:00  & Stage~1 DDP (\texttt{ap\_per\_class} 1-D crash) & gpu\_a100 & gcn26 & 4 & 120\,h & Failed$^\ddagger$ \\
+22519342 & 06 May 18:00  & Stage~1 DDP (7-val unpack crash)  & gpu\_a100 & gcn61  & 4  & 120\,h & Failed$^\S$ \\
+22522864 & 06 May 21:35  & Stage~1 DDP (all fixes; OOM ep.~83) & gpu\_a100 & gcn26  & 4  & 120\,h & OOM$^\P$ \\
+\hline
+\end{tabular}
+\begin{minipage}{\linewidth}
+\vspace{3pt}
+\footnotesize
+$^*$ All 211,527 frames extracted; only \texttt{manifest.json} write failed (disk quota).
+Frames present and usable; scripts updated to detect JPEGs directly.\\
+$^\dagger$ Epoch~0 completed (box loss $0.087\!\to\!0.027$, $-69\,\%$); crashed at
+end-of-epoch validation due to 4 corrupt JPEGs and broken mp4 fallback.\\
+$^\ddagger$ Epoch~0 trained fully (box loss $0.0873\!\to\!0.0277$, $-68\,\%$); crashed
+in \texttt{compute\_map}: \texttt{ap\_per\_class} received 1-D \texttt{correct}
+$(N,)$ but requires 2-D $(N,\text{num\_thresholds})$.
+Fix: \texttt{correct.unsqueeze(1)} and \texttt{torch.zeros(0,1)}.\\
+$^\S$ Epoch~0 trained fully; crashed in \texttt{compute\_map}: unpacked 5 values from
+\texttt{ap\_per\_class} but YOLOMG returns 7
+(\texttt{tp,fp,p,r,f1,ap,cls}). Fix: updated unpack to
+\texttt{\_, \_, \_, \_, \_, ap, \_}.\\
+$^\P$ Submitted 06 May 2026, 21:35 CEST; all fixes applied.
+Ran 1\,d\,15\,h\,54\,min (83 of 100 epochs); killed by CPU-RAM OOM at ep.~83
+(persistent \texttt{VideoCapture} workers across 40\,h accumulated memory;
+fix: \texttt{persistent\_workers=False} in DataLoaders).
+\textbf{best.pt} saved ep.~54, \textbf{mAP@0.5\,=\,0.6614} (00:31 CEST 08 May);
+\texttt{last.pt} saved ep.~82.
+mAP peaked at ep.~54 and declined thereafter (overfitting), so OOM at ep.~83
+does not affect the best checkpoint.
+Selected results: Ep.~0: 0.0000; Ep.~1: 0.0195; Ep.~2: 0.4093; Ep.~7: 0.5871;
+Ep.~17: 0.6040; Ep.~23: 0.6225; Ep.~39: 0.6542; Ep.~54: \textbf{0.6614} (peak);
+Ep.~82: 0.6428 (last).
+\textbf{Standalone eval} (job~22583396, 08 May 15:09 CEST) on \texttt{best.pt}
+with 10 IoU thresholds (0.50--0.95):
+\textbf{mAP@0.5\,=\,0.6617} (confirms training metric);
+\textbf{mAP@0.5:0.95\,=\,0.2900} (lower as expected for small UAV targets;
+this is the authoritative T1 figure for the Forgetting Measure).
+\end{minipage}
+\end{table}
+
+\noindent Remaining SBU budget as of \textbf{06 May 2026, 02:51 CEST}
+(confirmed via \texttt{accinfo}):
+\textbf{115,515.03 SBU} of 120,000 remaining
+(4,484.56 SBU consumed project-wide since allocation start).
+Budget expiry: 2026-12-31; excess usage not permitted.
+Job~22505545 at $\approx$58\,h would consume $\approx$232\,SBU,
+leaving $\approx$115,283\,SBU for Stage~2, Stage~3, ablations,
+and reruns — a very comfortable margin.
+
+% ------------------------------------------------------------
+\subsection*{7. Next Steps}
+
+\begin{enumerate}
+    \item \textbf{Switch to mp4-based training
+          ($\sim$01:00--02:00 CEST, 06 May 2026)} —
+          while job~22499776 was stuck extracting a partial tar archive
+          (the tar job had not yet finished writing when training
+          started reading it), a key insight emerged: the JPEG
+          pre-extraction approach provides \emph{no} training speed
+          benefit over VideoCapture (both measured at
+          $\approx$0.6\,s/batch empirically), but costs 4\,h to copy
+          211K individual files to scratch vs.\ $\approx$73\,s to copy
+          227 mp4 files. The entire JPEG infrastructure was therefore
+          abandoned:
+          \begin{itemize}
+              \item Job~22499776 was cancelled.
+              \item The JPEG frames directory
+                    (\texttt{Anti-UAV-RGBT-frames/}, 211,527 files,
+                    $\approx$10\,GB) was deleted with \texttt{rm -rf}
+                    to free project quota (deletion itself took several
+                    minutes due to the same per-file filesystem overhead).
+              \item The partial tar archive
+                    (\texttt{Anti-UAV-RGBT-frames.tar}) was deleted.
+              \item The original mp4 files were restored from
+                    \texttt{Anti-UAV-RGBT.zip} (present in
+                    \texttt{/projects/prjs2041/datasets/}) using
+                    \texttt{unzip -n} followed by \texttt{rsync} to
+                    merge them into the existing dataset directory
+                    (which already held the JSON annotation files).
+              \item \texttt{run\_stage1\_ddp.sh} was simplified to
+                    copy only the mp4 + JSON dataset to scratch
+                    ($\approx$73\,s, 227 files) and train with
+                    \texttt{VideoCapture}, removing the entire JPEG
+                    extraction and tar infrastructure.
+          \end{itemize}
+
+    \item \textbf{Job~22501402 — OOM kill at batch~50
+          (02:37 CEST, 06 May 2026)} — dataset copy succeeded in
+          128\,s (3.9\,GB, mp4 + JSON). Training started cleanly
+          (batch~0: box=0.087, mem=1.99\,G; batch~50: mem=23.11\,G)
+          but rank~2 was killed by the Linux OOM killer
+          (\texttt{exitcode: -9, SIGKILL}) at batch~50, confirmed
+          by SLURM: \texttt{oom\_kill event in StepId=22501402}.
+          Root cause: 4 DDP processes $\times$ 8 DataLoader workers
+          $= 32$ worker processes, each holding \texttt{cv2.VideoCapture}
+          decode buffers ($\approx$3--5\,GB each) $\Rightarrow$
+          $\approx$128\,GB system RAM, exceeding the 120\,GB job
+          allocation. Fix: reduce workers from 8 to 4 per process
+          (16 workers total, $\approx$64\,GB), well within the limit.
+
+    \item \textbf{Job~22501881 — NCCL collective timeout after epoch~0
+          (03:57 CEST, 06 May 2026)} — the worker reduction (8$\to$4)
+          resolved the OOM issue. Epoch~0 trained successfully through
+          all 2,337 batches (box loss $0.0873\to0.0279$, $-68\,\%$).
+          The job then crashed at the post-epoch broadcast with:
+\begin{verbatim}
+WorkNCCL(SeqNum=11692, OpType=BROADCAST) ran for
+600039 ms before timing out.
+\end{verbatim}
+          Root cause: validation was gated to rank~0 only while ranks~1--3
+          sat idle. With 61,999 val frames read sequentially via
+          \texttt{VideoCapture}, rank~0 validation takes $\approx$40\,min.
+          The default NCCL watchdog timeout is 600\,s (10\,min) —
+          idle ranks abort before rank~0 finishes.
+
+          \textbf{Two fixes applied (06 May 2026):}
+          \begin{enumerate}
+              \item \textit{Safety net} — NCCL timeout extended to 2\,h:
+                    \texttt{dist.init\_process\_group(backend=`nccl',
+                    timeout=timedelta(hours=2))}.
+              \item \textit{Root fix} — distributed validation: a
+                    \texttt{DistributedSampler} splits the 61,999-frame val
+                    set across all 4 ranks; each rank runs
+                    \texttt{evaluate()} in parallel ($\approx$15,500 frames
+                    per rank); raw detection stats are gathered to rank~0
+                    via \texttt{dist.all\_gather\_object}; rank~0 merges
+                    and computes mAP. Validation time reduced from
+                    $\approx$40\,min to $\approx$10\,min per epoch.
+          \end{enumerate}
+
+    \item \textbf{Job~22505545 — \texttt{ap\_per\_class} crash at end of epoch~0
+          ($\sim$17:51 CEST, 06 May 2026)} —
+          Epoch~0 trained fully (box loss $0.0873\!\to\!0.0277$, $-68\,\%$).
+          Crashed in \texttt{compute\_map} because \texttt{ap\_per\_class}
+          expects a 2-D \texttt{correct} array $(N, \text{num\_iou\_thresholds})$
+          but our single-threshold evaluator passed a 1-D $(N,)$ tensor,
+          causing \texttt{IndexError: tuple index out of range} on
+          \texttt{tp.shape[1]}. Fix: \texttt{.unsqueeze(1)} applied to
+          \texttt{correct} at every append site in \texttt{evaluate()};
+          zero-detection placeholder also updated to \texttt{torch.zeros(0,1)}.
+          Job~22519342 also failed (18:47 CEST): \texttt{ap\_per\_class}
+          returns 7 values in YOLOMG (\texttt{tp,fp,p,r,f1,ap,cls}) but the
+          unpack expected 5 (\texttt{ValueError: too many values to unpack}).
+          Fix: corrected unpack to \texttt{\_, \_, \_, \_, \_, ap, \_}.
+          Resubmitted as job~\textbf{22522864} at \textbf{21:35 CEST, 06 May 2026}.
+
+    \item \textbf{\boldmath$\checkmark$ Job~22522864 — first fully successful
+          epoch + validation (22:28 CEST, 06 May 2026)} —
+          \textbf{This is the key milestone of Weeks~17--18.}
+          After 21 SLURM submissions and nine successive infrastructure
+          fixes, Stage~1 DDP training completed its first full
+          epoch-plus-validation cycle without error.
+
+          Epoch~0 results from log:
+          \begin{itemize}
+              \item Box loss: $0.0873$ (batch~0) $\to$ $0.0275$ (batch~2300),
+                    $-68.5\,\%$ in one epoch — confirms the model is learning
+                    the UAV localisation task correctly.
+              \item Obj loss: $0.0015$ (batch~0) $\to$ $0.0012$ (batch~2300)
+                    — objectness branch is suppressing background.
+              \item Cls loss: $0.0000$ throughout — expected with a single
+                    class (no cross-class discrimination needed).
+              \item GPU memory: stable at $23.11$\,GB after warmup
+                    (well within the 40\,GB A100 VRAM limit).
+              \item mAP@0.5: $0.0000$ — expected at epoch~0 for a freshly
+                    initialised detector; confidence scores are not yet
+                    calibrated, so no detections clear the NMS threshold.
+                    Meaningful mAP values typically emerge around
+                    epochs~5--15.
+              \item Checkpoint saved:
+                    \texttt{antiuav\_rgbt14/weights/best.pt}
+          \end{itemize}
+
+          Epoch~1 results (confirmed complete, $\sim$23:00 CEST, 06 May):
+          \begin{itemize}
+              \item Box loss: $0.0363$ (batch~0) $\to$ $0.0206$ (batch~2300),
+                    $-25\,\%$ below epoch~0's final loss of $0.0275$.
+              \item Epoch loss: $0.0215$.
+              \item \textbf{mAP@0.5 = 0.0195} — \textbf{first non-zero mAP},
+                    confirming the model has begun detecting UAVs with
+                    meaningful confidence. mAP@0.5:0.95 = 0.0195.
+              \item New best checkpoint saved:
+                    \texttt{antiuav\_rgbt14/weights/best.pt}
+          \end{itemize}
+
+          Epoch~2 in progress at time of log capture ($\sim$23:10 CEST):
+          \begin{itemize}
+              \item GPU memory increased to $30.22$\,GB (up from $23.09$\,GB
+                    in epochs~0--1) — still well within the 40\,GB A100 limit;
+                    likely due to CUDA caching additional graph nodes after the
+                    first validation cycle.
+              \item Batch~0: box=$0.0125$ — the model opens epoch~2 at a
+                    loss level already far below epoch~0's final value,
+                    confirming rapid convergence.
+              \item Batch~500: box=$\approx$0.0196, obj=$0.0007$ — stable
+                    and continuing to decrease.
+          \end{itemize}
+
+          Expected completion: $\approx$\textbf{08:00 CEST, 09 May 2026 (Saturday)}
+          (58\,h total wall time). Upon completion,
+          \texttt{stage1\_mAP.txt} will contain the T1 mAP anchor
+          for the Forgetting Measure.
+
+    \item \textbf{Record Stage~1 results} — once job~22522864 completes,
+          record mAP@0.5 from \texttt{stage1\_mAP.txt}
+          and inspect the \texttt{results.csv} learning curve.
+          This value is the fixed T1 anchor
+          ($\text{mAP}_{T1}^{\text{after }T1}$) for all subsequent
+          Forgetting Measure computations.
+    \item \textbf{Verify ARD100 mask loading} (\textit{completed,
+          05 May 2026}) — \texttt{test\_datasets.py} ran 4/4 passing.
+          ARD100 masks load with shape $(1, 1080, 1920)$, confirmed
+          non-zero at frame~10 (\texttt{max=101.0, mean=1.62}).
+          Note: frames~0--4 are zero by design — FD5 computes
+          $|I_t - I_{t-5}|$, so the earliest valid frame is $t=5$.
+          Frame~10 was chosen as the test sample because it is the
+          first round number strictly above the 5-frame warm-up
+          threshold, giving a small margin to ensure the UAV has
+          moved enough to produce a visible non-zero motion signal.
+    \item \textbf{Stage~2 training script} (\textit{completed}) —
+          \texttt{train\_stage2.py} implements Teacher-Student UDA:
+          the frozen Stage~1 model acts as teacher; a student copy is
+          fine-tuned on Anti-UAV410 IR with loss
+          $\mathcal{L} = \mathcal{L}_{\text{det}} +
+          \lambda_{\text{kd}}\,\mathcal{L}_{\text{kd}}$, where
+          $\mathcal{L}_{\text{kd}}$ is response-level MSE between
+          student and teacher raw prediction grids at all three
+          detection scales. The student is also evaluated on the
+          Anti-UAV-RGBT val split each epoch to track the Forgetting
+          Measure in real time.
+    \item \textbf{Scale-Stratified Herding buffer} — implement the
+          penultimate-feature buffer for Stage~3: hook into
+          YOLOMG's backbone output, extract embeddings per
+          sample, partition by bounding box size strata
+          (COCO boundaries at 32, 96, 192\,px), and select
+          exemplars via mean-distance herding independently per
+          stratum.
+    \item \textbf{Stage~3 naive baseline} — plain fine-tuning on
+          CST without any rehearsal, to produce the uncorrected
+          forgetting measure $\text{FM}_{\text{naive}}$.
+\end{enumerate}

@@ -1,0 +1,14 @@
+==============================
+Stage 3 — NAIVE BASELINE
+Job ID  : 23394054
+Node    : gcn77
+GPUs    : 0,1,2,3
+Started : Tue Jun  2 21:34:15 CEST 2026
+==============================
+Using datasets from project storage (no local copy)
+  CST  : /projects/prjs2041/datasets/CST-AntiUAV
+  RGBT : /projects/prjs2041/datasets/Anti-UAV-RGBT
+==============================
+Done: Wed Jun  3 04:33:20 CEST 2026
+Results: /projects/prjs2041/runs/stage3/naive*/
+==============================

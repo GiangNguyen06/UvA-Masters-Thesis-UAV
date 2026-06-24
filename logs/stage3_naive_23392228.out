@@ -1,0 +1,10 @@
+==============================
+Stage 3 — NAIVE BASELINE
+Job ID  : 23392228
+Node    : gcn93
+GPUs    : 0,1,2,3
+Started : Tue Jun  2 20:25:40 CEST 2026
+==============================
+Copying CST Anti-UAV to $TMPDIR ...
+Copying Anti-UAV-RGBT to $TMPDIR ...
+Data ready: Tue Jun  2 20:38:46 CEST 2026

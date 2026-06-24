@@ -1,0 +1,118 @@
+========================================
+Stage 2: Teacher-Student UDA on Anti-UAV410
+Job ID:  22637527
+Node:    gcn53
+GPU:     0
+Weights: /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt
+Time:    Mon May 11 13:18:19 CEST 2026
+========================================
+
+YOLOv5 🚀 visualization-2-g090a74c torch 2.7.1+cu118 CUDA:0 (NVIDIA A100-SXM4-40GB, 40441MiB)
+
+Stage 2 Teacher-Student UDA  →  /projects/prjs2041/runs/stage2/antiuav410
+Stage 1 weights: /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt
+Device: cuda:0  |  IMG_SIZE=640  EPOCHS=50  BS=32
+KD weight λ = 1.0
+Loading datasets …
+  T2 train : 213,995 frames   (AntiUAV410)
+  T2 val   : 94,711 frames   (AntiUAV410)
+  T1 val   : 61,999 frames   (AntiUAVRGBT — FM tracking)
+Loading student from /projects/prjs2041/runs/stage1/antiuav_rgbt14/weights/best.pt …
+
+                 from  n    params  module                                  arguments                     
+  0                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  1                -1  1       336  models.common.C3                        [8, 8]                        
+  2                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  3                -1  1       336  models.common.C3                        [8, 8, 1]                     
+  4           [-1, 1]  1       130  models.common.Concat3                   [16, 1]                       
+  5                -1  1      1248  models.common.C3                        [16, 16, 1]                   
+  6                -1  1      4672  models.common.Conv                      [16, 32, 3, 2]                
+  7                -1  1      4800  models.common.C3                        [32, 32, 1]                   
+  8                -1  1     18560  models.common.Conv                      [32, 64, 3, 2]                
+  9                -1  1     18816  models.common.C3                        [64, 64, 1]                   
+ 10                -1  1     73984  models.common.Conv                      [64, 128, 3, 2]               
+ 11                -1  3    156928  models.common.C3                        [128, 128, 3]                 
+ 12                -1  1     41344  models.common.SPPF                      [128, 128, 5]                 
+ 13                -1  1     33280  models.common.Conv                      [128, 256, 1, 1]              
+ 14                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 15           [-1, 9]  1         0  models.common.Concat                    [1]                           
+ 16                -1  1    312832  models.common.C3                        [320, 256, 1, False]          
+ 17                -1  1     33024  models.common.Conv                      [256, 128, 1, 1]              
+ 18                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 19           [-1, 6]  1         0  models.common.Concat                    [1]                           
+ 20                -1  1     78592  models.common.C3                        [160, 128, 1, False]          
+ 21                -1  1    147712  models.common.Conv                      [128, 128, 3, 2]              
+ 22          [-1, 16]  1         0  models.common.Concat                    [1]                           
+ 23                -1  1    329216  models.common.C3                        [384, 256, 1, False]          
+ 24                -1  1    590336  models.common.Conv                      [256, 256, 3, 2]              
+ 25          [-1, 12]  1         0  models.common.Concat                    [1]                           
+ 26                -1  1   1117184  models.common.C3                        [384, 512, 1, False]          
+ 27      [20, 23, 26]  1     16182  models.yolo.Detect                      [1, [[3, 2, 4, 3, 4, 3], [6, 4, 7, 5, 9, 6], [12, 7, 15, 9, 26, 14]], [128, 256, 512]]
+Model Summary: 318 layers, 2979976 parameters, 2979976 gradients, 91.5 GFLOPs
+
+Creating frozen teacher (same weights) …
+
+                 from  n    params  module                                  arguments                     
+  0                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  1                -1  1       336  models.common.C3                        [8, 8]                        
+  2                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  3                -1  1       336  models.common.C3                        [8, 8, 1]                     
+  4           [-1, 1]  1       130  models.common.Concat3                   [16, 1]                       
+  5                -1  1      1248  models.common.C3                        [16, 16, 1]                   
+  6                -1  1      4672  models.common.Conv                      [16, 32, 3, 2]                
+  7                -1  1      4800  models.common.C3                        [32, 32, 1]                   
+  8                -1  1     18560  models.common.Conv                      [32, 64, 3, 2]                
+  9                -1  1     18816  models.common.C3                        [64, 64, 1]                   
+ 10                -1  1     73984  models.common.Conv                      [64, 128, 3, 2]               
+ 11                -1  3    156928  models.common.C3                        [128, 128, 3]                 
+ 12                -1  1     41344  models.common.SPPF                      [128, 128, 5]                 
+ 13                -1  1     33280  models.common.Conv                      [128, 256, 1, 1]              
+ 14                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 15           [-1, 9]  1         0  models.common.Concat                    [1]                           
+ 16                -1  1    312832  models.common.C3                        [320, 256, 1, False]          
+ 17                -1  1     33024  models.common.Conv                      [256, 128, 1, 1]              
+ 18                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 19           [-1, 6]  1         0  models.common.Concat                    [1]                           
+ 20                -1  1     78592  models.common.C3                        [160, 128, 1, False]          
+ 21                -1  1    147712  models.common.Conv                      [128, 128, 3, 2]              
+ 22          [-1, 16]  1         0  models.common.Concat                    [1]                           
+ 23                -1  1    329216  models.common.C3                        [384, 256, 1, False]          
+ 24                -1  1    590336  models.common.Conv                      [256, 256, 3, 2]              
+ 25          [-1, 12]  1         0  models.common.Concat                    [1]                           
+ 26                -1  1   1117184  models.common.C3                        [384, 512, 1, False]          
+ 27      [20, 23, 26]  1     16182  models.yolo.Detect                      [1, [[3, 2, 4, 3, 4, 3], [6, 4, 7, 5, 9, 6], [12, 7, 15, 9, 26, 14]], [128, 256, 512]]
+Model Summary: 318 layers, 2979976 parameters, 2979976 gradients, 91.5 GFLOPs
+
+  Parameters: 2,979,976
+  Trainable:  2,979,976
+
+Starting Stage 2 training for 50 epochs …
+  L = L_det + 1.0 × L_kd
+
+Traceback (most recent call last):
+  File "/projects/prjs2041/uav_code/train_stage2.py", line 665, in <module>
+    train(save_dir, device, stage1_weights=Path(args.weights))
+  File "/projects/prjs2041/uav_code/train_stage2.py", line 531, in train
+    teacher_out = teacher(imgs, imgs2)
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/projects/prjs2041/YOLOMG/models/yolo.py", line 130, in forward
+    return self._forward_once(x1, x2, profile, visualize)  # single-scale inference, train
+  File "/projects/prjs2041/YOLOMG/models/yolo.py", line 170, in _forward_once
+    x2 = m(x2)  # run
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/nn/modules/upsampling.py", line 172, in forward
+    return F.interpolate(
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/nn/functional.py", line 4649, in interpolate
+    return torch._C._nn.upsample_nearest2d(input, output_size, scale_factors)
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1.56 GiB. GPU 0 has a total capacity of 39.49 GiB of which 1.55 GiB is free. Including non-PyTorch memory, this process has 37.92 GiB memory in use. Of the allocated memory 36.90 GiB is allocated by PyTorch, and 539.29 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+
+========================================
+Finished at: Mon May 11 13:18:56 CEST 2026
+Check results: /projects/prjs2041/runs/stage2/
+========================================

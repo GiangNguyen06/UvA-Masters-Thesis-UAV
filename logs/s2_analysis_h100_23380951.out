@@ -1,0 +1,17 @@
+==============================
+Job ID  : 23380951
+Node    : gcn145
+Started : Tue Jun  2 14:47:20 CEST 2026
+==============================
+
+Copying Anti-UAV410 to $TMPDIR ...
+Done in 837s
+
+=== Step 1: Multi-seed CI plots ===
+Loading runs matching: /projects/prjs2041/runs/stage2/seed*
+  Loaded: seed123  (31 epochs)
+  Loaded: seed42  (32 epochs)
+  Loaded: seed999  (29 epochs)
+
+Aligning epochs across 3 seeds ...
+  Common epochs: 0–28  (29 epochs)

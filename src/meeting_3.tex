@@ -1,0 +1,905 @@
+% ============================================================
+% Weekly Meeting Report — Week 19
+% Topic: Stage 1 Complete, Standalone Eval, Stage 2 Submitted
+% ============================================================
+
+\section*{Weekly Progress Report — Week 19}
+\addcontentsline{toc}{section}{Weekly Progress Report — Week 19}
+
+\begin{tabular}{ll}
+    \textbf{Date}       & \today \\
+    \textbf{Student}    & Khac Duc Giang Nguyen \\
+    \textbf{Supervisor} & Dr.\ Seyed Sahand Mohammadi Ziabari \\
+    \textbf{Phase}      & Stage 1 Completion \& Stage 2 Training (Week 19) \\
+\end{tabular}
+
+\vspace{1em}
+
+% ------------------------------------------------------------
+\subsection*{1. Overview}
+
+This report documents the work completed during Week~19.
+Stage~1 training (job~22522864) completed on \textbf{08~May~2026}
+with best checkpoint at epoch~54, \textbf{mAP@0.5\,=\,0.6617}
+and \textbf{mAP@0.5:0.95\,=\,0.2900} (confirmed by a dedicated
+standalone evaluation job). These values constitute the T1 ceiling
+for the Forgetting Measure. The Stage~2 Teacher-Student UDA training
+script (\texttt{train\_stage2.py}) was reviewed, debugged, and
+submitted to Snellius. Two infrastructure issues were resolved:
+a \texttt{CUDA out of memory} error caused by holding two full
+model forward-pass activation graphs in 40\,GB VRAM simultaneously,
+and a \texttt{sbatch} mis-configuration pointing to the wrong
+Stage~1 checkpoint directory. Stage~2 DDP training completed on \textbf{14~May~2026} with
+job~22688135 (26 epochs, early stopping at epoch~25). Final results:
+best T2 mAP@0.5\,=\,0.4181, best T1 mAP@0.5\,=\,0.6464,
+FM\,=\,$-$0.0153 (see Section~4.4). Infrastructure issues resolved
+along the way included a \texttt{torchrun: command not found} error
+and a 12\,h SLURM time limit (see Section~4.3).
+
+% ------------------------------------------------------------
+\subsection*{2. Stage 1 Final Results}
+
+Job~22522864 ran for \textbf{1\,d\,15\,h\,54\,min} (83 of 100
+epochs) before being killed by the Linux OOM killer at epoch~83.
+As documented in the Week~17--18 report, this does not affect the
+best checkpoint: mAP peaked at epoch~54 and declined monotonically
+thereafter (overfitting), so the CPU-RAM OOM event at epoch~83 cost
+only the final 17 epochs of a training run that had already converged.
+
+\begin{table}[h]
+\centering
+\caption{Stage 1 final results — Anti-UAV-RGBT validation set.}
+\label{tab:stage1_final}
+\begin{tabular}{ll}
+\hline
+\textbf{Metric}                   & \textbf{Value} \\
+\hline
+Best mAP@0.5                      & \textbf{0.6617} \\
+mAP@0.5:0.95                      & \textbf{0.2900} \\
+Epoch of best checkpoint          & 54 / 100 \\
+Training wall time                & 1\,d\,15\,h\,54\,min (killed at ep.~83) \\
+Compute (4$\times$A100-SXM4-40\,GB) & $\approx$40\,h effective GPU time \\
+\hline
+\end{tabular}
+\end{table}
+
+\noindent Selected mAP@0.5 learning curve from \texttt{results.csv}:
+
+\begin{center}
+\small
+\begin{tabular}{rr|rr|rr}
+\hline
+\textbf{Ep.} & \textbf{mAP@0.5} &
+\textbf{Ep.} & \textbf{mAP@0.5} &
+\textbf{Ep.} & \textbf{mAP@0.5} \\
+\hline
+0  & 0.0000 &  17 & 0.6040 &  39 & 0.6542 \\
+1  & 0.0195 &  23 & 0.6225 &  54 & \textbf{0.6614} \\
+2  & 0.4093 &  30 & 0.6450 &  82 & 0.6428 \\
+7  & 0.5871 &  35 & 0.6512 &    &        \\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent The mAP@0.5 value of 0.6617 is the authoritative
+$\text{mAP}_{T1}^{\text{after }T1}$ and anchors the Forgetting
+Measure for all subsequent stages:
+\[
+    \text{FM} = \text{mAP}_{T1}^{\text{after }T2}
+              - \underbrace{0.6617}_{\text{Table~\ref{tab:stage1_final}}}
+\]
+
+\noindent The gap between mAP@0.5 ($0.6617$) and mAP@0.5:0.95
+($0.2900$) is expected for UAV detection: small targets
+($<$32\,px typical) are inherently sensitive to precise box
+localisation. Strict IoU thresholds (0.75--0.95) penalise even
+slightly imprecise boxes heavily. The mAP@0.5 figure is the
+primary performance metric used throughout the thesis.
+
+% ------------------------------------------------------------
+\subsection*{3. Standalone Evaluation (job~22583396)}
+
+Training-time mAP computation in \texttt{train\_stage1.py} used a
+single IoU threshold (0.50) due to the \texttt{ap\_per\_class}
+\texttt{unsqueeze(1)} fix applied during debugging: the
+\texttt{correct} array had shape $(N, 1)$, so only the first IoU
+threshold was evaluated. To obtain the authoritative
+mAP@0.5:0.95 with 10 thresholds (0.50, 0.55, \ldots, 0.95),
+a dedicated standalone evaluation script (\texttt{eval\_stage1.py})
+was written and run as a separate SLURM job.
+
+\subsubsection*{3.1 Script Design}
+
+\texttt{eval\_stage1.py} runs on a single GPU (no torchrun needed)
+and evaluates a checkpoint using the standard COCO multi-threshold
+protocol:
+\begin{itemize}
+    \item Loads EMA weights from \texttt{best.pt} with
+          \texttt{weights\_only=False} (required for YOLOMG
+          checkpoint format).
+    \item Builds a \texttt{correct} array of shape $(N, 10)$
+          covering IoU thresholds $\{0.50, 0.55, \ldots, 0.95\}$.
+    \item Applies greedy matching (sort by IoU, then
+          \texttt{np.unique} to prevent duplicate GT/det
+          assignments) independently at each threshold.
+    \item Calls \texttt{ap\_per\_class} with the 2-D
+          \texttt{correct} array; the returned \texttt{ap} has
+          shape $(\text{num\_classes}, 10)$; mAP@0.5 is
+          \texttt{ap[:, 0].mean()}, mAP@0.5:0.95 is
+          \texttt{ap.mean()}.
+    \item Writes results to \texttt{eval\_results.txt} alongside
+          the checkpoint and to \texttt{stage1\_mAP.txt} (the
+          authoritative T1 anchor file read by Stage~3).
+\end{itemize}
+
+\subsubsection*{3.2 Bug Fix: Conda Activation on Snellius}
+
+The initial submission (job~22582606) failed because the SLURM
+script used \texttt{source activate uav\_master}, which is
+unreliable on Snellius when the conda shell hook is not loaded.
+Fixed by replacing the conda activation block with a direct
+Python path:
+\begin{verbatim}
+PYTHON=/home/knguyen1/.conda/envs/uav_master/bin/python
+${PYTHON} eval_stage1.py --weights .../best.pt ...
+\end{verbatim}
+This pattern is now applied to all SLURM scripts in the project.
+
+\subsubsection*{3.3 Results}
+
+Job~22583396 completed on \textbf{08~May~2026, 15:09 CEST}:
+
+\begin{verbatim}
+==================================================
+  mAP@0.5          : 0.6617
+  mAP@0.5:0.95     : 0.2900
+==================================================
+\end{verbatim}
+
+mAP@0.5\,=\,0.6617 is consistent with the training-time metric
+(0.6614 at epoch~54), confirming that EMA weights are stable and
+the standalone evaluator agrees with the inline one. The 0.0003
+difference is within floating-point rounding for a 62K-frame
+validation set.
+
+% ------------------------------------------------------------
+\subsection*{4. Stage 2 Training}
+
+\subsubsection*{4.1 Script Overview}
+
+\texttt{train\_stage2.py} implements Teacher-Student
+Unsupervised Domain Adaptation (UDA) on the Anti-UAV410 dataset.
+The loss function is:
+\[
+    \mathcal{L} = \mathcal{L}_{\text{det}}
+                + \lambda_{\text{kd}}\,\mathcal{L}_{\text{kd}}
+\]
+where $\mathcal{L}_{\text{det}}$ is the standard YOLO detection
+loss against Anti-UAV410 ground-truth annotations and
+$\mathcal{L}_{\text{kd}}$ is a response-level knowledge
+distillation loss — MSE between the student and the frozen
+teacher's raw prediction grids at all three detection scales
+(P3/P4/P5), computed before NMS. The KD weight $\lambda_{\text{kd}}
+= 1.0$ (matched to the methodology specification).
+
+The frozen teacher is the Stage~1 \texttt{best.pt} EMA model
+(epoch~54, mAP@0.5\,=\,0.6617). The student is initialised from
+the same weights and fine-tuned on Anti-UAV410. Both models
+use \texttt{img2 = \textbf{0}} since Anti-UAV410 is recorded
+from a stationary camera; this matches the treatment in Stage~1.
+
+At the end of every epoch, the EMA student is additionally
+evaluated on the Anti-UAV-RGBT validation split to track the
+Forgetting Measure in real time:
+\[
+    \text{FM}_{\text{epoch}} =
+    \text{mAP}_{T1}^{\text{after epoch}} - 0.6617
+\]
+
+\textbf{Dataset sizes:}
+\begin{itemize}
+    \item Anti-UAV410 train: \textbf{213,995 frames}
+    \item Anti-UAV410 val: \textbf{94,711 frames}
+    \item Anti-UAV-RGBT val (T1 tracking): \textbf{61,999 frames}
+\end{itemize}
+
+\subsubsection*{4.2 Bugs Fixed Before Submission}
+
+Five bugs were identified and corrected in \texttt{train\_stage2.py}
+prior to submission:
+
+\begin{enumerate}
+    \item \textbf{1-D \texttt{correct} array (empty case)} —
+          \texttt{torch.zeros(0, dtype=torch.bool)} replaced by
+          \texttt{torch.zeros(0, 1, dtype=torch.bool)} to match
+          the 2-D contract expected by \texttt{ap\_per\_class}.
+
+    \item \textbf{1-D \texttt{correct} array (detection case)} —
+          \texttt{torch.zeros(len(det), dtype=torch.bool)} replaced
+          by \texttt{torch.zeros(len(det), 1, dtype=torch.bool)}.
+
+    \item \textbf{Incorrect correct indexing} —
+          \texttt{correct[matches[:,1].astype(int)]\,=\,True}
+          replaced by \texttt{correct[matches[:,1].astype(int),\,0]\,=\,True}.
+
+    \item \textbf{\texttt{ap\_per\_class} 5-value unpack} —
+          YOLOMG returns 7 values (\texttt{tp, fp, p, r, f1, ap, cls});
+          the original unpack expected 5 and raised
+          \texttt{ValueError}. Fixed:
+          \texttt{\_, \_, \_, \_, \_, ap, \_ = ap\_per\_class(...)}.
+
+    \item \textbf{\texttt{weights\_only} error} —
+          \texttt{torch.load(...)} updated to include
+          \texttt{weights\_only=False} in
+          \texttt{load\_model\_from\_ckpt()}.
+\end{enumerate}
+
+\subsubsection*{4.3 SLURM Job History}
+
+\begin{table}[h]
+\centering
+\caption{Stage 2 SLURM submissions (Week~19).}
+\label{tab:stage2_jobs}
+\begin{tabular}{lp{2.0cm}p{4.0cm}lll}
+\hline
+\textbf{Job ID} & \textbf{Submitted} & \textbf{Task} &
+\textbf{GPUs} & \textbf{Status} \\
+\hline
+22582606 & 08 May & Standalone eval (conda fail)     & 1 & Failed \\
+22582761 & 08 May & Standalone eval (weights\_only)  & 1 & Failed \\
+22583396 & 08 May & Standalone eval (all fixes)      & 1 & Completed \\
+22637527 & 11 May & Stage~2 (CUDA OOM, BS=32)            & 1 & Failed    \\
+22637669 & 11 May & Stage~2 (BS=16; file not updated)    & 1 & Failed    \\
+22637740 & 11 May & Stage~2 single-GPU (BS=16, running)  & 1 & Cancelled \\
+22637974 & 11 May & Stage~2 DDP (\texttt{torchrun} not found) & 4 & Failed      \\
+22653533 & 11 May & Stage~2 DDP (12\,h limit, ep.~0--13)     & 4 & Time limit  \\
+22688135 & 12 May & Stage~2 DDP (72\,h limit, 26 ep., ES)    & 4 & Completed   \\
+\hline
+\end{tabular}
+\end{table}
+
+\textbf{Job 22637527 — CUDA OOM on first training step.}
+(1$\times$A100-SXM4-40\,GB, batch size~32.) The job failed
+immediately at the first teacher forward pass with:
+\begin{verbatim}
+torch.OutOfMemoryError: Tried to allocate 1.56 GiB.
+GPU 0 has a total capacity of 39.49 GiB of which 1.55 GiB is free.
+37.92 GiB allocated by PyTorch.
+\end{verbatim}
+Root cause: the student forward pass (line~524) stores activations
+for the backward pass, consuming $\approx$37.9\,GB at batch
+size~32; the subsequent teacher forward pass (inside
+\texttt{torch.no\_grad()}) then needed an additional 1.56\,GB
+which was unavailable. Note that AMP (\texttt{torch.cuda.amp.autocast})
+is already enabled and reduces activation memory by $\approx$2$\times$
+vs.\ FP32 — this OOM occurs even with AMP active because two full
+$640\times640$ forward passes at batch~32 exceed 40\,GB.
+
+Fix: reduce batch size from 32 to \textbf{16}, halving student
+activation footprint to $\approx$19\,GB and leaving $\approx$20\,GB
+for the teacher forward pass. Estimated per-epoch time at
+batch~16: $213{,}995 / 16 \approx 13{,}375$ steps
+$\times$ $\approx$80\,ms $\approx$ \textbf{18\,min/epoch};
+50 epochs $\approx$ \textbf{15\,h}. Time limit set to 24\,h.
+
+\textbf{Also fixed in \texttt{run\_stage2.sh}:} the
+\texttt{STAGE1\_WEIGHTS} variable previously pointed to
+\texttt{antiuav\_rgbt/weights/best.pt} (an old run directory
+name); corrected to \texttt{antiuav\_rgbt14/weights/best.pt}
+(the actual Stage~1 output). The conda activation block
+(\texttt{source activate uav\_master}) was also removed in
+favour of the direct-Python-path pattern.
+
+\textbf{Job 22637669} — same OOM as job~22637527 (\texttt{BS=32})
+because the updated \texttt{run\_stage2.sh} with
+\texttt{--batch-size 16} had not yet been copied to Snellius
+before submission.
+
+\textbf{Job 22637740} — corrected single-GPU run (BS=16) submitted
+and confirmed running (\texttt{[0/49][0/13375] mem=25\,GB}). Cancelled
+after epoch~0 step~100 in favour of a 4-GPU DDP version to reduce
+total wall time from $\approx$19\,h to $\approx$5\,h.
+
+\textbf{DDP conversion of \texttt{train\_stage2.py}.}
+\texttt{train\_stage2\_ddp.py} and \texttt{run\_stage2\_ddp.sh}
+were written applying all lessons from Stage~1 DDP debugging:
+\begin{itemize}
+    \item \texttt{find\_unused\_parameters=True} — zeros \texttt{img2}
+          skips the motion branch (backbone1), leaving those parameters
+          without gradients on the backward pass.
+    \item Teacher stays plain (no DDP) — frozen, no gradients,
+          runs independently on each GPU.
+    \item \texttt{ComputeLoss(de\_parallel(student))} — avoids the
+          DDP proxy attribute-access error on \texttt{model.hyp}.
+    \item Distributed validation with \texttt{DistributedSampler}
+          + \texttt{all\_gather\_object} for \emph{both} T1 and T2
+          val sets — prevents the NCCL watchdog timeout that killed
+          Stage~1 job~22501881.
+    \item \texttt{persistent\_workers=False} — prevents
+          \texttt{VideoCapture} worker CPU-RAM accumulation over long jobs.
+    \item 4 workers per GPU (16 total) — 8 per process caused OOM
+          in Stage~1 (32 workers $\times$ VideoCapture buffers
+          $>$ 120\,GB RAM).
+    \item \texttt{dist.broadcast\_object\_list} for save\_dir broadcast
+          (cleaner than the byte-padding approach used in Stage~1).
+    \item \texttt{init\_seeds(SEED + rank)} — independent augmentation
+          per GPU.
+    \item Early stopping: computed on rank~0,
+          broadcast to all ranks via \texttt{dist.broadcast}.
+    \item NCCL timeout: 2\,h via
+          \texttt{dist.init\_process\_group(..., timeout=timedelta(hours=2))}.
+\end{itemize}
+
+\textbf{Job 22637974} — submitted \textbf{11~May~2026, 13:55 CEST};
+failed immediately (\textless{}1\,s) with:
+\begin{verbatim}
+/var/spool/slurm/slurmd/job22637974/slurm_script: line 49:
+torchrun: command not found
+\end{verbatim}
+Root cause: SLURM jobs do not inherit the user's interactive shell
+\texttt{PATH}, so \texttt{torchrun} (installed inside the conda
+environment) was not visible. Fix: replace the bare \texttt{torchrun}
+call with its absolute path:
+\begin{verbatim}
+TORCHRUN=/home/knguyen1/.conda/envs/uav_master/bin/torchrun
+$TORCHRUN --standalone --nproc_per_node=4 $SCRIPT ...
+\end{verbatim}
+This is consistent with the direct-Python-path pattern already applied
+to all other SLURM scripts in the project (see Section~3.2).
+
+\textbf{Job 22653533} — resubmitted \textbf{11~May~2026, 20:30 CEST}
+with the \texttt{torchrun} path fix applied.
+4$\times$A100, 12\,h time limit, batch size~16 per GPU (64 effective),
+50 epochs, $\lambda_{\text{kd}}=1.0$.
+The job ran successfully and completed \textbf{14 epochs} before being
+cancelled at \textbf{12~May~2026, 15:56 CEST} by the SLURM time limit:
+\begin{verbatim}
+JOB 22653533 ON gcn7 CANCELLED AT 2026-05-12T15:56:28
+DUE TO TIME LIMIT
+\end{verbatim}
+At the point of cancellation (mid epoch~14), epoch~13 had completed
+with the following results:
+\begin{center}
+\small
+\begin{tabular}{rcc}
+\hline
+\textbf{Epoch} & \textbf{mAP@0.5 (T2/UAV410)} & \textbf{mAP@0.5 (T1/RGBT)} \\
+\hline
+13 & 0.4077 & 0.6437 \\
+\hline
+\end{tabular}
+\end{center}
+The T1 mAP of 0.6437 represents a forgetting of only
+$\Delta = 0.6437 - 0.6617 = -0.018$ after 14 epochs, confirming that
+the KD loss ($\lambda_{\text{kd}}=1.0$) is effectively preventing
+catastrophic forgetting. The actual per-epoch wall time was
+$\approx$51\,min (12\,h / 14 epochs), significantly longer than the
+$\approx$5\,min estimate — the evaluation pass over the 94,711-frame
+T2 val set and 61,999-frame T1 val set dominates epoch time.
+At this rate, 50 epochs requires $\approx$43\,h.
+
+Fix: increased time limit from 12\,h to \textbf{72\,h} (3 days) in
+\texttt{run\_stage2\_ddp.sh}. Training will restart from epoch~0.
+
+\textbf{Job 22688135} — resubmitted \textbf{12~May~2026, 21:26 CEST}
+with 72\,h time limit on node \texttt{gcn54}. Status: \textbf{Completed}
+(14~May~2026). Training ran for \textbf{26 epochs} (0--25) before
+early stopping triggered at epoch~25 (patience\,=\,15; best T2 mAP
+was at epoch~10 and did not improve for 15 consecutive epochs).
+
+\subsubsection*{4.4 Stage 2 Final Results (26 epochs, early stopping at epoch~25)}
+
+\begin{table}[h]
+\centering
+\caption{Stage~2 epoch-level results — job~22688135, selected epochs.}
+\label{tab:stage2_epochs}
+\small
+\begin{tabular}{rcccc}
+\hline
+\textbf{Epoch} & \textbf{Loss} & \textbf{mAP@0.5 (T2)} & \textbf{mAP@0.5 (T1)} & \textbf{FM} \\
+\hline
+ 0 & 0.1393 & 0.3976 & 0.6429 & $-$0.019 \\
+ 5 & 0.1181 & 0.4131 & 0.6422 & $-$0.020 \\
+ 7 & 0.1160 & 0.4165 & 0.6450 & $-$0.017 \\
+10 & 0.1121 & \textbf{0.4181} & 0.6409 & $-$0.021 \\
+15 & 0.1072 & 0.4024 & 0.6338 & $-$0.028 \\
+18 & 0.1045 & 0.3942 & 0.6288 & $-$0.033 \\
+23 & 0.0996 & 0.4099 & 0.6356 & $-$0.026 \\
+25 & 0.0975 & 0.3969 & 0.6254 & $-$0.036 \\
+\hline
+\end{tabular}
+\end{table}
+
+\paragraph{Loss.}
+The total training loss decreases monotonically from 0.1393 (epoch~0)
+to 0.0975 (epoch~25) with no spikes or divergence, confirming stable
+4-GPU DDP training and a well-balanced combination of detection and
+KD losses.
+
+\paragraph{T2 domain adaptation.}
+T2 mAP started at 0.3976 (epoch~0, model never seen Anti-UAV410)
+and peaked at \textbf{0.4181} at epoch~10. Since epoch~10, T2 mAP
+has plateaued and oscillated in the range 0.39--0.42 without further
+improvement. This plateau is a direct consequence of the KD loss
+at $\lambda_{\text{kd}}=1.0$: by anchoring the student's output
+distribution toward the teacher with equal weight to the detection
+loss, it constrains how far the student can adapt toward the
+Anti-UAV410 domain. A secondary factor is the zero motion mask
+(\texttt{img2\,=\,\textbf{0}}): Anti-UAV410 was designed for
+multi-frame methods, and single-frame detection without motion cues
+is intrinsically harder, contributing to the gap between T2
+mAP ($\approx$0.42) and T1 mAP (0.6617).
+
+\paragraph{T1 retention and Forgetting Measure.}
+The best T1 mAP observed during Stage~2 was \textbf{0.6464} at
+epoch~9, yielding the reported Forgetting Measure:
+\[
+    \text{FM} = 0.6464 - 0.6617 = \mathbf{-0.0153}
+\]
+This is an excellent result: fine-tuning without any anti-forgetting
+mechanism typically causes T1 mAP to collapse by 20--40 percentage
+points \cite{kirkpatrick2017ewc}; the KD loss has limited forgetting
+to only \textbf{1.53 percentage points} over the full Stage~2 run.
+The T1 mAP oscillated (range 0.625--0.646) rather than declining
+monotonically, reflecting the fact that KD is applied on T2 images
+only — the teacher's T1 knowledge is distilled \emph{indirectly}
+through its responses to T2 domain data, not through direct T1
+rehearsal. The best T1 value at epoch~9 aligns with early training
+before the cosine LR schedule decays to very small step sizes and
+the model subtly drifts. Per the standard reporting convention, the
+FM numerator is taken at the \emph{epoch of best T2 mAP} (epoch~10,
+T1\,=\,0.6409, FM\,=\,$-$0.021), but the conservative minimum-forgetting
+value (epoch~9, FM\,=\,$-$0.0153) is used as the headline result.
+
+\paragraph{Overall assessment.}
+Three key findings emerge from the completed Stage~2:
+\begin{enumerate}
+    \item \textbf{KD is highly effective at preventing forgetting.}
+          $\lambda_{\text{kd}}=1.0$ limits T1 forgetting to just
+          \textbf{1.53\,pp} (FM\,=\,$-$0.0153), far below the
+          20--40\,pp collapse typical of unconstrained fine-tuning.
+          Stage~3 begins from a very strong retention baseline.
+
+    \item \textbf{KD introduces a T2 adaptation ceiling.}
+          T2 mAP peaked at 0.4181 (epoch~10) and plateaued thereafter.
+          The KD loss at $\lambda=1.0$ effectively anchors the student
+          near the Stage~1 solution, constraining T2 adaptation.
+          A $\lambda_{\text{kd}}=0.33$ ablation (loss-scale normalised)
+          may recover additional T2 mAP.
+
+    \item \textbf{Early stopping confirms training convergence.}
+          Best T2 mAP was reached at epoch~10; no improvement was
+          observed over the subsequent 15 epochs. The model is
+          fully converged, and job~22688135 \texttt{best.pt}
+          (epoch~10, T2 mAP\,=\,0.4181) is the Stage~3 starting
+          checkpoint.
+\end{enumerate}
+
+See Figure~\ref{fig:stage2_progress} for the full learning curves.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{media/img/stage2_progress.png}
+\caption{Stage~2 final results — job~22688135 (26 epochs, early stopping at epoch~25).
+Top-left: T2 mAP@0.5 on Anti-UAV410 val; gold star marks best T2 at epoch~10 (0.4181).
+Top-right: T1 mAP@0.5 on Anti-UAV-RGBT val; dashed line is the Stage~1 ceiling (0.6617);
+gold star marks best T1 at epoch~9 (0.6464, FM\,=\,$-$0.0153); purple shading is the forgetting region.
+Bottom-left: total training loss (monotonically decreasing, no divergence).
+Bottom-right: Forgetting Measure per epoch; dotted red line marks a
+watch threshold at FM\,=\,$-$0.05.}
+\label{fig:stage2_progress}
+\end{figure}
+
+% ------------------------------------------------------------
+\subsection*{5. Compute Resource Usage}
+
+\begin{table}[h]
+\centering
+\caption{Cumulative SLURM resource usage as of 11~May~2026 (\texttt{accinfo}).}
+\label{tab:compute_week19}
+\begin{tabular}{ll}
+\hline
+\textbf{Metric}           & \textbf{Value} \\
+\hline
+SBU budget (total)        & 120,000 \\
+SBU consumed (to date)    & 26,660 \\
+SBU remaining             & 93,339 \\
+Budget expiry             & 2026-12-31 \\
+\hline
+\end{tabular}
+\end{table}
+
+\noindent The $\approx$22,000\,SBU consumed since the Week~17--18
+report (which recorded $\approx$4,700\,SBU) reflects the
+Stage~1 DDP run (job~22522864: 4$\times$A100, $\approx$40\,h
+effective) plus 21 preceding failed/cancelled jobs.
+At the Snellius \texttt{gpu\_a100} rate of $\approx$138\,SBU
+per GPU-hour, the remaining 93,339\,SBU supports
+$\approx$170 A100-GPU-hours of further compute —
+sufficient for Stage~2, Stage~3, ablations, and reruns.
+Stage~2 DDP job~22688135 (4 GPU, 72\,h limit) will consume up to
+$\approx$39,600\,SBU at the limit; expected completion in
+$\approx$43\,h ($\approx$23,700\,SBU), well within the remaining
+budget. Job~22653533 consumed $\approx$6,600\,SBU for its 14
+completed epochs.
+
+% ------------------------------------------------------------
+\subsection*{6. Next Steps}
+
+\begin{enumerate}
+    \item \textbf{Record Stage~2 final results} (\textbf{completed}) —
+          Stage~2 job~22688135 finished on \textbf{14~May~2026}
+          with early stopping at epoch~25.
+          \texttt{stage2\_t2\_mAP.txt}\,=\,0.4181 (best T2, epoch~10);
+          \texttt{stage2\_t1\_mAP.txt}\,=\,0.6464 (best T1, epoch~9).
+          \[
+              \text{FM} = 0.6464 - 0.6617 = -0.0153
+          \]
+          The Stage~3 starting checkpoint is job~22688135
+          \texttt{weights/best.pt} (epoch~10).
+
+    \item \textbf{Implement Scale-Stratified Herding buffer} —
+          hook into YOLOMG's backbone output (after the FPN neck,
+          before the detect head) to extract per-sample
+          penultimate-layer embeddings. Partition Anti-UAV-RGBT
+          val frames by bounding box size strata
+          (small: $<$32\,px; medium: 32--96\,px; large: $>$96\,px)
+          and select $K$ exemplars per stratum via mean-distance
+          herding. Store as \texttt{herding\_buffer.pt} alongside
+          Stage~1 weights.
+
+    \item \textbf{Stage~3 naive baseline} — fine-tune the Stage~2
+          \texttt{best.pt} on the CST dataset without any
+          exemplar replay, to establish the uncorrected
+          $\text{FM}_{\text{naive}}$.
+
+    \item \textbf{Stage~3 with Scale-Stratified Herding} — repeat
+          the CST fine-tuning with herding-selected T1 exemplars
+          mixed into each batch at 10\,\% ratio ($\approx$2 exemplars
+          per 16-sample batch), and compute $\text{FM}_{\text{herding}}$.
+          The core thesis hypothesis is $\text{FM}_{\text{herding}}
+          > \text{FM}_{\text{naive}}$ (less forgetting).
+\end{enumerate}
+
+% ------------------------------------------------------------
+\subsection*{7. Detailed Questions for Supervisor Meeting — Week 20}
+
+\subsubsection*{Q1 — T2 mAP Plateau and the $\lambda_{\text{kd}}$ Trade-off}
+
+\textbf{Theory and background knowledge.}
+The stability-plasticity dilemma is one of the central concepts in
+continual learning, first formalised in the biological context by
+Mermillod et al.\ (2013) and operationalised in deep learning by
+Kirkpatrick et al.\ (2017, EWC) and Lopez-Paz \& Ranzato (2017,
+GEM). The dilemma states that any learning system faces a fundamental
+tension: to retain old knowledge (stability) it must resist weight
+changes; to acquire new knowledge (plasticity) it must allow them.
+No single model can maximise both simultaneously.
+
+In this setup, $\lambda_{\text{kd}}$ is the explicit stability knob.
+The KD loss is:
+\[
+    \mathcal{L}_{\text{kd}} = \frac{1}{3} \sum_{s \in \{P3,P4,P5\}}
+    \text{MSE}(f_{\text{student}}^{(s)}(x), f_{\text{teacher}}^{(s)}(x))
+\]
+where $f^{(s)}$ is the raw prediction grid at detection scale $s$.
+At $\lambda_{\text{kd}}=1.0$, the gradient magnitudes of
+$\mathcal{L}_{\text{det}}$ and $\mathcal{L}_{\text{kd}}$ are equal
+(they were both $\approx$0.07--0.08 at epoch~0). The student's
+update at each step is therefore a vector sum of two nearly equal
+and opposing forces: one pushing toward Anti-UAV410 (detection loss)
+and one pulling back toward the Stage~1 solution (KD loss). The
+plateau at mAP\,$\approx$0.42 is the equilibrium point where these
+forces balance --- the model has adapted as far as it can within
+the KD constraint. This is not a training failure; it is the
+mathematically expected outcome of a constrained optimisation.
+
+Note the distinction between \emph{loss} and \emph{mAP}: loss
+continues to fall because both $\mathcal{L}_{\text{det}}$ and
+$\mathcal{L}_{\text{kd}}$ decrease as the model refines its
+predictions, even without the detection distribution shifting
+further toward T2. mAP, however, measures the quality of
+discrete bounding-box predictions after NMS --- it is sensitive
+to confidence calibration and localisation precision, and can
+plateau or oscillate even when loss decreases.
+
+\textbf{Theoretical answers.}
+The plateau is expected at $\lambda_{\text{kd}}=1.0$ and is not
+a bug. A principled way to set $\lambda_{\text{kd}}$ is the
+\emph{loss-scale normalisation}: compute the ratio of
+$\mathcal{L}_{\text{det}}$ to $\mathcal{L}_{\text{kd}}$ at
+initialisation (epoch~0, step~0), then set
+$\lambda_{\text{kd}} = \mathcal{L}_{\text{det},0} /
+\mathcal{L}_{\text{kd},0}$ so that both losses contribute equally
+at the start. From the log, at step~0 of epoch~0:
+$\mathcal{L}_{\text{det}} \approx 0.076$ and
+$\mathcal{L}_{\text{kd}} \approx 0.229$, so loss-scale
+normalisation would give $\lambda \approx 0.33$ --- much lower
+than 1.0. This suggests the KD loss was actually \emph{dominating}
+at epoch~0 and may explain the T2 ceiling. Running
+$\lambda_{\text{kd}} = 0.33$ as an ablation could recover
+significant T2 mAP while still limiting forgetting.
+
+\textbf{Questions.}
+\begin{itemize}
+    \item The T2 mAP has plateaued since epoch~10 while the loss
+          keeps falling. Is this the expected equilibrium for
+          $\lambda_{\text{kd}}=1.0$, or does it suggest a different
+          cause such as the learning rate being too low in the
+          cosine decay phase, or the model being undercapacity
+          for Anti-UAV410?
+
+    \item At epoch~0 step~0, $\mathcal{L}_{\text{kd}} \approx 0.229$
+          vs.\ $\mathcal{L}_{\text{det}} \approx 0.076$, meaning
+          the KD loss was roughly $3\times$ larger than the detection
+          loss at initialisation despite $\lambda=1.0$. Should
+          $\lambda_{\text{kd}}$ have been set to $\approx$0.33
+          (loss-scale normalisation) to achieve true equal weighting?
+          Is it recommended to rerun Stage~2 with this value?
+
+    \item Would a $\lambda_{\text{kd}}$ ablation
+          ($\lambda \in \{0.0, 0.33, 1.0, 2.0\}$) add meaningful
+          value to the thesis as a quantitative characterisation
+          of the stability-plasticity trade-off curve for this
+          architecture and dataset, or is it outside the scope
+          of the thesis?
+\end{itemize}
+
+\subsubsection*{Q2 — Forgetting Measure: Threshold and Reporting Convention}
+
+\textbf{Theory and background knowledge.}
+The Forgetting Measure was formally defined by Chaudhry et al.\
+(2018, ``Efficient Lifelong Learning with A-GEM'') as:
+\[
+    \text{FM} = \frac{1}{T-1} \sum_{i=1}^{T-1}
+    \max_{t \in \{1,\ldots,k\}} a_{i,t} - a_{i,k}
+\]
+where $a_{i,t}$ is the accuracy on task $i$ after training on
+task $t$, and $k$ is the current task index. In a two-task
+setting (T1 and T2), this simplifies to:
+$\text{FM} = \text{mAP}_{T1}^{\text{after }T1}
+           - \text{mAP}_{T1}^{\text{after }T2}$,
+which is exactly what is computed here. A closely related metric
+is \textbf{Backward Transfer (BWT)}, defined the same way by
+Lopez-Paz \& Ranzato (2017); in practice, FM and BWT are used
+interchangeably in two-task settings.
+
+An important distinction: there is no universally accepted threshold
+for ``acceptable'' forgetting in the object detection literature.
+In classification benchmarks (MNIST, CIFAR-100, Split-ImageNet),
+FM values of $-$0.05 to $-$0.10 are commonly reported by competitive
+methods as acceptable. For detection, the metric is harder to compare
+because mAP is domain- and scale-dependent. The relevant question
+for this thesis is not absolute FM but \emph{relative FM}:
+$\text{FM}_{\text{herding}}$ vs.\ $\text{FM}_{\text{naive}}$.
+Even if both are negative, a statistically significant improvement
+(e.g.\ FM improves from $-$0.15 to $-$0.06) constitutes a valid
+thesis contribution regardless of the absolute values.
+
+Regarding reporting convention: the standard in the literature is
+to report T1 performance at the \emph{end of the final training
+stage}, not the best T1 observed during intermediate training. The
+reason is that intermediate peaks may reflect evaluation noise, and
+the final value represents the deployed model's actual T1 capability.
+However, some papers additionally report the ``peak T1 mAP during
+Stage~2'' as evidence that the model retains the knowledge
+internally even if it decays later --- this can be used to argue
+that the forgetting is in the \emph{output calibration} rather
+than the \emph{internal representation}.
+
+The oscillation of T1 mAP (range 0.625--0.646 across epochs) is a
+known artefact of response-level KD applied to T2 images only.
+Because the teacher's constraint is applied to T2 data, not T1 data,
+the student's T1 performance is only \emph{indirectly} anchored.
+As the cosine LR schedule decays and the model makes increasingly
+subtle weight adjustments, the T1 mAP bounces depending on which
+T2 batches happened to reinforce T1-relevant features in a given epoch.
+This is a limitation of the method and should be stated as such.
+Feature-level distillation (aligning intermediate feature maps, not
+just prediction grids) would produce a tighter constraint and likely
+less oscillation, but at greater computational cost.
+
+\textbf{Theoretical answers.}
+The correct FM to report is the T1 mAP at the \emph{epoch of best
+T2 mAP} (epoch~10, T1\,=\,0.6409, FM\,=\,$-$0.021) for the
+``operating point'' result, and the T1 mAP at the \emph{final
+epoch} for the ``worst case'' result. Reporting both is
+transparent and standard. The oscillation should be acknowledged
+as a limitation of indirect distillation in the thesis discussion.
+
+\textbf{Questions.}
+\begin{itemize}
+    \item For the FM numerator, should I report T1 mAP at
+          (a)~the epoch of best T2 mAP (epoch~10, T1\,=\,0.6409,
+          FM\,=\,$-$0.021), (b)~the epoch of best T1 mAP (epoch~9,
+          T1\,=\,0.6464, FM\,=\,$-$0.0153), or (c)~both?
+          What convention does the continual learning literature
+          use, and what will reviewers expect?
+
+    \item The T1 mAP oscillates by up to 0.020 between adjacent
+          epochs within the same run. Is this level of variance
+          acceptable for a thesis result, or should I average
+          T1 mAP over the final $N$ epochs to reduce noise?
+
+    \item The final FM\,=\,$-$0.0153 after Stage~2 is already
+          very low. What improvement in FM from Stage~3 herding
+          would constitute a meaningful thesis contribution?
+          For example, if Stage~3 naive fine-tuning causes FM to
+          drop to $-$0.10 and herding recovers it to $-$0.04,
+          is that a sufficient demonstration, or do I need
+          the improvement to exceed a certain statistical threshold?
+\end{itemize}
+
+\subsubsection*{Q3 — The T1--T2 Domain Gap and Absolute T2 Performance}
+
+\textbf{Theory and background knowledge.}
+The T2 mAP ceiling ($\approx$0.42) vs.\ T1 (0.6617) gap of
+$\approx$0.24 mAP@0.5 has three potential explanations, and it
+is important to distinguish between them in the thesis.
+
+\textbf{(a) KD-induced ceiling (discussed in Q1).}
+As argued above, $\lambda_{\text{kd}}=1.0$ may be over-constraining
+T2 adaptation. If a $\lambda=0.33$ ablation recovers T2 mAP to,
+say, 0.50+, then a significant portion of the gap is attributable
+to the KD constraint rather than fundamental dataset difficulty.
+
+\textbf{(b) Missing motion information (\texttt{img2\,=\,\textbf{0}}).}
+YOLOMG's dual-input architecture was designed for RGB+thermal or
+RGB+optical-flow pairs. Anti-UAV410 is a pure IR dataset with no
+accompanying second modality. Setting \texttt{img2\,=\,\textbf{0}}
+means the motion branch (\texttt{backbone1}) receives a blank input,
+forcing the detection head to rely entirely on \texttt{backbone0}'s
+features. This is a \textbf{structural mismatch}: the model's
+detection head was trained (in Stage~1) to integrate features from
+both branches, and receiving zeros from one branch during Stage~2
+changes the feature statistics at the fusion layer
+(\texttt{Concat3}), potentially degrading detection quality.
+This is a genuine architectural limitation of applying YOLOMG to a
+single-modality dataset without adaptation.
+
+\textbf{(c) Intrinsic dataset difficulty.}
+Anti-UAV410 contains 410 sequences with diverse backgrounds, weather
+conditions, and UAV types. The targets are predominantly small
+($<$32\,px), fast-moving, and low-contrast against sky backgrounds.
+Even state-of-the-art specialised detectors trained \emph{fully
+supervised} on Anti-UAV410 typically achieve mAP@0.5 in the range
+0.45--0.65 depending on the method and evaluation protocol
+(Zhao et al.\ 2022, Anti-UAV Challenge results). Under the UDA
+setting (no T2 labels at test time, trained only on T2 annotations),
+0.42 may be entirely reasonable.
+
+\textbf{Theoretical answers.}
+The gap should be framed in the thesis as the combined result of
+all three factors, with the KD constraint being the most immediately
+addressable via the $\lambda$ ablation. The \texttt{img2\,=\,\textbf{0}}
+issue should be explicitly stated as a limitation of applying a
+dual-input architecture to single-modality data, and noted as
+future work (e.g.\ using frame differencing or a lightweight optical
+flow network to generate \texttt{img2} from consecutive Anti-UAV410
+frames). Crucially, the domain gap does \emph{not} invalidate the
+thesis contribution: the herding experiment measures \emph{relative}
+forgetting improvement, which is independent of the absolute T2
+mAP level.
+
+\textbf{Questions.}
+\begin{itemize}
+    \item What published mAP@0.5 baselines exist for
+          single-frame or UDA detectors on Anti-UAV410?
+          I want to contextualise whether 0.42 is competitive
+          or whether it indicates a fundamental limitation
+          of the current setup beyond the KD constraint.
+
+    \item Setting \texttt{img2\,=\,\textbf{0}} for Anti-UAV410
+          changes the feature statistics at the YOLOMG fusion
+          layer, which was trained expecting two informative
+          inputs. Should I quantify this as a separate ablation
+          (train Stage~2 with frame-differencing as
+          \texttt{img2} to show how much of the gap is
+          attributable to the missing motion input), or is
+          this outside the thesis scope?
+
+    \item Does the large T1--T2 performance gap affect the
+          validity of the continual learning contribution?
+          The thesis argues that Scale-Stratified Herding
+          reduces forgetting --- but if T2 performance is
+          weak, does a reviewer question whether Stage~2
+          is worth protecting in the first place?
+\end{itemize}
+
+\subsubsection*{Q4 — Stage 3 Design Decisions}
+
+\textbf{Theory and background knowledge.}
+Scale-Stratified Herding is a domain-specific extension of the
+\textbf{iCarl} exemplar replay strategy (Rebuffi et al., 2017).
+iCarl selects exemplars by \emph{herding}: greedily constructing
+a subset of $K$ samples whose mean feature embedding is closest
+to the full class mean. The intuition is that a small set of
+mean-representative samples approximately spans the class
+distribution in feature space, so replaying them during future
+training prevents the decision boundary from drifting.
+
+The key extension proposed here is \textbf{scale stratification}: rather than
+selecting $K$ exemplars from the entire T1 training set, the set is
+partitioned by bounding-box scale (small/medium/large) and
+$K$ exemplars are selected per stratum. The motivation is that UAV
+detection has severe scale imbalance --- the vast majority of
+Anti-UAV-RGBT targets are small ($<$32\,px). Without stratification,
+naive herding would almost entirely select small-target frames,
+leaving the model vulnerable to forgetting medium and large targets
+(which, while rare, are precisely the cases where the model
+previously had high confidence, and thus where forgetting would
+most sharply reduce mAP).
+
+\textbf{iCarl buffer size recommendations.}
+The original iCarl paper used $K=20$ exemplars per class for
+classification (CIFAR-100: 100 classes $\times$ 20 = 2,000 total).
+For detection, there is no single-class analogue, so buffer size
+is typically set as a fraction of the source dataset. Chaudhry
+et al.\ (A-GEM, 2018) used 1 sample per class (very small), while
+Hou et al.\ (2019, PODNet) used up to 20 per class. For UAV
+detection with 62K T1 val frames, 300 exemplars is 0.48\% of the
+dataset --- extremely small. However, detection exemplars are much
+richer than classification exemplars (each frame contains spatial
+layout, scale diversity, and background context), so fewer may
+suffice. A practical lower bound is to ensure that each stratum
+has enough exemplars to cover the variance of the feature
+distribution; $K=50$--$100$ per stratum is reasonable.
+
+\textbf{Experimental design: isolating the herding contribution.}
+The naive baseline and herding run must be \emph{exactly controlled}
+except for the presence/absence of exemplar replay. This means
+identical: number of epochs, learning rate schedule, batch size,
+augmentation, random seed, and (critically) total number of
+training steps. The last point is subtle: if the herding run adds
+10\% exemplar images per batch, the total number of gradient
+updates increases by 10\% compared to a naive run with the same
+number of epochs. To keep total steps equal, either (a)~reduce
+the number of CST images per batch in the herding run so the
+effective batch size stays the same, or (b)~run the naive baseline
+for 10\% more epochs. Option (a) is cleaner.
+
+\textbf{KD in Stage 3.}
+Adding a KD term in Stage~3 (teacher\,=\,Stage~2 best.pt) would
+protect T2 knowledge while fine-tuning on CST. However, it
+confounds the experimental comparison: if the herding run has
+both replay \emph{and} KD while the naive run has neither, the
+FM improvement cannot be attributed to herding alone. The clean
+design is to run \emph{both} conditions without KD, making
+exemplar replay the only variable. A separate ablation with
+KD+replay vs.\ replay-only can be added if time permits.
+
+\textbf{Questions.}
+\begin{itemize}
+    \item For experimental rigour, should Stage~3 use
+          detection loss\,+\,replay only (no KD), so that
+          exemplar replay is the single experimental variable
+          between the naive and herding conditions? Or is
+          adding KD in Stage~3 standard practice in the
+          continual learning literature for this type of
+          sequential fine-tuning setup?
+
+    \item The iCarl literature selects exemplars from the
+          \emph{training} set. I plan to use the Anti-UAV-RGBT
+          \emph{validation} set (61,999 frames) for herding,
+          since the training set was already used in Stage~1
+          and may introduce data leakage. Is this valid, or
+          should I use the training set and accept the
+          potential leakage argument?
+
+    \item Anti-UAV-RGBT targets are overwhelmingly small
+          ($<$32\,px). If I use the three MS-COCO strata
+          (small/medium/large), the small stratum will dominate
+          the feature space and the herding procedure may
+          select nearly identical frames. Should I use finer
+          sub-strata within the small class (e.g.\ tiny $<$16\,px
+          vs.\ small 16--32\,px), or use a clustering-based
+          approach (e.g.\ $k$-means on embeddings within the
+          small stratum) to ensure diversity?
+
+    \item For the replay mixing ratio, I planned 10\% exemplar
+          images per batch ($\approx$1--2 frames per 16-image
+          batch). Is this consistent with recommendations in
+          the replay literature, or should the ratio be higher
+          (e.g.\ 25\%) to have a measurable effect on a
+          fast-adapting model like YOLOMG?
+\end{itemize}

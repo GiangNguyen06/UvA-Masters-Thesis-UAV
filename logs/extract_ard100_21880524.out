@@ -1,0 +1,21 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+Starting ARD100 frame extraction...
+Frame Extraction — ARD100
+==================================================
+
+[TRAIN] 65 videos
+  train:   0%|          | 0/65 [00:00<?, ?video/s]  train:   2%|▏         | 1/65 [00:24<25:39, 24.06s/video]  train:   3%|▎         | 2/65 [00:48<25:48, 24.58s/video][2026-04-14T23:19:41.942] error: *** JOB 21880524 ON tcn303 CANCELLED AT 2026-04-14T23:19:41 DUE to SIGNAL Terminated ***

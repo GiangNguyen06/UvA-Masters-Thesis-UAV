@@ -1,0 +1,181 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+YOLOv5 🚀 visualization-2-g090a74c torch 2.7.1+cu118 CUDA:0 (NVIDIA A100-SXM4-40GB, 40441MiB)
+
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:247: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_sr   = float(np.trapz(sr_curve, SR_THRESHOLDS) / (SR_THRESHOLDS[-1] - SR_THRESHOLDS[0]))
+/projects/prjs2041/uav_code/eval_tracking_cst.py:257: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  auc_pr   = float(np.trapz(pr_curve, PR_THRESHOLDS) / PR_THRESHOLDS[-1]) if PR_THRESHOLDS[-1] > 0 else 0.0
+/projects/prjs2041/uav_code/eval_tracking_cst.py:431: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  agg_auc_sr = float(np.trapz(sr_curve_mean, SR_THRESHOLDS) /
+/projects/prjs2041/uav_code/eval_tracking_cst.py:435: DeprecationWarning: `trapz` is deprecated. Use `trapezoid` instead, or one of the numerical integration functions in `scipy.integrate`.
+  agg_auc_pr = float(np.trapz(pr_curve_mean, PR_THRESHOLDS) / PR_THRESHOLDS[-1])

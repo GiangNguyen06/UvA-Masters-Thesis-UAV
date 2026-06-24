@@ -1,0 +1,11 @@
+==============================
+Per-stratum T1 evaluation (S1 / S2 / S3)
+Job ID  : 24154721
+Started : Tue Jun 23 18:32:51 CEST 2026
+==============================
+
+Anti-UAV-RGBT test split: 85,374 frames
+
+Evaluating After Stage 1: /projects/prjs2041/runs/stage1/antiuav_rgbt15/weights/best.pt
+Evaluating After Stage 2: /projects/prjs2041/runs/stage2/seed42/weights/best.pt
+Evaluating After Stage 3: /projects/prjs2041/runs/stage3/naive/weights/best.pt

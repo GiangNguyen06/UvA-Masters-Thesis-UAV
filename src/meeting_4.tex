@@ -1,0 +1,1208 @@
+% ============================================================
+% Weekly Meeting Report — Weeks 20--21
+% Topic: Data Analysis Pipeline, Stage 1 Re-run, Stage 2 Multi-seed Plan
+% ============================================================
+
+\section*{Weekly Progress Report — Weeks 20--21}
+\addcontentsline{toc}{section}{Weekly Progress Report — Weeks 20--21}
+
+\begin{tabular}{ll}
+    \textbf{Date}       & \today \\
+    \textbf{Student}    & Khac Duc Giang Nguyen \\
+    \textbf{Supervisor} & Dr.\ Seyed Sahand Mohammadi Ziabari \\
+    \textbf{Phase}      & Analysis Infrastructure \& Stage 1 Re-run (Weeks 20--21) \\
+\end{tabular}
+
+\vspace{1em}
+
+% ------------------------------------------------------------
+\subsection*{1. Overview}
+
+This report covers the work completed during Weeks~20--21
+(26~May -- 8~June~2026).
+Following the completion of Stage~2 training (job~22688135,
+best T2 mAP@0.5\,=\,0.4181, FM\,=\,$-$0.0153), focus shifted to
+\textbf{deepening the data analysis} of Stage~1 and Stage~2
+before proceeding to Stage~3. The primary motivation was
+supervisor feedback: a single-seed, single-run result is
+insufficient for a credible thesis; confidence intervals across
+multiple seeds and a richer set of per-epoch metrics
+(precision, recall, F1) are needed.
+
+The following was completed in this period:
+
+\begin{enumerate}
+    \item \textbf{Training scripts patched} (\texttt{train\_stage1.py},
+          \texttt{train\_stage2\_ddp.py}) — both now log precision,
+          recall, and F1 at the optimal confidence threshold every
+          epoch, in addition to mAP@0.5. The \texttt{--seed} argument
+          is now a proper CLI flag. Per-epoch checkpoint saving
+          (\texttt{--save-epoch-ckpts}) was added. A \texttt{device\_ids=[local\_rank]}
+          bug in the DDP wrapper (using global rank instead of local GPU
+          index) was fixed in both scripts.
+
+    \item \textbf{Stage~1 re-run completed} (job~23297129,
+          30~May -- 1~June~2026) — Stage~1 re-run with the patched
+          script (seed\,=\,42, per-epoch checkpoints every 5 epochs)
+          finished at epoch~79 via early stopping.
+          \textbf{Best mAP@0.5\,=\,0.6725} (P\,=\,0.636, R\,=\,0.661,
+          F1\,=\,0.648) at epoch~49, surpassing the original
+          \texttt{antiuav\_rgbt14} result by $+$0.0108.
+          New T1 ceiling: $\text{mAP}_{T1}^{\text{after }T1} = 0.6725$.
+
+    \item \textbf{Multi-seed Stage~2 plan} — three independent
+          Stage~2 runs (seeds 42, 123, 999) will be submitted once
+          the Stage~1 re-run finishes, to produce confidence intervals
+          of the form $\text{mAP@0.5} = \mu \pm \sigma$ (n\,=\,3).
+
+    \item \textbf{Analysis pipeline written} — five post-training
+          scripts (see Section~3) cover bounding-box visualisation,
+          parameter drift analysis, full P-R curves, scale-stratified
+          metrics, and multi-seed CI aggregation.
+\end{enumerate}
+
+% ------------------------------------------------------------
+\subsection*{2. Training Script Changes}
+
+\subsubsection*{2.1 Precision, Recall, and F1 Logging}
+
+The \texttt{ap\_per\_class} function (YOLOMG's metric backend)
+has always returned precision ($p$), recall ($r$), and F1 ($f$)
+at the confidence threshold maximising $f$, alongside the AP array.
+Previously these values were silently discarded:
+
+\begin{verbatim}
+# Before (both scripts)
+_, _, _, _, _, ap, _ = ap_per_class(...)   # p, r, f1 thrown away
+
+# After
+_, _, p, r, f1, ap, _ = ap_per_class(...)
+prec = float(np.mean(p))
+rec  = float(np.mean(r))
+f1_  = float(np.mean(f1))
+\end{verbatim}
+
+The updated \texttt{results.csv} columns are:
+
+\begin{center}\small
+\begin{tabular}{lll}
+\hline
+\textbf{Script}             & \textbf{Old columns}                        & \textbf{New columns} \\
+\hline
+\texttt{train\_stage1.py}   & \texttt{mAP50, mAP50-95, lr}                & + \texttt{precision, recall, f1} \\
+\texttt{train\_stage2\_ddp} & \texttt{mAP50\_T2, mAP50\_T1, lr}          & + \texttt{P\_T2, R\_T2, F1\_T2,} \\
+                             &                                              & \phantom{+} \texttt{P\_T1, R\_T1, F1\_T1} \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsubsection*{2.2 Seed as CLI Argument}
+
+Previously \texttt{SEED\,=\,42} was hardcoded. Both scripts now
+accept \texttt{--seed INT} as a command-line argument, defaulting
+to~42 for backward compatibility. The seed is applied via:
+\begin{verbatim}
+init_seeds(SEED + rank)   # each DDP rank gets a distinct seed
+\end{verbatim}
+This ensures that (a) different seeds produce genuinely different
+training runs, and (b) within a single run, each GPU's data
+augmentation is independently seeded for maximum batch diversity.
+
+\subsubsection*{2.3 Per-epoch Checkpoint Saving}
+
+A new \texttt{--save-epoch-ckpts} flag saves
+\texttt{epoch\_000.pt}, \texttt{epoch\_005.pt}, \ldots every
+\texttt{--save-epoch-interval} epochs (default 5). This enables
+post-hoc per-epoch evaluation of any metric (e.g.\ computing
+P-R curves at every checkpoint, or visualising detection quality
+at different training stages). It is off by default to avoid
+unnecessary disk usage.
+
+\subsubsection*{2.4 DDP \texttt{device\_ids} Bug Fix}
+
+Both scripts previously wrapped the model with:
+\begin{verbatim}
+DDP(model, device_ids=[rank], ...)   # WRONG for multi-node
+\end{verbatim}
+The \texttt{device\_ids} argument must be the \emph{local} GPU
+index on the current node, not the global rank across all nodes.
+For single-node 4-GPU Snellius jobs these coincide, so the bug
+was silent. Fixed to:
+\begin{verbatim}
+gpu_id = local_rank if local_rank != -1 else rank
+DDP(model, device_ids=[gpu_id], ...)   # correct
+\end{verbatim}
+\texttt{local\_rank} is now passed through from \texttt{\_\_main\_\_}
+to the \texttt{train()} function signature in both scripts.
+
+% ------------------------------------------------------------
+\subsection*{3. Analysis Pipeline}
+
+Five post-training analysis scripts were written and validated
+(syntax-checked; all 18 internal contract assertions pass).
+All scripts target \texttt{/projects/prjs2041/uav\_code/} on
+Snellius and are ready to run immediately after a training job
+completes.
+
+\begin{table}[h]
+\centering
+\caption{Post-training analysis scripts produced in Weeks~20--21.}
+\label{tab:analysis_scripts}
+\small
+\begin{tabular}{p{0.30\linewidth}p{0.62\linewidth}}
+\hline
+\textbf{Script} & \textbf{Outputs} \\
+\hline
+\texttt{eval\_full\_analysis.py}
+  & Full P-R curve, precision/recall/F1 at optimal threshold,
+    \textbf{scale-stratified mAP@0.5} (tiny/small/normal/large),
+    per-sequence mAP dot plot, summary CSV. Works on RGBT or UAV410. \\[4pt]
+\texttt{visualise\_detections\_rgbt.py}
+  & Annotated JPEG frames from \texttt{infrared.mp4} with predicted
+    boxes (green) and GT boxes (orange), assembled MP4 video,
+    per-sequence P/R summary. \\[4pt]
+\texttt{visualise\_detections.py}
+  & Same as above but for Anti-UAV410 (flat-JPEG format). \\[4pt]
+\texttt{parameter\_drift.py}
+  & Per-layer relative L2 drift and cosine similarity between Stage~1
+    and Stage~2 checkpoints. Tufte dot plots grouped by backbone/neck/head. \\[4pt]
+\texttt{plot\_training\_analysis.py}
+  & Parses \texttt{results.csv}: derives \texttt{loss\_det},
+    \texttt{kd/det} ratio, FM; produces 4-panel progress figure
+    and 2-panel loss decomposition figure. \\[4pt]
+\texttt{plot\_multirun\_ci.py}
+  & Aggregates multiple \texttt{results.csv} files (one per seed)
+    into mean\,$\pm$\,std confidence-interval plots. \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection*{3.1 Scale-Stratified Evaluation}
+
+\texttt{eval\_full\_analysis.py} computes mAP@0.5 separately
+for four UAV size categories, defined by ground-truth bounding-box
+area in pixels:
+
+\begin{center}\small
+\begin{tabular}{lcc}
+\hline
+\textbf{Category} & \textbf{Area range (px$^2$)} & \textbf{Approx.\ side length} \\
+\hline
+Tiny   & $< 32^2 = 1{,}024$        & $< 32$\,px \\
+Small  & $32^2$--$96^2$             & 32--96\,px \\
+Normal & $96^2$--$192^2$            & 96--192\,px \\
+Large  & $> 192^2$                  & $> 192$\,px \\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent This figure directly supports the thesis narrative: the three
+datasets differ sharply in their size distributions
+(Anti-UAV-RGBT: 68.4\% large; CST Anti-UAV: 73.6\% small),
+and scale-stratified mAP quantifies exactly how that shift
+affects detection performance at each stage.
+
+% ------------------------------------------------------------
+\subsection*{4. Stage 1 Re-run (job~23297129)}
+
+\begin{table}[h]
+\centering
+\caption{Stage 1 re-run submission details.}
+\label{tab:s1_rerun}
+\begin{tabular}{ll}
+\hline
+\textbf{Job ID}        & 23297129 \\
+\textbf{Submitted}     & 30~May~2026 \\
+\textbf{Script}        & \texttt{run\_stage1\_rerun.sh} \\
+\textbf{GPUs}          & 4$\times$ A100 (DDP, \texttt{--standalone}) \\
+\textbf{Time limit}    & 120\,h \\
+\textbf{Seed}          & 42 \\
+\textbf{Epochs}        & 100 (early stopping patience\,=\,30) \\
+\textbf{Batch size}    & 16 per GPU (64 effective) \\
+\textbf{Epoch ckpts}   & Every 5 epochs (\texttt{--save-epoch-ckpts}) \\
+\textbf{Output dir}    & \texttt{/projects/prjs2041/runs/stage1/antiuav\_rgbt15/} \\
+\hline
+\end{tabular}
+\end{table}
+
+\noindent The existing Stage~1 checkpoint (\texttt{antiuav\_rgbt14/},
+mAP@0.5\,=\,0.6617) is not overwritten. \texttt{increment\_path}
+automatically selects the next available directory name.
+
+\subsubsection*{4.1 Results (job~23297129 — completed 1~June~2026, 13:11 CEST)}
+
+Job~23297129 ran for \textbf{80 epochs} (0--79) before early stopping
+triggered at epoch~79 (patience\,=\,30; best mAP peaked at epoch~49
+and did not improve for 30 consecutive epochs). The run completed
+cleanly on node \texttt{gcn43}, 4$\times$A100, in approximately
+\textbf{14\,h wall time}.
+
+\begin{table}[h]
+\centering
+\caption{Stage~1 re-run final results — Anti-UAV-RGBT validation set
+(job~23297129, \texttt{antiuav\_rgbt15}).}
+\label{tab:s1_rerun_results}
+\begin{tabular}{ll}
+\hline
+\textbf{Metric}                     & \textbf{Value} \\
+\hline
+Best mAP@0.5                        & \textbf{0.6725} \\
+Precision (at best epoch)           & 0.6362 \\
+Recall (at best epoch)              & 0.6609 \\
+F1 (at best epoch)                  & 0.6484 \\
+Epoch of best checkpoint            & 49 / 100 \\
+Early stopping triggered at         & epoch~79 \\
+vs.\ original run (\texttt{rgbt14}) & $+$0.0108 improvement \\
+\hline
+\end{tabular}
+\end{table}
+
+\noindent Selected mAP@0.5 learning curve:
+
+\begin{center}
+\small
+\begin{tabular}{rr|rr|rr}
+\hline
+\textbf{Ep.} & \textbf{mAP@0.5} &
+\textbf{Ep.} & \textbf{mAP@0.5} &
+\textbf{Ep.} & \textbf{mAP@0.5} \\
+\hline
+ 1 & 0.4070 &  20 & 0.6416 &  49 & \textbf{0.6725} \\
+ 3 & 0.5306 &  30 & 0.6598 &  60 & 0.6640 \\
+ 5 & 0.6040 &  40 & 0.6680 &  75 & 0.6521 \\
+10 & 0.6213 &  45 & 0.6713 &  78 & $\approx$0.649 \\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent The new \textbf{T1 ceiling} for all subsequent stages and
+Forgetting Measure computations is:
+\[
+    \text{mAP}_{T1}^{\text{after }T1} = \mathbf{0.6725}
+    \quad \Rightarrow \quad
+    \text{FM} = \text{mAP}_{T1}^{\text{after }T2} - 0.6725
+\]
+This replaces the previous value of 0.6617 from \texttt{antiuav\_rgbt14}.
+The improvement of $+$0.0108 is meaningful: a higher T1 ceiling means
+the FM denominator is stronger, making the FM values slightly more
+negative for the same absolute T1 retention. The Stage~2 multi-seed
+runs will use \texttt{antiuav\_rgbt15/weights/best.pt} as the teacher
+and \texttt{--t1-baseline 0.6725} for all analysis scripts.
+
+\noindent \textbf{Actual compute:} $\approx$14\,h wall time on
+4$\times$A100 ($\approx$1,930\,SBU) — faster than the original
+Stage~1 run because the model converged earlier (epoch~49 vs epoch~54).
+
+\subsubsection*{4.2 Bugs Fixed in \texttt{run\_multirun\_stage2.sh} Before Submission}
+
+Reviewing the multi-seed launcher script revealed five bugs that
+would have caused all three Stage~2 jobs to fail immediately:
+
+\begin{enumerate}
+    \item \textbf{Wrong teacher checkpoint} — \texttt{STAGE1\_WEIGHTS}
+          pointed to \texttt{antiuav\_rgbt14/weights/best.pt} (the
+          original run). Updated to \texttt{antiuav\_rgbt15/weights/best.pt}.
+
+    \item \textbf{Wrong SLURM partition} — \texttt{--partition=gpu}
+          does not exist on Snellius; changed to \texttt{--partition=gpu\_a100}
+          (confirmed working in Stage~1 and the original Stage~2).
+
+    \item \textbf{Time limit too short} — \texttt{--time=04:00:00}
+          (4\,h) is far below the ~43\,h needed. Updated to
+          \texttt{--time=72:00:00} (same as job~22688135).
+
+    \item \textbf{Wrong GPU resource syntax} — \texttt{--gpus=4} is
+          not a valid Snellius directive; changed to
+          \texttt{--gres=gpu:a100:4} (matches Stage~1 script).
+
+    \item \textbf{\texttt{torchrun} bare command} — SLURM jobs do not
+          inherit the user's \texttt{PATH}, so \texttt{torchrun} would
+          fail with ``command not found'' (same issue as job~22637974).
+          Fixed by using the absolute path:
+          \texttt{/home/knguyen1/.conda/envs/uav\_master/bin/torchrun}.
+          Module loading also corrected to use
+          \texttt{Miniconda3/23.5.2-0} + \texttt{source activate uav\_master}.
+\end{enumerate}
+
+% ------------------------------------------------------------
+\subsection*{5. Stage 2 Multi-seed Plan}
+
+Once job~23297129 completes and the new Stage~1 \texttt{best.pt}
+is available, three Stage~2 runs will be submitted in parallel:
+
+\begin{center}\small
+\begin{tabular}{lllll}
+\hline
+\textbf{Run name} & \textbf{Seed} & \textbf{Teacher} & \textbf{Script} & \textbf{Est.\ SBU} \\
+\hline
+\texttt{seed42}  & 42  & \texttt{antiuav\_rgbt15/best.pt} & \texttt{run\_multirun\_stage2.sh} & $\approx$2,200 \\
+\texttt{seed123} & 123 & same                              & same                              & $\approx$2,200 \\
+\texttt{seed999} & 999 & same                              & same                              & $\approx$2,200 \\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent Each run saves per-epoch checkpoints every 5 epochs.
+After all three finish, \texttt{plot\_multirun\_ci.py} aggregates
+the three \texttt{results.csv} files and produces a figure of the
+form:
+\[
+    \text{mAP@0.5 (T2)} = \mu \pm \sigma \quad (n = 3\ \text{seeds})
+\]
+alongside CI bands for precision, recall, F1, and FM across epochs.
+
+\noindent \textbf{Decision point resolved:} the Stage~1 re-run
+produced mAP@0.5\,=\,0.6725, which is $+$0.0108 above the original
+0.6617 --- well above the $>$0.005 threshold. The original Stage~2
+results (job~22688135, teacher\,=\,\texttt{rgbt14}) are therefore
+treated as \textbf{preliminary only}. The three multi-seed Stage~2
+runs all use \texttt{antiuav\_rgbt15/best.pt} as the teacher,
+and the T1 baseline for FM is updated to \textbf{0.6725}.
+
+\subsubsection*{5.1 Submission — 1~June~2026}
+
+The fixed \texttt{run\_multirun\_stage2.sh} was uploaded to Snellius
+and executed. \textbf{Important:} the script must be run as a regular
+bash script (\texttt{bash run\_multirun\_stage2.sh}), not submitted
+directly to SLURM (\texttt{sbatch run\_multirun\_stage2.sh}).
+Running it via \texttt{sbatch} submits the entire launcher as a single
+CPU job (job~23340219), which then submits the three GPU jobs from
+within that allocation — an unusual but valid pattern on Snellius.
+The correct invocation for future runs is:
+\begin{verbatim}
+bash /projects/prjs2041/uav_code/run_multirun_stage2.sh
+\end{verbatim}
+
+\noindent \textbf{First submission (A100) cancelled and resubmitted on H100.}
+Jobs~23340230--23340232 (gpu\_a100, pending) were cancelled and
+resubmitted on the \texttt{gpu\_h100} partition for faster throughput
+and shorter queue wait. H100 nodes on Snellius have 4$\times$H100
+GPUs (80\,GB VRAM each) vs.\ 4$\times$A100 (40\,GB), and offer
+$\approx$1.5--2$\times$ higher training throughput.
+
+\begin{center}\small
+\begin{tabular}{lllll}
+\hline
+\textbf{Job ID} & \textbf{Name} & \textbf{Seed} & \textbf{Partition} & \textbf{Status} \\
+\hline
+23349180 & \texttt{s2\_seed42}  & 42  & gpu\_h100 & PENDING \\
+23349181 & \texttt{s2\_seed123} & 123 & gpu\_h100 & PENDING \\
+23349182 & \texttt{s2\_seed999} & 999 & gpu\_h100 & PENDING \\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent Each job requests 4$\times$H100, 72\,h time limit.
+Actual epoch time: $\approx$34.5\,min/epoch
+(vs.\ $\approx$51\,min on A100 — $\approx$1.5$\times$ speedup).
+Logs:
+\texttt{/projects/prjs2041/logs/stage2\_seed\{42,123,999\}\_\{JOBID\}.out}
+
+\subsubsection*{5.2 Results (2~June~2026)}
+
+\begin{table}[h]
+\centering
+\caption{Stage~2 multi-seed results (teacher\,=\,\texttt{antiuav\_rgbt15},
+T1 baseline\,=\,0.6725). FM\,=\,best T1 mAP during Stage~2\,$-$\,0.6725.}
+\label{tab:stage2_multiseed}
+\small
+\begin{tabular}{lrrrrr}
+\hline
+\textbf{Seed} & \textbf{Best T2 mAP} & \textbf{Best T1 mAP} & \textbf{FM} &
+\textbf{Stop ep.} & \textbf{Status} \\
+\hline
+42  & 0.4264 & 0.6658 & $-$0.0067 & 31 & Complete \\
+123 & 0.4304 & 0.6647 & $-$0.0078 & 30 & Complete \\
+999 & 0.4275 & 0.6647 & $-$0.0078 & 27\,* & Cancelled (hung) \\
+\hline
+\textbf{Mean $\pm$ std (n\,=\,3)} & \textbf{0.428 $\pm$ 0.002} & & \textbf{$-$0.007 $\pm$ 0.001} & & \\
+\hline
+\multicolumn{6}{l}{\small * \texttt{best.pt} saved at epoch~27; job cancelled mid epoch~29 due to validation hang.}
+\end{tabular}
+\end{table}
+
+\subsubsection*{5.3 Seed~999 hang and cancellation}
+
+Job~23349660 (seed~999) hung during the end-of-epoch validation pass
+of epoch~29. The last training-batch log entry was
+\texttt{[29/49][2650/3344]} at 13:00~CEST on 2~June~2026; no further
+output appeared for over 75~minutes. Each epoch normally completes in
+$\approx$35\,min (training\,+\,validation), so a 75-minute silence
+after batch~2650 (79\% through training) indicates the job froze in
+the distributed validation \texttt{all\_gather\_object} call ---
+the same NCCL deadlock pattern seen in Stage~1 job~22501881 and
+Stage~2 job~22653533.
+
+The job was cancelled (\texttt{scancel 23349660}).
+Seed~999's \texttt{best.pt} (epoch~27, T2~mAP\,=\,0.4275) and
+partial \texttt{results.csv} (epochs~0--28) are saved and are
+sufficient for analysis. All three seeds' best checkpoints are
+available, giving a valid n\,=\,3 confidence interval:
+\[
+    \text{mAP@0.5 (T2)} = 0.428 \pm 0.002 \quad (n = 3\ \text{seeds})
+\]
+
+\subsubsection*{5.4 Key observations}
+
+\begin{enumerate}
+    \item \textbf{T2 mAP improved vs.\ original run.}
+          All three seeds achieve 0.4264--0.4304 vs.\ 0.4181 in
+          job~22688135 ($+$0.008--0.012). The stronger teacher
+          (\texttt{rgbt15}, mAP\,=\,0.6725 vs.\ 0.6617) provides
+          richer KD guidance, raising the T2 performance ceiling.
+
+    \item \textbf{Less forgetting than the original run.}
+          FM\,$\approx$\,$-$0.007 vs.\ the original $-$0.0153.
+          Absolute T1 retention is also higher ($\approx$0.665 vs.\
+          $\approx$0.646), confirming the stronger teacher produces
+          a more knowledge-preserving student.
+
+    \item \textbf{Tight confidence interval.}
+          T2 mAP spread of $\pm$0.002 across all three seeds confirms
+          the result is stable and not seed-dependent.
+\end{enumerate}
+
+\noindent \textbf{Note on FM interpretation.}
+The new FM ($\approx -0.007$) is numerically smaller in magnitude than
+the original ($-0.0153$), but the T1 baseline has also increased
+by 0.0108. In absolute retention terms both runs maintain T1 mAP
+around 0.64--0.67 during Stage~2; the difference in FM largely reflects
+the stronger baseline. Both values indicate very effective forgetting
+prevention by the KD loss.
+
+% ------------------------------------------------------------
+\subsection*{6. Stage 1 Analysis — First Run and Bug Fix}
+
+\subsubsection*{6.1 First run (job~23340483 — completed 1~June~2026, 18:07 CEST)}
+
+A Stage~1 analysis job was submitted immediately after training completed
+(1$\times$A100, 13 minutes total). The job ran two scripts:
+\textbf{\texttt{eval\_full\_analysis.py}} (61,999 val frames) and
+\textbf{\texttt{visualise\_detections\_rgbt.py}} (5 sequences,
+80 frames each).
+
+Overall results confirmed the training metric:
+
+\begin{center}\small
+\begin{tabular}{ll}
+\hline
+\textbf{Metric}  & \textbf{Value} \\
+\hline
+mAP@0.5          & 0.6728 \\
+Precision        & 0.6360 \\
+Recall           & 0.6615 \\
+F1               & 0.6485 \\
+Sequences        & 67 evaluated \\
+GT objects       & 60,548 \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsubsection*{6.2 Bug: Scale-Stratified Results Were All Zero}
+
+The scale-stratified output exposed a critical bug:
+
+\begin{verbatim}
+tiny     mAP@0.5 = 0.5740   ← correct
+small    mAP@0.5 = 0.7044   ← correct
+normal   mAP@0.5 = 0.0000   ← WRONG
+large    mAP@0.5 = 0.0000   ← WRONG
+\end{verbatim}
+
+\noindent \textbf{Root cause:} \texttt{eval\_full\_analysis.py} used
+COCO-standard size bins (tiny $<32$\,px, small $32$--$96$\,px,
+normal $96$--$192$\,px, large $>192$\,px). These thresholds are
+appropriate for ImageNet-scale object detection but completely
+wrong for UAV detection: the evaluation confirmed that
+\emph{all 60,548 GT boxes in Anti-UAV-RGBT have side length $<$96\,px}.
+Objects never reach the ``normal'' or ``large'' COCO thresholds
+because UAVs are small targets by definition.
+
+\noindent \textbf{Fix:} Size bins updated to UAV-appropriate thresholds
+based on the longest bounding-box side:
+
+\begin{center}\small
+\begin{tabular}{lll}
+\hline
+\textbf{Category} & \textbf{Old (COCO)} & \textbf{New (UAV)} \\
+\hline
+Tiny   & $<$32\,px   & $<$16\,px \\
+Small  & 32--96\,px  & 16--32\,px \\
+Normal & 96--192\,px & 32--64\,px \\
+Large  & $>$192\,px  & $>$64\,px \\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent The bin definitions in \texttt{eval\_full\_analysis.py},
+the caption of Figure~\ref{fig:sizes}, and the surrounding prose in
+the results section were all updated to reflect these UAV-specific
+thresholds. The scale distribution figure was also regenerated.
+
+\noindent \textbf{Note:} The scale distribution percentages in
+Figure~\ref{fig:sizes} (e.g.\ 68.4\% ``large'' for Anti-UAV-RGBT)
+must be recomputed from the actual dataset annotations using the
+new 16/32/64\,px bins via \texttt{audit\_datasets.py} on Snellius.
+The current figure uses placeholder values and will be updated
+once the annotation audit runs.
+
+\subsubsection*{6.3 Re-run (job~23349514 — completed 1~June~2026, 19:18 CEST)}
+
+After two failed attempts (KeyError on \texttt{loss\_kd} and a duplicate
+\texttt{\_\_main\_\_} block from a prior heredoc corruption),
+\texttt{plot\_training\_analysis.py} was fixed to auto-detect Stage~1
+vs Stage~2 CSV format by checking for the \texttt{loss\_kd} column.
+All three steps completed successfully in \textbf{12 minutes}
+on node \texttt{gcn40} (1$\times$A100).
+
+\paragraph{Step 1 — Training curves.}
+Three figures produced from \texttt{results.csv}:
+\texttt{fig\_stage1\_progress.png} (mAP, loss, P/R/F1 per epoch),
+\texttt{fig\_loss\_decomp\_v2.png}, \texttt{fig\_lr\_curve.png}.
+Loss fell from 0.0288 (epoch~0) to 0.0059 (epoch~79);
+mAP@0.5 peaked at \textbf{0.6725} at epoch~49.
+
+\paragraph{Step 2 — Full evaluation with corrected UAV size bins.}
+Overall metrics confirmed:
+
+\begin{center}\small
+\begin{tabular}{ll}
+\hline
+mAP@0.5    & 0.6728 \\
+Precision  & 0.6360 \\
+Recall     & 0.6615 \\
+F1         & 0.6485 \\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent Scale-stratified mAP@0.5 with corrected bins
+(tiny $<$16\,px, small 16--32\,px, normal 32--64\,px, large $>$64\,px):
+
+\begin{center}\small
+\begin{tabular}{lrl}
+\hline
+\textbf{Category} & \textbf{mAP@0.5} & \textbf{Interpretation} \\
+\hline
+Tiny ($<$16\,px)    & 0.009 & Nearly undetectable \\
+Small (16--32\,px)  & 0.579 & Moderate difficulty \\
+Normal (32--64\,px) & \textbf{0.719} & Best performance \\
+Large ($>$64\,px)   & 0.461 & Lower (fewer training examples) \\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent This is the key motivating result for Stage~3:
+the model trained on Anti-UAV-RGBT performs well on normal targets
+(32--64\,px) but struggles on tiny objects ($<$16\,px). CST Anti-UAV
+contains predominantly small and tiny targets, so catastrophic
+forgetting of normal-target features is a genuine risk.
+
+67 sequences evaluated; top performers reached mAP@0.5\,$\approx$\,0.995;
+worst performers reached near 0 (highly challenging visibility conditions).
+
+\paragraph{Step 3 — Bounding-box visualisation.}
+640 annotated frames (8 sequences $\times$ 80 frames) saved to
+\texttt{analysis/vis/frames/}.
+Best sequence: \texttt{20190925\_131530\_1\_3} (P\,=\,1.000, R\,=\,0.588).
+Three sequences showed zero detections — likely tiny/near-invisible
+targets below the 0.25 confidence threshold.
+MP4 assembly skipped (\texttt{ffmpeg} not available on compute nodes).
+
+\subsubsection*{Stage 2 multi-seed (once all three seed runs finish)}
+
+\begin{verbatim}
+# Aggregate CI plots
+python plot_multirun_ci.py \
+    --runs-root /projects/prjs2041/runs/stage2 \
+    --pattern   "seed*" \
+    --t1-baseline 0.6725   # updated: antiuav_rgbt15 best mAP@0.5
+
+# Per-run full analysis (repeat for seed123, seed999)
+python eval_full_analysis.py \
+    --weights  /projects/prjs2041/runs/stage2/seed42/weights/best.pt \
+    --dataset  uav410 \
+    --data-root $TMPDIR/Anti-UAV410
+\end{verbatim}
+
+% ------------------------------------------------------------
+\subsection*{7. Compute Budget Update}
+
+\begin{table}[h]
+\centering
+\caption{Estimated SBU consumption through end of Stage~2 multi-seed.}
+\label{tab:budget_w2021}
+\begin{tabular}{lrr}
+\hline
+\textbf{Item}                           & \textbf{SBU}        & \textbf{Running total} \\
+\hline
+\multicolumn{3}{l}{\textit{Actual (from \texttt{accinfo} on 2~June~2026)}} \\
+\hline
+Consumed to date                        & 63,911              & 63,911 \\
+\quad of which: all runs to Week~19     & 26,660              & — \\
+\quad of which: Stage~1 re-run (23297129) & $\approx$17,152   & — \\
+\quad of which: Stage~2 $\times$3 H100 seeds & $\approx$20,099 & — \\
+\hline
+\textbf{Remaining (budget = 120,000)}   & \textbf{56,089}     & \\
+\hline
+\multicolumn{3}{l}{\textit{Projected remaining spend}} \\
+\hline
+Seed~999 completion + analysis jobs     & $\approx$2,500    & $\approx$66,411 \\
+Stage~3 (est.\ 2 runs, $\approx$30 ep.) & $\approx$8,000   & $\approx$74,411 \\
+Ablations + reruns (buffer)             & $\approx$10,000   & $\approx$84,411 \\
+\hline
+\textbf{Projected remaining after all work} & \textbf{$\approx$35,600} & \\
+\hline
+\end{tabular}
+\end{table}
+
+\noindent Budget is healthy at 56,089\,SBU remaining.
+Stage~2 $\times$3 seeds consumed $\approx$20,099\,SBU on H100
+(vs.\ $\approx$23,760 estimated) — slightly under budget due to
+early stopping. Sufficient for Stage~3, ablations, and reruns
+with $\approx$35,000\,SBU to spare.
+
+% ------------------------------------------------------------
+\subsection*{8. Stage 2 Full Analysis (job~23381446 — 2~June~2026)}
+
+Stage~2 full analysis ran on 2~June~2026 (job~23381446, 1$\times$A100,
+44~minutes). Three steps: multi-seed CI aggregation, per-seed training
+curves, and full evaluation of each seed's \texttt{best.pt} on
+Anti-UAV410 val (94,711 frames).
+
+\subsubsection*{8.1 Corrected FM Values}
+
+A critical discrepancy was identified between the FM values reported
+in the multi-seed CI summary and those computed by the per-seed
+training analysis.
+
+\begin{itemize}
+    \item \textbf{Previously reported FM} ($\approx -0.007$): computed as
+    \texttt{best T1 mAP seen at any epoch} $-$ 0.6725. This is the
+    \emph{optimistic} value — it picks the highest T1 mAP ever observed
+    during training, which is always epoch~0 (before any gradient steps).
+    \item \textbf{Correct FM} ($\approx -0.033$): computed as
+    \texttt{T1 mAP at the epoch where T2 mAP peaked} $-$ 0.6725.
+    This is the honest measure of T1 retention at the point the model
+    is actually checkpointed.
+\end{itemize}
+
+\begin{table}[h]
+\centering
+\caption{Corrected Stage~2 FM values — at peak T2 epoch.}
+\label{tab:s2_fm_corrected}
+\small
+\begin{tabular}{lrrr}
+\hline
+\textbf{Seed} & \textbf{Peak T2 mAP} & \textbf{Peak T2 epoch} & \textbf{FM at peak T2} \\
+\hline
+42  & 0.4264 & 16 & $-$0.0369 \\
+123 & 0.4304 & 15 & $-$0.0276 \\
+999 & 0.4275 & 27 & $-$0.0333 \\
+\hline
+\textbf{Mean $\pm$ std} & \textbf{0.428 $\pm$ 0.002} & & \textbf{$-$0.033 $\pm$ 0.004} \\
+\hline
+\end{tabular}
+\end{table}
+
+\noindent The FM of $-0.033 \pm 0.004$ replaces the previously reported
+$-0.007$ in all thesis sections. The \texttt{train\_stage3.py} script
+has been updated to track FM at the best T3 epoch rather than the
+all-time best T1, preventing the same bias from affecting Stage~3 results.
+
+\subsubsection*{8.2 Scale-Stratified Performance on Anti-UAV410}
+
+\begin{table}[h]
+\centering
+\caption{Stage~2 scale-stratified mAP@0.5 on Anti-UAV410 val (mean across 3 seeds).}
+\label{tab:s2_scale}
+\small
+\begin{tabular}{lrr}
+\hline
+\textbf{Stratum} & \textbf{mAP@0.5 (mean)} & \textbf{Interpretation} \\
+\hline
+Tiny ($<$16\,px)    & 0.001 & Essentially undetectable \\
+Small (16--32\,px)  & 0.278 & Moderate \\
+Normal (32--64\,px) & \textbf{0.681} & Model's primary strength \\
+Large ($>$64\,px)   & 0.276 & Moderate \\
+\hline
+\end{tabular}
+\end{table}
+
+\noindent This directly motivates Stage~3: the Stage~2 model excels at
+normal-sized targets (mAP = 0.68) but cannot detect tiny targets at all.
+CST Anti-UAV is 73.6\% small/tiny. Stage~3 training will force adaptation
+to small/tiny targets, risking catastrophic forgetting of normal-target
+detection. This is the forgetting story the herding buffer is designed to prevent.
+
+\subsubsection*{8.3 Loss Decomposition}
+
+The KD/det loss ratio rises from 1.36$\times$ at epoch~0 to
+$\approx$2.60$\times$ at final epoch, consistent across all three seeds.
+This indicates the teacher-student constraint becomes progressively
+dominant relative to the detection objective as training converges —
+the model is increasingly constrained by the teacher rather than
+driven by the Anti-UAV410 labels. This is expected behaviour and
+confirms the KD mechanism is active throughout training.
+
+% ------------------------------------------------------------
+\subsection*{9. Stage 3 Launch — 2~June~2026}
+
+\subsubsection*{9.1 Replay Buffer Construction (job~23391452)}
+
+Two replay buffers were built from Stage~2 \texttt{seed42/best.pt}
+features on Anti-UAV-RGBT val (60,620 UAV-present frames):
+
+\begin{table}[h]
+\centering
+\caption{Replay buffer construction results (job~23391452).}
+\label{tab:buffers}
+\small
+\begin{tabular}{lrrrrrr}
+\hline
+\textbf{Buffer} & \textbf{Tiny} & \textbf{Small} & \textbf{Normal} & \textbf{Large} & \textbf{Total} & \textbf{Size} \\
+\hline
+Herding (thesis)   & 75/197 & 75/14,798 & 75/42,608 & 75/3,017 & 300 & 274\,KB \\
+Random (ablation)  & 75/197 & 75/14,798 & 75/42,608 & 75/3,017 & 300 & 290\,KB \\
+\hline
+\end{tabular}
+\end{table}
+
+\noindent Both buffers saved to
+\texttt{/projects/prjs2041/runs/stage2/seed42/}. The tiny stratum
+(197 frames, 0.3\% of val) is sampled at 38\% — intentional
+over-representation to protect tiny-target knowledge during Stage~3.
+
+\subsubsection*{9.2 Training Jobs Submitted}
+
+Three Stage~3 conditions submitted in parallel on 2~June~2026:
+
+\begin{center}\small
+\begin{tabular}{llll}
+\hline
+\textbf{Job ID} & \textbf{Condition} & \textbf{Purpose} & \textbf{Status} \\
+\hline
+23392228 & Naive baseline       & Establishes FM\_naive (no protection)      & PENDING \\
+23392229 & Random stratified    & Ablation: strata balance only, no herding  & PENDING \\
+23392230 & Scale-Stratified Herding & Thesis contribution: FM\_herding         & PENDING \\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent All three jobs use Stage~2 seed42 weights as the starting
+point, 50 epochs, 4$\times$H100, batch size 16. Expected runtime:
+$\approx$30\,h each. The three conditions run in parallel.
+
+\noindent \textbf{Key improvements in \texttt{train\_stage3.py} vs.\ original:}
+\begin{itemize}
+    \item FM tracked at best T3 epoch (not all-time best T1)
+    \item Stage~2 T1 baseline measured before first gradient step
+    \item Two FM values reported: \texttt{fm\_abs} (vs T1 ceiling) and
+          \texttt{fm\_stage3} (vs Stage~2 T1 retention)
+    \item Per-stratum T1 evaluation every epoch (tiny/small/normal/large)
+    \item Random stratified ablation condition added
+    \item Replay batch size increased (REPLAY\_RATIO 0.1→0.25) with
+          explicit loss weighting (REPLAY\_WEIGHT=4.0)
+    \item Double forward-pass bug fixed
+\end{itemize}
+
+\subsubsection*{9.3 Expected Results}
+
+The thesis claim is FM\_herding $>$ FM\_random $>$ FM\_naive (less
+negative = less forgetting). The per-stratum breakdown will show
+whether herding specifically protects large/normal target detection —
+the strata most threatened by CST's tiny-target distribution shift.
+
+% ------------------------------------------------------------
+\subsection*{10. Compute Budget Update (2~June~2026)}
+
+\begin{table}[h]
+\centering
+\caption{Updated SBU estimate after Stage~3 launch.}
+\label{tab:budget_w22}
+\small
+\begin{tabular}{lrr}
+\hline
+\textbf{Item} & \textbf{SBU} & \textbf{Running total} \\
+\hline
+Consumed to date (2~June)       & $\approx$65,000 & 65,000 \\
+Stage~3 $\times$3 H100 (est.)   & $\approx$12,000 & 77,000 \\
+Analysis jobs (drift, eval)     & $\approx$1,000  & 78,000 \\
+\hline
+\textbf{Projected remaining}    & \textbf{$\approx$42,000} & \\
+\hline
+\end{tabular}
+\end{table}
+
+\noindent Budget remains healthy. The third condition (random stratified)
+adds $\approx$4,000\,SBU vs.\ the original two-condition plan but is
+scientifically necessary to isolate the herding contribution.
+
+% ------------------------------------------------------------
+\subsection*{11. Stage 3 First Attempt — Disk Quota Failure and Fix}
+
+The initial Stage~3 submission (jobs 23392228, 23392229, 23392230) failed
+during epoch~0 with:
+
+\begin{verbatim}
+OSError: [Errno 122] Disk quota exceeded:
+  '/scratch-local/knguyen1.23392228/pymp-...'
+\end{verbatim}
+
+\noindent \textbf{Root cause:} All three jobs were scheduled on the same
+physical H100 node (shared by default on Snellius). Each job independently
+ran \texttt{rsync} of both CST Anti-UAV and Anti-UAV-RGBT into its own
+\texttt{\$TMPDIR} partition on the shared local scratch disk. Three jobs
+$\times$ two datasets $\approx$ 300+\,GB total overwhelmed the node's
+scratch quota. The dataloader workers then failed to create inter-process
+communication temp files.
+
+\noindent \textbf{Fix:} Added \texttt{\#SBATCH --exclusive} to all three
+Stage~3 scripts. This guarantees each job is allocated its own dedicated
+node with an independent scratch filesystem, preventing scratch collision
+regardless of how many jobs are submitted in parallel.
+
+\noindent \textbf{Resubmission (2~June~2026):}
+
+\begin{center}\small
+\begin{tabular}{lll}
+\hline
+\textbf{Job ID} & \textbf{Condition} & \textbf{Status} \\
+\hline
+23393159 & Naive baseline        & PENDING \\
+23393160 & Random stratified     & PENDING \\
+23393161 & Herding               & PENDING \\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent Also confirmed during the failed run: \texttt{mAP\_T1\_after\_T2\,=\,0.6404}
+for the naive condition — the Stage~2 T1 baseline is measured correctly
+before any Stage~3 gradient steps. Stage~2 forgetting relative to the T1
+ceiling\,=\,$-$0.0321, consistent with the corrected FM from the full
+analysis ($-$0.033\,$\pm$\,0.004).
+
+% ------------------------------------------------------------
+\subsection*{12. Stage 3 Second and Third Attempts — \texttt{--exclusive} Rejected}
+
+\subsubsection*{12.1 Second attempt (jobs 23393159--23393161) — immediate cancellation}
+
+After the disk quota fix, \texttt{--exclusive} was added to all three scripts
+and jobs resubmitted. All three were assigned to nodes (gcn91, gcn94) but
+immediately cancelled by SLURM with \texttt{State: CANCELLED, ExitCode: 0:0,
+Reason: None}. No log files were written. The immediate cancellation with no
+error output indicates SLURM rejected the jobs at the scheduler level, most
+likely because \texttt{--exclusive} is not permitted or conflicts with the
+\texttt{gpu\_h100} partition policy on Snellius.
+
+\subsubsection*{12.2 Third attempt (jobs 23393459--23393461) — same result}
+
+A third submission after verifying script line endings (\texttt{cat -A}
+confirmed no CRLF) produced identical immediate cancellations.
+\texttt{sacct} confirmed all three were CANCELLED with no reason.
+
+\subsubsection*{12.3 Root cause and fix}
+
+The \texttt{--exclusive} SBATCH directive is not compatible with the
+\texttt{gpu\_h100} partition configuration on Snellius for this account.
+The correct solution is to avoid the scratch quota problem entirely by
+\textbf{reading datasets directly from project storage}
+(\texttt{/projects/prjs2041/datasets/}) rather than copying to
+\texttt{\$TMPDIR}. This eliminates the scratch disk collision regardless
+of node sharing, at the cost of slightly slower I/O. All three scripts
+were updated accordingly and the \texttt{--exclusive} directive removed.
+
+\subsubsection*{12.4 Fourth attempt (jobs 23394054--23394056) — submitted 2~June~2026}
+
+\begin{center}\small
+\begin{tabular}{lll}
+\hline
+\textbf{Job ID} & \textbf{Condition} & \textbf{Status} \\
+\hline
+23394054 & Naive baseline        & Submitted \\
+23394055 & Random stratified     & Submitted \\
+23394056 & Herding               & Submitted \\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent Scripts confirmed: no \texttt{--exclusive}, datasets read from
+project storage, all other parameters unchanged.
+
+% ------------------------------------------------------------
+\subsection*{13. Stage 3 Naive — First Results (3~June~2026, 00:59~CEST)}
+
+Job~23394054 (naive baseline) has been running on node \texttt{gcn77}
+since approximately 21:30~CEST on 2~June. As of 00:59~CEST on
+3~June ($\approx$3.5\,h elapsed), epochs~0--7 are confirmed
+complete (each epoch $\approx$25\,min on shared H100 reading from
+project storage).
+
+The random stratified (23394055) and herding (23394056) jobs remain
+\texttt{PENDING} — waiting for H100 nodes to become available.
+
+\subsubsection*{13.1 Per-epoch results — naive condition}
+
+\begin{table}[h]
+\centering
+\caption{Stage~3 naive condition — per-epoch results (epochs 0--7).
+T2 baseline = mAP\_T1\_after\_T2 = 0.6404. T1 ceiling = 0.6725.}
+\label{tab:s3_naive_early}
+\small
+\begin{tabular}{rrrrrrrr}
+\hline
+\textbf{Ep.} & \textbf{T3 mAP} & \textbf{T1 mAP} & \textbf{fm\_abs} & \textbf{fm\_stage3} & \textbf{Tiny} & \textbf{Normal} & \textbf{Large} \\
+\hline
+pre & — & 0.6404 & $-$0.0321 & 0.0000 & — & — & — \\
+0  & 0.0421 & 0.2064 & $-$0.4661 & $-$0.4340 & 0.041 & 0.251 & 0.010 \\
+1  & 0.0655 & 0.1271 & $-$0.5454 & $-$0.5133 & 0.005 & 0.151 & 0.000 \\
+2  & 0.0739 & 0.0817 & $-$0.5908 & $-$0.5587 & 0.001 & 0.092 & 0.000 \\
+3  & \textbf{0.0829} & 0.0680 & $-$0.6045 & $-$0.5724 & 0.001 & 0.079 & 0.000 \\
+4  & 0.0655 & 0.0571 & $-$0.6154 & $-$0.5833 & 0.000 & 0.065 & 0.000 \\
+5  & 0.0705 & 0.0527 & $-$0.6198 & $-$0.5877 & 0.000 & 0.064 & 0.000 \\
+6  & 0.0628 & 0.0482 & $-$0.6243 & $-$0.5922 & 0.000 & 0.055 & 0.000 \\
+7  & 0.0756 & 0.0393 & $-$0.6332 & $-$0.6010 & 0.000 & 0.044 & 0.000 \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection*{13.2 Observations}
+
+\begin{enumerate}
+    \item \textbf{Catastrophic forgetting confirmed — and severe.}
+    T1 mAP dropped from 0.6404 (Stage~2 baseline) to 0.039 in just
+    7 epochs — a loss of 94\% of T1 knowledge. fm\_abs has already
+    reached $-0.633$, far exceeding the Stage~2 FM of $-0.033$.
+    This is the worst-case baseline the thesis predicts for the naive
+    condition.
+
+    \item \textbf{Large target detection → 0 by epoch 2.}
+    CST Anti-UAV has 0\% large targets ($>$64\,px). Without any
+    replay protection, the model loses large-target detection entirely
+    within 2 epochs. By epoch 1 it is essentially zero (0.0001) and
+    never recovers. This is the mechanistic story of scale-shift
+    forgetting.
+
+    \item \textbf{Normal target detection collapsing.}
+    Normal-stratum mAP (32--64\,px) fell from an estimated $\approx$0.68
+    at Stage~2 to 0.044 by epoch~7. The model is sacrificing its
+    primary strength (normal-sized UAV detection) to adapt to
+    CST's tiny targets.
+
+    \item \textbf{T3 performance rising slowly.}
+    CST mAP is improving (best 0.0829 at epoch~3), confirming
+    the model is learning the new domain. The stability-plasticity
+    tradeoff is visible: T3 gains come at the cost of T1 collapse.
+
+    \item \textbf{Early stopping clock.}
+    Best T3 mAP\,=\,0.0829 at epoch~3. Early stopping triggers if
+    T3 mAP does not improve for 15 consecutive epochs. Expected
+    stopping around epoch~18--25 if T3 plateaus.
+\end{enumerate}
+
+\subsubsection*{13.3 Significance for the thesis}
+
+These early results are strong preliminary evidence for H1: naive
+fine-tuning on a small-target dataset causes severe catastrophic
+forgetting, particularly of large and normal-scale features. The
+per-stratum breakdown (large → 0 in 2 epochs) provides a mechanistic
+explanation that goes beyond aggregate mAP. The herding and random
+stratified conditions — when they start running — need to show
+materially higher T1 mAP at comparable T3 epochs to confirm the
+thesis claim FM\_herding $>$ FM\_random $>$ FM\_naive.
+
+% ------------------------------------------------------------
+\subsection*{14. Stage 3 Naive — Final Results (3~June~2026, $\sim$04:00~CEST)}
+
+Job~23394054 completed cleanly at epoch~18 via early stopping
+(patience\,=\,15; best T3 mAP at epoch~3, no improvement for 15
+consecutive epochs). Total wall time: approximately 7.5\,h on a
+shared H100 node reading from project storage.
+
+\subsubsection*{14.1 Final headline numbers}
+
+\begin{table}[h]
+\centering
+\caption{Stage~3 naive condition — final results.}
+\label{tab:s3_naive_final}
+\small
+\begin{tabular}{ll}
+\hline
+\textbf{Metric} & \textbf{Value} \\
+\hline
+Best T3 mAP@0.5 (CST val)         & 0.0829 \\
+Best T3 epoch                      & 3 / 18 (stopped) \\
+mAP\_T1\_after\_T1 (T1 ceiling)   & 0.6725 \\
+mAP\_T1\_after\_T2 (Stage 3 ref)  & 0.6404 \\
+\textbf{FM\_naive (fm\_abs)}       & \textbf{$-$0.6045} \\
+\textbf{FM\_naive (fm\_stage3)}    & \textbf{$-$0.5724} \\
+T1 mAP at final epoch (18)         & 0.0168 \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection*{14.2 Key findings}
+
+\begin{enumerate}
+    \item \textbf{Catastrophic forgetting confirmed and severe.}
+    T1 mAP collapsed from 0.6404 (Stage~2 retention) to 0.017 by
+    epoch~18 — a 97\% loss of T1 knowledge. FM\_naive\,=\,$-$0.6045
+    (vs T1 ceiling) and $-$0.5724 (vs Stage~2 retention). This far
+    exceeds the Stage~2 FM of $-$0.033, confirming that the scale
+    shift in Stage~3 causes dramatically more forgetting than the
+    domain shift in Stage~2.
+
+    \item \textbf{Large target detection destroyed in 2 epochs.}
+    Large-stratum mAP dropped from 0.010 at epoch~0 to 0.000 by
+    epoch~2 and never recovered. CST Anti-UAV contains 0\% large
+    targets, so the model receives no gradient signal to maintain
+    large-target features.
+
+    \item \textbf{Normal target detection destroyed progressively.}
+    Normal-stratum mAP fell from $\approx$0.68 (Stage~2 baseline)
+    to 0.019 by epoch~18. The model's primary detection strength
+    is gone.
+
+    \item \textbf{Forgetting continues beyond T3 plateau.}
+    Best T3 mAP occurred at epoch~3 (0.0829). T1 mAP continued
+    declining through epoch~18 (0.017), demonstrating that forgetting
+    does not stop when the new task stops improving --- a hallmark of
+    catastrophic forgetting.
+\end{enumerate}
+
+\subsubsection*{14.3 Thesis significance}
+
+FM\_naive\,=\,$-$0.6045 is the lower bound the herding condition
+must beat. The per-stratum data provides mechanistic evidence:
+scale-shift forgetting manifests as complete loss of large and normal
+target detection — the exact features absent in CST Anti-UAV. This
+directly supports H1 and establishes the severity of the problem
+the herding buffer is designed to solve.
+
+% ------------------------------------------------------------
+\subsection*{15. Stage 3 Herding — Submitted (3~June~2026, $\sim$04:00~CEST)}
+
+Immediately after naive completed, the herding condition was submitted.
+
+\begin{center}\small
+\begin{tabular}{ll}
+\hline
+\textbf{Weights} & \texttt{runs/stage2/seed42/weights/best.pt} \\
+\textbf{Buffer} & \texttt{runs/stage2/seed42/herding\_buffer.pt} (300 exemplars) \\
+\textbf{Expected runtime} & $\sim$7--8\,h (based on naive timing) \\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent \textbf{Budget note:} accinfo at submission showed 12,383\,SBU
+remaining. Billing for the naive job ($\approx$7.5\,h\,$\times$\,768\,SBU/h
+$\approx$\,5,760\,SBU) may not yet be reflected due to the billing delay
+observed after Stage~2. Estimated true remaining: $\approx$6,600\,SBU.
+Herding expected to cost $\approx$5,760\,SBU if it runs a similar number
+of epochs — budget is tight but sufficient. The random stratified condition
+was cancelled to preserve budget for herding, which is the primary thesis
+contribution. A budget extension request of 200,000\,SBU has been drafted
+for submission to SURF after the supervisor meeting on 4~June~2026.
+
+\subsubsection*{12.5 Revised compute budget}
+
+The first failed batch (23392228--23392230) ran for approximately 1.5--2\,h
+per job before crashing (rsync + epoch~0 training), consuming an estimated
+3,000--4,000\,SBU in wasted compute. The subsequently cancelled batches
+consumed negligible SBU.
+
+\begin{table}[h]
+\centering
+\caption{Revised SBU estimate after Stage~3 rerun overhead.}
+\label{tab:budget_rerun}
+\small
+\begin{tabular}{lrr}
+\hline
+\textbf{Item} & \textbf{SBU} & \textbf{Running total} \\
+\hline
+Confirmed consumed (accinfo)      & 63,911  & 63,911 \\
+Failed Stage~3 first batch (est.) & $\approx$3,500 & $\approx$67,400 \\
+Stage~3 $\times$3 conditions (est.) & $\approx$12,000 & $\approx$79,400 \\
+Remaining analysis jobs           & $\approx$1,000  & $\approx$80,400 \\
+\hline
+\textbf{Projected remaining}      & \textbf{$\approx$39,600} & \\
+\hline
+\end{tabular}
+\end{table}
+
+\noindent Budget remains sufficient. $\approx$40,000\,SBU spare provides
+margin for analysis reruns, any additional experiments requested by the
+supervisor on 5~June, and the buffer week before the June~26 deadline.
+
+% ------------------------------------------------------------
+\subsection*{16. Stage 3 Herding — Resubmission (3~June~2026)}
+
+Three successive crashes were fixed before the final submission:
+
+\begin{enumerate}
+    \item \textbf{Job~23425651} — PyTorch autograd in-place conflict (DDP
+    AllReduce between two backward passes). Fixed with \texttt{model.no\_sync()}
+    on the first backward.
+    \item \textbf{Job~23442877} — \texttt{TypeError} in logging f-string
+    (\texttt{Tensor} formatted with \texttt{:.4f} without \texttt{.item()}).
+    \item \textbf{Job~23443056} — Silent data bug: \texttt{ReplayDataset}
+    was looking for \texttt{meta['img\_path']} which does not exist in
+    \texttt{AntiUAVRGBTDataset} metas. Every replay image silently fell back
+    to a zero (black) tensor, so the replay loss never decreased and provided
+    no useful gradient — T1 collapsed as fast as naive. Fixed by reconstructing
+    frames from \texttt{meta['seq\_dir']} and \texttt{meta['frame']} via
+    \texttt{cv2.VideoCapture}, matching the original dataset's loading logic.
+\end{enumerate}
+
+\noindent Resubmitted as \textbf{job~23449442} — running on \texttt{gcn159}
+(gpu\_h100). This is the final attempt within the current budget.
+
+\subsubsection*{16.1 Early results — job~23443056 (epochs 0--1)}
+
+\begin{table}[h]
+\centering
+\caption{Stage~3 herding — early per-epoch results (job~23443056).
+Compare naive: T1 mAP\,=\,0.2064 at epoch~0, 0.1271 at epoch~1.}
+\label{tab:s3_herding_early}
+\small
+\begin{tabular}{rrrrr}
+\hline
+\textbf{Ep.} & \textbf{T3 mAP} & \textbf{T1 mAP} & \textbf{fm\_abs} & \textbf{fm\_stage3} \\
+\hline
+0 & 0.0003 & 0.0411 & $-$0.6314 & $-$0.5992 \\
+1 & 0.0002 & 0.0305 & $-$0.6420 & $-$0.6098 \\
+\hline
+\end{tabular}
+\end{table}
+
+\noindent \textbf{Warning: herding is performing worse than naive.}
+At epoch~0 the naive condition retained T1 mAP\,=\,0.2064; herding
+retains only 0.0411. This is the opposite of the expected direction.
+A likely cause is the replay weight (\texttt{REPLAY\_WEIGHT\,=\,4.0})
+being too large: with a replay loss of $\approx$0.148, the effective
+replay gradient magnitude is $4\times0.148\approx0.59$, versus the
+CST gradient of $\approx$0.096 — making replay $\approx$6$\times$
+larger and potentially destabilising the model. Results from later
+epochs (job still running) will confirm whether this corrects or worsens.
+
+% ------------------------------------------------------------
+\subsection*{17. Compute Budget (3~June~2026)}
+
+\begin{center}\small
+\begin{tabular}{ll}
+\hline
+Initial budget    & 120,000\,SBU \\
+Used to date      & $\approx$113,140\,SBU \\
+\textbf{Remaining}& \textbf{6,860\,SBU} \\
+Expiry            & 2026-12-31 \\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent Budget is critical. The three failed herding attempts
+(23425651, 23442877, 23443056) consumed $\approx$5,500\,SBU in wasted
+compute. At $\approx$5,760\,SBU per full herding run, the remaining
+6,860\,SBU covers \textbf{exactly one more attempt} with $\approx$1,100\,SBU
+to spare --- no margin for further crashes. The budget extension request
+of 200,000\,SBU must be submitted to SURF immediately.
+

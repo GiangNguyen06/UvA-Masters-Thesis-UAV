@@ -1,0 +1,32 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+Starting Anti-UAV-RGBT frame extraction...
+Frame Extraction — Anti-UAV-RGBT
+==================================================
+
+[TRAIN] 160 sequences
+  train:   0%|          | 0/160 [00:00<?, ?seq/s]  train:   1%|          | 1/160 [00:00<00:15,  9.94seq/s]  train:   1%|▏         | 2/160 [00:15<23:42,  9.00s/seq]  train:   2%|▏         | 3/160 [00:31<32:15, 12.33s/seq]  train:   2%|▎         | 4/160 [00:56<44:30, 17.12s/seq]  train:   3%|▎         | 5/160 [01:17<48:22, 18.72s/seq]  train:   4%|▍         | 6/160 [01:35<47:23, 18.46s/seq]  train:   4%|▍         | 7/160 [01:51<45:00, 17.65s/seq]  train:   5%|▌         | 8/160 [02:11<46:51, 18.49s/seq]  train:   6%|▌         | 9/160 [02:35<50:25, 20.04s/seq]  train:   6%|▋         | 10/160 [03:04<57:29, 23.00s/seq]  train:   7%|▋         | 11/160 [03:35<1:03:05, 25.41s/seq]  train:   8%|▊         | 12/160 [03:55<58:25, 23.68s/seq]    train:   8%|▊         | 13/160 [04:20<58:36, 23.92s/seq]  train:   9%|▉         | 14/160 [04:43<58:07, 23.88s/seq]  train:   9%|▉         | 15/160 [05:02<54:00, 22.35s/seq]  train:  10%|█         | 16/160 [05:16<47:28, 19.78s/seq]  train:  11%|█         | 17/160 [05:32<44:20, 18.60s/seq]  train:  11%|█▏        | 18/160 [05:42<38:01, 16.07s/seq]  train:  12%|█▏        | 19/160 [05:57<37:14, 15.84s/seq]  train:  12%|█▎        | 20/160 [06:15<38:32, 16.52s/seq]  train:  13%|█▎        | 21/160 [06:35<40:08, 17.33s/seq]  train:  14%|█▍        | 22/160 [06:55<41:53, 18.21s/seq]  train:  14%|█▍        | 23/160 [07:14<42:18, 18.53s/seq]  train:  15%|█▌        | 24/160 [07:35<43:27, 19.18s/seq]  train:  16%|█▌        | 25/160 [07:58<46:00, 20.44s/seq]  train:  16%|█▋        | 26/160 [12:08<3:19:21, 89.26s/seq]  train:  17%|█▋        | 27/160 [18:11<6:19:34, 171.24s/seq]  train:  17%|█▋        | 27/160 [18:13<1:29:45, 40.49s/seq] 
+Traceback (most recent call last):
+  File "/projects/prjs2041/uav_code/extract_antiuav_rgbt.py", line 125, in <module>
+    main()
+  File "/projects/prjs2041/uav_code/extract_antiuav_rgbt.py", line 100, in main
+    n = extract_video(video_file, out_dir, prefix)
+  File "/projects/prjs2041/uav_code/extract_antiuav_rgbt.py", line 42, in extract_video
+    out_dir.mkdir(parents=True, exist_ok=True)
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/pathlib.py", line 1251, in mkdir
+    self._accessor.mkdir(self, mode)
+OSError: [Errno 122] Disk quota exceeded: '/projects/prjs2041/datasets/Anti-UAV-RGBT/train/20190925_140917_1_4/infrared'
+Anti-UAV-RGBT extraction complete.

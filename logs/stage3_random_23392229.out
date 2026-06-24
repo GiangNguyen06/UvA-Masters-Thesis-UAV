@@ -1,0 +1,16 @@
+==============================
+Stage 3 — RANDOM STRATIFIED (ablation)
+Job ID  : 23392229
+Node    : gcn91
+GPUs    : 0,1,2,3
+Started : Tue Jun  2 20:39:48 CEST 2026
+==============================
+
+PURPOSE: This condition isolates the contribution of STRATA BALANCE
+vs. the HERDING SELECTION ALGORITHM. If this condition performs
+similarly to herding, the benefit comes from balanced strata alone.
+If herding > random_stratified > naive, herding's feature-space
+selection provides additional benefit.
+
+Random buffer  : /projects/prjs2041/runs/stage2/seed42/herding_buffer_random.pt
+Copying CST Anti-UAV to $TMPDIR ...

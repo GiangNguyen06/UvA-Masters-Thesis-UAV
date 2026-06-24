@@ -1,0 +1,33 @@
+==============================
+Job ID  : 23821661
+Node    : gcn24
+Started : Sun Jun 14 17:27:39 CEST 2026
+==============================
+Loading: /projects/prjs2041/runs/stage3/naive2/weights/best.pt
+  Epoch 3  |  best_fitness=?
+
+Visualising 5 seqs × 60 frames from /projects/prjs2041/datasets/Anti-UAV-RGBT/val
+  → 20190925_101846_1_4
+  → 20190925_101846_1_5
+  → 20190925_130434_1_1
+  → 20190925_130434_1_2
+  → 20190925_130434_1_5
+
+Stage 1 Detection Visualisation — Anti-UAV-RGBT val
+Checkpoint : /projects/prjs2041/runs/stage3/naive2/weights/best.pt
+conf=0.25  iou=0.45
+
+Seq                             Fr    TP    FP    FN      P      R
+--------------------------------------------------------------
+20190925_101846_1_4             60     4    44    56  0.083  0.067
+20190925_101846_1_5             60     0    15    60  0.000  0.000
+20190925_130434_1_1             60     0     0    60    nan  0.000
+20190925_130434_1_2             60     0     4    38  0.000  0.000
+20190925_130434_1_5             60     0     0    60    nan  0.000
+--------------------------------------------------------------
+TOTAL                          300     4    63   274  0.060  0.014
+
+300 frames → /projects/prjs2041/analysis/stage3_naive/detections/frames
+==============================
+Done: Sun Jun 14 17:28:05 CEST 2026
+==============================

@@ -1,0 +1,270 @@
+========================================
+Stage 1: YOLOMG on Anti-UAV-RGBT
+Job ID:  22460564
+Node:    gcn28
+GPU:     0
+Time:    Mon May  4 16:02:13 CEST 2026
+========================================
+
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+YOLOv5 🚀 visualization-2-g090a74c torch 2.7.1+cu118 CUDA:0 (NVIDIA A100-SXM4-40GB, 40441MiB)
+
+Stage 1 training  →  /projects/prjs2041/runs/stage1/antiuav_rgbt3
+Device: cuda:0  |  IMG_SIZE=640  EPOCHS=100  BS=16
+Loading datasets …
+  train: 149,528 frames  |  val: 61,999 frames
+Building YOLOMG from /projects/prjs2041/YOLOMG/models/dual_uav2.yaml …
+
+                 from  n    params  module                                  arguments                     
+  0                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  1                -1  1       336  models.common.C3                        [8, 8]                        
+  2                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  3                -1  1       336  models.common.C3                        [8, 8, 1]                     
+  4           [-1, 1]  1       130  models.common.Concat3                   [16, 1]                       
+  5                -1  1      1248  models.common.C3                        [16, 16, 1]                   
+  6                -1  1      4672  models.common.Conv                      [16, 32, 3, 2]                
+  7                -1  1      4800  models.common.C3                        [32, 32, 1]                   
+  8                -1  1     18560  models.common.Conv                      [32, 64, 3, 2]                
+  9                -1  1     18816  models.common.C3                        [64, 64, 1]                   
+ 10                -1  1     73984  models.common.Conv                      [64, 128, 3, 2]               
+ 11                -1  3    156928  models.common.C3                        [128, 128, 3]                 
+ 12                -1  1     41344  models.common.SPPF                      [128, 128, 5]                 
+ 13                -1  1     33280  models.common.Conv                      [128, 256, 1, 1]              
+ 14                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 15           [-1, 9]  1         0  models.common.Concat                    [1]                           
+ 16                -1  1    312832  models.common.C3                        [320, 256, 1, False]          
+ 17                -1  1     33024  models.common.Conv                      [256, 128, 1, 1]              
+ 18                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 19           [-1, 6]  1         0  models.common.Concat                    [1]                           
+ 20                -1  1     78592  models.common.C3                        [160, 128, 1, False]          
+ 21                -1  1    147712  models.common.Conv                      [128, 128, 3, 2]              
+ 22          [-1, 16]  1         0  models.common.Concat                    [1]                           
+ 23                -1  1    329216  models.common.C3                        [384, 256, 1, False]          
+ 24                -1  1    590336  models.common.Conv                      [256, 256, 3, 2]              
+ 25          [-1, 12]  1         0  models.common.Concat                    [1]                           
+ 26                -1  1   1117184  models.common.C3                        [384, 512, 1, False]          
+ 27      [20, 23, 26]  1     16182  models.yolo.Detect                      [1, [[3, 2, 4, 3, 4, 3], [6, 4, 7, 5, 9, 6], [12, 7, 15, 9, 26, 14]], [128, 256, 512]]
+Model Summary: 318 layers, 2979976 parameters, 2979976 gradients, 91.5 GFLOPs
+
+  Parameters: 2,979,976
+
+Starting training for 100 epochs …
+
+  [  0/99][   0/9346]  mem=2.03G  box=0.0407  obj=0.0015  cls=0.0000
+  [  0/99][  50/9346]  mem=22.04G  box=0.0487  obj=0.0015  cls=0.0000
+  [  0/99][ 100/9346]  mem=22.04G  box=0.0408  obj=0.0016  cls=0.0000
+  [  0/99][ 150/9346]  mem=22.04G  box=0.0392  obj=0.0015  cls=0.0000
+  [  0/99][ 200/9346]  mem=22.04G  box=0.0378  obj=0.0015  cls=0.0000
+  [  0/99][ 250/9346]  mem=22.04G  box=0.0362  obj=0.0015  cls=0.0000
+  [  0/99][ 300/9346]  mem=22.04G  box=0.0353  obj=0.0015  cls=0.0000
+  [  0/99][ 350/9346]  mem=22.04G  box=0.0344  obj=0.0014  cls=0.0000
+  [  0/99][ 400/9346]  mem=22.04G  box=0.0341  obj=0.0014  cls=0.0000
+  [  0/99][ 450/9346]  mem=22.04G  box=0.0337  obj=0.0014  cls=0.0000
+  [  0/99][ 500/9346]  mem=22.04G  box=0.0333  obj=0.0014  cls=0.0000
+  [  0/99][ 550/9346]  mem=22.04G  box=0.0328  obj=0.0014  cls=0.0000
+  [  0/99][ 600/9346]  mem=22.04G  box=0.0325  obj=0.0013  cls=0.0000
+  [  0/99][ 650/9346]  mem=22.04G  box=0.0324  obj=0.0013  cls=0.0000
+  [  0/99][ 700/9346]  mem=22.04G  box=0.0322  obj=0.0013  cls=0.0000
+  [  0/99][ 750/9346]  mem=22.04G  box=0.0319  obj=0.0013  cls=0.0000
+  [  0/99][ 800/9346]  mem=22.04G  box=0.0317  obj=0.0013  cls=0.0000
+  [  0/99][ 850/9346]  mem=22.04G  box=0.0317  obj=0.0013  cls=0.0000
+  [  0/99][ 900/9346]  mem=22.04G  box=0.0315  obj=0.0013  cls=0.0000
+  [  0/99][ 950/9346]  mem=22.04G  box=0.0313  obj=0.0013  cls=0.0000
+  [  0/99][1000/9346]  mem=22.04G  box=0.0311  obj=0.0012  cls=0.0000
+  [  0/99][1050/9346]  mem=22.04G  box=0.0310  obj=0.0012  cls=0.0000
+  [  0/99][1100/9346]  mem=22.04G  box=0.0310  obj=0.0012  cls=0.0000
+  [  0/99][1150/9346]  mem=22.04G  box=0.0308  obj=0.0012  cls=0.0000
+  [  0/99][1200/9346]  mem=22.04G  box=0.0306  obj=0.0012  cls=0.0000
+  [  0/99][1250/9346]  mem=22.04G  box=0.0307  obj=0.0012  cls=0.0000
+  [  0/99][1300/9346]  mem=22.04G  box=0.0306  obj=0.0012  cls=0.0000
+  [  0/99][1350/9346]  mem=22.04G  box=0.0304  obj=0.0012  cls=0.0000
+  [  0/99][1400/9346]  mem=22.04G  box=0.0304  obj=0.0012  cls=0.0000
+  [  0/99][1450/9346]  mem=22.04G  box=0.0304  obj=0.0012  cls=0.0000
+  [  0/99][1500/9346]  mem=22.04G  box=0.0304  obj=0.0012  cls=0.0000
+  [  0/99][1550/9346]  mem=22.04G  box=0.0303  obj=0.0012  cls=0.0000
+  [  0/99][1600/9346]  mem=22.04G  box=0.0303  obj=0.0012  cls=0.0000
+  [  0/99][1650/9346]  mem=22.04G  box=0.0302  obj=0.0012  cls=0.0000
+  [  0/99][1700/9346]  mem=22.04G  box=0.0301  obj=0.0011  cls=0.0000
+  [  0/99][1750/9346]  mem=22.04G  box=0.0300  obj=0.0011  cls=0.0000
+  [  0/99][1800/9346]  mem=22.04G  box=0.0300  obj=0.0011  cls=0.0000
+  [  0/99][1850/9346]  mem=22.04G  box=0.0299  obj=0.0011  cls=0.0000
+  [  0/99][1900/9346]  mem=22.04G  box=0.0299  obj=0.0011  cls=0.0000
+  [  0/99][1950/9346]  mem=22.04G  box=0.0298  obj=0.0011  cls=0.0000
+  [  0/99][2000/9346]  mem=22.04G  box=0.0297  obj=0.0011  cls=0.0000
+  [  0/99][2050/9346]  mem=22.04G  box=0.0297  obj=0.0011  cls=0.0000
+  [  0/99][2100/9346]  mem=22.04G  box=0.0296  obj=0.0011  cls=0.0000
+  [  0/99][2150/9346]  mem=22.04G  box=0.0296  obj=0.0011  cls=0.0000
+  [  0/99][2200/9346]  mem=22.04G  box=0.0295  obj=0.0011  cls=0.0000
+  [  0/99][2250/9346]  mem=22.04G  box=0.0294  obj=0.0011  cls=0.0000
+  [  0/99][2300/9346]  mem=22.04G  box=0.0293  obj=0.0011  cls=0.0000
+  [  0/99][2350/9346]  mem=22.04G  box=0.0293  obj=0.0011  cls=0.0000
+  [  0/99][2400/9346]  mem=22.04G  box=0.0292  obj=0.0011  cls=0.0000
+  [  0/99][2450/9346]  mem=22.04G  box=0.0292  obj=0.0011  cls=0.0000
+  [  0/99][2500/9346]  mem=22.04G  box=0.0291  obj=0.0011  cls=0.0000
+  [  0/99][2550/9346]  mem=22.04G  box=0.0291  obj=0.0011  cls=0.0000
+  [  0/99][2600/9346]  mem=22.04G  box=0.0290  obj=0.0011  cls=0.0000
+  [  0/99][2650/9346]  mem=22.04G  box=0.0289  obj=0.0011  cls=0.0000
+  [  0/99][2700/9346]  mem=22.04G  box=0.0289  obj=0.0011  cls=0.0000
+  [  0/99][2750/9346]  mem=22.04G  box=0.0289  obj=0.0011  cls=0.0000
+  [  0/99][2800/9346]  mem=22.04G  box=0.0289  obj=0.0011  cls=0.0000
+  [  0/99][2850/9346]  mem=22.04G  box=0.0289  obj=0.0011  cls=0.0000
+  [  0/99][2900/9346]  mem=22.04G  box=0.0289  obj=0.0011  cls=0.0000
+  [  0/99][2950/9346]  mem=22.04G  box=0.0288  obj=0.0011  cls=0.0000
+  [  0/99][3000/9346]  mem=22.04G  box=0.0288  obj=0.0011  cls=0.0000
+  [  0/99][3050/9346]  mem=22.04G  box=0.0288  obj=0.0011  cls=0.0000
+  [  0/99][3100/9346]  mem=22.04G  box=0.0288  obj=0.0010  cls=0.0000
+  [  0/99][3150/9346]  mem=22.04G  box=0.0288  obj=0.0010  cls=0.0000
+  [  0/99][3200/9346]  mem=22.04G  box=0.0288  obj=0.0010  cls=0.0000
+  [  0/99][3250/9346]  mem=22.04G  box=0.0287  obj=0.0010  cls=0.0000
+  [  0/99][3300/9346]  mem=22.04G  box=0.0287  obj=0.0010  cls=0.0000
+  [  0/99][3350/9346]  mem=22.04G  box=0.0286  obj=0.0010  cls=0.0000
+  [  0/99][3400/9346]  mem=22.04G  box=0.0286  obj=0.0010  cls=0.0000
+  [  0/99][3450/9346]  mem=22.04G  box=0.0285  obj=0.0010  cls=0.0000
+  [  0/99][3500/9346]  mem=22.04G  box=0.0285  obj=0.0010  cls=0.0000
+  [  0/99][3550/9346]  mem=22.04G  box=0.0285  obj=0.0010  cls=0.0000
+  [  0/99][3600/9346]  mem=22.04G  box=0.0284  obj=0.0010  cls=0.0000
+  [  0/99][3650/9346]  mem=22.04G  box=0.0284  obj=0.0010  cls=0.0000
+  [  0/99][3700/9346]  mem=22.04G  box=0.0283  obj=0.0010  cls=0.0000
+  [  0/99][3750/9346]  mem=22.04G  box=0.0283  obj=0.0010  cls=0.0000
+  [  0/99][3800/9346]  mem=22.04G  box=0.0283  obj=0.0010  cls=0.0000
+  [  0/99][3850/9346]  mem=22.04G  box=0.0283  obj=0.0010  cls=0.0000
+  [  0/99][3900/9346]  mem=22.04G  box=0.0282  obj=0.0010  cls=0.0000
+  [  0/99][3950/9346]  mem=22.04G  box=0.0282  obj=0.0010  cls=0.0000
+  [  0/99][4000/9346]  mem=22.04G  box=0.0281  obj=0.0010  cls=0.0000
+  [  0/99][4050/9346]  mem=22.04G  box=0.0281  obj=0.0010  cls=0.0000
+  [  0/99][4100/9346]  mem=22.04G  box=0.0280  obj=0.0010  cls=0.0000
+  [  0/99][4150/9346]  mem=22.04G  box=0.0280  obj=0.0010  cls=0.0000
+  [  0/99][4200/9346]  mem=22.04G  box=0.0279  obj=0.0010  cls=0.0000
+  [  0/99][4250/9346]  mem=22.04G  box=0.0279  obj=0.0010  cls=0.0000
+  [  0/99][4300/9346]  mem=22.04G  box=0.0279  obj=0.0010  cls=0.0000
+  [  0/99][4350/9346]  mem=22.04G  box=0.0278  obj=0.0010  cls=0.0000
+  [  0/99][4400/9346]  mem=22.04G  box=0.0277  obj=0.0010  cls=0.0000
+  [  0/99][4450/9346]  mem=22.04G  box=0.0277  obj=0.0010  cls=0.0000
+  [  0/99][4500/9346]  mem=22.04G  box=0.0276  obj=0.0010  cls=0.0000
+  [  0/99][4550/9346]  mem=22.04G  box=0.0276  obj=0.0010  cls=0.0000
+  [  0/99][4600/9346]  mem=22.04G  box=0.0275  obj=0.0010  cls=0.0000
+  [  0/99][4650/9346]  mem=22.04G  box=0.0274  obj=0.0010  cls=0.0000
+  [  0/99][4700/9346]  mem=22.04G  box=0.0274  obj=0.0010  cls=0.0000
+  [  0/99][4750/9346]  mem=22.04G  box=0.0274  obj=0.0010  cls=0.0000
+  [  0/99][4800/9346]  mem=22.04G  box=0.0273  obj=0.0010  cls=0.0000
+  [  0/99][4850/9346]  mem=22.04G  box=0.0273  obj=0.0010  cls=0.0000
+  [  0/99][4900/9346]  mem=22.04G  box=0.0273  obj=0.0010  cls=0.0000
+  [  0/99][4950/9346]  mem=22.04G  box=0.0272  obj=0.0010  cls=0.0000
+  [  0/99][5000/9346]  mem=22.04G  box=0.0272  obj=0.0010  cls=0.0000
+  [  0/99][5050/9346]  mem=22.04G  box=0.0271  obj=0.0010  cls=0.0000
+  [  0/99][5100/9346]  mem=22.04G  box=0.0271  obj=0.0010  cls=0.0000
+  [  0/99][5150/9346]  mem=22.04G  box=0.0270  obj=0.0010  cls=0.0000
+  [  0/99][5200/9346]  mem=22.04G  box=0.0269  obj=0.0010  cls=0.0000
+  [  0/99][5250/9346]  mem=22.04G  box=0.0269  obj=0.0010  cls=0.0000
+  [  0/99][5300/9346]  mem=22.04G  box=0.0268  obj=0.0010  cls=0.0000
+  [  0/99][5350/9346]  mem=22.04G  box=0.0268  obj=0.0010  cls=0.0000
+  [  0/99][5400/9346]  mem=22.04G  box=0.0267  obj=0.0010  cls=0.0000
+  [  0/99][5450/9346]  mem=22.04G  box=0.0267  obj=0.0009  cls=0.0000
+  [  0/99][5500/9346]  mem=22.04G  box=0.0266  obj=0.0009  cls=0.0000
+  [  0/99][5550/9346]  mem=22.04G  box=0.0265  obj=0.0009  cls=0.0000
+  [  0/99][5600/9346]  mem=22.04G  box=0.0265  obj=0.0009  cls=0.0000
+  [  0/99][5650/9346]  mem=22.04G  box=0.0264  obj=0.0009  cls=0.0000
+  [  0/99][5700/9346]  mem=22.04G  box=0.0264  obj=0.0009  cls=0.0000
+  [  0/99][5750/9346]  mem=22.04G  box=0.0264  obj=0.0009  cls=0.0000
+  [  0/99][5800/9346]  mem=22.04G  box=0.0263  obj=0.0009  cls=0.0000
+  [  0/99][5850/9346]  mem=22.04G  box=0.0263  obj=0.0009  cls=0.0000
+  [  0/99][5900/9346]  mem=22.04G  box=0.0262  obj=0.0009  cls=0.0000
+  [  0/99][5950/9346]  mem=22.04G  box=0.0262  obj=0.0009  cls=0.0000
+  [  0/99][6000/9346]  mem=22.04G  box=0.0262  obj=0.0009  cls=0.0000
+  [  0/99][6050/9346]  mem=22.04G  box=0.0261  obj=0.0009  cls=0.0000
+  [  0/99][6100/9346]  mem=22.04G  box=0.0261  obj=0.0009  cls=0.0000
+  [  0/99][6150/9346]  mem=22.04G  box=0.0261  obj=0.0009  cls=0.0000
+  [  0/99][6200/9346]  mem=22.04G  box=0.0261  obj=0.0009  cls=0.0000
+  [  0/99][6250/9346]  mem=22.04G  box=0.0260  obj=0.0009  cls=0.0000
+  [  0/99][6300/9346]  mem=22.04G  box=0.0260  obj=0.0009  cls=0.0000
+  [  0/99][6350/9346]  mem=22.04G  box=0.0260  obj=0.0009  cls=0.0000
+  [  0/99][6400/9346]  mem=22.04G  box=0.0259  obj=0.0009  cls=0.0000
+  [  0/99][6450/9346]  mem=22.04G  box=0.0259  obj=0.0009  cls=0.0000
+  [  0/99][6500/9346]  mem=22.04G  box=0.0259  obj=0.0009  cls=0.0000
+  [  0/99][6550/9346]  mem=22.04G  box=0.0258  obj=0.0009  cls=0.0000
+  [  0/99][6600/9346]  mem=22.04G  box=0.0258  obj=0.0009  cls=0.0000
+  [  0/99][6650/9346]  mem=22.04G  box=0.0258  obj=0.0009  cls=0.0000
+  [  0/99][6700/9346]  mem=22.04G  box=0.0257  obj=0.0009  cls=0.0000
+  [  0/99][6750/9346]  mem=22.04G  box=0.0257  obj=0.0009  cls=0.0000
+  [  0/99][6800/9346]  mem=22.04G  box=0.0257  obj=0.0009  cls=0.0000
+  [  0/99][6850/9346]  mem=22.04G  box=0.0256  obj=0.0009  cls=0.0000
+  [  0/99][6900/9346]  mem=22.04G  box=0.0256  obj=0.0009  cls=0.0000
+  [  0/99][6950/9346]  mem=22.04G  box=0.0255  obj=0.0009  cls=0.0000
+  [  0/99][7000/9346]  mem=22.04G  box=0.0255  obj=0.0009  cls=0.0000
+  [  0/99][7050/9346]  mem=22.04G  box=0.0255  obj=0.0009  cls=0.0000
+  [  0/99][7100/9346]  mem=22.04G  box=0.0254  obj=0.0009  cls=0.0000
+  [  0/99][7150/9346]  mem=22.04G  box=0.0254  obj=0.0009  cls=0.0000
+  [  0/99][7200/9346]  mem=22.04G  box=0.0254  obj=0.0009  cls=0.0000
+  [  0/99][7250/9346]  mem=22.04G  box=0.0254  obj=0.0009  cls=0.0000
+  [  0/99][7300/9346]  mem=22.04G  box=0.0253  obj=0.0009  cls=0.0000
+  [  0/99][7350/9346]  mem=22.04G  box=0.0253  obj=0.0009  cls=0.0000
+  [  0/99][7400/9346]  mem=22.04G  box=0.0253  obj=0.0009  cls=0.0000
+  [  0/99][7450/9346]  mem=22.04G  box=0.0253  obj=0.0009  cls=0.0000
+  [  0/99][7500/9346]  mem=22.04G  box=0.0252  obj=0.0009  cls=0.0000
+  [  0/99][7550/9346]  mem=22.04G  box=0.0252  obj=0.0009  cls=0.0000
+  [  0/99][7600/9346]  mem=22.04G  box=0.0252  obj=0.0009  cls=0.0000
+  [  0/99][7650/9346]  mem=22.04G  box=0.0251  obj=0.0009  cls=0.0000
+  [  0/99][7700/9346]  mem=22.04G  box=0.0251  obj=0.0009  cls=0.0000
+  [  0/99][7750/9346]  mem=22.04G  box=0.0251  obj=0.0009  cls=0.0000
+  [  0/99][7800/9346]  mem=22.04G  box=0.0250  obj=0.0009  cls=0.0000
+  [  0/99][7850/9346]  mem=22.04G  box=0.0250  obj=0.0009  cls=0.0000
+  [  0/99][7900/9346]  mem=22.04G  box=0.0250  obj=0.0009  cls=0.0000
+  [  0/99][7950/9346]  mem=22.04G  box=0.0250  obj=0.0009  cls=0.0000
+  [  0/99][8000/9346]  mem=22.04G  box=0.0250  obj=0.0009  cls=0.0000
+  [  0/99][8050/9346]  mem=22.04G  box=0.0249  obj=0.0009  cls=0.0000
+  [  0/99][8100/9346]  mem=22.04G  box=0.0249  obj=0.0009  cls=0.0000
+  [  0/99][8150/9346]  mem=22.04G  box=0.0249  obj=0.0009  cls=0.0000
+  [  0/99][8200/9346]  mem=22.04G  box=0.0249  obj=0.0009  cls=0.0000
+  [  0/99][8250/9346]  mem=22.04G  box=0.0248  obj=0.0009  cls=0.0000
+  [  0/99][8300/9346]  mem=22.04G  box=0.0248  obj=0.0009  cls=0.0000
+  [  0/99][8350/9346]  mem=22.04G  box=0.0248  obj=0.0009  cls=0.0000
+  [  0/99][8400/9346]  mem=22.04G  box=0.0248  obj=0.0009  cls=0.0000
+  [  0/99][8450/9346]  mem=22.04G  box=0.0247  obj=0.0009  cls=0.0000
+  [  0/99][8500/9346]  mem=22.04G  box=0.0247  obj=0.0009  cls=0.0000
+  [  0/99][8550/9346]  mem=22.04G  box=0.0247  obj=0.0008  cls=0.0000
+  [  0/99][8600/9346]  mem=22.04G  box=0.0247  obj=0.0008  cls=0.0000
+  [  0/99][8650/9346]  mem=22.04G  box=0.0247  obj=0.0008  cls=0.0000
+  [  0/99][8700/9346]  mem=22.04G  box=0.0246  obj=0.0008  cls=0.0000
+  [  0/99][8750/9346]  mem=22.04G  box=0.0246  obj=0.0008  cls=0.0000
+  [  0/99][8800/9346]  mem=22.04G  box=0.0246  obj=0.0008  cls=0.0000
+  [  0/99][8850/9346]  mem=22.04G  box=0.0246  obj=0.0008  cls=0.0000
+  [  0/99][8900/9346]  mem=22.04G  box=0.0245  obj=0.0008  cls=0.0000
+  [  0/99][8950/9346]  mem=22.04G  box=0.0245  obj=0.0008  cls=0.0000
+  [  0/99][9000/9346]  mem=22.04G  box=0.0245  obj=0.0008  cls=0.0000
+  [  0/99][9050/9346]  mem=22.04G  box=0.0244  obj=0.0008  cls=0.0000
+  [  0/99][9100/9346]  mem=22.04G  box=0.0244  obj=0.0008  cls=0.0000
+  [  0/99][9150/9346]  mem=22.04G  box=0.0244  obj=0.0008  cls=0.0000
+  [  0/99][9200/9346]  mem=22.04G  box=0.0244  obj=0.0008  cls=0.0000
+  [  0/99][9250/9346]  mem=22.04G  box=0.0243  obj=0.0008  cls=0.0000
+  [  0/99][9300/9346]  mem=22.04G  box=0.0243  obj=0.0008  cls=0.0000
+Traceback (most recent call last):
+  File "/projects/prjs2041/uav_code/train_stage1.py", line 514, in <module>
+    train(save_dir, device)
+  File "/projects/prjs2041/uav_code/train_stage1.py", line 433, in train
+    map50, mapxx = evaluate(ema.ema, val_loader, device, IMG_SIZE)
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+  File "/projects/prjs2041/uav_code/train_stage1.py", line 222, in evaluate
+    preds = non_max_suppression(preds, CONF_THRES, IOU_THRES)  # list[B] of (n,6)
+  File "/projects/prjs2041/YOLOMG/utils/general.py", line 708, in non_max_suppression
+    nc = prediction.shape[2] - 5  # number of classes
+AttributeError: 'tuple' object has no attribute 'shape'
+
+========================================
+Finished at: Mon May  4 17:42:56 CEST 2026
+Check results: /projects/prjs2041/runs/stage1/
+========================================

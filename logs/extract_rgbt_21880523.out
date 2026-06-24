@@ -1,0 +1,21 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+Starting Anti-UAV-RGBT frame extraction...
+Frame Extraction — Anti-UAV-RGBT
+==================================================
+
+[TRAIN] 160 sequences
+  train:   0%|          | 0/160 [00:00<?, ?seq/s]  train:   1%|          | 1/160 [00:22<1:00:13, 22.73s/seq]  train:   1%|▏         | 2/160 [00:39<50:54, 19.33s/seq]    train:   2%|▏         | 3/160 [00:59<51:28, 19.67s/seq][2026-04-14T23:19:41.941] error: *** JOB 21880523 ON tcn448 CANCELLED AT 2026-04-14T23:19:41 DUE to SIGNAL Terminated ***

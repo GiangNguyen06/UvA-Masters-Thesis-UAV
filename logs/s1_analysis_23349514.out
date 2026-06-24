@@ -1,0 +1,163 @@
+==============================
+Job ID  : 23349514
+Node    : gcn40
+Started : Mon Jun  1 19:06:16 CEST 2026
+==============================
+
+Copying Anti-UAV-RGBT to $TMPDIR ...
+Done in 55s
+
+=== Step 1: Training curve analysis ===
+Reading: /projects/prjs2041/runs/stage1/antiuav_rgbt15/results.csv
+  80 epochs loaded  [Stage 1 format]  (cols: ['epoch', 'loss_box', 'loss_obj', 'loss_cls', 'loss_total', 'mAP50', 'mAP50-95', 'precision', 'recall', 'f1', 'lr', 'loss_det', 'loss_kd', 'mAP50_T2', 'mAP50_T1', 'kd_ratio', 'FM', 'P_T2', 'R_T2', 'F1_T2'])
+
+  Saved: /projects/prjs2041/runs/stage1/antiuav_rgbt15/analysis/fig_stage1_progress.png
+  Saved: /projects/prjs2041/runs/stage1/antiuav_rgbt15/analysis/fig_loss_decomp_v2.png
+  Saved: /projects/prjs2041/runs/stage1/antiuav_rgbt15/analysis/fig_lr_curve.png
+
+============================================================
+Stage 2 Training Analysis — Key Numbers
+============================================================
+
+Total epochs trained       : 80
+Early stopping triggered at: epoch 79
+
+--- T2 performance (Anti-UAV410 val) ---
+Peak T2 mAP@0.5            : 0.6725  (epoch 49)
+Final T2 mAP@0.5           : 0.6467
+
+--- T1 retention (Anti-UAV-RGBT val) ---
+T1 baseline (Stage 1)      : 0.6725
+Best T1 mAP during T2      : 0.6725  (epoch 0)
+FM (best T1 − baseline)    : 0.0000
+
+--- Forgetting Measure (FM = mAP_T1_after_T2 − T1_baseline) ---
+Min FM (max forgetting)    : 0.0000  (epoch 0)
+FM at peak T2 epoch        : 0.0000
+Final FM                   : 0.0000
+
+--- Loss decomposition ---
+L_det: epoch 0  = 0.0288   →  epoch 79 = 0.0059
+L_kd:  epoch 0  = 0.0000   →  epoch 79 = 0.0000
+kd/det ratio: epoch 0 = 0.00×  →  epoch 79 = 0.00×
+(at peak T2 epoch 49: kd/det = 0.00×)
+
+--- Stability-plasticity gap ---
+Peak T2 epoch              : 49
+Min FM epoch               : 0
+Gap                        : 49 epochs
+
+============================================================
+
+  Summary: /projects/prjs2041/runs/stage1/antiuav_rgbt15/analysis/analysis_summary.txt
+
+  Extended CSV: /projects/prjs2041/runs/stage1/antiuav_rgbt15/analysis/results_extended.csv
+
+All outputs in: /projects/prjs2041/runs/stage1/antiuav_rgbt15/analysis
+Done.
+
+=== Step 2: Full evaluation (fixed scale bins) ===
+Loading: /projects/prjs2041/runs/stage1/antiuav_rgbt15/weights/best.pt
+  Epoch 49  best_fitness=0.6717988846057131
+
+Loading Anti-UAV-RGBT val set from /scratch-local/knguyen1.23349514/Anti-UAV-RGBT …
+  61,999 frames  |  1938 batches
+
+Running evaluation …
+  61042 images evaluated  |  60548 GT objects
+
+Computing overall metrics …
+  mAP@0.5    = 0.6728
+  Precision  = 0.6360
+  Recall     = 0.6615
+  F1         = 0.6485
+
+Computing scale-stratified metrics …
+  tiny     mAP@0.5 = 0.0090
+  small    mAP@0.5 = 0.5785
+  normal   mAP@0.5 = 0.7194
+  large    mAP@0.5 = 0.4606
+
+Computing per-sequence metrics …
+  67 sequences evaluated
+
+Generating figures …
+  Saved: /projects/prjs2041/runs/stage1/antiuav_rgbt15/analysis/fig_pr_curve.png
+  Saved: /projects/prjs2041/runs/stage1/antiuav_rgbt15/analysis/fig_conf_curve.png
+  Saved: /projects/prjs2041/runs/stage1/antiuav_rgbt15/analysis/fig_scale_metrics.png
+  Saved: /projects/prjs2041/runs/stage1/antiuav_rgbt15/analysis/fig_seq_metrics.png
+  Scale CSV: /projects/prjs2041/runs/stage1/antiuav_rgbt15/analysis/scale_metrics.csv
+  Seq CSV:   /projects/prjs2041/runs/stage1/antiuav_rgbt15/analysis/seq_metrics.csv
+
+=======================================================
+Full Analysis Summary — antiuav_rgbt15 | Anti-UAV-RGBT val
+=======================================================
+
+--- Overall ---
+mAP@0.5          : 0.6728
+Precision        : 0.6360
+Recall           : 0.6615
+F1               : 0.6485
+
+--- Scale-stratified mAP@0.5 ---
+tiny    : 0.0090
+small   : 0.5785
+normal  : 0.7194
+large   : 0.4606
+
+--- Per-sequence (top 5 / bottom 5) ---
+20190925_200320_1_8            0.9950
+20190926_144550_1_10           0.9950
+20190926_133516_1_3            0.9950
+20190926_183400_1_4            0.9945
+20190926_143632_1_4            0.9945
+  ...
+20190925_130434_1_2            0.0000
+20190925_130434_1_1            0.0003
+20190925_152412_1_3            0.3003
+20190925_183946_1_1            0.3213
+20190925_141417_1_6            0.3265
+
+=======================================================
+
+All outputs in: /projects/prjs2041/runs/stage1/antiuav_rgbt15/analysis
+Done.
+
+=== Step 3: Bounding-box visualisation ===
+Loading: /projects/prjs2041/runs/stage1/antiuav_rgbt15/weights/best.pt
+  Epoch 49  |  best_fitness=0.6717988846057131
+
+Visualising 8 seqs × 80 frames from /scratch-local/knguyen1.23349514/Anti-UAV-RGBT/val
+  → 20190925_101846_1_4
+  → 20190925_101846_1_5
+  → 20190925_130434_1_1
+  → 20190925_130434_1_2
+  → 20190925_130434_1_5
+  → 20190925_130434_1_6
+  → 20190925_130434_1_8
+  → 20190925_131530_1_3
+
+Stage 1 Detection Visualisation — Anti-UAV-RGBT val
+Checkpoint : /projects/prjs2041/runs/stage1/antiuav_rgbt15/weights/best.pt
+conf=0.25  iou=0.45
+
+Seq                             Fr    TP    FP    FN      P      R
+--------------------------------------------------------------
+20190925_101846_1_4             80    25    59    55  0.298  0.312
+20190925_101846_1_5             80    29    30    51  0.492  0.362
+20190925_130434_1_1             80     0     0    80    nan  0.000
+20190925_130434_1_2             80     0     0    58    nan  0.000
+20190925_130434_1_5             80     0     0    80    nan  0.000
+20190925_130434_1_6             80     7    32    73  0.179  0.087
+20190925_130434_1_8             80     0    80    80  0.000  0.000
+20190925_131530_1_3             80    47     0    33  1.000  0.588
+--------------------------------------------------------------
+TOTAL                          640   108   201   510  0.350  0.175
+  [WARN] ffmpeg failed (code 32512)
+
+640 frames → /projects/prjs2041/runs/stage1/antiuav_rgbt15/analysis/vis/frames
+
+==============================
+Done: Mon Jun  1 19:18:10 CEST 2026
+Results in: /projects/prjs2041/runs/stage1/antiuav_rgbt15/analysis
+==============================

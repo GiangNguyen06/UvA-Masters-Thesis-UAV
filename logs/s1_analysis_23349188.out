@@ -1,0 +1,11 @@
+==============================
+Job ID  : 23349188
+Node    : gcn46
+Started : Mon Jun  1 18:46:24 CEST 2026
+==============================
+
+Copying Anti-UAV-RGBT to $TMPDIR ...
+Done in 56s
+
+=== Step 1: Training curve analysis ===
+Reading: /projects/prjs2041/runs/stage1/antiuav_rgbt15/results.csv

@@ -1,0 +1,342 @@
+========================================
+Stage 1 DDP: YOLOMG on Anti-UAV-RGBT
+Job ID:  22471299
+Node:    gcn35
+GPUs:    0,1,2,3
+Time:    Tue May  5 04:16:13 CEST 2026
+========================================
+
+Local scratch:
+Filesystem      Size  Used Avail Use% Mounted on
+wstor_scratch1  2.5P  517T  2.0P  21% /gpfs/scratch1
+
+Copying Anti-UAV-RGBT to GPFS scratch...
+Done in 105s.  Size: 4.1G
+
+No pre-extracted frames found. Extracting (takes ~8 min)...
+Source : /scratch-local/knguyen1.22471299/Anti-UAV-RGBT
+Output : /scratch-local/knguyen1.22471299/Anti-UAV-RGBT-frames
+Splits : ['train', 'val']
+Quality: 95
+Workers: 16
+
+=== TRAIN — 160 sequences ===
+  [  1/160] 20190925_131530_1_5             1000 frames   20.3s  (49 fps)
+  [  2/160] 20190925_131530_1_6             1000 frames   22.8s  (44 fps)
+  [  3/160] 20190925_130434_1_9              869 frames   28.0s  (31 fps)
+  [  4/160] 20190925_131530_1_2             1000 frames   28.2s  (36 fps)
+  [  5/160] 20190925_133630_1_1             1000 frames    8.6s  (117 fps)
+  [  6/160] 20190925_130434_1_3             1000 frames   29.2s  (34 fps)
+  [  7/160] 20190925_101846_1_7             1000 frames   29.4s  (34 fps)
+  [  8/160] 20190925_131530_1_4             1000 frames   29.5s  (34 fps)
+  [  9/160] 20190925_101846_1_1             1000 frames   29.6s  (34 fps)
+  [ 10/160] 20190925_101846_1_6             1000 frames   37.0s  (27 fps)
+  [ 11/160] 20190925_101846_1_8              899 frames   37.2s  (24 fps)
+  [ 12/160] 20190925_130434_1_7             1000 frames   38.4s  (26 fps)
+  [ 13/160] 20190925_131530_1_7              923 frames   41.5s  (22 fps)
+  [ 14/160] 20190925_130434_1_4             1000 frames   41.7s  (24 fps)
+  [ 15/160] 20190925_101846_1_3             1000 frames   55.1s  (18 fps)
+  [ 16/160] 20190925_131530_1_1             1000 frames   63.0s  (16 fps)
+  [ 17/160] 20190925_133630_1_10             658 frames   40.8s  (16 fps)
+  [ 18/160] 20190925_140917_1_8              404 frames   13.5s  (30 fps)
+  [ 19/160] 20190925_101846_1_2             1000 frames   78.6s  (13 fps)
+  [ 20/160] 20190925_140917_1_7             1000 frames   36.9s  (27 fps)
+  [ 21/160] 20190925_140917_1_5             1000 frames   37.4s  (27 fps)
+  [ 22/160] 20190925_133630_1_2             1000 frames   51.2s  (20 fps)
+  [ 23/160] 20190925_133630_1_5             1000 frames   50.8s  (20 fps)
+  [ 24/160] 20190925_141417_1_4             1000 frames   11.8s  (85 fps)
+  [ 25/160] 20190925_140917_1_2             1000 frames   43.4s  (23 fps)
+  [ 26/160] 20190925_133630_1_4             1000 frames   52.3s  (19 fps)
+  [ 27/160] 20190925_141417_1_8              379 frames    2.7s  (141 fps)
+  [ 28/160] 20190925_140917_1_1             1000 frames   44.4s  (23 fps)
+  [ 29/160] 20190925_133630_1_6             1000 frames   52.1s  (19 fps)
+  [ 30/160] 20190925_133630_1_8             1000 frames   52.0s  (19 fps)
+  [ 31/160] 20190925_140917_1_4             1000 frames   44.4s  (23 fps)
+  [ 32/160] 20190925_133630_1_3             1000 frames   55.3s  (18 fps)
+  [ 33/160] 20190925_143900_1_5             1000 frames    4.3s  (231 fps)
+  [ 34/160] 20190925_141417_1_5             1000 frames    6.2s  (161 fps)
+  [ 35/160] 20190925_133630_1_7             1000 frames   55.5s  (18 fps)
+  [ 36/160] 20190925_141417_1_2             1000 frames   22.4s  (45 fps)
+  [ 37/160] 20190925_143900_1_8              534 frames    5.2s  (103 fps)
+  [ 38/160] 20190925_141417_1_3             1000 frames   28.4s  (35 fps)
+  [ 39/160] 20190925_143900_1_4             1000 frames   12.8s  (78 fps)
+  [ 40/160] 20190925_152412_1_1             1000 frames   11.3s  (88 fps)
+  [ 41/160] 20190925_152412_1_2             1000 frames   12.4s  (81 fps)
+  [ 42/160] 20190925_143900_1_6             1000 frames   13.6s  (74 fps)
+  [ 43/160] 20190925_143900_1_3             1000 frames   15.2s  (66 fps)
+  [ 44/160] 20190925_183946_1_6              929 frames   10.1s  (92 fps)
+  [ 45/160] 20190925_183946_1_5              914 frames   13.3s  (68 fps)
+  [ 46/160] 20190925_152412_1_4             1000 frames   17.2s  (58 fps)
+  [ 47/160] 20190925_183946_1_4              979 frames   15.5s  (63 fps)
+  [ 48/160] 20190925_152412_1_8              604 frames   20.2s  (30 fps)
+  [ 49/160] 20190925_152412_1_6             1000 frames   22.2s  (45 fps)
+  [ 50/160] 20190925_183946_1_8              549 frames   19.1s  (29 fps)
+  [ 51/160] 20190925_152412_1_7             1000 frames   23.1s  (43 fps)
+  [ 52/160] 20190925_183946_1_7              920 frames   19.6s  (47 fps)
+  [ 53/160] 20190925_194211_1_1              943 frames   19.1s  (49 fps)
+  [ 54/160] 20190925_200320_1_3              857 frames    7.4s  (115 fps)
+  [ 55/160] 20190925_200320_1_1              937 frames   11.2s  (84 fps)
+  [ 56/160] 20190925_194211_1_8              851 frames   11.4s  (74 fps)
+  [ 57/160] 20190925_200320_1_2              915 frames   13.9s  (66 fps)
+  [ 58/160] 20190925_194211_1_5              959 frames   17.3s  (55 fps)
+  [ 59/160] 20190925_200320_1_5              938 frames   11.7s  (80 fps)
+  [ 60/160] 20190925_205804_1_1              898 frames   31.1s  (29 fps)
+  [ 61/160] 20190925_194211_1_6              942 frames   43.8s  (21 fps)
+  [ 62/160] 20190925_194211_1_2              956 frames   44.5s  (21 fps)
+  [ 63/160] 20190925_205804_1_4              942 frames   32.2s  (29 fps)
+  [ 64/160] 20190925_200320_1_6              898 frames   44.5s  (20 fps)
+  [ 65/160] 20190925_210802_1_2              892 frames   40.1s  (22 fps)
+  [ 66/160] 20190925_205804_1_8              530 frames   48.3s  (11 fps)
+  [ 67/160] 20190925_205804_1_2              894 frames   49.2s  (18 fps)
+  [ 68/160] 20190925_194211_1_7              924 frames   68.3s  (14 fps)
+  [ 69/160] 20190925_200320_1_7              930 frames   60.7s  (15 fps)
+  [ 70/160] 20190925_210802_1_1              944 frames   62.2s  (15 fps)
+  [ 71/160] 20190925_205804_1_3              919 frames   75.3s  (12 fps)
+  [ 72/160] 20190925_213001_1_2              936 frames   47.8s  (20 fps)
+  [ 73/160] 20190925_205804_1_7              950 frames   79.9s  (12 fps)
+  [ 74/160] 20190925_213001_1_7              948 frames   41.4s  (23 fps)
+  [ 75/160] 20190925_213001_1_8              688 frames   39.4s  (17 fps)
+  [ 76/160] 20190925_213001_1_6              977 frames   48.9s  (20 fps)
+  [ 77/160] 20190925_222534_1_2             1000 frames   33.5s  (30 fps)
+  [ 78/160] 20190925_222534_1_1              979 frames   35.3s  (28 fps)
+  [ 79/160] 20190925_222534_1_3              986 frames   28.3s  (35 fps)
+  [ 80/160] 20190925_213001_1_5              933 frames   61.3s  (15 fps)
+  [ 81/160] 20190925_213001_1_4              942 frames   66.9s  (14 fps)
+  [ 82/160] 20190925_210802_1_4              907 frames   96.2s  (9 fps)
+  [ 83/160] 20190926_103046_1_4             1000 frames   20.5s  (49 fps)
+  [ 84/160] 20190926_130341_1_8               28 frames    0.1s  (220 fps)
+  [ 85/160] 20190925_210802_1_7              934 frames   97.0s  (10 fps)
+  [ 86/160] 20190925_222534_1_4              987 frames   44.4s  (22 fps)
+  [ 87/160] 20190926_130341_1_3             1000 frames   18.2s  (55 fps)
+  [ 88/160] 20190926_130341_1_2             1000 frames   19.8s  (51 fps)
+  [ 89/160] 20190925_222534_1_6             1000 frames   41.2s  (24 fps)
+  [ 90/160] 20190925_210802_1_5              900 frames  100.4s  (9 fps)
+  [ 91/160] 20190926_130341_1_1             1000 frames   22.9s  (44 fps)
+  [ 92/160] 20190926_103046_1_7             1000 frames   25.5s  (39 fps)
+  [ 93/160] 20190926_103046_1_1             1000 frames   31.9s  (31 fps)
+  [ 94/160] 20190926_141816_1_10             364 frames    2.5s  (145 fps)
+  [ 95/160] 20190926_130341_1_6             1000 frames    9.2s  (108 fps)
+  [ 96/160] 20190926_133516_1_9              313 frames    5.4s  (58 fps)
+  [ 97/160] 20190926_103046_1_5             1000 frames   30.1s  (33 fps)
+  [ 98/160] 20190926_130341_1_4             1000 frames   21.5s  (46 fps)
+  [ 99/160] 20190926_103046_1_6             1000 frames   59.5s  (17 fps)
+  [100/160] 20190926_141816_1_1             1000 frames   37.0s  (27 fps)
+  [101/160] 20190926_103046_1_3             1000 frames   76.5s  (13 fps)
+  [102/160] 20190926_141816_1_5             1000 frames   55.1s  (18 fps)
+  [103/160] 20190926_141816_1_3             1000 frames   56.9s  (18 fps)
+  [104/160] 20190926_141816_1_7             1000 frames   57.1s  (17 fps)
+  [105/160] 20190926_133516_1_7             1000 frames   68.0s  (15 fps)
+  [106/160] 20190926_133516_1_8             1000 frames   75.8s  (13 fps)
+  [107/160] 20190926_141816_1_8             1000 frames   77.5s  (13 fps)
+  [108/160] 20190926_142435_1_4             1000 frames   70.4s  (14 fps)
+  [109/160] 20190926_130341_1_7             1000 frames   87.6s  (11 fps)
+  [110/160] 20190926_133516_1_1             1000 frames   87.9s  (11 fps)
+  [111/160] 20190926_143632_1_1             1000 frames   27.7s  (36 fps)
+  [112/160] 20190926_143632_1_5             1000 frames   19.3s  (52 fps)
+  [113/160] 20190926_142435_1_2             1000 frames   84.7s  (12 fps)
+  [114/160] 20190926_142435_1_6             1000 frames   55.6s  (18 fps)
+  [115/160] 20190926_144550_1_3             1000 frames   21.1s  (47 fps)
+  [116/160] 20190926_143632_1_6             1000 frames   29.9s  (33 fps)
+  [117/160] 20190926_142435_1_8             1000 frames   56.5s  (18 fps)
+  [118/160] 20190926_142435_1_5             1000 frames   80.2s  (12 fps)
+  [119/160] 20190926_142435_1_7             1000 frames   73.7s  (14 fps)
+  [120/160] 20190926_143632_1_7             1000 frames   48.4s  (21 fps)
+  [121/160] 20190926_144550_1_2             1000 frames   54.6s  (18 fps)
+  [122/160] 20190926_133516_1_4             1000 frames  139.2s  (7 fps)
+  [123/160] 20190926_143632_1_3             1000 frames   79.3s  (13 fps)
+  [124/160] 20190926_142435_1_3             1000 frames  133.3s  (7 fps)
+  [125/160] 20190926_183400_1_9              429 frames   15.7s  (27 fps)
+  [126/160] 20190926_144550_1_5             1000 frames   54.5s  (18 fps)
+  [127/160] 20190926_144550_1_8             1000 frames   53.7s  (19 fps)
+  [128/160] 20190926_142435_1_1             1000 frames  137.2s  (7 fps)
+  [129/160] 20190926_183400_1_2              979 frames   60.6s  (16 fps)
+  [130/160] 20190926_183941_1_9              163 frames   13.3s  (12 fps)
+  [131/160] 20190926_183941_1_4             1000 frames   20.9s  (48 fps)
+  [132/160] 20190926_183941_1_1             1000 frames   34.4s  (29 fps)
+  [133/160] 20190926_144550_1_9             1000 frames   73.9s  (14 fps)
+  [134/160] 20190926_193515_1_1             1000 frames   33.1s  (30 fps)
+  [135/160] 20190926_183400_1_5             1000 frames   72.5s  (14 fps)
+  [136/160] 20190926_183400_1_3             1000 frames   75.1s  (13 fps)
+  [137/160] 20190926_183400_1_7             1000 frames   66.5s  (15 fps)
+  [138/160] 20190926_183941_1_6             1000 frames   41.0s  (24 fps)
+  [139/160] 20190926_183941_1_2              987 frames   48.6s  (20 fps)
+  [140/160] 20190926_193515_1_3             1000 frames   33.7s  (30 fps)
+  [141/160] 20190926_144550_1_6             1000 frames  105.5s  (9 fps)
+  [142/160] 20190926_183400_1_8             1000 frames   77.2s  (13 fps)
+  [143/160] 20190926_183941_1_7             1000 frames   54.8s  (18 fps)
+  [144/160] 20190926_183941_1_8             1000 frames   54.4s  (18 fps)
+  [145/160] 20190926_195921_1_7             1000 frames   20.9s  (48 fps)
+  [146/160] 20190926_193515_1_7             1000 frames   42.0s  (24 fps)
+  [147/160] 20190926_193515_1_8              919 frames   38.3s  (24 fps)
+  [148/160] 20190926_193515_1_2             1000 frames   71.2s  (14 fps)
+  [149/160] 20190926_193515_1_5             1000 frames   57.1s  (18 fps)
+  [150/160] 20190926_200510_1_6             1000 frames   23.6s  (42 fps)
+  [151/160] 20190926_195921_1_9              649 frames   31.3s  (21 fps)
+  [152/160] 20190926_195921_1_4             1000 frames   37.9s  (26 fps)
+  [153/160] 20190926_195921_1_8             1000 frames   35.3s  (28 fps)
+  [154/160] 20190926_200510_1_7             1000 frames   28.4s  (35 fps)
+  [155/160] 20190926_195921_1_2             1000 frames   46.3s  (22 fps)
+  [156/160] 20190926_200510_1_5             1000 frames   30.4s  (33 fps)
+  [157/160] 20190926_193515_1_4             1000 frames   74.9s  (13 fps)
+  [158/160] 20190926_193515_1_6             1000 frames   66.7s  (15 fps)
+  [159/160] 20190926_200510_1_1             1000 frames   59.6s  (17 fps)
+  [160/160] 20190926_195921_1_3             1000 frames   79.3s  (13 fps)
+  Split done in 468.4s
+
+=== VAL — 67 sequences ===
+  [  1/67] 20190925_143900_1_2             1000 frames   11.3s  (89 fps)
+  [  2/67] 20190925_133630_1_9             1000 frames   19.1s  (52 fps)
+  [  3/67] 20190925_130434_1_1             1000 frames   21.6s  (46 fps)
+  [  4/67] 20190925_143900_1_1             1000 frames   25.9s  (39 fps)
+  [  5/67] 20190925_140917_1_3             1000 frames   26.9s  (37 fps)
+  [  6/67] 20190925_141417_1_1             1000 frames   31.9s  (31 fps)
+  [  7/67] 20190925_130434_1_8             1000 frames   32.1s  (31 fps)
+  [  8/67] 20190925_141417_1_7             1000 frames   34.0s  (29 fps)
+  [  9/67] 20190925_152412_1_5             1000 frames   13.8s  (72 fps)
+  [ 10/67] 20190925_130434_1_2             1000 frames   35.5s  (28 fps)
+  [ 11/67] 20190925_200320_1_8               39 frames    0.1s  (366 fps)
+  [ 12/67] 20190925_131530_1_3             1000 frames   41.1s  (24 fps)
+  [ 13/67] 20190925_130434_1_5             1000 frames   41.2s  (24 fps)
+  [ 14/67] 20190925_101846_1_4             1000 frames   41.9s  (24 fps)
+  [ 15/67] 20190925_101846_1_5             1000 frames   42.5s  (24 fps)
+  [ 16/67] 20190925_210802_1_6              938 frames    9.7s  (97 fps)
+  [ 17/67] 20190925_141417_1_6             1000 frames   51.9s  (19 fps)
+  [ 18/67] 20190925_152412_1_3             1000 frames   33.4s  (30 fps)
+  [ 19/67] 20190925_194211_1_4              944 frames   18.7s  (50 fps)
+  [ 20/67] 20190925_205804_1_6              924 frames   12.1s  (76 fps)
+  [ 21/67] 20190925_194211_1_3              971 frames   21.3s  (46 fps)
+  [ 22/67] 20190925_205804_1_5              961 frames   18.9s  (51 fps)
+  [ 23/67] 20190925_200320_1_4              935 frames   19.2s  (49 fps)
+  [ 24/67] 20190925_210802_1_8              706 frames   13.1s  (54 fps)
+  [ 25/67] 20190925_183946_1_3             1000 frames   23.7s  (42 fps)
+  [ 26/67] 20190925_222534_1_5             1000 frames    3.8s  (265 fps)
+  [ 27/67] 20190925_183946_1_1              929 frames   32.0s  (29 fps)
+  [ 28/67] 20190925_213001_1_1              942 frames   10.2s  (92 fps)
+  [ 29/67] 20190925_183946_1_2              858 frames   36.1s  (24 fps)
+  [ 30/67] 20190926_103046_1_2             1000 frames   14.9s  (67 fps)
+  [ 31/67] 20190926_133516_1_6             1000 frames   11.7s  (86 fps)
+  [ 32/67] 20190925_143900_1_7             1000 frames   58.3s  (17 fps)
+  [ 33/67] 20190926_103046_1_8              509 frames   17.3s  (29 fps)
+  [ 34/67] 20190925_222534_1_8              938 frames   18.7s  (50 fps)
+  [ 35/67] 20190925_140917_1_6             1000 frames   72.2s  (14 fps)
+  [ 36/67] 20190926_133516_1_5             1000 frames   16.7s  (60 fps)
+  [ 37/67] 20190926_142435_1_9              299 frames    2.8s  (105 fps)
+  [ 38/67] 20190925_213001_1_3              926 frames   22.9s  (40 fps)
+  [ 39/67] 20190926_133516_1_2             1000 frames   22.7s  (44 fps)
+  [ 40/67] 20190926_144550_1_10             174 frames    9.2s  (19 fps)
+  [ 41/67] 20190926_133516_1_3             1000 frames   29.9s  (33 fps)
+  [ 42/67] 20190926_141816_1_6             1000 frames   20.3s  (49 fps)
+  [ 43/67] 20190926_143632_1_8              584 frames   22.0s  (27 fps)
+  [ 44/67] 20190926_143632_1_2             1000 frames   25.9s  (39 fps)
+  [ 45/67] 20190926_141816_1_4             1000 frames   37.9s  (26 fps)
+  [ 46/67] 20190926_141816_1_9             1000 frames   38.1s  (26 fps)
+  [ 47/67] 20190925_130434_1_6             1000 frames  108.0s  (9 fps)
+  [ 48/67] 20190926_144550_1_1             1000 frames   35.0s  (29 fps)
+  [ 49/67] 20190926_130341_1_5             1000 frames   53.9s  (19 fps)
+  [ 50/67] 20190925_210802_1_3              929 frames   67.4s  (14 fps)
+  [ 51/67] 20190926_144550_1_7             1000 frames   41.8s  (24 fps)
+  [ 52/67] 20190925_222534_1_7             1000 frames   72.7s  (14 fps)
+  [ 53/67] 20190926_183400_1_4             1000 frames   42.6s  (23 fps)
+  [ 54/67] 20190926_144550_1_4             1000 frames   57.9s  (17 fps)
+  [ 55/67] 20190926_200510_1_2             1000 frames   25.3s  (39 fps)
+  [ 56/67] 20190926_183400_1_1             1000 frames   60.2s  (17 fps)
+  [ 57/67] 20190926_141816_1_2             1000 frames   84.3s  (12 fps)
+  [ 58/67] 20190926_200510_1_8              493 frames   27.2s  (18 fps)
+  [ 59/67] 20190926_195921_1_6             1000 frames   46.4s  (22 fps)
+  [ 60/67] 20190926_183941_1_5             1000 frames   73.3s  (14 fps)
+  [ 61/67] 20190926_183400_1_6             1000 frames  104.2s  (10 fps)
+  [ 62/67] 20190926_200510_1_3             1000 frames  110.9s  (9 fps)
+  [ 63/67] 20190926_143632_1_4             1000 frames  148.0s  (7 fps)
+  [ 64/67] 20190926_195921_1_1             1000 frames  119.1s  (8 fps)
+  [ 65/67] 20190926_183941_1_3             1000 frames  137.6s  (7 fps)
+  [ 66/67] 20190926_195921_1_5             1000 frames  141.7s  (7 fps)
+  [ 67/67] 20190926_200510_1_4             1000 frames  173.8s  (6 fps)
+  Split done in 282.5s
+
+============================================================
+Total frames extracted : 211,527
+Total errors           : 0
+Wall-clock time        : 9795s (summed, parallel actual faster)
+
+Frame root to pass to training:
+  --frames-root /scratch-local/knguyen1.22471299/Anti-UAV-RGBT-frames
+
+Manifest written: /scratch-local/knguyen1.22471299/Anti-UAV-RGBT-frames/manifest.json
+Extraction done in 753s.
+
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/pathlib.py", line 1251, in mkdir
+[rank0]:     self._accessor.mkdir(self, mode)
+[rank0]: OSError: [Errno 36] File name too long: '/projects/prjs2041/runs/stage1/antiuav_rgbt8                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    '
+
+[rank0]: During handling of the above exception, another exception occurred:
+
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/projects/prjs2041/uav_code/train_stage1.py", line 621, in <module>
+[rank0]:     train(save_dir, device, rank=rank, world_size=world_size)
+[rank0]:   File "/projects/prjs2041/uav_code/train_stage1.py", line 313, in train
+[rank0]:     save_dir.mkdir(parents=True, exist_ok=True)
+[rank0]:   File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/pathlib.py", line 1260, in mkdir
+[rank0]:     if not exist_ok or not self.is_dir():
+[rank0]:   File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/pathlib.py", line 1367, in is_dir
+[rank0]:     return S_ISDIR(self.stat().st_mode)
+[rank0]:   File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/pathlib.py", line 1160, in stat
+[rank0]:     return self._accessor.stat(self)
+[rank0]: OSError: [Errno 36] File name too long: '/projects/prjs2041/runs/stage1/antiuav_rgbt8                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    '
+[AntiUAVRGBTFramesDataset] Using pre-extracted JPEGs from /scratch-local/knguyen1.22471299/Anti-UAV-RGBT-frames[AntiUAVRGBTFramesDataset] Using pre-extracted JPEGs from /scratch-local/knguyen1.22471299/Anti-UAV-RGBT-frames
+
+[AntiUAVRGBTFramesDataset] Using pre-extracted JPEGs from /scratch-local/knguyen1.22471299/Anti-UAV-RGBT-frames
+[rank0]:[W505 04:30:50.614259001 ProcessGroupNCCL.cpp:1479] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+W0505 04:30:51.425440 2443240 /gpfs/home3/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/api.py:900] Sending process 2443276 closing signal SIGTERM
+W0505 04:30:51.426173 2443240 /gpfs/home3/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/api.py:900] Sending process 2443277 closing signal SIGTERM
+W0505 04:30:51.426522 2443240 /gpfs/home3/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/api.py:900] Sending process 2443278 closing signal SIGTERM
+E0505 04:30:52.104396 2443240 /gpfs/home3/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/api.py:874] failed (exitcode: 1) local_rank: 0 (pid: 2443275) of binary: /home/knguyen1/.conda/envs/uav_master/bin/python3.9
+Traceback (most recent call last):
+  File "/home/knguyen1/.conda/envs/uav_master/bin/torchrun", line 6, in <module>
+    sys.exit(main())
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/run.py", line 892, in main
+    run(args)
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/run.py", line 883, in run
+    elastic_launch(
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/launcher/api.py", line 139, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/launcher/api.py", line 270, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/projects/prjs2041/uav_code/train_stage1.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-05-05_04:30:51
+  host      : gcn35.local.snellius.surf.nl
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 2443275)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+
+========================================
+Finished at: Tue May  5 04:30:52 CEST 2026
+Check results: /projects/prjs2041/runs/stage1/
+========================================

@@ -1,0 +1,22 @@
+==============================
+Job ID      : 23349658
+Node        : gcn92
+GPUs        : 0,1,2,3
+Seed        : 42
+Name        : seed42
+Teacher     : /projects/prjs2041/runs/stage1/antiuav_rgbt15/weights/best.pt
+Started     : Mon Jun  1 19:08:19 CEST 2026
+==============================
+
+Copying Anti-UAV410 to /scratch-local/knguyen1.23349658 ...
+Done in 747s  |  14G
+Copying Anti-UAV-RGBT to /scratch-local/knguyen1.23349658 ...
+Done in 67s  |  4.6G
+Data ready: Mon Jun  1 19:24:17 CEST 2026
+
+Starting Stage 2 DDP training ...
+
+==============================
+Stage 2 complete: Tue Jun  2 13:53:36 CEST 2026
+Results in: /projects/prjs2041/runs/stage2/seed42/
+==============================

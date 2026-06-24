@@ -1,0 +1,17 @@
+==============================
+Job ID      : 23349181
+Node        : gcn103
+GPUs        : 0,1,2,3
+Seed        : 123
+Name        : seed123
+Teacher     : /projects/prjs2041/runs/stage1/antiuav_rgbt15/weights/best.pt
+Started     : Mon Jun  1 18:45:56 CEST 2026
+==============================
+
+Copying Anti-UAV410 to /scratch-local/knguyen1.23349181 ...
+Done in 757s  |  14G
+Copying Anti-UAV-RGBT to /scratch-local/knguyen1.23349181 ...
+Done in 47s  |  4.5G
+Data ready: Mon Jun  1 19:01:49 CEST 2026
+
+Starting Stage 2 DDP training ...

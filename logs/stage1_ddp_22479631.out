@@ -1,0 +1,521 @@
+========================================
+Stage 1 DDP: YOLOMG on Anti-UAV-RGBT
+Job ID:  22479631
+Node:    gcn29
+GPUs:    0,1,2,3
+Time:    Tue May  5 12:22:26 CEST 2026
+========================================
+
+Local scratch:
+Filesystem      Size  Used Avail Use% Mounted on
+wstor_scratch1  2.5P  524T  2.0P  22% /gpfs/scratch1
+
+Copying Anti-UAV-RGBT to GPFS scratch...
+Done in 109s.  Size: 2.2G
+
+No pre-extracted frames found. Extracting (takes ~8 min)...
+Source : /scratch-local/knguyen1.22479631/Anti-UAV-RGBT
+Output : /scratch-local/knguyen1.22479631/Anti-UAV-RGBT-frames
+Splits : ['train', 'val']
+Quality: 95
+Workers: 16
+
+=== TRAIN — 160 sequences ===
+  [  1/160] 20190925_131530_1_1             1000 frames   22.8s  (44 fps)
+  [  2/160] 20190925_131530_1_4             1000 frames   22.9s  (44 fps)
+  [  3/160] 20190925_131530_1_2             1000 frames   23.0s  (43 fps)
+  [  4/160] 20190925_131530_1_7              923 frames   23.1s  (40 fps)
+  [  5/160] 20190925_101846_1_6             1000 frames   23.1s  (43 fps)
+  [  6/160] 20190925_101846_1_3             1000 frames   23.1s  (43 fps)
+  [  7/160] 20190925_130434_1_4             1000 frames   23.2s  (43 fps)
+  [  8/160] 20190925_131530_1_6             1000 frames   23.3s  (43 fps)
+  [  9/160] 20190925_130434_1_9              869 frames   23.9s  (36 fps)
+  [ 10/160] 20190925_101846_1_8              899 frames   24.0s  (38 fps)
+  [ 11/160] 20190925_130434_1_7             1000 frames   24.5s  (41 fps)
+  [ 12/160] 20190925_101846_1_2             1000 frames   24.6s  (41 fps)
+  [ 13/160] 20190925_130434_1_3             1000 frames   25.0s  (40 fps)
+  [ 14/160] 20190925_101846_1_1             1000 frames   25.0s  (40 fps)
+  [ 15/160] 20190925_133630_1_10             658 frames    2.4s  (278 fps)
+  [ 16/160] 20190925_140917_1_1             1000 frames    2.7s  (371 fps)
+  [ 17/160] 20190925_133630_1_4             1000 frames    8.2s  (123 fps)
+  [ 18/160] 20190925_131530_1_5             1000 frames   32.4s  (31 fps)
+  [ 19/160] 20190925_133630_1_1             1000 frames    9.8s  (102 fps)
+  [ 20/160] 20190925_133630_1_3             1000 frames    9.6s  (105 fps)
+  [ 21/160] 20190925_101846_1_7             1000 frames   34.7s  (29 fps)
+  [ 22/160] 20190925_140917_1_8              404 frames   10.2s  (40 fps)
+  [ 23/160] 20190925_133630_1_2             1000 frames   14.0s  (72 fps)
+  [ 24/160] 20190925_141417_1_8              379 frames    4.3s  (87 fps)
+  [ 25/160] 20190925_133630_1_8             1000 frames   14.2s  (71 fps)
+  [ 26/160] 20190925_140917_1_7             1000 frames   14.4s  (69 fps)
+  [ 27/160] 20190925_140917_1_4             1000 frames   16.1s  (62 fps)
+  [ 28/160] 20190925_141417_1_4             1000 frames   10.0s  (100 fps)
+  [ 29/160] 20190925_133630_1_7             1000 frames   19.1s  (52 fps)
+  [ 30/160] 20190925_143900_1_3             1000 frames    9.5s  (105 fps)
+  [ 31/160] 20190925_143900_1_4             1000 frames   12.2s  (82 fps)
+  [ 32/160] 20190925_143900_1_8              534 frames   11.4s  (47 fps)
+  [ 33/160] 20190925_140917_1_5             1000 frames   24.5s  (41 fps)
+  [ 34/160] 20190925_152412_1_8              604 frames    5.7s  (105 fps)
+  [ 35/160] 20190925_141417_1_2             1000 frames   25.0s  (40 fps)
+  [ 36/160] 20190925_141417_1_3             1000 frames   24.7s  (41 fps)
+  [ 37/160] 20190925_141417_1_5             1000 frames   31.7s  (32 fps)
+  [ 38/160] 20190925_152412_1_1             1000 frames   25.8s  (39 fps)
+  [ 39/160] 20190925_133630_1_5             1000 frames   55.7s  (18 fps)
+  [ 40/160] 20190925_143900_1_6             1000 frames   46.1s  (22 fps)
+  [ 41/160] 20190925_194211_1_1              943 frames   20.2s  (47 fps)
+  [ 42/160] 20190925_183946_1_6              929 frames   31.3s  (30 fps)
+  [ 43/160] 20190925_194211_1_2              956 frames   26.9s  (36 fps)
+  [ 44/160] 20190925_183946_1_7              920 frames   47.1s  (20 fps)
+  [ 45/160] 20190925_133630_1_6             1000 frames   89.8s  (11 fps)
+  [ 46/160] 20190925_152412_1_6             1000 frames   74.7s  (13 fps)
+  [ 47/160] 20190925_152412_1_4             1000 frames   76.8s  (13 fps)
+  [ 48/160] 20190925_194211_1_5              959 frames   40.6s  (24 fps)
+  [ 49/160] 20190925_183946_1_8              549 frames   63.5s  (9 fps)
+  [ 50/160] 20190925_152412_1_7             1000 frames   98.7s  (10 fps)
+  [ 51/160] 20190925_194211_1_8              851 frames   81.0s  (11 fps)
+  [ 52/160] 20190925_194211_1_6              942 frames   88.8s  (11 fps)
+  [ 53/160] 20190925_200320_1_7              930 frames  112.8s  (8 fps)
+  [ 54/160] 20190925_200320_1_5              938 frames  116.2s  (8 fps)
+  [ 55/160] 20190925_205804_1_8              530 frames   56.6s  (9 fps)
+  [ 56/160] 20190925_200320_1_3              857 frames  193.1s  (4 fps)
+  [ 57/160] 20190925_140917_1_2             1000 frames  282.3s  (4 fps)
+  [ 58/160] 20190925_194211_1_7              924 frames  222.7s  (4 fps)
+  [ 59/160] 20190925_183946_1_5              914 frames  258.1s  (4 fps)
+  [ 60/160] 20190925_200320_1_2              915 frames  207.3s  (4 fps)
+  [ 61/160] 20190925_183946_1_4              979 frames  260.9s  (4 fps)
+  [ 62/160] 20190925_205804_1_2              894 frames  167.6s  (5 fps)
+  [ 63/160] 20190925_200320_1_1              937 frames  218.9s  (4 fps)
+  [ 64/160] 20190925_200320_1_6              898 frames  192.1s  (5 fps)
+  [ 65/160] 20190925_213001_1_2              936 frames    1.9s  (502 fps)
+  [ 66/160] 20190925_205804_1_1              898 frames  192.7s  (5 fps)
+  [ 67/160] 20190925_152412_1_2             1000 frames  276.7s  (4 fps)
+  [ 68/160] 20190925_213001_1_7              948 frames    6.8s  (139 fps)
+  [ 69/160] 20190925_205804_1_3              919 frames  149.0s  (6 fps)
+  [ 70/160] 20190925_143900_1_5             1000 frames  294.4s  (3 fps)
+  [ 71/160] 20190925_213001_1_6              977 frames   30.2s  (32 fps)
+  [ 72/160] 20190925_222534_1_4              987 frames   16.7s  (59 fps)
+  [ 73/160] 20190925_213001_1_8              688 frames   34.8s  (20 fps)
+  [ 74/160] 20190925_205804_1_4              942 frames  142.9s  (7 fps)
+  [ 75/160] 20190925_213001_1_5              933 frames   48.5s  (19 fps)
+  [ 76/160] 20190925_222534_1_1              979 frames   47.4s  (21 fps)
+  [ 77/160] 20190925_213001_1_4              942 frames  108.0s  (9 fps)
+  [ 78/160] 20190925_210802_1_2              892 frames  146.7s  (6 fps)
+  [ 79/160] 20190925_222534_1_3              986 frames  137.6s  (7 fps)
+  [ 80/160] 20190925_210802_1_5              900 frames  159.2s  (6 fps)
+  [ 81/160] 20190925_210802_1_1              944 frames  181.7s  (5 fps)
+  [ 82/160] 20190925_210802_1_7              934 frames  183.8s  (5 fps)
+  [ 83/160] 20190926_103046_1_7             1000 frames  140.9s  (7 fps)
+  [ 84/160] 20190926_130341_1_8               28 frames   25.9s  (1 fps)
+  [ 85/160] 20190926_103046_1_4             1000 frames  221.2s  (5 fps)
+  [ 86/160] 20190926_103046_1_5             1000 frames  221.3s  (5 fps)
+  [ 87/160] 20190926_133516_1_1             1000 frames   44.8s  (22 fps)
+  [ 88/160] 20190925_205804_1_7              950 frames  340.1s  (3 fps)
+  [ 89/160] 20190925_222534_1_2             1000 frames  256.6s  (4 fps)
+  [ 90/160] 20190926_130341_1_1             1000 frames  164.3s  (6 fps)
+  [ 91/160] 20190926_130341_1_7             1000 frames   93.4s  (11 fps)
+  [ 92/160] 20190926_103046_1_3             1000 frames  245.2s  (4 fps)
+  [ 93/160] 20190925_222534_1_6             1000 frames  263.6s  (4 fps)
+  [ 94/160] 20190926_133516_1_9              313 frames   30.7s  (10 fps)
+  [ 95/160] 20190925_210802_1_4              907 frames  298.0s  (3 fps)
+  [ 96/160] 20190926_103046_1_6             1000 frames  261.2s  (4 fps)
+  [ 97/160] 20190926_130341_1_3             1000 frames  197.0s  (5 fps)
+  [ 98/160] 20190926_130341_1_2             1000 frames  201.7s  (5 fps)
+  [ 99/160] 20190926_141816_1_10             364 frames   73.1s  (5 fps)
+  [100/160] 20190926_130341_1_6             1000 frames  178.5s  (6 fps)
+  [101/160] 20190926_130341_1_4             1000 frames  210.1s  (5 fps)
+  [102/160] 20190926_133516_1_4             1000 frames  128.2s  (8 fps)
+  [103/160] 20190926_103046_1_1             1000 frames  357.6s  (3 fps)
+  [104/160] 20190926_142435_1_3             1000 frames   47.4s  (21 fps)
+  [105/160] 20190926_142435_1_2             1000 frames   79.9s  (13 fps)
+  [106/160] 20190926_141816_1_5             1000 frames  107.9s  (9 fps)
+  [107/160] 20190926_141816_1_8             1000 frames   97.5s  (10 fps)
+  [108/160] 20190926_141816_1_1             1000 frames  128.9s  (8 fps)
+  [109/160] 20190926_133516_1_7             1000 frames  134.3s  (7 fps)
+  [110/160] 20190926_133516_1_8             1000 frames  133.8s  (7 fps)
+  [111/160] 20190926_142435_1_4             1000 frames   51.8s  (19 fps)
+  [112/160] 20190926_142435_1_6             1000 frames   44.6s  (22 fps)
+  [113/160] 20190926_143632_1_3             1000 frames    9.4s  (106 fps)
+  [114/160] 20190926_142435_1_8             1000 frames   14.6s  (68 fps)
+  [115/160] 20190926_142435_1_5             1000 frames   63.4s  (16 fps)
+  [116/160] 20190926_141816_1_3             1000 frames  135.7s  (7 fps)
+  [117/160] 20190926_144550_1_9             1000 frames   12.7s  (79 fps)
+  [118/160] 20190926_143632_1_6             1000 frames   22.4s  (45 fps)
+  [119/160] 20190926_142435_1_1             1000 frames  119.1s  (8 fps)
+  [120/160] 20190926_143632_1_7             1000 frames   27.9s  (36 fps)
+  [121/160] 20190926_144550_1_6             1000 frames   23.1s  (43 fps)
+  [122/160] 20190926_183400_1_9              429 frames    4.8s  (90 fps)
+  [123/160] 20190926_183941_1_2              987 frames    2.1s  (467 fps)
+  [124/160] 20190926_143632_1_1             1000 frames   33.4s  (30 fps)
+  [125/160] 20190926_141816_1_7             1000 frames  137.2s  (7 fps)
+  [126/160] 20190926_183400_1_5             1000 frames   11.7s  (86 fps)
+  [127/160] 20190926_144550_1_2             1000 frames   31.8s  (31 fps)
+  [128/160] 20190926_183941_1_6             1000 frames    4.4s  (227 fps)
+  [129/160] 20190926_183941_1_9              163 frames    4.2s  (39 fps)
+  [130/160] 20190926_144550_1_5             1000 frames   32.2s  (31 fps)
+  [131/160] 20190926_183941_1_1             1000 frames   10.7s  (93 fps)
+  [132/160] 20190926_142435_1_7             1000 frames   63.1s  (16 fps)
+  [133/160] 20190926_183400_1_8             1000 frames   16.6s  (60 fps)
+  [134/160] 20190926_144550_1_8             1000 frames   75.9s  (13 fps)
+  [135/160] 20190926_183400_1_7             1000 frames   63.8s  (16 fps)
+  [136/160] 20190926_193515_1_4             1000 frames   61.7s  (16 fps)
+  [137/160] 20190926_183941_1_7             1000 frames   76.1s  (13 fps)
+  [138/160] 20190926_193515_1_2             1000 frames   73.6s  (14 fps)
+  [139/160] 20190926_144550_1_3             1000 frames  112.4s  (9 fps)
+  [140/160] 20190926_183400_1_3             1000 frames  100.5s  (10 fps)
+  [141/160] 20190926_183941_1_4             1000 frames   97.5s  (10 fps)
+  [142/160] 20190926_193515_1_3             1000 frames  107.6s  (9 fps)
+  [143/160] 20190926_195921_1_2             1000 frames   63.5s  (16 fps)
+  [144/160] 20190926_183941_1_8             1000 frames  132.6s  (8 fps)
+  [145/160] 20190926_200510_1_5             1000 frames   28.5s  (35 fps)
+  [146/160] 20190926_193515_1_7             1000 frames  134.9s  (7 fps)
+  [147/160] 20190926_193515_1_1             1000 frames  150.9s  (7 fps)
+  [148/160] 20190926_195921_1_4             1000 frames   95.5s  (10 fps)
+  [149/160] 20190926_195921_1_7             1000 frames   96.1s  (10 fps)
+  [150/160] 20190926_195921_1_3             1000 frames  124.7s  (8 fps)
+  [151/160] 20190926_193515_1_6             1000 frames  194.8s  (5 fps)
+  [152/160] 20190926_193515_1_5             1000 frames  271.0s  (4 fps)
+  [153/160] 20190926_200510_1_7             1000 frames  151.0s  (7 fps)
+  [154/160] 20190926_195921_1_9              649 frames  198.3s  (3 fps)
+  [155/160] 20190926_183400_1_2              979 frames  308.0s  (3 fps)
+  [156/160] 20190926_143632_1_5             1000 frames  320.9s  (3 fps)
+  [157/160] 20190926_200510_1_1             1000 frames  206.3s  (5 fps)
+  [158/160] 20190926_193515_1_8              919 frames  248.9s  (4 fps)
+  [159/160] 20190926_200510_1_6             1000 frames  185.3s  (5 fps)
+  [160/160] 20190926_195921_1_8             1000 frames  299.9s  (3 fps)
+  Split done in 1116.2s
+
+=== VAL — 67 sequences ===
+  [  1/67] 20190925_141417_1_7             1000 frames    8.6s  (116 fps)
+  [  2/67] 20190925_143900_1_1             1000 frames    9.2s  (109 fps)
+  [  3/67] 20190925_130434_1_5             1000 frames   10.4s  (97 fps)
+  [  4/67] 20190925_130434_1_6             1000 frames   10.3s  (97 fps)
+  [  5/67] 20190925_140917_1_6             1000 frames   10.6s  (94 fps)
+  [  6/67] 20190925_131530_1_3             1000 frames   19.2s  (52 fps)
+  [  7/67] 20190925_141417_1_1             1000 frames   19.3s  (52 fps)
+  [  8/67] 20190925_183946_1_2              858 frames   10.3s  (83 fps)
+  [  9/67] 20190925_101846_1_4             1000 frames   21.7s  (46 fps)
+  [ 10/67] 20190925_143900_1_2             1000 frames   24.2s  (41 fps)
+  [ 11/67] 20190925_200320_1_8               39 frames    0.1s  (339 fps)
+  [ 12/67] 20190925_130434_1_2             1000 frames   24.6s  (41 fps)
+  [ 13/67] 20190925_205804_1_6              924 frames    5.5s  (168 fps)
+  [ 14/67] 20190925_130434_1_8             1000 frames   31.2s  (32 fps)
+  [ 15/67] 20190925_143900_1_7             1000 frames   23.4s  (43 fps)
+  [ 16/67] 20190925_152412_1_3             1000 frames   22.9s  (44 fps)
+  [ 17/67] 20190925_141417_1_6             1000 frames   32.4s  (31 fps)
+  [ 18/67] 20190925_101846_1_5             1000 frames   43.6s  (23 fps)
+  [ 19/67] 20190925_152412_1_5             1000 frames   37.0s  (27 fps)
+  [ 20/67] 20190925_210802_1_6              938 frames   18.4s  (51 fps)
+  [ 21/67] 20190925_183946_1_3             1000 frames   31.5s  (32 fps)
+  [ 22/67] 20190925_194211_1_4              944 frames   30.6s  (31 fps)
+  [ 23/67] 20190926_103046_1_8              509 frames   33.1s  (15 fps)
+  [ 24/67] 20190925_133630_1_9             1000 frames   95.1s  (11 fps)
+  [ 25/67] 20190925_210802_1_8              706 frames   70.3s  (10 fps)
+  [ 26/67] 20190925_130434_1_1             1000 frames  139.7s  (7 fps)
+  [ 27/67] 20190925_222534_1_7             1000 frames  101.2s  (10 fps)
+  [ 28/67] 20190925_210802_1_3              929 frames  118.9s  (8 fps)
+  [ 29/67] 20190926_133516_1_2             1000 frames   61.4s  (16 fps)
+  [ 30/67] 20190925_205804_1_5              961 frames  149.8s  (6 fps)
+  [ 31/67] 20190925_222534_1_5             1000 frames  138.1s  (7 fps)
+  [ 32/67] 20190925_222534_1_8              938 frames  134.0s  (7 fps)
+  [ 33/67] 20190926_103046_1_2             1000 frames  133.8s  (7 fps)
+  [ 34/67] 20190926_141816_1_2             1000 frames   40.5s  (25 fps)
+  [ 35/67] 20190925_213001_1_1              942 frames  171.1s  (6 fps)
+  [ 36/67] 20190926_141816_1_9             1000 frames   24.1s  (42 fps)
+  [ 37/67] 20190926_133516_1_5             1000 frames   71.9s  (14 fps)
+  [ 38/67] 20190925_194211_1_3              971 frames  196.0s  (5 fps)
+  [ 39/67] 20190926_143632_1_8              584 frames   12.3s  (48 fps)
+  [ 40/67] 20190926_144550_1_10             174 frames    6.5s  (27 fps)
+  [ 41/67] 20190926_133516_1_6             1000 frames   69.8s  (14 fps)
+  [ 42/67] 20190925_140917_1_3             1000 frames  227.3s  (4 fps)
+  [ 43/67] 20190925_200320_1_4              935 frames  206.4s  (5 fps)
+  [ 44/67] 20190926_142435_1_9              299 frames   45.1s  (7 fps)
+  [ 45/67] 20190926_143632_1_4             1000 frames   52.5s  (19 fps)
+  [ 46/67] 20190926_141816_1_4             1000 frames   91.7s  (11 fps)
+  [ 47/67] 20190926_141816_1_6             1000 frames   79.6s  (13 fps)
+  [ 48/67] 20190926_133516_1_3             1000 frames  162.8s  (6 fps)
+  [ 49/67] 20190926_183400_1_1             1000 frames   77.2s  (13 fps)
+  [ 50/67] 20190926_144550_1_7             1000 frames   88.5s  (11 fps)
+  [ 51/67] 20190925_183946_1_1              929 frames  294.4s  (3 fps)
+  [ 52/67] 20190926_183941_1_3             1000 frames   76.7s  (13 fps)
+  [ 53/67] 20190926_183400_1_6             1000 frames   90.5s  (11 fps)
+  [ 54/67] 20190926_183941_1_5             1000 frames   89.6s  (11 fps)
+  [ 55/67] 20190926_195921_1_1             1000 frames   75.6s  (13 fps)
+  [ 56/67] 20190925_213001_1_3              926 frames  286.2s  (3 fps)
+  [ 57/67] 20190926_200510_1_8              493 frames   25.3s  (19 fps)
+  [ 58/67] 20190926_143632_1_2             1000 frames  167.8s  (6 fps)
+  [ 59/67] 20190926_200510_1_4             1000 frames   49.0s  (20 fps)
+  [ 60/67] 20190926_130341_1_5             1000 frames  268.1s  (4 fps)
+  [ 61/67] 20190926_144550_1_4             1000 frames  138.6s  (7 fps)
+  [ 62/67] 20190926_200510_1_3             1000 frames   59.8s  (17 fps)
+  [ 63/67] 20190926_195921_1_5             1000 frames  117.5s  (9 fps)
+  [ 64/67] 20190926_183400_1_4             1000 frames  148.8s  (7 fps)
+  [ 65/67] 20190926_144550_1_1             1000 frames  161.6s  (6 fps)
+  [ 66/67] 20190926_200510_1_2             1000 frames  136.5s  (7 fps)
+  [ 67/67] 20190926_195921_1_6             1000 frames  185.8s  (5 fps)
+  Split done in 439.6s
+
+============================================================
+Total frames extracted : 211,527
+Total errors           : 0
+Wall-clock time        : 21148s (summed, parallel actual faster)
+
+Frame root to pass to training:
+  --frames-root /scratch-local/knguyen1.22479631/Anti-UAV-RGBT-frames
+
+Manifest written: /scratch-local/knguyen1.22479631/Anti-UAV-RGBT-frames/manifest.json
+Extraction done in 1556s.
+
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+[AntiUAVRGBTFramesDataset] Using pre-extracted JPEGs from /scratch-local/knguyen1.22479631/Anti-UAV-RGBT-frames[AntiUAVRGBTFramesDataset] Using pre-extracted JPEGs from /scratch-local/knguyen1.22479631/Anti-UAV-RGBT-frames
+[AntiUAVRGBTFramesDataset] Using pre-extracted JPEGs from /scratch-local/knguyen1.22479631/Anti-UAV-RGBT-frames
+
+Stage 1 training  →  /projects/prjs2041/runs/stage1/antiuav_rgbt8
+Device: cuda:0  |  IMG_SIZE=640  EPOCHS=100  BS=16  world_size=4
+Loading datasets …
+  Using pre-extracted JPEG frames from /scratch-local/knguyen1.22479631/Anti-UAV-RGBT-frames
+[AntiUAVRGBTFramesDataset] Using pre-extracted JPEGs from /scratch-local/knguyen1.22479631/Anti-UAV-RGBT-frames
+[AntiUAVRGBTFramesDataset] Using pre-extracted JPEGs from /scratch-local/knguyen1.22479631/Anti-UAV-RGBT-frames[AntiUAVRGBTFramesDataset] Using pre-extracted JPEGs from /scratch-local/knguyen1.22479631/Anti-UAV-RGBT-frames[AntiUAVRGBTFramesDataset] Using pre-extracted JPEGs from /scratch-local/knguyen1.22479631/Anti-UAV-RGBT-frames
+[AntiUAVRGBTFramesDataset] Using pre-extracted JPEGs from /scratch-local/knguyen1.22479631/Anti-UAV-RGBT-frames
+
+
+  train: 149,528 frames  |  val: 61,999 frames
+Building YOLOMG from /projects/prjs2041/YOLOMG/models/dual_uav2.yaml …
+
+                 from  n    params  module                                  arguments                     
+
+                 from  n    params  module                                  arguments                     
+
+                 from  n    params  module                                  arguments                     
+
+                 from  n    params  module                                  arguments                     
+  0                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  0                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  0                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  0                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  1                -1  1       336  models.common.C3                        [8, 8]                        
+  1                -1  1       336  models.common.C3                        [8, 8]                        
+  2                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  1                -1  1       336  models.common.C3                        [8, 8]                        
+  1                -1  1       336  models.common.C3                        [8, 8]                        
+  2                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  2                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  2                -1  1       232  models.common.Conv                      [3, 8, 3, 1, 1]               
+  3                -1  1       336  models.common.C3                        [8, 8, 1]                     
+  3                -1  1       336  models.common.C3                        [8, 8, 1]                     
+  3                -1  1       336  models.common.C3                        [8, 8, 1]                     
+  3                -1  1       336  models.common.C3                        [8, 8, 1]                     
+  4           [-1, 1]  1       130  models.common.Concat3                   [16, 1]                       
+  4           [-1, 1]  1       130  models.common.Concat3                   [16, 1]                       
+  4           [-1, 1]  1       130  models.common.Concat3                   [16, 1]                       
+  4           [-1, 1]  1       130  models.common.Concat3                   [16, 1]                       
+  5                -1  1      1248  models.common.C3                        [16, 16, 1]                   
+  5                -1  1      1248  models.common.C3                        [16, 16, 1]                   
+  5                -1  1      1248  models.common.C3                        [16, 16, 1]                   
+  5                -1  1      1248  models.common.C3                        [16, 16, 1]                   
+  6                -1  1      4672  models.common.Conv                      [16, 32, 3, 2]                
+  6                -1  1      4672  models.common.Conv                      [16, 32, 3, 2]                
+  6                -1  1      4672  models.common.Conv                      [16, 32, 3, 2]                
+  6                -1  1      4672  models.common.Conv                      [16, 32, 3, 2]                
+  7                -1  1      4800  models.common.C3                        [32, 32, 1]                   
+  7                -1  1      4800  models.common.C3                        [32, 32, 1]                   
+  7                -1  1      4800  models.common.C3                        [32, 32, 1]                   
+  7                -1  1      4800  models.common.C3                        [32, 32, 1]                   
+  8                -1  1     18560  models.common.Conv                      [32, 64, 3, 2]                
+  8                -1  1     18560  models.common.Conv                      [32, 64, 3, 2]                
+  8                -1  1     18560  models.common.Conv                      [32, 64, 3, 2]                
+  8                -1  1     18560  models.common.Conv                      [32, 64, 3, 2]                
+  9                -1  1     18816  models.common.C3                        [64, 64, 1]                   
+  9                -1  1     18816  models.common.C3                        [64, 64, 1]                   
+  9                -1  1     18816  models.common.C3                        [64, 64, 1]                   
+  9                -1  1     18816  models.common.C3                        [64, 64, 1]                   
+ 10                -1  1     73984  models.common.Conv                      [64, 128, 3, 2]               
+ 10                -1  1     73984  models.common.Conv                      [64, 128, 3, 2]               
+ 10                -1  1     73984  models.common.Conv                      [64, 128, 3, 2]               
+ 10                -1  1     73984  models.common.Conv                      [64, 128, 3, 2]               
+ 11                -1  3    156928  models.common.C3                        [128, 128, 3]                 
+ 11                -1  3    156928  models.common.C3                        [128, 128, 3]                 
+ 11                -1  3    156928  models.common.C3                        [128, 128, 3]                 
+ 11                -1  3    156928  models.common.C3                        [128, 128, 3]                 
+ 12                -1  1     41344  models.common.SPPF                      [128, 128, 5]                 
+ 12                -1  1     41344  models.common.SPPF                      [128, 128, 5]                 
+ 12                -1  1     41344  models.common.SPPF                      [128, 128, 5]                 
+ 12                -1  1     41344  models.common.SPPF                      [128, 128, 5]                 
+ 13                -1  1     33280  models.common.Conv                      [128, 256, 1, 1]              
+ 13                -1  1     33280  models.common.Conv                      [128, 256, 1, 1]              
+ 13                -1  1     33280  models.common.Conv                      [128, 256, 1, 1]              
+ 14                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 13                -1  1     33280  models.common.Conv                      [128, 256, 1, 1]              
+ 14                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 14                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 15           [-1, 9]  1         0  models.common.Concat                    [1]                           
+ 15           [-1, 9]  1         0  models.common.Concat                    [1]                           
+ 15           [-1, 9]  1         0  models.common.Concat                    [1]                           
+ 14                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 15           [-1, 9]  1         0  models.common.Concat                    [1]                           
+ 16                -1  1    312832  models.common.C3                        [320, 256, 1, False]          
+ 16                -1  1    312832  models.common.C3                        [320, 256, 1, False]          
+ 16                -1  1    312832  models.common.C3                        [320, 256, 1, False]          
+ 16                -1  1    312832  models.common.C3                        [320, 256, 1, False]          
+ 17                -1  1     33024  models.common.Conv                      [256, 128, 1, 1]              
+ 17                -1  1     33024  models.common.Conv                      [256, 128, 1, 1]              
+ 18                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 18                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 17                -1  1     33024  models.common.Conv                      [256, 128, 1, 1]              
+ 19           [-1, 6]  1         0  models.common.Concat                    [1]                           
+ 19           [-1, 6]  1         0  models.common.Concat                    [1]                           
+ 18                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 17                -1  1     33024  models.common.Conv                      [256, 128, 1, 1]              
+ 19           [-1, 6]  1         0  models.common.Concat                    [1]                           
+ 18                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 20                -1  1     78592  models.common.C3                        [160, 128, 1, False]          
+ 20                -1  1     78592  models.common.C3                        [160, 128, 1, False]          
+ 19           [-1, 6]  1         0  models.common.Concat                    [1]                           
+ 21                -1  1    147712  models.common.Conv                      [128, 128, 3, 2]              
+ 21                -1  1    147712  models.common.Conv                      [128, 128, 3, 2]              
+ 22          [-1, 16]  1         0  models.common.Concat                    [1]                           
+ 22          [-1, 16]  1         0  models.common.Concat                    [1]                           
+ 20                -1  1     78592  models.common.C3                        [160, 128, 1, False]          
+ 20                -1  1     78592  models.common.C3                        [160, 128, 1, False]          
+ 21                -1  1    147712  models.common.Conv                      [128, 128, 3, 2]              
+ 22          [-1, 16]  1         0  models.common.Concat                    [1]                           
+ 21                -1  1    147712  models.common.Conv                      [128, 128, 3, 2]              
+ 22          [-1, 16]  1         0  models.common.Concat                    [1]                           
+ 23                -1  1    329216  models.common.C3                        [384, 256, 1, False]          
+ 23                -1  1    329216  models.common.C3                        [384, 256, 1, False]          
+ 23                -1  1    329216  models.common.C3                        [384, 256, 1, False]          
+ 23                -1  1    329216  models.common.C3                        [384, 256, 1, False]          
+ 24                -1  1    590336  models.common.Conv                      [256, 256, 3, 2]              
+ 24                -1  1    590336  models.common.Conv                      [256, 256, 3, 2]              
+ 25          [-1, 12]  1         0  models.common.Concat                    [1]                           
+ 25          [-1, 12]  1         0  models.common.Concat                    [1]                           
+ 24                -1  1    590336  models.common.Conv                      [256, 256, 3, 2]              
+ 25          [-1, 12]  1         0  models.common.Concat                    [1]                           
+ 24                -1  1    590336  models.common.Conv                      [256, 256, 3, 2]              
+ 25          [-1, 12]  1         0  models.common.Concat                    [1]                           
+ 26                -1  1   1117184  models.common.C3                        [384, 512, 1, False]          
+ 26                -1  1   1117184  models.common.C3                        [384, 512, 1, False]          
+ 26                -1  1   1117184  models.common.C3                        [384, 512, 1, False]          
+ 26                -1  1   1117184  models.common.C3                        [384, 512, 1, False]          
+ 27      [20, 23, 26]  1     16182  models.yolo.Detect                      [1, [[3, 2, 4, 3, 4, 3], [6, 4, 7, 5, 9, 6], [12, 7, 15, 9, 26, 14]], [128, 256, 512]]
+ 27      [20, 23, 26]  1     16182  models.yolo.Detect                      [1, [[3, 2, 4, 3, 4, 3], [6, 4, 7, 5, 9, 6], [12, 7, 15, 9, 26, 14]], [128, 256, 512]]
+ 27      [20, 23, 26]  1     16182  models.yolo.Detect                      [1, [[3, 2, 4, 3, 4, 3], [6, 4, 7, 5, 9, 6], [12, 7, 15, 9, 26, 14]], [128, 256, 512]]
+ 27      [20, 23, 26]  1     16182  models.yolo.Detect                      [1, [[3, 2, 4, 3, 4, 3], [6, 4, 7, 5, 9, 6], [12, 7, 15, 9, 26, 14]], [128, 256, 512]]
+Model Summary: 318 layers, 2979976 parameters, 2979976 gradients, 91.5 GFLOPs
+
+  Parameters: 2,979,976
+Model Summary: 318 layers, 2979976 parameters, 2979976 gradients, 91.5 GFLOPs
+
+Model Summary: 318 layers, 2979976 parameters, 2979976 gradients, 91.5 GFLOPs
+
+Model Summary: 318 layers, 2979976 parameters, 2979976 gradients, 91.5 GFLOPs
+
+
+Starting training for 100 epochs …
+
+  [  0/99][   0/2337]  mem=2.10G  box=0.0872  obj=0.0015  cls=0.0000
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/projects/prjs2041/uav_code/train_stage1.py", line 621, in <module>
+[rank0]:     train(save_dir, device, rank=rank, world_size=world_size)
+[rank0]:   File "/projects/prjs2041/uav_code/train_stage1.py", line 458, in train
+[rank0]:     pred = model(imgs, imgs2)
+[rank0]:   File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:   File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+[rank0]:     return forward_call(*args, **kwargs)
+[rank0]:   File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/nn/parallel/distributed.py", line 1633, in forward
+[rank0]:     inputs, kwargs = self._pre_forward(*inputs, **kwargs)
+[rank0]:   File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/nn/parallel/distributed.py", line 1522, in _pre_forward
+[rank0]:     if torch.is_grad_enabled() and self.reducer._rebuild_buckets():
+[rank0]: RuntimeError: Expected to have finished reduction in the prior iteration before starting a new one. This error indicates that your module has parameters that were not used in producing loss. You can enable unused parameter detection by passing the keyword argument `find_unused_parameters=True` to `torch.nn.parallel.DistributedDataParallel`, and by 
+[rank0]: making sure all `forward` function outputs participate in calculating loss. 
+[rank0]: If you already have done the above, then the distributed data parallel module wasn't able to locate the output tensors in the return value of your module's `forward` function. Please include the loss function and the structure of the return value of `forward` of your module when reporting this issue (e.g. list, dict, iterable).
+[rank0]: Parameter indices which did not receive grad for rank 0: 37 38
+[rank0]:  In addition, you can set the environment variable TORCH_DISTRIBUTED_DEBUG to either INFO or DETAIL to print out information about which particular parameters did not receive gradient on this rank as part of this error
+[rank2]: Traceback (most recent call last):
+[rank2]:   File "/projects/prjs2041/uav_code/train_stage1.py", line 621, in <module>
+[rank2]:     train(save_dir, device, rank=rank, world_size=world_size)
+[rank2]:   File "/projects/prjs2041/uav_code/train_stage1.py", line 458, in train
+[rank2]:     pred = model(imgs, imgs2)
+[rank2]:   File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+[rank2]:     return self._call_impl(*args, **kwargs)
+[rank2]:   File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+[rank2]:     return forward_call(*args, **kwargs)
+[rank2]:   File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/nn/parallel/distributed.py", line 1633, in forward
+[rank2]:     inputs, kwargs = self._pre_forward(*inputs, **kwargs)
+[rank2]:   File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/nn/parallel/distributed.py", line 1522, in _pre_forward
+[rank2]:     if torch.is_grad_enabled() and self.reducer._rebuild_buckets():
+[rank2]: RuntimeError: Expected to have finished reduction in the prior iteration before starting a new one. This error indicates that your module has parameters that were not used in producing loss. You can enable unused parameter detection by passing the keyword argument `find_unused_parameters=True` to `torch.nn.parallel.DistributedDataParallel`, and by 
+[rank2]: making sure all `forward` function outputs participate in calculating loss. 
+[rank2]: If you already have done the above, then the distributed data parallel module wasn't able to locate the output tensors in the return value of your module's `forward` function. Please include the loss function and the structure of the return value of `forward` of your module when reporting this issue (e.g. list, dict, iterable).
+[rank2]: Parameter indices which did not receive grad for rank 2: 37 38
+[rank2]:  In addition, you can set the environment variable TORCH_DISTRIBUTED_DEBUG to either INFO or DETAIL to print out information about which particular parameters did not receive gradient on this rank as part of this error
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/projects/prjs2041/uav_code/train_stage1.py", line 621, in <module>
+[rank1]:     train(save_dir, device, rank=rank, world_size=world_size)
+[rank1]:   File "/projects/prjs2041/uav_code/train_stage1.py", line 458, in train
+[rank1]:     pred = model(imgs, imgs2)
+[rank1]:   File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+[rank1]:     return self._call_impl(*args, **kwargs)
+[rank1]:   File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+[rank1]:     return forward_call(*args, **kwargs)
+[rank1]:   File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/nn/parallel/distributed.py", line 1633, in forward
+[rank1]:     inputs, kwargs = self._pre_forward(*inputs, **kwargs)
+[rank1]:   File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/nn/parallel/distributed.py", line 1522, in _pre_forward
+[rank1]:     if torch.is_grad_enabled() and self.reducer._rebuild_buckets():
+[rank1]: RuntimeError: Expected to have finished reduction in the prior iteration before starting a new one. This error indicates that your module has parameters that were not used in producing loss. You can enable unused parameter detection by passing the keyword argument `find_unused_parameters=True` to `torch.nn.parallel.DistributedDataParallel`, and by 
+[rank1]: making sure all `forward` function outputs participate in calculating loss. 
+[rank1]: If you already have done the above, then the distributed data parallel module wasn't able to locate the output tensors in the return value of your module's `forward` function. Please include the loss function and the structure of the return value of `forward` of your module when reporting this issue (e.g. list, dict, iterable).
+[rank1]: Parameter indices which did not receive grad for rank 1: 37 38
+[rank1]:  In addition, you can set the environment variable TORCH_DISTRIBUTED_DEBUG to either INFO or DETAIL to print out information about which particular parameters did not receive gradient on this rank as part of this error
+[rank0]:[W505 12:52:52.522467364 ProcessGroupNCCL.cpp:1479] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+W0505 12:52:54.565303 502428 /gpfs/home3/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/api.py:900] Sending process 502466 closing signal SIGTERM
+W0505 12:52:54.567092 502428 /gpfs/home3/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/api.py:900] Sending process 502467 closing signal SIGTERM
+W0505 12:52:54.567442 502428 /gpfs/home3/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/api.py:900] Sending process 502468 closing signal SIGTERM
+E0505 12:52:55.432435 502428 /gpfs/home3/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/api.py:874] failed (exitcode: 1) local_rank: 0 (pid: 502465) of binary: /home/knguyen1/.conda/envs/uav_master/bin/python3.9
+Traceback (most recent call last):
+  File "/home/knguyen1/.conda/envs/uav_master/bin/torchrun", line 6, in <module>
+    sys.exit(main())
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/run.py", line 892, in main
+    run(args)
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/run.py", line 883, in run
+    elastic_launch(
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/launcher/api.py", line 139, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/launcher/api.py", line 270, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/projects/prjs2041/uav_code/train_stage1.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-05-05_12:52:54
+  host      : gcn29.local.snellius.surf.nl
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 502465)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+
+========================================
+Finished at: Tue May  5 12:52:55 CEST 2026
+Check results: /projects/prjs2041/runs/stage1/
+========================================

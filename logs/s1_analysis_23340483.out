@@ -1,0 +1,108 @@
+==============================
+Job ID  : 23340483
+Node    : gcn46
+Started : Mon Jun  1 17:54:07 CEST 2026
+==============================
+
+Copying Anti-UAV-RGBT to $TMPDIR ...
+Done in 139s
+
+=== Step 1: Full evaluation ===
+Loading: /projects/prjs2041/runs/stage1/antiuav_rgbt15/weights/best.pt
+  Epoch 49  best_fitness=0.6717988846057131
+
+Loading Anti-UAV-RGBT val set from /scratch-local/knguyen1.23340483/Anti-UAV-RGBT …
+  61,999 frames  |  1938 batches
+
+Running evaluation …
+  61042 images evaluated  |  60548 GT objects
+
+Computing overall metrics …
+  mAP@0.5    = 0.6728
+  Precision  = 0.6360
+  Recall     = 0.6615
+  F1         = 0.6485
+
+Computing scale-stratified metrics …
+  tiny     mAP@0.5 = 0.5740
+  small    mAP@0.5 = 0.7044
+  normal   mAP@0.5 = 0.0000
+  large    mAP@0.5 = 0.0000
+
+Computing per-sequence metrics …
+  67 sequences evaluated
+
+Generating figures …
+  Saved: /projects/prjs2041/runs/stage1/antiuav_rgbt15/analysis/fig_pr_curve.png
+  Saved: /projects/prjs2041/runs/stage1/antiuav_rgbt15/analysis/fig_conf_curve.png
+  Saved: /projects/prjs2041/runs/stage1/antiuav_rgbt15/analysis/fig_scale_metrics.png
+  Saved: /projects/prjs2041/runs/stage1/antiuav_rgbt15/analysis/fig_seq_metrics.png
+  Scale CSV: /projects/prjs2041/runs/stage1/antiuav_rgbt15/analysis/scale_metrics.csv
+  Seq CSV:   /projects/prjs2041/runs/stage1/antiuav_rgbt15/analysis/seq_metrics.csv
+
+=======================================================
+Full Analysis Summary — antiuav_rgbt15 | Anti-UAV-RGBT val
+=======================================================
+
+--- Overall ---
+mAP@0.5          : 0.6728
+Precision        : 0.6360
+Recall           : 0.6615
+F1               : 0.6485
+
+--- Scale-stratified mAP@0.5 ---
+tiny    : 0.5740
+small   : 0.7044
+normal  : 0.0000
+large   : 0.0000
+
+--- Per-sequence (top 5 / bottom 5) ---
+20190925_200320_1_8            0.9950
+20190926_144550_1_10           0.9950
+20190926_133516_1_3            0.9950
+20190926_183400_1_4            0.9945
+20190926_143632_1_4            0.9945
+  ...
+20190925_130434_1_2            0.0000
+20190925_130434_1_1            0.0003
+20190925_152412_1_3            0.3003
+20190925_183946_1_1            0.3213
+20190925_141417_1_6            0.3265
+
+=======================================================
+
+All outputs in: /projects/prjs2041/runs/stage1/antiuav_rgbt15/analysis
+Done.
+
+=== Step 2: Bounding-box visualisation ===
+Loading: /projects/prjs2041/runs/stage1/antiuav_rgbt15/weights/best.pt
+  Epoch 49  |  best_fitness=0.6717988846057131
+
+Visualising 5 seqs × 80 frames from /scratch-local/knguyen1.23340483/Anti-UAV-RGBT/val
+  → 20190925_101846_1_4
+  → 20190925_101846_1_5
+  → 20190925_130434_1_1
+  → 20190925_130434_1_2
+  → 20190925_130434_1_5
+
+Stage 1 Detection Visualisation — Anti-UAV-RGBT val
+Checkpoint : /projects/prjs2041/runs/stage1/antiuav_rgbt15/weights/best.pt
+conf=0.25  iou=0.45
+
+Seq                             Fr    TP    FP    FN      P      R
+--------------------------------------------------------------
+20190925_101846_1_4             80    25    59    55  0.298  0.312
+20190925_101846_1_5             80    29    30    51  0.492  0.362
+20190925_130434_1_1             80     0     0    80    nan  0.000
+20190925_130434_1_2             80     0     0    58    nan  0.000
+20190925_130434_1_5             80     0     0    80    nan  0.000
+--------------------------------------------------------------
+TOTAL                          400    54    89   324  0.378  0.143
+  [WARN] ffmpeg failed (code 32512)
+
+400 frames → /projects/prjs2041/runs/stage1/antiuav_rgbt15/analysis/vis/frames
+
+==============================
+Done: Mon Jun  1 18:07:26 CEST 2026
+Results in: /projects/prjs2041/runs/stage1/antiuav_rgbt15/analysis
+==============================

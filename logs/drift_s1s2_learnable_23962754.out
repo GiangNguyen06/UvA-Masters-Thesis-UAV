@@ -1,0 +1,7 @@
+==============================
+Job ID  : 23962754
+Node    : tcn263
+Started : Wed Jun 17 12:19:08 CEST 2026
+Mode    : learnable-only (requires_grad=True)
+Transition: S1 -> S2
+==============================

@@ -172,6 +172,7 @@ Dual-input YOLOv5-based detector (Guo et al., 2025). YOLOMG was selected because
 
 ```
 YOLOMG-main/                      YOLOMG detector source (Guo et al., 2025)
+requirements.txt                  Python dependencies (see Installation below)
 
 src/
   datasets/
@@ -182,27 +183,31 @@ src/
     ard100.py                     ARD100 loader (motion mask pre-computation only)
     base.py                       BaseUAVDataset shared interface
 
-  Training
+  training/
     train_stage1.py               Stage 1 supervised training on Anti-UAV-RGBT (DDP)
     train_stage2.py               Stage 2 KD fine-tuning on Anti-UAV410 (single-GPU)
     train_stage2_ddp.py           Stage 2 KD fine-tuning (DDP, 4×H100)
-    train_stage3.py               Stage 3 naive fine-tuning + herding replay on CST
+    train_stage3.py               Stage 3 training: naive / herding / random-stratified
+                                  replay. Flags: --replay-mode {none,herding,random_stratified},
+                                  --replay-buffer, --replay-weight, --lr0
 
-  Evaluation
+  evaluation/
     eval_full_analysis.py         Per-stratum mAP, PR curves, per-sequence mAP
     eval_stage1.py                Stage 1 checkpoint evaluation on Anti-UAV-RGBT
     eval_stratum_t1.py            Per-stratum T1 mAP evaluated after each stage
     eval_tracking_cst.py          SOT tracking eval on CST (SR@0.5, PR@20, IDSW)
 
-  Analysis
+  analysis/
     parameter_drift.py            Inter-stage cosine similarity; --learnable-only flag
                                   separates gradient-updated weights from BN buffers
     compute_drift_s2s3.py         S2→S3 parameter drift with per layer-group breakdown
     grad_starvation_diagnostic.py Per-head (P3/P4/P5) gradient L2-norm probe at the
                                   S2→S3 boundary; compares CST vs RGBT distributions
-    build_herding_buffer.py       Scale-Stratified Herding buffer construction
+    build_herding_buffer.py       Scale-Stratified Herding buffer construction;
+                                  --split {train,val} selects the pool (use train to
+                                  avoid overlap with the T1 val-set evaluation)
 
-  Preprocessing
+  preprocessing/
     extract_antiuav_rgbt.py       Extract JPEG frames from Anti-UAV-RGBT .mp4 videos
     extract_ard100.py             Extract JPEG frames from ARD100 videos
     extract_frames_antiuav_rgbt.py Alternate frame extractor with quality options
@@ -212,33 +217,38 @@ src/
     prepare_ard100.py             ARD100 annotation conversion to YOLO format
     json2yolo.py                  Generic JSON → YOLO annotation converter
 
-  Plotting
+  plotting/
     plot_training_analysis.py     Training curve plots (loss, mAP, FM per epoch)
     plot_scale_distribution.py    Scale distribution bar charts across datasets
     plot_multirun_ci.py           Multi-seed confidence interval plots
 
-  Utilities
+  utilities/
     audit_datasets.py             Dataset integrity and annotation sanity checks
     test_datasets.py              Dataset loader unit tests
     visualise_detections_rgbt.py  Bounding-box overlay visualisation for RGBT frames
     visualise_detections.py       General-purpose bounding-box overlay visualisation
 
-  SLURM scripts — training
+  slurm/                          SLURM batch scripts for Snellius HPC
+    — training —
     run_stage1_ddp.sh             Stage 1 (4×A100, 72 h)
     run_stage1.sh                 Stage 1 single-GPU
     run_stage1_rerun.sh           Stage 1 rerun/resume from checkpoint
     run_stage2_ddp.sh             Stage 2 DDP (4×H100)
     run_stage2.sh                 Stage 2 single-GPU
     run_stage3_naive.sh           Stage 3 naive baseline
-    run_stage3_herding.sh         Stage 3 herding replay (cancelled at epoch 1)
-    run_stage3_random_stratified.sh Stage 3 random-stratified replay baseline
+    run_stage3_herding.sh         Stage 3 herding replay (earlier cancelled attempts)
+    run_stage3_random_stratified.sh Stage 3 random-stratified (legacy, val-split buffer)
+    run_stage3_ssh_s42.sh         Stage 3 SSH — canonical herding run, seed 42, 5 epochs
+    run_stage3_random_s42.sh      Stage 3 random-stratified — ablation, seed 42, 3 epochs
+    run_stage3_controlled_s123.sh Stage 3 no-replay, lr=1e-3, seed 123 (LR confound ctrl)
+    run_stage3_controlled_s999.sh Stage 3 no-replay, lr=1e-3, seed 999 (LR confound ctrl)
     run_multirun_stage2.sh        Stage 2 multi-seed launcher (seeds 42/123/999)
-
-  SLURM scripts — evaluation & analysis
+    — evaluation & analysis —
     run_eval.sh                   Full per-stratum evaluation
     run_eval_stage1.sh            Stage 1 checkpoint evaluation
     run_eval_pr_s3.sh             PR curve evaluation for Stage 3
     run_eval_stratum_t1.sh        Per-stratum T1 mAP across all three stages
+    run_eval_stratum_s2_seeds.sh  Per-stratum T1 after S2, seeds 123 and 999
     run_tracking_eval.sh          SOT tracking evaluation on CST
     run_analysis_drift.sh         Parameter drift analysis (all-params, S1→S2)
     run_drift_s2s3.sh             Parameter drift analysis (all-params, S2→S3)
@@ -248,14 +258,12 @@ src/
     run_analysis_stage1.sh        Stage 1 result aggregation and visualisation
     run_analysis_stage2.sh        Stage 2 multi-seed aggregation
     run_analysis_stage2_h100.sh   Stage 2 multi-seed aggregation (H100 partition)
-
-  SLURM scripts — data pipeline
+    — data pipeline —
     run_data_pipeline.sh          Full data extraction pipeline
     run_generate_masks.sh         Motion mask (mask32) generation
-    run_build_buffers.sh          SSH buffer construction
-    run_vis.sh                    Detection visualisation
-    run_vis_stage1.sh             Stage 1 detection visualisation
-    run_vis_stage2.sh             Stage 2 detection visualisation
+    run_build_buffers.sh          SSH buffer construction (val split — superseded)
+    run_build_buffer_train.sh     SSH + random-stratified buffer rebuild (train split)
+    run_vis.sh / run_vis_stage1.sh / run_vis_stage2.sh  Detection visualisation
 
   figures/
     fig_size_distribution.png/pdf Scale distribution across datasets (Figure 1)
@@ -275,6 +283,12 @@ src/figures/                     Generated paper figures
   fig_frame_counts.png/pdf       Frame counts per dataset split
   fig_visibility.png/pdf         Target visibility rates
 ```
+
+> **Note on Snellius paths:** All SLURM scripts in `src/slurm/` use hardcoded absolute paths
+> from the original Snellius project directory (`/projects/prjs2041/`, interpreter at
+> `/home/knguyen1/.conda/envs/uav_master/bin/`). These paths will differ from your own
+> cluster setup. Before submitting any script, update `TORCHRUN`, `SCRIPT`, dataset roots,
+> and output directories to match your environment.
 
 ---
 

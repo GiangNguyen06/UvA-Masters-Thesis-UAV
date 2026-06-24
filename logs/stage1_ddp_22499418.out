@@ -1,0 +1,17 @@
+========================================
+Stage 1 DDP: YOLOMG on Anti-UAV-RGBT
+Job ID:  22499418
+Node:    gcn71
+GPUs:    0,1,2,3
+Time:    Tue May  5 23:55:12 CEST 2026
+========================================
+
+Local scratch:
+Filesystem      Size  Used Avail Use% Mounted on
+wstor_scratch1  2.5P  557T  1.9P  23% /gpfs/scratch1
+
+Copying Anti-UAV-RGBT to GPFS scratch...
+Done in 27s.  Size: 3.8M
+
+Extracting frames from tar archive (fast single-file copy)...
+[2026-05-05T23:55:40.205] error: *** JOB 22499418 ON gcn71 CANCELLED AT 2026-05-05T23:55:40 DUE to SIGNAL Terminated ***

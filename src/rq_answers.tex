@@ -1,0 +1,60 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% rq_answers.tex
+% Answer to Research Question — Peer Exercise
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass{thesisdesign}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% DOCUMENT METADATA
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Answer to Research Question}
+\subtitle{
+    Peer Exercise | %
+    Submitted on: \textbf{22-04-2026}
+}
+\date{22.04.2026}
+\authorname{Khac Duc Giang Nguyen}
+\authoremail{giang.nguyen5@student.uva.nl}
+\affiliation{
+  \institution{\thesisinstitution}
+  \city{\thesiscity}
+  \country{\thesiscountry}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CONTENT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\pagestyle{plain}
+\setcounter{page}{0}
+\fixemptypage
+\maketitle
+
+\section*{a) Data Description and Task}
+
+The evidence comes from four benchmark video datasets: Anti-UAV-RGBT \cite{jiang_anti-uav_2023}, which provides paired RGB and thermal infrared (TIR) drone footage with synchronized streams per sequence; Anti-UAV410 \cite{bohuang_410}, a TIR-only dataset covering standard-scale drone targets; ARD100, an ego-motion drone video corpus captured from a moving camera platform; and CST Anti-UAV \cite{xie2025cstantiuavthermalinfrared}, which focuses on extreme tiny thermal targets in complex scenes. Together the four datasets span over 970,000 annotated frames, each labelled with per-frame bounding boxes marking the drone's location. Two datasets additionally provide frame-level occlusion flags indicating thermal crossover events.
+
+The primary task is object detection: a neural detector is trained sequentially across these datasets and the change in detection performance on earlier data is measured after training on later data. A secondary task is single-object tracking, where the detector's outputs are linked across frames using an IoU-based Hungarian matching algorithm and identity switches (IDSW) are counted as a measure of temporal consistency.
+
+\section*{b) Research Question and Literal Answer}
+
+\textit{Research question}: Does scale-distribution shift cause more catastrophic forgetting than modality shift in a sequentially trained anti-UAV detector, and can Scale-Stratified Herding mitigate this under a fixed memory budget?
+
+\textit{Literal answer}: Yes, because when you show the model pictures of very tiny drones after it has only ever seen large drones, it forgets how to detect large drones. But when you only change the camera from colour to heat, the drone stays roughly the same size on screen, so the model does not forget as much. Going from big targets to tiny targets is a bigger structural surprise to the feature extractor than going from one colour space to another. The Scale-Stratified Herding buffer helps by making sure the model keeps a few examples of each target size in memory, so it does not completely lose track of what a large drone looks like after spending weeks studying tiny ones.
+
+\section*{c) Reliability, Validity, and Soundness Risks}
+
+Several aspects of the research risk undermining its validity and soundness.
+
+\textbf{Dataset bias.} All four datasets are biased toward DJI commercial quadcopters in semi-controlled airspace. The forgetting effect measured may not generalise to fixed-wing UAVs, custom-built drones, or adversarial evasion scenarios. Results should therefore be interpreted as evidence within this specific operational distribution rather than as a universal claim about anti-UAV systems.
+
+\textbf{Forgetting Measure dependency.} The Forgetting Measure (FM) uses the Anti-UAV410 test split as the sole T1 reference point. If this split is unrepresentative of the full T1 distribution---for instance, if it over-represents easy sequences---the FM will under-estimate true forgetting, making the continual learning module appear more effective than it is.
+
+\textbf{Embedding quality at buffer sampling time.} The Scale-Stratified Herding buffer is sampled from penultimate-layer embeddings produced by a model trained only on large-scale data at that point. If the embedding space is poorly structured for small or tiny targets during the T1 phase, the stratified buffer will contain unrepresentative samples for those strata, undermining the protection it is intended to provide.
+
+\textbf{Annotation noise in tiny-target data.} Bounding box annotations for sub-10-pixel thermal targets in CST involve significant human subjectivity. Borderline background artefacts may be incorrectly labelled as drones, which introduces label noise that could artificially inflate or deflate the forgetting signal independently of the method being tested.
+
+\textbf{Compounding errors across stages.} The three-stage sequential training means that any instability introduced in Stage~1 propagates through Stages~2 and~3. This makes it difficult to isolate which training stage is responsible for a given drop in performance, reducing the interpretability of ablation results.
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{bibliographies/references}
+
+\end{document}

@@ -1,0 +1,32 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+Starting ARD100 frame extraction...
+Frame Extraction — ARD100
+==================================================
+
+[TRAIN] 65 videos
+  train:   0%|          | 0/65 [00:00<?, ?video/s]  train:   2%|▏         | 1/65 [00:24<26:33, 24.90s/video]  train:   3%|▎         | 2/65 [00:50<26:49, 25.54s/video]  train:   5%|▍         | 3/65 [01:42<38:35, 37.34s/video]  train:   6%|▌         | 4/65 [02:20<38:22, 37.74s/video]  train:   8%|▊         | 5/65 [02:51<35:21, 35.35s/video]  train:   9%|▉         | 6/65 [03:10<29:08, 29.63s/video]  train:  11%|█         | 7/65 [03:47<31:11, 32.28s/video]  train:  12%|█▏        | 8/65 [04:29<33:29, 35.25s/video]  train:  14%|█▍        | 9/65 [04:57<30:51, 33.06s/video]  train:  15%|█▌        | 10/65 [06:04<39:40, 43.28s/video]  train:  17%|█▋        | 11/65 [06:52<40:30, 45.01s/video]  train:  18%|█▊        | 12/65 [07:31<38:01, 43.06s/video]  train:  20%|██        | 13/65 [07:49<30:45, 35.49s/video]  train:  22%|██▏       | 14/65 [18:41<3:08:22, 221.62s/video]  train:  22%|██▏       | 14/65 [18:41<1:08:05, 80.11s/video] 
+Traceback (most recent call last):
+  File "/projects/prjs2041/uav_code/extract_ard100.py", line 131, in <module>
+    main()
+  File "/projects/prjs2041/uav_code/extract_ard100.py", line 103, in main
+    n = extract_video(video_path, out_dir)
+  File "/projects/prjs2041/uav_code/extract_ard100.py", line 48, in extract_video
+    out_dir.mkdir(parents=True, exist_ok=True)
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/pathlib.py", line 1251, in mkdir
+    self._accessor.mkdir(self, mode)
+OSError: [Errno 122] Disk quota exceeded: '/projects/prjs2041/datasets/ARD100/images/train/phantom116'
+ARD100 extraction complete.

@@ -1,0 +1,44 @@
+========================================
+Stage 1 (fast): YOLOMG on Anti-UAV-RGBT
+Job ID:  22470031
+Node:    gcn18
+GPU:     0
+Time:    Mon May  4 23:37:45 CEST 2026
+========================================
+
+Local scratch:
+Filesystem      Size  Used Avail Use% Mounted on
+wstor_scratch1  2.5P  514T  2.0P  21% /gpfs/scratch1
+
+Copying Anti-UAV-RGBT annotations+video to GPFS scratch...
+Done in 68s.  Size: 4.0G
+
+No pre-extracted frames found at /projects/prjs2041/datasets/Anti-UAV-RGBT-frames.
+Extracting from local mp4 copies (this takes ~8-10 min)...
+/home/knguyen1/.conda/envs/uav_master/bin/python: can't open file '/projects/prjs2041/uav_code/extract_frames_antiuav_rgbt.py': [Errno 2] No such file or directory
+Extraction done in 0s.
+
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+usage: train_stage1.py [-h] [--epochs EPOCHS] [--batch-size BATCH_SIZE]
+                       [--imgsz IMGSZ] [--workers WORKERS] [--device DEVICE]
+                       [--name NAME] [--dataset-root DATASET_ROOT]
+train_stage1.py: error: unrecognized arguments: --frames-root /scratch-local/knguyen1.22470031/Anti-UAV-RGBT-frames
+
+========================================
+Finished at: Mon May  4 23:39:07 CEST 2026
+Check results: /projects/prjs2041/runs/stage1/
+========================================

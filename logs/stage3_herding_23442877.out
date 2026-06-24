@@ -1,0 +1,13 @@
+==============================
+Stage 3 — SCALE-STRATIFIED HERDING
+Job ID  : 23442877
+Node    : gcn159
+GPUs    : 0,1,2,3
+Started : Wed Jun  3 21:25:06 CEST 2026
+==============================
+Herding buffer : /projects/prjs2041/runs/stage2/seed42/herding_buffer.pt
+Using datasets from project storage (no local copy)
+  Replay buffer: 300 exemplars loaded from /projects/prjs2041/runs/stage2/seed42/herding_buffer.pt  Replay buffer: 300 exemplars loaded from /projects/prjs2041/runs/stage2/seed42/herding_buffer.pt  Replay buffer: 300 exemplars loaded from /projects/prjs2041/runs/stage2/seed42/herding_buffer.pt
+  Replay buffer: 300 exemplars loaded from /projects/prjs2041/runs/stage2/seed42/herding_buffer.pt
+
+

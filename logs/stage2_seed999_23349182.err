@@ -1,0 +1,81 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+  File "/projects/prjs2041/uav_code/train_stage2_ddp.py", line 816
+    R/F1 re-evaluation)')
+         ^
+SyntaxError: invalid syntax
+  File "/projects/prjs2041/uav_code/train_stage2_ddp.py", line 816
+    R/F1 re-evaluation)')
+         ^
+SyntaxError: invalid syntax
+  File "/projects/prjs2041/uav_code/train_stage2_ddp.py", line 816
+    R/F1 re-evaluation)')
+         ^
+SyntaxError: invalid syntax
+  File "/projects/prjs2041/uav_code/train_stage2_ddp.py", line 816
+    R/F1 re-evaluation)')
+         ^
+SyntaxError: invalid syntax
+E0601 19:01:54.182970 3652948 /gpfs/home3/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/api.py:874] failed (exitcode: 1) local_rank: 0 (pid: 3652975) of binary: /home/knguyen1/.conda/envs/uav_master/bin/python3.9
+Traceback (most recent call last):
+  File "/home/knguyen1/.conda/envs/uav_master/bin/torchrun", line 6, in <module>
+    sys.exit(main())
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/run.py", line 892, in main
+    run(args)
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/run.py", line 883, in run
+    elastic_launch(
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/launcher/api.py", line 139, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/torch/distributed/launcher/api.py", line 270, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/projects/prjs2041/uav_code/train_stage2_ddp.py FAILED
+------------------------------------------------------------
+Failures:
+[1]:
+  time      : 2026-06-01_19:01:54
+  host      : gcn92.local.snellius.surf.nl
+  rank      : 1 (local_rank: 1)
+  exitcode  : 1 (pid: 3652976)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+[2]:
+  time      : 2026-06-01_19:01:54
+  host      : gcn92.local.snellius.surf.nl
+  rank      : 2 (local_rank: 2)
+  exitcode  : 1 (pid: 3652977)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+[3]:
+  time      : 2026-06-01_19:01:54
+  host      : gcn92.local.snellius.surf.nl
+  rank      : 3 (local_rank: 3)
+  exitcode  : 1 (pid: 3652978)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-06-01_19:01:54
+  host      : gcn92.local.snellius.surf.nl
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 3652975)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================

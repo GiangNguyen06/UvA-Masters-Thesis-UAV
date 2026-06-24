@@ -1,0 +1,25 @@
+Starting FD5 mask generation...
+Job ID: 22459058
+Node:   tcn414
+Time:   Mon May  4 15:09:44 CEST 2026
+
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+FD5 Motion Mask Generation → .npz
+==================================================
+Output: /projects/prjs2041/datasets/ARD100/masks_npz
+
+Sequences:   0%|          | 0/100 [00:00<?, ?seq/s]Sequences:   1%|          | 1/100 [08:28<13:59:42, 508.91s/seq]Sequences:   2%|▏         | 2/100 [17:11<14:03:55, 516.69s/seq]Sequences:   3%|▎         | 3/100 [23:27<12:12:01, 452.80s/seq][2026-05-04T15:38:15.106] error: *** JOB 22459058 ON tcn414 CANCELLED AT 2026-05-04T15:38:15 DUE to SIGNAL Terminated ***

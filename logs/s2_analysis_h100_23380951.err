@@ -1,0 +1,78 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+Traceback (most recent call last):
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/pandas/core/groupby/groupby.py", line 1944, in _agg_py_fallback
+    res_values = self._grouper.agg_series(ser, alt, preserve_dtype=True)
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/pandas/core/groupby/ops.py", line 873, in agg_series
+    result = self._aggregate_series_pure_python(obj, func)
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/pandas/core/groupby/ops.py", line 894, in _aggregate_series_pure_python
+    res = func(group)
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/pandas/core/groupby/groupby.py", line 2461, in <lambda>
+    alt=lambda x: Series(x, copy=False).mean(numeric_only=numeric_only),
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/pandas/core/series.py", line 6570, in mean
+    return NDFrame.mean(self, axis, skipna, numeric_only, **kwargs)
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/pandas/core/generic.py", line 12485, in mean
+    return self._stat_function(
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/pandas/core/generic.py", line 12442, in _stat_function
+    return self._reduce(
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/pandas/core/series.py", line 6478, in _reduce
+    return op(delegate, skipna=skipna, **kwds)
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/pandas/core/nanops.py", line 147, in f
+    result = alt(values, axis=axis, skipna=skipna, **kwds)
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/pandas/core/nanops.py", line 404, in new_func
+    result = func(values, axis=axis, skipna=skipna, mask=mask, **kwargs)
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/pandas/core/nanops.py", line 720, in nanmean
+    the_sum = _ensure_numeric(the_sum)
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/pandas/core/nanops.py", line 1701, in _ensure_numeric
+    raise TypeError(f"Could not convert string '{x}' to numeric")
+TypeError: Could not convert string 'seed123seed42seed999' to numeric
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/projects/prjs2041/uav_code/plot_multirun_ci.py", line 269, in <module>
+    main()
+  File "/projects/prjs2041/uav_code/plot_multirun_ci.py", line 250, in main
+    agg = align_epochs(dfs)
+  File "/projects/prjs2041/uav_code/plot_multirun_ci.py", line 86, in align_epochs
+    agg = combined.groupby('epoch').agg(['mean', 'std'])
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/pandas/core/groupby/generic.py", line 1432, in aggregate
+    result = op.agg()
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/pandas/core/apply.py", line 193, in agg
+    return self.agg_list_like()
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/pandas/core/apply.py", line 326, in agg_list_like
+    return self.agg_or_apply_list_like(op_name="agg")
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/pandas/core/apply.py", line 1566, in agg_or_apply_list_like
+    keys, results = self.compute_list_like(op_name, selected_obj, kwargs)
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/pandas/core/apply.py", line 385, in compute_list_like
+    new_res = getattr(colg, op_name)(func, *args, **kwargs)
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/pandas/core/groupby/generic.py", line 257, in aggregate
+    ret = self._aggregate_multiple_funcs(func, *args, **kwargs)
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/pandas/core/groupby/generic.py", line 362, in _aggregate_multiple_funcs
+    results[key] = self.aggregate(func, *args, **kwargs)
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/pandas/core/groupby/generic.py", line 249, in aggregate
+    return getattr(self, func)(*args, **kwargs)
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/pandas/core/groupby/groupby.py", line 2459, in mean
+    result = self._cython_agg_general(
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/pandas/core/groupby/groupby.py", line 2005, in _cython_agg_general
+    new_mgr = data.grouped_reduce(array_func)
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/pandas/core/internals/base.py", line 367, in grouped_reduce
+    res = func(arr)
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/pandas/core/groupby/groupby.py", line 2002, in array_func
+    result = self._agg_py_fallback(how, values, ndim=data.ndim, alt=alt)
+  File "/home/knguyen1/.conda/envs/uav_master/lib/python3.9/site-packages/pandas/core/groupby/groupby.py", line 1948, in _agg_py_fallback
+    raise type(err)(msg) from err
+TypeError: agg function failed [how->mean,dtype->object]

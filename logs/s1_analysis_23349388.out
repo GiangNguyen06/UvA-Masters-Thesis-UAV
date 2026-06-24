@@ -1,0 +1,13 @@
+==============================
+Job ID  : 23349388
+Node    : gcn14
+Started : Mon Jun  1 18:54:01 CEST 2026
+==============================
+
+Copying Anti-UAV-RGBT to $TMPDIR ...
+Done in 56s
+
+=== Step 1: Training curve analysis ===
+Reading: /projects/prjs2041/runs/stage1/antiuav_rgbt15/results.csv
+  80 epochs loaded  [Stage 1 format]  (cols: ['epoch', 'loss_box', 'loss_obj', 'loss_cls', 'loss_total', 'mAP50', 'mAP50-95', 'precision', 'recall', 'f1', 'lr', 'loss_det', 'mAP50_T2', 'mAP50_T1', 'kd_ratio', 'FM', 'P_T2', 'R_T2', 'F1_T2'])
+
