@@ -18,12 +18,12 @@ Thermal infrared UAV detectors must remain accurate as operational datasets evol
 
 ## Research Questions
 
-| | Question | Status |
+| | Question | Finding |
 |---|---|---|
-| **H1** | Is catastrophic forgetting measurable under the three-stage curriculum? | Confirmed — FM = −0.605 |
-| **RQ1** | Does Knowledge Distillation preserve T1 performance during T2 domain shift? | Answered — FM = −0.033 ± 0.004 (95% retention) |
-| **RQ2** | Does scale-distribution shift characterise the forgetting pattern in Stage 3? | Answered — gradient starvation identified as mechanism |
-| **RQ3** | Does Scale-Stratified Herding mitigate large-target forgetting? | Design contribution — buffer built, experimental validation blocked by compute budget |
+| **H1** | Is catastrophic forgetting measurable under the three-stage curriculum? | FM = −0.605; scale shift drives 18× more forgetting than domain shift |
+| **RQ1** | Does Knowledge Distillation preserve T1 performance during T2 domain shift? | FM = −0.033 ± 0.004 across three seeds; 95% T1 retention |
+| **RQ2** | Does scale-distribution shift characterise the forgetting pattern in Stage 3? | Large-target collapse to 0.000 mAP despite cosine sim 0.987; evidence points to scale-conditioned gradient imbalance |
+| **RQ3** | Does Scale-Stratified Herding mitigate large-target forgetting? | Buffer built and integrated; empirical comparison left as future work |
 
 ---
 
