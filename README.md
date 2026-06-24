@@ -269,4 +269,4 @@ Always use the absolute interpreter path on Snellius:
 
 **ap_per_class (YOLOMG-specific):** returns 7 values; `correct` array must be shape `(N, num_iou_thresholds)`.
 
-**Total compute used:** ~113,140 SBU of a 120,000 SBU allocation (budget exhausted after Stage 3 herding crash-fix cycles).
+**Total compute used:** ~116,000 SBU of a 120,000 SBU allocation (budget exhausted after Stage 3 herding crash-fix cycles).
