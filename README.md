@@ -129,56 +129,103 @@ Dual-input YOLOv5-based detector (Guo et al., 2025). YOLOMG was selected because
 ## Repository Structure
 
 ```
-YOLOMG-main/                     YOLOMG detector source (Guo et al., 2025)
+YOLOMG-main/                      YOLOMG detector source (Guo et al., 2025)
+
 src/
-  datasets/                      Dataset loaders
-    antiuav_rgbt.py              Anti-UAV-RGBT (video, cv2.VideoCapture)
-    antiuav410.py                Anti-UAV410 (JPEG frames)
-    cst.py                       CST Anti-UAV (JPEG frames)
-    ard100.py                    ARD100 (motion mask pre-computation only)
-    base.py                      BaseUAVDataset
-  train_stage1.py                Stage 1 supervised training (DDP)
-  train_stage2.py / _ddp.py      Stage 2 KD fine-tuning (single-GPU / DDP)
-  train_stage3.py                Stage 3 naive baseline + herding replay
-  build_herding_buffer.py        Scale-Stratified Herding buffer construction
-  eval_full_analysis.py          Per-stratum mAP, PR curves, per-seq mAP
-  eval_stage1.py                 Stage 1 checkpoint evaluation
-  eval_tracking_cst.py           SOT tracking eval on CST (SR@0.5, PR@20, IDSW)
-  visualise_detections_rgbt.py   Bounding-box overlay frames
-  parameter_drift.py             Inter-stage cosine similarity analysis
-  compute_drift_s2s3.py          S2→S3 parameter drift (layer-group breakdown)
-  plot_training_analysis.py      Training curve plots
-  plot_scale_distribution.py     Scale distribution bar charts
-  plot_multirun_ci.py            Multi-seed CI plots
-  audit_datasets.py              Dataset sanity checks
-  test_datasets.py               Dataset loader unit tests
-  json2yolo.py                   Annotation format conversion
-  grad_starvation_diagnostic.py  Gradient norm diagnostic per head (P3/P4/P5)
-  eval_stratum_t1.py             Per-stratum T1 mAP across all three stages
-  parameter_drift.py             Inter-stage cosine similarity (--learnable-only flag)
-  run_stage1_ddp.sh              SLURM: Stage 1 (4×A100, 72 h)
-  run_stage1.sh                  SLURM: Stage 1 single-GPU
-  run_stage1_rerun.sh            SLURM: Stage 1 rerun from checkpoint
-  run_stage2_ddp.sh              SLURM: Stage 2 DDP (4×H100)
-  run_stage2.sh                  SLURM: Stage 2 single-GPU
-  run_stage3_naive.sh            SLURM: Stage 3 naive baseline
-  run_stage3_herding.sh          SLURM: Stage 3 herding (cancelled)
-  run_stage3_random_stratified.sh SLURM: Stage 3 random-stratified replay
-  run_eval.sh                    SLURM: full evaluation
-  run_eval_pr_s3.sh              SLURM: PR curve evaluation Stage 3
-  run_tracking_eval.sh           SLURM: tracking evaluation
-  run_vis.sh                     SLURM: detection visualisation
-  run_analysis_drift.sh          SLURM: parameter drift analysis (all-params)
-  run_drift_s2s3.sh              SLURM: S2→S3 drift analysis
-  run_drift_s2s3_learnable.sh    SLURM: S2→S3 learnable-only drift
-  run_grad_diagnostic.sh         SLURM: gradient starvation diagnostic
-  run_eval_stratum_t1.sh         SLURM: per-stratum T1 evaluation
-  run_analysis_stage2.sh         SLURM: Stage 2 multi-seed aggregation
-  run_build_buffers.sh           SLURM: herding buffer construction
-  run_data_pipeline.sh           SLURM: full data extraction pipeline
-  run_generate_masks.sh          SLURM: motion mask generation
-analysis/                        Per-layer drift CSVs and figures (see analysis/)
-logs/                            SLURM output logs (see logs/README.md)
+  datasets/
+    antiuav_rgbt.py               Anti-UAV-RGBT loader (video, cv2.VideoCapture)
+    antiuav_rgbt_frames.py        Anti-UAV-RGBT loader (pre-extracted JPEG frames)
+    antiuav410.py                 Anti-UAV410 loader (JPEG frames)
+    cst.py                        CST Anti-UAV loader (JPEG frames)
+    ard100.py                     ARD100 loader (motion mask pre-computation only)
+    base.py                       BaseUAVDataset shared interface
+
+  Training
+    train_stage1.py               Stage 1 supervised training on Anti-UAV-RGBT (DDP)
+    train_stage2.py               Stage 2 KD fine-tuning on Anti-UAV410 (single-GPU)
+    train_stage2_ddp.py           Stage 2 KD fine-tuning (DDP, 4×H100)
+    train_stage3.py               Stage 3 naive fine-tuning + herding replay on CST
+
+  Evaluation
+    eval_full_analysis.py         Per-stratum mAP, PR curves, per-sequence mAP
+    eval_stage1.py                Stage 1 checkpoint evaluation on Anti-UAV-RGBT
+    eval_stratum_t1.py            Per-stratum T1 mAP evaluated after each stage
+    eval_tracking_cst.py          SOT tracking eval on CST (SR@0.5, PR@20, IDSW)
+
+  Analysis
+    parameter_drift.py            Inter-stage cosine similarity; --learnable-only flag
+                                  separates gradient-updated weights from BN buffers
+    compute_drift_s2s3.py         S2→S3 parameter drift with per layer-group breakdown
+    grad_starvation_diagnostic.py Per-head (P3/P4/P5) gradient L2-norm probe at the
+                                  S2→S3 boundary; compares CST vs RGBT distributions
+    build_herding_buffer.py       Scale-Stratified Herding buffer construction
+
+  Preprocessing
+    extract_antiuav_rgbt.py       Extract JPEG frames from Anti-UAV-RGBT .mp4 videos
+    extract_ard100.py             Extract JPEG frames from ARD100 videos
+    extract_frames_antiuav_rgbt.py Alternate frame extractor with quality options
+    extract_frames.sh             Shell wrapper for frame extraction
+    generate_masks_npz.py         Pre-compute mask32 motion difference maps (NPZ)
+    generate_mask5_fixed.py       Fixed FD5 mask generator (ECC-based GMC)
+    prepare_ard100.py             ARD100 annotation conversion to YOLO format
+    json2yolo.py                  Generic JSON → YOLO annotation converter
+
+  Plotting
+    plot_training_analysis.py     Training curve plots (loss, mAP, FM per epoch)
+    plot_scale_distribution.py    Scale distribution bar charts across datasets
+    plot_multirun_ci.py           Multi-seed confidence interval plots
+
+  Utilities
+    audit_datasets.py             Dataset integrity and annotation sanity checks
+    test_datasets.py              Dataset loader unit tests
+    visualise_detections_rgbt.py  Bounding-box overlay visualisation for RGBT frames
+    visualise_detections.py       General-purpose bounding-box overlay visualisation
+
+  SLURM scripts — training
+    run_stage1_ddp.sh             Stage 1 (4×A100, 72 h)
+    run_stage1.sh                 Stage 1 single-GPU
+    run_stage1_rerun.sh           Stage 1 rerun/resume from checkpoint
+    run_stage2_ddp.sh             Stage 2 DDP (4×H100)
+    run_stage2.sh                 Stage 2 single-GPU
+    run_stage3_naive.sh           Stage 3 naive baseline
+    run_stage3_herding.sh         Stage 3 herding replay (cancelled at epoch 1)
+    run_stage3_random_stratified.sh Stage 3 random-stratified replay baseline
+    run_multirun_stage2.sh        Stage 2 multi-seed launcher (seeds 42/123/999)
+
+  SLURM scripts — evaluation & analysis
+    run_eval.sh                   Full per-stratum evaluation
+    run_eval_stage1.sh            Stage 1 checkpoint evaluation
+    run_eval_pr_s3.sh             PR curve evaluation for Stage 3
+    run_eval_stratum_t1.sh        Per-stratum T1 mAP across all three stages
+    run_tracking_eval.sh          SOT tracking evaluation on CST
+    run_analysis_drift.sh         Parameter drift analysis (all-params, S1→S2)
+    run_drift_s2s3.sh             Parameter drift analysis (all-params, S2→S3)
+    run_drift_s2s3_learnable.sh   Parameter drift (learnable-only, S2→S3)
+    run_drift_s1s2_learnable.sh   Parameter drift (learnable-only, S1→S2)
+    run_grad_diagnostic.sh        Gradient starvation diagnostic at S2→S3 boundary
+    run_analysis_stage1.sh        Stage 1 result aggregation and visualisation
+    run_analysis_stage2.sh        Stage 2 multi-seed aggregation
+    run_analysis_stage2_h100.sh   Stage 2 multi-seed aggregation (H100 partition)
+
+  SLURM scripts — data pipeline
+    run_data_pipeline.sh          Full data extraction pipeline
+    run_generate_masks.sh         Motion mask (mask32) generation
+    run_build_buffers.sh          SSH buffer construction
+    run_vis.sh                    Detection visualisation
+    run_vis_stage1.sh             Stage 1 detection visualisation
+    run_vis_stage2.sh             Stage 2 detection visualisation
+
+  figures/
+    fig_size_distribution.png/pdf Scale distribution across datasets (Figure 1)
+    fig_frame_counts.png/pdf      Annotated frame counts per dataset
+    fig_visibility.png/pdf        Target visibility rates per dataset
+
+analysis/
+  drift_s1s2/                     S1→S2 drift: learnable-only CSVs + figures
+  drift_s2s3/                     S2→S3 drift: all-params and learnable-only CSVs + figures
+  diagnostics/grad_starvation/    Per-head gradient norm CSVs (seeds 42, 123, 999)
+
+logs/                             SLURM output logs (see logs/README.md)
 docs/
   stage2_progress.png            Stage 2 training curves
 src/figures/                     Generated paper figures
