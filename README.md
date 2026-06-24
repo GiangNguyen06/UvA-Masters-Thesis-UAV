@@ -8,11 +8,11 @@
 
 ---
 
-## What This Thesis Is About
+## What This Research Is About
 
-Thermal infrared UAV detectors must remain accurate as operational datasets evolve. Sequential fine-tuning on a new dataset destroys performance on previous ones — a phenomenon called catastrophic forgetting. This thesis trains YOLOMG through a three-stage curriculum of increasing scale difficulty, measures precisely *when*, *how much*, and *why* forgetting happens, and proposes Scale-Stratified Herding as a targeted remedy.
+Thermal infrared UAV detectors must remain accurate as operational datasets evolve. Sequential fine-tuning on a new dataset destroys performance on previous ones — a phenomenon called catastrophic forgetting. This research trains YOLOMG through a three-stage curriculum of increasing scale difficulty, measures precisely *when*, *how much*, and *why* forgetting happens, and proposes Scale-Stratified Herding as a targeted remedy.
 
-**Core finding:** Scale-distribution shift (Stage 3, CST Anti-UAV: 97.7% tiny/small targets, 0% large) causes **18× more forgetting** than cross-domain adaptation (Stage 2, Anti-UAV410). The mechanism is **gradient starvation** — learnable-parameter cosine similarity S2→S3 is 0.987 (weights barely moved) yet T1 mAP collapses from 0.640 to 0.068. Large-target detection reaches 0.000 mAP within the first training epoch. BN running statistics drift 2× more than gradient-updated weights (L2-rel ≈ 0.24 vs 0.12), confirming that the network re-estimates normalisation stats for CST's tiny-target distribution while conv weights remain largely unchanged.
+**Core finding:** Scale-distribution shift (Stage 3, CST Anti-UAV: 97.7% tiny/small targets, 0% large) causes **18× more forgetting** than cross-domain adaptation (Stage 2, Anti-UAV410). Inter-stage cosine similarity is 0.967 over all parameters (0.987 over gradient-updated weights alone) — weights barely moved — yet T1 mAP collapses from 0.640 to 0.068. Large-target detection reaches 0.000 mAP within the first training epoch. The evidence is consistent with a **scale-conditioned gradient imbalance** — a refinement of gradient starvation — as a candidate forgetting mechanism: the large stratum receives no positive gradient signal from CST's distribution, while BatchNorm running statistics drift roughly 2× more than the trained weights (L2-rel ≈ 0.24 vs 0.12), suggesting the network adapts its normalisation to the new distribution while the gradient-updated parameters remain largely unchanged.
 
 ---
 
@@ -34,7 +34,7 @@ Thermal infrared UAV detectors must remain accurate as operational datasets evol
 | 1 | Supervised baseline | Anti-UAV-RGBT (208,737 frames) | mAP@0.5 = **0.6725** |
 | 2 | KD fine-tuning | Anti-UAV410 (438,397 frames) | FM = **−0.033 ± 0.004** (3 seeds) |
 | 3 | Naive baseline | CST Anti-UAV (245,471 frames) | FM = **−0.605**, best at epoch 3 |
-| 3 | Scale-Stratified Herding | CST Anti-UAV | Cancelled — compute budget exhausted |
+| 3 | Scale-Stratified Herding | CST Anti-UAV | Buffer built and integrated; empirical comparison left as future work |
 
 ---
 
@@ -97,7 +97,7 @@ Loss: `L_total = L_det + λ_kd × L_kd`, where `L_kd` = MSE between student and 
 | BN running-stat drift (L2-rel) | **0.24** vs learnable weights 0.12 |
 | P5 head gradient ratio RGBT/CST | **1.7×** (0.654 vs 0.387) |
 
-**Gradient starvation signature:** learnable-parameter cosine similarity S2→S3 is 0.987 — weights barely moved — yet forgetting is 18× worse than Stage 2. Large-target features received zero gradient signal because CST has 0% large targets. BN running statistics drift 2× more than conv weights, indicating the network adapts its normalisation to CST's tiny-target distribution while the gradient-updated parameters remain largely frozen.
+**Candidate mechanism — scale-conditioned gradient imbalance:** learnable-parameter cosine similarity S2→S3 is 0.987 — weights barely moved — yet forgetting is 18× worse than Stage 2. Large-target features received no positive gradient signal from CST's distribution (0% large targets). BN running statistics drift 2× more than conv weights, suggesting the network adapts its normalisation to CST's tiny-target distribution while gradient-updated parameters remain largely unchanged. The P5 head gradient ratio RGBT/CST = 1.7× provides direct evidence of large-target gradient starvation, though a definitive causal mechanism remains tentative.
 
 ---
 
