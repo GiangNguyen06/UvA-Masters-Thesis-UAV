@@ -167,10 +167,10 @@ Buffer built and verified using Stage 2 seed-42 checkpoint on Anti-UAV-RGBT val 
 
 | Stratum | Eligible frames | Selected | Sampling rate |
 |---------|----------------|----------|---------------|
-| Tiny (<16 px) | 197 | 75 | 38.1% |
-| Small (16–32 px) | 14,798 | 75 | 0.5% |
-| Normal (32–64 px) | 42,608 | 75 | 0.2% |
-| Large (>64 px) | 3,017 | 75 | 2.5% |
+| Tiny (<256 px²) | 197 | 75 | 38.1% |
+| Small (256–1024 px²) | 14,798 | 75 | 0.5% |
+| Normal (1024–4096 px²) | 42,608 | 75 | 0.2% |
+| Large (≥4096 px²) | 3,017 | 75 | 2.5% |
 | **Total** | 60,620 | **300** | — |
 
 ---
@@ -337,7 +337,7 @@ Always use the absolute interpreter path on Snellius:
 
 **CSTDataset:** `IR_label.json` uses key `gt` (not `gt_rect`); images at `{seq}/{frame:06d}.jpg` (1-based, 6-digit).
 
-**Size bins (UAV-specific):** tiny <16 px, small 16–32 px, normal 32–64 px, large ≥64 px (longest bbox side). Standard COCO bins (32/96/192 px) are inappropriate for sub-100 px thermal UAV targets.
+**Size bins (UAV-specific):** tiny <256 px², small 256–1024 px², normal 1024–4096 px², large ≥4096 px² (bbox area; thresholds = 16²/32²/64² px). Standard COCO bins (32/96/192 px) are inappropriate for sub-100 px thermal UAV targets.
 
 **VideoCapture:** `persistent_workers=False` — with `True`, workers accumulate RAM and kill long jobs (observed at Stage 1 epoch 83; best checkpoint at epoch 49 was safe).
 

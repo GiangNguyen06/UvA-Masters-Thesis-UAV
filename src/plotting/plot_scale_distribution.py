@@ -51,11 +51,13 @@ BINS   = ["Tiny", "Small", "Normal", "Large"]
 COLORS = ["#d62728", "#ff7f0e", "#2ca02c", "#1f77b4"]   # red → blue
 
 def classify(w, h):
-    """Bin by longest side (pixels)."""
-    longest = max(w, h)
-    if longest < 16:  return "Tiny"
-    if longest < 32:  return "Small"
-    if longest < 64:  return "Normal"
+    """Bin by bounding-box AREA in px^2, matching the per-stratum mAP and the
+    SSH buffer (thresholds 256/1024/4096 = 16^2/32^2/64^2). All datasets are
+    native 640x512, so raw box w*h is the same frame used elsewhere."""
+    area = w * h
+    if area < 256:   return "Tiny"
+    if area < 1024:  return "Small"
+    if area < 4096:  return "Normal"
     return "Large"
 
 
@@ -222,7 +224,7 @@ def make_figure(datasets, out_path):
     ax.yaxis.set_major_formatter(mticker.PercentFormatter())
     ax.set_title(
         "UAV Target-Size Distribution Across Training Datasets\n"
-        r"(bin = longest bbox side: Tiny $<$16 px, Small 16–32 px, Normal 32–64 px, Large $\geq$64 px)",
+        r"(bin = bbox area: Tiny $<$256, Small 256–1024, Normal 1024–4096, Large $\geq$4096 px$^2$)",
         fontsize=10
     )
     ax.legend(title="Size bin", fontsize=9, title_fontsize=9,
@@ -276,12 +278,4 @@ def main():
 
     datasets = [
         ("Anti-UAV-RGBT\n(Stage 1)", rgbt),
-        ("Anti-UAV410\n(Stage 2)",   uav410),
-        ("CST Anti-UAV\n(Stage 3)",  cst),
-    ]
-    make_figure(datasets, args.out)
-    print("\nDone.")
-
-
-if __name__ == "__main__":
-    main()
+        ("Anti-UAV
