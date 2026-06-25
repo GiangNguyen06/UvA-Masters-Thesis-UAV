@@ -9,13 +9,13 @@ training datasets used in the sequential continual learning curriculum:
     Stage 2 — Anti-UAV410     (thermal domain, IR frames)
     Stage 3 — CST Anti-UAV    (extreme tiny targets, IR video)
 
-Size bins match eval_full_analysis.py (corrected UAV-specific thresholds,
-based on the longest bounding-box side in pixels):
+Size bins match eval_full_analysis.py and build_herding_buffer.py
+(UAV-specific thresholds, based on bounding-box AREA in px^2):
 
-    Tiny   :  max(w, h) <  16 px
-    Small  :  max(w, h) <  32 px
-    Normal :  max(w, h) <  64 px
-    Large  :  max(w, h) >= 64 px
+    Tiny   :  w*h <  256  px^2  ( = 16^2 )
+    Small  :  w*h <  1024 px^2  ( = 32^2 )
+    Normal :  w*h <  4096 px^2  ( = 64^2 )
+    Large  :  w*h >= 4096 px^2
 
 Output
 ------
@@ -278,4 +278,12 @@ def main():
 
     datasets = [
         ("Anti-UAV-RGBT\n(Stage 1)", rgbt),
-        ("Anti-UAV
+        ("Anti-UAV410\n(Stage 2)",   uav410),
+        ("CST Anti-UAV\n(Stage 3)",  cst),
+    ]
+    make_figure(datasets, args.out)
+    print("\nDone.")
+
+
+if __name__ == "__main__":
+    main()
