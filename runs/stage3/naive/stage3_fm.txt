@@ -1,0 +1,4 @@
+fm_abs=-0.604509
+fm_stage3=-0.572381
+map50_t2_baseline=0.640372
+t1_baseline=0.672500

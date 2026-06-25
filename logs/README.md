@@ -246,6 +246,32 @@ Epoch   T3 mAP   T1 mAP   FM (abs)   FM (stage3)   large T1
 
 SSH reduces forgetting by ~49%. Large-target mAP recovers from complete absence to 0.079. T3 performance is modestly lower (0.065 vs 0.083), reflecting the plasticity–stability trade-off.
 
+### `stage3_random_s42_24197035.err` — RANDOM-STRATIFIED TRAINING
+**Job:** 24197035 | `run_stage3_random_s42.sh` → `train_stage3.py --replay-mode random_stratified`  
+**Buffer:** `herding_buffer_random_train.pt` (300 exemplars, train split, uniform random per stratum)  
+**Config:** seed 42, 3 epochs, replay ratio 25%, replay weight 4.0, 4×A100
+
+```
+Epoch   T3 mAP   T1 mAP   FM (abs)   large T1
+  0     0.033    0.492    −0.180     0.169
+  1     0.057    0.480    −0.192     0.138
+  2*    0.064    0.451    −0.221     0.129  ← best T3
+
+* Best checkpoint saved at epoch 2.
+```
+
+**Three-way comparison at best T3 checkpoint:**
+
+| | Naive | Random-Stratified | SSH |
+|--|-------|-------------------|-----|
+| FM (vs T1 ceiling) | −0.605 | **−0.221** | −0.311 |
+| T1 mAP overall | 0.068 | **0.451** | 0.362 |
+| Large-stratum T1 | 0.000 | **0.129** | 0.079 |
+| Small-stratum T1 | 0.067 | **0.286** | 0.232 |
+| Normal-stratum T1 | 0.088 | **0.519** | 0.415 |
+
+Random-stratified outperforms SSH in FM and per-stratum T1 retention. Scale representation in the buffer is the key driver; herding selection within strata does not add value at this buffer size (75/stratum). Results are single-seed.
+
 ---
 
 ## Stage 3 — Herding Attempts (earlier, budget exhaustion)

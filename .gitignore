@@ -9,3 +9,9 @@ YOLOMG-main/runs/
 .DS_Store
 Thumbs.db
 CLAUDE.md
+
+# Detection / visualisation frame images (hundreds of per-frame JPEGs)
+**/frames/*.jpg
+**/frames/*.jpeg
+**/vis/frames/
+**/detections/frames/

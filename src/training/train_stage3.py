@@ -114,7 +114,7 @@ from datasets import CSTDataset, AntiUAVRGBTDataset
 
 # ── Hyperparameters ────────────────────────────────────────────────────────────
 HYP = {
-    'lr0':             5e-4,    # lower LR for Stage 3 (stage 2 used 1e-3)
+    'lr0':             5e-4,    # default; override with --lr0 (stage 2 used 1e-3)
     'lrf':             1e-2,
     'momentum':        0.937,
     'weight_decay':    5e-4,
@@ -848,6 +848,9 @@ def parse_args():
     p.add_argument('--cst-root',            type=str, default=str(CST_ROOT))
     p.add_argument('--rgbt-root',           type=str, default=str(RGBT_ROOT))
     p.add_argument('--t1-baseline',         type=float, default=T1_BASELINE)
+    p.add_argument('--lr0',                 type=float, default=None,
+                   help='Override initial learning rate (default: HYP[lr0]=5e-4). '
+                        'Pass 1e-3 to match Stage 2 for a controlled comparison.')
     # Kept for backward compat; --replay-mode none is preferred
     p.add_argument('--no-replay',           action='store_true',
                    help='Deprecated: use --replay-mode none instead.')
@@ -861,6 +864,8 @@ if __name__ == '__main__':
     BATCH_SIZE    = args.batch_size
     WORKERS       = args.workers
     SEED          = args.seed
+    if args.lr0 is not None:
+        HYP['lr0'] = args.lr0
     T1_BASELINE   = args.t1_baseline
     CST_ROOT      = Path(args.cst_root)
     RGBT_ROOT     = Path(args.rgbt_root)

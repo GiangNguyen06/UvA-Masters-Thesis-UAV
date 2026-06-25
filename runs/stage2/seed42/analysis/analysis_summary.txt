@@ -1,0 +1,33 @@
+============================================================
+Stage 2 Training Analysis — Key Numbers
+============================================================
+
+Total epochs trained       : 32
+Early stopping triggered at: epoch 31
+
+--- T2 performance (Anti-UAV410 val) ---
+Peak T2 mAP@0.5            : 0.4264  (epoch 16)
+Final T2 mAP@0.5           : 0.4218
+
+--- T1 retention (Anti-UAV-RGBT val) ---
+T1 baseline (Stage 1)      : 0.6725
+Best T1 mAP during T2      : 0.6658  (epoch 0)
+FM (best T1 − baseline)    : -0.0067
+
+--- Forgetting Measure (FM = mAP_T1_after_T2 − T1_baseline) ---
+Min FM (max forgetting)    : -0.0473  (epoch 19)
+FM at peak T2 epoch        : -0.0369
+Final FM                   : -0.0372
+
+--- Loss decomposition ---
+L_det: epoch 0  = 0.0580   →  epoch 31 = 0.0233
+L_kd:  epoch 0  = 0.0791   →  epoch 31 = 0.0612
+kd/det ratio: epoch 0 = 1.36×  →  epoch 31 = 2.62×
+(at peak T2 epoch 16: kd/det = 2.44×)
+
+--- Stability-plasticity gap ---
+Peak T2 epoch              : 16
+Min FM epoch               : 19
+Gap                        : 3 epochs
+
+============================================================

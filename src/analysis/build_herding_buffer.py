@@ -132,8 +132,8 @@ class HerdingDataset(Dataset):
     Returns (img_tensor, img2_zeros, labels, meta) for each frame.
     """
 
-    def __init__(self, root: Path, imgsz: int = 640):
-        self.ds    = AntiUAVRGBTDataset(root=root, split='val', skip_empty=True)
+    def __init__(self, root: Path, imgsz: int = 640, split: str = 'val'):
+        self.ds    = AntiUAVRGBTDataset(root=root, split=split, skip_empty=True)
         self.imgsz = imgsz
 
     def __len__(self):
@@ -264,6 +264,11 @@ def parse_args():
         help='Random seed for --mode random (default: 42)')
     p.add_argument('--out',           type=str, default=None,
         help='Output .pt path. Defaults to <weights_dir>/herding_buffer[_random].pt')
+    p.add_argument('--split',         type=str, default='val',
+        choices=['train', 'val'],
+        help='Which Anti-UAV-RGBT split to pool exemplars from. '
+             'Use "train" to avoid overlap with the val-set T1 evaluation. '
+             'Default "val" preserves backward compatibility.')
     p.add_argument('--batch-size',    type=int, default=32)
     p.add_argument('--workers',       type=int, default=4)
     p.add_argument('--device',        type=str, default='0')
@@ -302,8 +307,8 @@ def main():
           f'best_fitness={ckpt.get("best_fitness","?")}\n')
 
     # ── Dataset ───────────────────────────────────────────────────────────────
-    print('Loading Anti-UAV-RGBT val (UAV-present frames only) …')
-    ds     = HerdingDataset(data_root, args.imgsz)
+    print(f'Loading Anti-UAV-RGBT {args.split} (UAV-present frames only) …')
+    ds     = HerdingDataset(data_root, args.imgsz, split=args.split)
     loader = DataLoader(ds, batch_size=args.batch_size, shuffle=False,
                         num_workers=args.workers, pin_memory=True,
                         persistent_workers=False,

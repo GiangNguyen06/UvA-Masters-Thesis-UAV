@@ -1,0 +1,18 @@
+Tracking Evaluation — naive2 | CST Anti-UAV val
+Checkpoint : /projects/prjs2041/runs/stage3/naive2/weights/best.pt
+Split      : val
+
+Sequences evaluated : 40
+Total GT frames     : 39,055
+
+SR@0.5  (Success Rate IoU≥0.5) : 0.0119
+AUC-SR  (Success Plot AUC)     : 0.0388
+PR@20   (Precision ≤20px)      : 0.2189
+PR@10   (Precision ≤10px)      : 0.0810
+AUC-PR  (Precision Plot AUC)   : 0.2109
+Mean IoU (all GT frames)       : 0.0151
+Total IDSW                     : 135
+
+Note: IDSW counted as re-acquisitions after track loss.
+  Track lost   : IoU < 0.1
+  Track re-acq : IoU ≥ 0.5 following a lost state

@@ -1,0 +1,13 @@
+Scale-Stratified Buffer  [RANDOM]
+Weights   : /projects/prjs2041/runs/stage2/seed42/weights/best.pt  (Stage 2)
+K/stratum : 75
+Mode      : random
+
+Stratum     Available   Selected
+-----------------------------------
+tiny              197         75
+small          14,798         75
+normal         42,608         75
+large           3,017         75
+-----------------------------------
+TOTAL          60,620        300

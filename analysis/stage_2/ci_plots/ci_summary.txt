@@ -1,0 +1,23 @@
+=================================================================
+Multi-seed Confidence Interval Summary  (n=3 seeds)
+=================================================================
+
+--- Peak T2 mAP@0.5 per seed ---
+  seed123               peak=0.4304  epoch=15
+  seed42                peak=0.4264  epoch=16
+  seed999               peak=0.4275  epoch=27
+  MEAN ± STD : 0.4281 ± 0.0017
+
+--- FM at peak T2 epoch per seed ---
+  seed123               FM=-0.0276  (epoch 15)
+  seed42                FM=-0.0369  (epoch 16)
+  seed999               FM=-0.0333  (epoch 27)
+  MEAN ± STD : -0.0326 ± 0.0038
+
+--- F1_T2 at peak T2 epoch per seed ---
+  seed123               F1=0.5181
+  seed42                F1=0.5174
+  seed999               F1=0.5153
+  MEAN ± STD : 0.5169 ± 0.0012
+
+=================================================================

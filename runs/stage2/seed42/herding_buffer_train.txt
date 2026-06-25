@@ -1,0 +1,13 @@
+Scale-Stratified Buffer  [HERDING]
+Weights   : /projects/prjs2041/runs/stage2/seed42/weights/best.pt  (Stage 2)
+K/stratum : 75
+Mode      : herding
+
+Stratum     Available   Selected
+-----------------------------------
+tiny            1,091         75
+small          43,560         75
+normal         98,929         75
+large           4,788         75
+-----------------------------------
+TOTAL         148,368        300

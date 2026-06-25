@@ -1,0 +1,13 @@
+==============================
+Stage 3 — Random-Stratified (train-split buffer) — seed 42
+Job ID  : 24197035
+Node    : gcn38
+Started : Thu Jun 25 01:32:56 CEST 2026
+==============================
+  Replay buffer: 300 exemplars loaded from /projects/prjs2041/runs/stage2/seed42/herding_buffer_random_train.pt
+  Replay buffer: 300 exemplars loaded from /projects/prjs2041/runs/stage2/seed42/herding_buffer_random_train.pt
+  Replay buffer: 300 exemplars loaded from /projects/prjs2041/runs/stage2/seed42/herding_buffer_random_train.pt
+  Replay buffer: 300 exemplars loaded from /projects/prjs2041/runs/stage2/seed42/herding_buffer_random_train.pt
+==============================
+Done: Thu Jun 25 03:33:43 CEST 2026
+==============================

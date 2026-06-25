@@ -26,7 +26,7 @@ Thermal infrared UAV detectors must remain accurate as operational datasets evol
 | **H1** | Is catastrophic forgetting measurable under the three-stage curriculum? | FM = −0.605; scale shift drives 18× more forgetting than domain shift |
 | **RQ1** | Does Knowledge Distillation preserve T1 performance during T2 domain shift? | FM = −0.033 ± 0.004 across three seeds; 95% T1 retention |
 | **RQ2** | Does scale-distribution shift characterise the forgetting pattern in Stage 3? | Large-target collapse to 0.000 mAP despite cosine sim 0.987; evidence points to scale-conditioned gradient imbalance |
-| **RQ3** | Does Scale-Stratified Herding mitigate large-target forgetting? | SSH reduced FM from −0.605 to −0.311 (49% less forgetting); large-target mAP recovered from 0.000 to 0.079 |
+| **RQ3** | Does Scale-Stratified Herding mitigate large-target forgetting? | Both replay methods reduce forgetting; random-stratified FM −0.221, SSH FM −0.311 vs naive −0.605. Scale representation matters; herding selection within strata does not add measurable value over random at this buffer size |
 
 ---
 
@@ -47,6 +47,7 @@ Thermal infrared UAV detectors must remain accurate as operational datasets evol
 | 1 | Supervised baseline | Anti-UAV-RGBT (208,737 frames) | mAP@0.5 = **0.6725** |
 | 2 | KD fine-tuning | Anti-UAV410 (438,397 frames) | FM = **−0.033 ± 0.004** (3 seeds) |
 | 3 | Naive baseline | CST Anti-UAV (245,471 frames) | FM = **−0.605**, best at epoch 3 |
+| 3 | Random-Stratified replay | CST Anti-UAV | FM = **−0.221** at best checkpoint (ep. 2); large-target mAP 0.000 → **0.129** |
 | 3 | Scale-Stratified Herding (SSH) | CST Anti-UAV | FM = **−0.311** at best checkpoint (ep. 2); large-target mAP 0.000 → **0.079** |
 
 ---
@@ -140,6 +141,23 @@ Buffer: 300 exemplars (75 per stratum) sampled from the **training** split of An
 | Large-stratum T1 mAP | **0.000** | **0.079** |
 
 SSH reduces forgetting by ~49% relative to the naive baseline (FM −0.311 vs −0.605). Large-target mAP recovers from complete absence (0.000) to 0.079. The replay loss decays steadily across epochs (0.033 → 0.004), indicating the network adapts quickly to the exemplar signal. T3 performance is modestly lower than naive (0.064 vs 0.083), reflecting the plasticity–stability trade-off inherent to replay-based methods.
+
+### Stage 3 — Random-Stratified Replay (seed 42, 3 epochs)
+
+Buffer: same size and stratum proportions as SSH (75 per stratum, 300 total) but exemplars selected uniformly at random within each stratum. Direct ablation isolating the contribution of the herding selection strategy.
+
+| Metric | Naive baseline | Random-stratified | SSH |
+|--------|---------------|-------------------|-----|
+| Best checkpoint epoch | 3 | **2** | **2** |
+| T3 mAP@0.5 (CST) | 0.083 | 0.064 | 0.064 |
+| T1 mAP@0.5 at best ep. | 0.068 | **0.451** | 0.362 |
+| FM (vs T1 ceiling) | −0.605 | **−0.221** | −0.311 |
+| Tiny-stratum T1 mAP | 0.001 | 0.103 | 0.093 |
+| Small-stratum T1 mAP | 0.067 | 0.286 | 0.232 |
+| Normal-stratum T1 mAP | 0.088 | 0.519 | 0.415 |
+| Large-stratum T1 mAP | **0.000** | **0.129** | 0.079 |
+
+Random-stratified replay achieves less forgetting than SSH (FM −0.221 vs −0.311). Both methods substantially outperform the naive baseline. This suggests the primary benefit comes from **scale representation** in the replay buffer — ensuring all stratum categories are covered — rather than from feature-space herding selection within each stratum. At 75 exemplars per stratum, greedy herding does not add measurable value over uniform random sampling. Results are single-seed (seed 42); additional seeds would be needed to confirm this ordering.
 
 ---
 
