@@ -20,7 +20,9 @@ from pathlib import Path
 # ── Paths ─────────────────────────────────────────────────────────────────────
 PATHS = {
     "Anti-UAV-RGBT": {
-        "test": "/projects/prjs2041/datasets/Anti-UAV-RGBT/test",
+        "train": "/projects/prjs2041/datasets/Anti-UAV-RGBT/train",
+        "val":   "/projects/prjs2041/datasets/Anti-UAV-RGBT/val",
+        "test":  "/projects/prjs2041/datasets/Anti-UAV-RGBT/test",
     },
     "Anti-UAV410": {
         "train": "/projects/prjs2041/datasets/Anti-UAV410/train",
@@ -31,9 +33,9 @@ PATHS = {
         "all": "/projects/prjs2041/datasets/ARD100/annotations",
     },
     "CST-AntiUAV": {
-        "train": "/projects/prjs2041/datasets/CST-AntiUAV-full/CST-AntiUAV/CST-AntiUAV/train",
-        "val":   "/projects/prjs2041/datasets/CST-AntiUAV-full/CST-AntiUAV/CST-AntiUAV/val",
-        "test":  "/projects/prjs2041/datasets/CST-AntiUAV-full/CST-AntiUAV/CST-AntiUAV/test",
+        "train": "/projects/prjs2041/datasets/CST-AntiUAV/train",
+        "val":   "/projects/prjs2041/datasets/CST-AntiUAV/val",
+        "test":  "/projects/prjs2041/datasets/CST-AntiUAV/test",
     },
 }
 
@@ -360,7 +362,4 @@ def main():
     )
 
     print(f"\n{'═'*62}")
-    print("Audit complete.")
-
-if __name__ == "__main__":
-    main()
+    print("Audit com

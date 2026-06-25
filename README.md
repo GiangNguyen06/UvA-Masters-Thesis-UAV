@@ -32,8 +32,11 @@ Thermal infrared UAV detectors must remain accurate as operational datasets evol
 
 ## Visualisations
 
+![Annotated frame counts per dataset split](docs/figures/fig_frame_counts.png)
+*UAV-present annotated frames per dataset split. Anti-UAV-RGBT train (148k) provides the SSH replay buffer pool; CST train (110k) is the Stage 3 training set.*
+
 ![Scale distribution across datasets](docs/figures/fig_size_distribution.png)
-*Scale distribution per dataset. CST Anti-UAV has 67% tiny and 0% large targets — the root cause of large-target forgetting in Stage 3.*
+*Scale distribution per dataset (bbox area bins). CST Anti-UAV has 87.9% tiny and 0% large targets — the root cause of large-target forgetting in Stage 3.*
 
 ![Stage 3 forgetting dynamics](docs/figures/fig_stage3_progress.png)
 *(A) T3 detection peaks at epoch 3 then plateaus. (B) T1 retention collapses immediately and keeps declining. (C) Per-stratum breakdown: large-target mAP hits 0.000 by epoch 1. (D) FM reaches −0.605.*
@@ -121,7 +124,7 @@ KD preserves — and marginally improves — large-target detection across all t
 | Mean cosine sim S2→S3 (all-params) | **0.967** |
 | Mean cosine sim S2→S3 (learnable-only) | **0.987** |
 | BN running-stat drift (L2-rel) | **0.24** vs learnable weights 0.12 |
-| P5 head gradient ratio RGBT/CST | **1.7×** (0.654 vs 0.387) |
+| P5 head gradient ratio RGBT/CST | **1.7×** (0.615 vs 0.388) |
 
 **Candidate mechanism — scale-conditioned gradient imbalance:** learnable-parameter cosine similarity S2→S3 is 0.987 — weights barely moved — yet forgetting is 18× worse than Stage 2. Large-target features received no positive gradient signal from CST's distribution (0% large targets). BN running statistics drift 2× more than conv weights, suggesting the network adapts its normalisation to CST's tiny-target distribution while gradient-updated parameters remain largely unchanged. The P5 head gradient ratio RGBT/CST = 1.7× provides direct evidence of large-target gradient starvation, though a definitive causal mechanism remains tentative.
 
