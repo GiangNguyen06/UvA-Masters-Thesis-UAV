@@ -12,7 +12,7 @@
 
 Thermal infrared UAV detectors must remain accurate as operational datasets evolve. Sequential fine-tuning on a new dataset destroys performance on previous ones — a phenomenon called catastrophic forgetting. This research trains YOLOMG through a three-stage curriculum of increasing scale difficulty, measures precisely *when*, *how much*, and *why* forgetting happens, and proposes Scale-Stratified Herding as a targeted remedy.
 
-**Core finding:** Scale-distribution shift (Stage 3, CST Anti-UAV: 97.7% tiny/small targets, 0% large) causes **18× more forgetting** than cross-domain adaptation (Stage 2, Anti-UAV410). Inter-stage cosine similarity is 0.967 over all parameters (0.987 over gradient-updated weights alone) — weights barely moved — yet T1 mAP collapses from 0.640 to 0.068. Large-target detection reaches 0.000 mAP within the first training epoch. The evidence is consistent with a **scale-conditioned gradient imbalance** — a refinement of gradient starvation — as a candidate forgetting mechanism: the large stratum receives no positive gradient signal from CST's distribution, while BatchNorm running statistics drift roughly 2× more than the trained weights (L2-rel ≈ 0.24 vs 0.12), suggesting the network adapts its normalisation to the new distribution while the gradient-updated parameters remain largely unchanged.
+**Core finding:** Scale-distribution shift (Stage 3, CST Anti-UAV: 99.8% tiny/small targets, 0% large) causes **18× more forgetting** than cross-domain adaptation (Stage 2, Anti-UAV410). Inter-stage cosine similarity is 0.967 over all parameters (0.987 over gradient-updated weights alone) — weights barely moved — yet T1 mAP collapses from 0.640 to 0.068. Large-target detection reaches 0.000 mAP within the first training epoch. The evidence is consistent with a **scale-conditioned gradient imbalance** — a refinement of gradient starvation — as a candidate forgetting mechanism: the large stratum receives no positive gradient signal from CST's distribution, while BatchNorm running statistics drift roughly 2× more than the trained weights (L2-rel ≈ 0.24 vs 0.12), suggesting the network adapts its normalisation to the new distribution while the gradient-updated parameters remain largely unchanged.
 
 ![Detection comparison across stages](docs/figures/fig_vis_comparison.png)
 *Same sequence: Stage 1 (T1 ceiling, mAP=0.672) correctly detects the UAV; Stage 2 (after KD, mAP=0.640) retains detection; Stage 3 (after naive fine-tuning on CST) — mAP collapses to 0.068.*
@@ -163,15 +163,15 @@ Random-stratified replay achieves less forgetting than SSH (FM −0.221 vs −0.
 
 ## Scale-Stratified Herding (Design Contribution)
 
-Buffer built and verified using Stage 2 seed-42 checkpoint on Anti-UAV-RGBT val (60,620 UAV-present frames). Experimental comparison against naive fine-tuning is left as future work.
+Buffer built using Stage 2 seed-42 checkpoint on the Anti-UAV-RGBT **training** split (148,368 UAV-present frames), disjoint from the validation set used to compute the FM. Replay compared against naive fine-tuning and a random-stratified control — see Stage 3 results above.
 
 | Stratum | Eligible frames | Selected | Sampling rate |
 |---------|----------------|----------|---------------|
-| Tiny (<256 px²) | 197 | 75 | 38.1% |
-| Small (256–1024 px²) | 14,798 | 75 | 0.5% |
-| Normal (1024–4096 px²) | 42,608 | 75 | 0.2% |
-| Large (≥4096 px²) | 3,017 | 75 | 2.5% |
-| **Total** | 60,620 | **300** | — |
+| Tiny (<256 px²) | 1,091 | 75 | 6.9% |
+| Small (256–1024 px²) | 43,560 | 75 | 0.2% |
+| Normal (1024–4096 px²) | 98,929 | 75 | 0.1% |
+| Large (≥4096 px²) | 4,788 | 75 | 1.6% |
+| **Total** | 148,368 | **300** | — |
 
 ---
 
