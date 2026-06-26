@@ -26,7 +26,7 @@ Usage:
       --out-dir /projects/prjs2041/runs/stage2/stage2_uda1/analysis \
       --t1-baseline 0.6617
 
-  # Or run directly in the stage2 run dir (auto-discovers results.csv):
+  # Or just run in the stage2 run dir (auto-discovers results.csv):
   cd /projects/prjs2041/runs/stage2/stage2_uda1
   python /projects/prjs2041/uav_code/plot_training_analysis.py
 """
@@ -440,7 +440,7 @@ def plot_stage3_progress(df: pd.DataFrame, t1_baseline: float, out_path: Path):
                f'min={max_fm_val:.4f}\n(ep {max_fm_epoch})',
                fontsize=7, color=RED, va='top')
     vline(ax_fm, best_t3_epoch, color=BLUE, lw=0.8)
-    ax_fm.legend(fontsize=7, frameon=False, loc='lower left')
+    ax_fm.legend(fontsize=8, frameon=False, loc='upper right', bbox_to_anchor=(1.02, 0.95))
     ax_fm.set_xlabel('Epoch', fontsize=8)
     ax_fm.set_ylabel('FM', fontsize=8)
     ax_fm.set_title('(D)  Forgetting Measure (Stage 3)',
