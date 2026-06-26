@@ -241,6 +241,11 @@ src/
   plotting/
     plot_training_analysis.py     Training curve plots (loss, mAP, FM per epoch)
     plot_scale_distribution.py    Scale distribution bar charts across datasets
+                                  (bin = bbox area: tiny <256, small 256–1024,
+                                  normal 1024–4096, large ≥4096 px²)
+    plot_frame_counts.py          Annotated frame count and visibility figures per
+                                  dataset split; imports audit helpers from
+                                  utilities/audit_datasets.py
     plot_multirun_ci.py           Multi-seed confidence interval plots
 
   utilities/
