@@ -47,9 +47,9 @@ Thermal infrared UAV detectors must remain accurate as operational datasets evol
 
 | Stage | Task | Dataset | Result |
 |-------|------|---------|--------|
-| 1 | Supervised baseline | Anti-UAV-RGBT (208,737 frames) | mAP@0.5 = **0.6725** |
-| 2 | KD fine-tuning | Anti-UAV410 (438,397 frames) | FM = **−0.033 ± 0.004** (3 seeds) |
-| 3 | Naive baseline | CST Anti-UAV (245,471 frames) | FM = **−0.605**, best at epoch 3 |
+| 1 | Supervised baseline | Anti-UAV-RGBT (208,988 UAV-present frames, train+val) | mAP@0.5 = **0.6725** |
+| 2 | KD fine-tuning | Anti-UAV410 (428,703 UAV-present frames) | FM = **−0.033 ± 0.004** (3 seeds) |
+| 3 | Naive baseline | CST Anti-UAV (208,221 UAV-present frames) | FM = **−0.605**, best at epoch 3 |
 | 3 | Random-Stratified replay | CST Anti-UAV | FM = **−0.221** at best checkpoint (ep. 2); large-target mAP 0.000 → **0.129** |
 | 3 | Scale-Stratified Herding (SSH) | CST Anti-UAV | FM = **−0.311** at best checkpoint (ep. 2); large-target mAP 0.000 → **0.079** |
 
