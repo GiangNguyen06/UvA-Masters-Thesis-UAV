@@ -10,7 +10,7 @@ Usage:
       --runs-root /projects/prjs2041/runs/stage2 \
       --pattern   "seed*" \
       --out-dir   /projects/prjs2041/runs/stage2/ci_plots \
-      --t1-baseline 0.6617
+      --t1-baseline 0.6725
 
 Expects results.csv in each matched subdirectory with columns:
   epoch, loss_box, loss_obj, loss_cls, loss_kd, loss_total,
@@ -41,7 +41,7 @@ def tufte_ax(ax):
     ax.spines['right'].set_visible(False)
     ax.spines['left'].set_color(GREY)
     ax.spines['bottom'].set_color(GREY)
-    ax.tick_params(axis='both', color=GREY, labelsize=8)
+    ax.tick_params(axis='both', color=GREY, labelsize=11)
     ax.yaxis.grid(True, color=LGREY, linewidth=0.6, zorder=0)
     ax.set_axisbelow(True)
 
@@ -117,10 +117,10 @@ def plot_ci_figure(agg: pd.DataFrame, t1_baseline: float, out_path: Path,
     plot_ci_panel(ax_t2, epochs,
                   col('mAP50_T2_mean').values, col('mAP50_T2_std').values,
                   BLUE, f'mAP@0.5 T2 (n={n_seeds})')
-    ax_t2.set_xlabel('Epoch', fontsize=8)
-    ax_t2.set_ylabel('mAP@0.5', fontsize=8)
-    ax_t2.set_title('(A)  T2 mAP@0.5 — Anti-UAV410 val', fontsize=9, loc='left')
-    ax_t2.legend(fontsize=7, frameon=False)
+    ax_t2.set_xlabel('Epoch', fontsize=11)
+    ax_t2.set_ylabel('mAP@0.5', fontsize=11)
+    ax_t2.set_title('(A)  T2 mAP@0.5 — Anti-UAV410 val', fontsize=12, loc='left')
+    ax_t2.legend(fontsize=10, frameon=False)
 
     # [B] T1 mAP with ceiling
     ax_t1.axhline(t1_baseline, color=GREEN, lw=1.0, ls='--', alpha=0.8,
@@ -128,10 +128,10 @@ def plot_ci_figure(agg: pd.DataFrame, t1_baseline: float, out_path: Path,
     plot_ci_panel(ax_t1, epochs,
                   col('mAP50_T1_mean').values, col('mAP50_T1_std').values,
                   RED, f'mAP@0.5 T1 (n={n_seeds})')
-    ax_t1.set_xlabel('Epoch', fontsize=8)
-    ax_t1.set_ylabel('mAP@0.5', fontsize=8)
-    ax_t1.set_title('(B)  T1 mAP@0.5 — Anti-UAV-RGBT val', fontsize=9, loc='left')
-    ax_t1.legend(fontsize=7, frameon=False)
+    ax_t1.set_xlabel('Epoch', fontsize=11)
+    ax_t1.set_ylabel('mAP@0.5', fontsize=11)
+    ax_t1.set_title('(B)  T1 mAP@0.5 — Anti-UAV-RGBT val', fontsize=12, loc='left')
+    ax_t1.legend(fontsize=10, frameon=False)
 
     # [C] F1 for both datasets
     if 'F1_T2_mean' in agg.columns:
@@ -141,8 +141,8 @@ def plot_ci_figure(agg: pd.DataFrame, t1_baseline: float, out_path: Path,
         plot_ci_panel(ax_loss, epochs,
                       col('F1_T1_mean').values, col('F1_T1_std').values,
                       RED, 'F1 T1')
-        ax_loss.set_ylabel('F1', fontsize=8)
-        ax_loss.set_title('(C)  F1 score (T1 and T2)', fontsize=9, loc='left')
+        ax_loss.set_ylabel('F1', fontsize=11)
+        ax_loss.set_title('(C)  F1 score (T1 and T2)', fontsize=12, loc='left')
     else:
         # Fallback: loss components
         plot_ci_panel(ax_loss, epochs,
@@ -151,10 +151,10 @@ def plot_ci_figure(agg: pd.DataFrame, t1_baseline: float, out_path: Path,
         plot_ci_panel(ax_loss, epochs,
                       col('loss_kd_mean').values, col('loss_kd_std').values,
                       RED, r'$L_\mathrm{kd}$')
-        ax_loss.set_ylabel('Loss', fontsize=8)
-        ax_loss.set_title('(C)  Loss components', fontsize=9, loc='left')
-    ax_loss.set_xlabel('Epoch', fontsize=8)
-    ax_loss.legend(fontsize=7, frameon=False)
+        ax_loss.set_ylabel('Loss', fontsize=11)
+        ax_loss.set_title('(C)  Loss components', fontsize=12, loc='left')
+    ax_loss.set_xlabel('Epoch', fontsize=11)
+    ax_loss.legend(fontsize=10, frameon=False)
 
     # [D] Forgetting Measure
     fm_mean = col('mAP50_T1_mean').values - t1_baseline
@@ -164,10 +164,10 @@ def plot_ci_figure(agg: pd.DataFrame, t1_baseline: float, out_path: Path,
                   label='−0.05 threshold')
     plot_ci_panel(ax_fm, epochs, fm_mean, fm_std, ORANGE,
                   f'FM (n={n_seeds})')
-    ax_fm.set_xlabel('Epoch', fontsize=8)
-    ax_fm.set_ylabel('FM', fontsize=8)
-    ax_fm.set_title('(D)  Forgetting Measure (FM)', fontsize=9, loc='left')
-    ax_fm.legend(fontsize=7, frameon=False)
+    ax_fm.set_xlabel('Epoch', fontsize=11)
+    ax_fm.set_ylabel('FM', fontsize=11)
+    ax_fm.set_title('(D)  Forgetting Measure (FM)', fontsize=12, loc='left')
+    ax_fm.legend(fontsize=10, frameon=False)
 
     for ax in axes.flatten():
         ax.set_xlim(epochs[0] - 0.5, epochs[-1] + 0.5)
@@ -232,7 +232,7 @@ def parse_args():
                    default='/projects/prjs2041/runs/stage2')
     p.add_argument('--pattern',      type=str, default='seed*')
     p.add_argument('--out-dir',      type=str, default=None)
-    p.add_argument('--t1-baseline',  type=float, default=0.6617)
+    p.add_argument('--t1-baseline',  type=float, default=0.6725)
     return p.parse_args()
 
 

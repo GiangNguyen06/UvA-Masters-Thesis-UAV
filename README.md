@@ -4,7 +4,9 @@
 **Author:** Khac Duc Giang Nguyen (16265858)  
 **Supervisor:** Dr. Seyed Sahand Mohammadi Ziabari  
 **Institution:** University of Amsterdam — MSc Information Studies (Data Science)  
-**Submitted:** June 2026
+**Submitted:** June 2026 · **Revised:** July 2026 (post-assessment revision)
+
+📄 **Thesis PDF:** [`Uva_Master_s_Thesis_Giang_Nguyen.pdf`](Uva_Master_s_Thesis_Giang_Nguyen.pdf) (revised version)
 
 ---
 
@@ -44,6 +46,9 @@ Thermal infrared UAV detectors must remain accurate as operational datasets evol
 ---
 
 ## Three-Stage Curriculum
+
+![Three-stage continual-learning pipeline](docs/figures/fig_methodology_pipeline.png)
+*Overview of the three-stage curriculum (Figure 1 in the thesis): Stage 1 supervised on Anti-UAV-RGBT, Stage 2 KD fine-tuning on Anti-UAV410, Stage 3 (naive / SSH replay / random-stratified replay) on CST Anti-UAV, with T1 retention evaluated after each stage.*
 
 | Stage | Task | Dataset | Result |
 |-------|------|---------|--------|
@@ -139,8 +144,8 @@ Buffer: 300 exemplars (75 per stratum) sampled from the **training** split of An
 | T1 mAP@0.5 at best ep. | 0.068 | **0.362** |
 | FM (vs T1 ceiling) | −0.605 | **−0.311** |
 | Tiny-stratum T1 mAP | 0.001 | 0.093 |
-| Small-stratum T1 mAP | 0.067 | 0.232 |
-| Normal-stratum T1 mAP | 0.088 | 0.415 |
+| Small-stratum T1 mAP | 0.060 | 0.232 |
+| Normal-stratum T1 mAP | 0.079 | 0.415 |
 | Large-stratum T1 mAP | **0.000** | **0.079** |
 
 SSH reduces forgetting by ~49% relative to the naive baseline (FM −0.311 vs −0.605). Large-target mAP recovers from complete absence (0.000) to 0.079. The replay loss decays steadily across epochs (0.033 → 0.004), indicating the network adapts quickly to the exemplar signal. T3 performance is modestly lower than naive (0.064 vs 0.083), reflecting the plasticity–stability trade-off inherent to replay-based methods.
@@ -156,8 +161,8 @@ Buffer: same size and stratum proportions as SSH (75 per stratum, 300 total) but
 | T1 mAP@0.5 at best ep. | 0.068 | **0.451** | 0.362 |
 | FM (vs T1 ceiling) | −0.605 | **−0.221** | −0.311 |
 | Tiny-stratum T1 mAP | 0.001 | 0.103 | 0.093 |
-| Small-stratum T1 mAP | 0.067 | 0.286 | 0.232 |
-| Normal-stratum T1 mAP | 0.088 | 0.519 | 0.415 |
+| Small-stratum T1 mAP | 0.060 | 0.286 | 0.232 |
+| Normal-stratum T1 mAP | 0.079 | 0.519 | 0.415 |
 | Large-stratum T1 mAP | **0.000** | **0.129** | 0.079 |
 
 Random-stratified replay achieves less forgetting than SSH (FM −0.221 vs −0.311). Both methods substantially outperform the naive baseline. This suggests the primary benefit comes from **scale representation** in the replay buffer — ensuring all stratum categories are covered — rather than from feature-space herding selection within each stratum. At 75 exemplars per stratum, greedy herding does not add measurable value over uniform random sampling. Results are single-seed (seed 42); additional seeds would be needed to confirm this ordering.
@@ -239,7 +244,9 @@ src/
     json2yolo.py                  Generic JSON → YOLO annotation converter
 
   plotting/
-    plot_training_analysis.py     Training curve plots (loss, mAP, FM per epoch)
+    plot_training_analysis.py     Training curve plots (loss, mAP, FM per epoch);
+                                  enlarged fonts for the multi-panel thesis figures
+    plot_methodology_diagram_v2.py Three-stage pipeline diagram (Figure 1 in the thesis)
     plot_scale_distribution.py    Scale distribution bar charts across datasets
                                   (bin = bbox area: tiny <256, small 256–1024,
                                   normal 1024–4096, large ≥4096 px²)
@@ -247,6 +254,8 @@ src/
                                   dataset split; imports audit helpers from
                                   utilities/audit_datasets.py
     plot_multirun_ci.py           Multi-seed confidence interval plots
+    assemble_vis_comparison.py    Assembles the three-checkpoint qualitative
+                                  detection comparison (Figure 6 in the thesis)
 
   utilities/
     audit_datasets.py             Dataset integrity and annotation sanity checks
@@ -303,7 +312,15 @@ analysis/
 
 logs/                             SLURM output logs (see logs/README.md)
 docs/
-  stage2_progress.png            Stage 2 training curves
+  stage2_progress.png            Stage 2 training curves (multi-seed)
+  figures/                       Thesis figures (revised July 2026)
+    fig_methodology_pipeline.png Three-stage pipeline diagram (thesis Fig. 1)
+    fig_size_distribution.png    Scale distribution across datasets (thesis Fig. 2)
+    fig_stage3_progress.png      Stage 3 forgetting dynamics (thesis Fig. 3)
+    fig_drift_groups(.learnable).png  Per-layer-group parameter drift (thesis Fig. 5)
+    fig_vis_comparison.png       Qualitative detection comparison (thesis Fig. 6)
+    fig_frame_counts.png         Frame counts per dataset split
+    fig_precision_plot.png / fig_success_plot.png / fig_seq_sr.png  CST tracking eval
 src/figures/                     Generated paper figures
   fig_size_distribution.png/pdf  Scale distribution across datasets
   fig_frame_counts.png/pdf       Frame counts per dataset split

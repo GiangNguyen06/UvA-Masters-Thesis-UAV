@@ -214,20 +214,20 @@ def make_figure(datasets, out_path):
                     bar.get_x() + bar.get_width() / 2,
                     bar.get_height() + 0.5,
                     f"{val:.0f}%",
-                    ha="center", va="bottom", fontsize=7.5, color="#333333"
+                    ha="center", va="bottom", fontsize=10, color="#333333"
                 )
 
     ax.set_xticks(x)
-    ax.set_xticklabels(labels, fontsize=11)
-    ax.set_ylabel("Proportion of annotated frames (%)", fontsize=10)
+    ax.set_xticklabels(labels, fontsize=14)
+    ax.set_ylabel("Proportion of annotated frames (%)", fontsize=13)
     ax.set_ylim(0, 100)
     ax.yaxis.set_major_formatter(mticker.PercentFormatter())
     ax.set_title(
         "UAV Target-Size Distribution Across Training Datasets\n"
         r"(bin = bbox area: Tiny $<$256, Small 256–1024, Normal 1024–4096, Large $\geq$4096 px$^2$)",
-        fontsize=10
+        fontsize=13
     )
-    ax.legend(title="Size bin", fontsize=9, title_fontsize=9,
+    ax.legend(title="Size bin", fontsize=12, title_fontsize=12,
               loc="upper right", framealpha=0.9)
     ax.grid(axis="y", linestyle="--", alpha=0.4)
     ax.spines["top"].set_visible(False)

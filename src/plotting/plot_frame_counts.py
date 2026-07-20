@@ -93,17 +93,17 @@ def fig_frame_counts(rows, out_path):
     bars = ax.bar(range(len(rows)), vals, color=colors, edgecolor="white")
     for b, v in zip(bars, vals):
         ax.text(b.get_x() + b.get_width() / 2, b.get_height() + 1,
-                f"{v:.0f}k", ha="center", va="bottom", fontsize=10, fontweight="bold")
+                f"{v:.0f}k", ha="center", va="bottom", fontsize=13, fontweight="bold")
     ax.set_xticks(range(len(rows)))
-    ax.set_xticklabels(labels, fontsize=10)
-    ax.set_ylabel("Annotated frames (thousands)", fontsize=11)
-    ax.set_title("Annotated Frame Count per Dataset Split", fontsize=13, fontweight="bold")
+    ax.set_xticklabels(labels, fontsize=13)
+    ax.set_ylabel("Annotated frames (thousands)", fontsize=14)
+    ax.set_title("Annotated Frame Count per Dataset Split", fontsize=15, fontweight="bold")
     # de-duplicated legend by dataset
     seen = {}
     for ds in DS_COLOR:
         if any(r[0] == ds for r in rows):
             seen[ds] = plt.Rectangle((0, 0), 1, 1, color=DS_COLOR[ds])
-    ax.legend(seen.values(), seen.keys(), fontsize=10, loc="upper right")
+    ax.legend(seen.values(), seen.keys(), fontsize=13, loc="upper right")
     ax.grid(axis="y", linestyle="--", alpha=0.4)
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
@@ -121,12 +121,12 @@ def fig_visibility(rows, out_path):
     bars = ax.bar(range(len(rows)), vals, color=colors, edgecolor="white")
     for b, v in zip(bars, vals):
         ax.text(b.get_x() + b.get_width() / 2, b.get_height() + 0.8,
-                f"{v:.0f}%", ha="center", va="bottom", fontsize=10, fontweight="bold")
+                f"{v:.0f}%", ha="center", va="bottom", fontsize=13, fontweight="bold")
     ax.set_xticks(range(len(rows)))
-    ax.set_xticklabels(labels, fontsize=10)
-    ax.set_ylabel("Visible frames (exist=1) %", fontsize=11)
+    ax.set_xticklabels(labels, fontsize=13)
+    ax.set_ylabel("Visible frames (exist=1) %", fontsize=14)
     ax.set_ylim(0, 105)
-    ax.set_title("Target Visibility per Dataset Split", fontsize=13, fontweight="bold")
+    ax.set_title("Target Visibility per Dataset Split", fontsize=15, fontweight="bold")
     ax.grid(axis="y", linestyle="--", alpha=0.4)
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
@@ -147,4 +147,24 @@ def print_totals(rows):
             d["trainval"] += ann
     for ds, d in by_ds.items():
         tv = f", train+val={d['trainval']:,}" if d["trainval"] else ""
-        print(f"  
+        print(f"  {ds:16}  all-splits={d['all']:,}{tv}")
+
+
+def main():
+    p = argparse.ArgumentParser()
+    p.add_argument("--out-dir", default=".", help="where to save the PNGs")
+    args = p.parse_args()
+    out = Path(args.out_dir)
+    out.mkdir(parents=True, exist_ok=True)
+
+    print(f"Output dir: {out.resolve()}", flush=True)
+    print("Starting dataset audit (this reads many JSON files; "
+          "expect a few minutes of quiet work per dataset)...", flush=True)
+    rows = collect()
+    fig_frame_counts(rows, out / "fig_frame_counts.png")
+    fig_visibility(rows, out / "fig_visibility.png")
+    print_totals(rows)
+
+
+if __name__ == "__main__":
+    main()

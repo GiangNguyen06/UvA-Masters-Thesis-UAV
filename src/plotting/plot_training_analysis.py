@@ -25,6 +25,10 @@ Usage:
       --csv  /projects/prjs2041/runs/stage2/stage2_uda1/results.csv \
       --out-dir /projects/prjs2041/runs/stage2/stage2_uda1/analysis \
       --t1-baseline 0.6617
+
+  # Or just run in the stage2 run dir (auto-discovers results.csv):
+  cd /projects/prjs2041/runs/stage2/stage2_uda1
+  python /projects/prjs2041/uav_code/plot_training_analysis.py
 """
 
 import argparse
@@ -37,7 +41,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
-from scipy.ndimage import uniform_filter1d   
+from scipy.ndimage import uniform_filter1d   # pip install scipy if missing
 
 # ── Tufte palette ──────────────────────────────────────────────────────────────
 BLUE      = '#4878A8'
@@ -55,7 +59,7 @@ def tufte_ax(ax, grid_axis: str = 'y'):
     ax.spines['right'].set_visible(False)
     ax.spines['left'].set_color(GREY)
     ax.spines['bottom'].set_color(GREY)
-    ax.tick_params(axis='both', color=GREY, labelsize=8)
+    ax.tick_params(axis='both', color=GREY, labelsize=11)
     if grid_axis in ('y', 'both'):
         ax.yaxis.grid(True, color=LGREY, linewidth=0.6, zorder=0)
     if grid_axis in ('x', 'both'):
@@ -67,7 +71,7 @@ def vline(ax, x, label=None, color=GREY, lw=1.0, ls='--'):
     ax.axvline(x, color=color, lw=lw, ls=ls, zorder=2)
     if label:
         ax.text(x + 0.3, ax.get_ylim()[1] * 0.97, label,
-                fontsize=7, color=color, va='top')
+                fontsize=10, color=color, va='top')
 
 
 def rolling_avg(series, w: int = 3):
@@ -113,12 +117,12 @@ def plot_stage2_progress(df: pd.DataFrame, t1_baseline: float,
                   zorder=5, marker='*')
     ax_t2.text(best_t2_epoch + 0.5, best_t2_val,
                f'{best_t2_val:.4f} (ep {best_t2_epoch})',
-               fontsize=7, color=BLUE, va='center')
+               fontsize=10, color=BLUE, va='center')
     vline(ax_t2, best_t2_epoch, color=BLUE, lw=0.8)
-    ax_t2.set_xlabel('Epoch', fontsize=8)
-    ax_t2.set_ylabel('mAP@0.5', fontsize=8)
+    ax_t2.set_xlabel('Epoch', fontsize=11)
+    ax_t2.set_ylabel('mAP@0.5', fontsize=11)
     ax_t2.set_title('(A)  T2 detection performance (Anti-UAV410)',
-                    fontsize=9, loc='left', pad=4)
+                    fontsize=12, loc='left', pad=4)
 
     # [B] T1 mAP with baseline ceiling
     ax_t1.axhline(t1_baseline, color=GREEN, lw=1.0, ls='--', alpha=0.8,
@@ -130,11 +134,11 @@ def plot_stage2_progress(df: pd.DataFrame, t1_baseline: float,
     ax_t1.plot(epochs, t1_map, color=RED, lw=0.8, alpha=0.35, zorder=2)
     ax_t1.plot(epochs, ra_t1, color=RED, lw=1.8, zorder=3)
     vline(ax_t1, best_t2_epoch, color=BLUE, lw=0.8)
-    ax_t1.legend(fontsize=7, frameon=False, loc='lower right')
-    ax_t1.set_xlabel('Epoch', fontsize=8)
-    ax_t1.set_ylabel('mAP@0.5', fontsize=8)
+    ax_t1.legend(fontsize=10, frameon=False, loc='lower right')
+    ax_t1.set_xlabel('Epoch', fontsize=11)
+    ax_t1.set_ylabel('mAP@0.5', fontsize=11)
     ax_t1.set_title('(B)  T1 retention (Anti-UAV-RGBT)',
-                    fontsize=9, loc='left', pad=4)
+                    fontsize=12, loc='left', pad=4)
 
     # [C] Loss components
     ax_loss.plot(epochs, loss_det, color=BLUE, lw=1.6, label=r'$L_\mathrm{det}$',
@@ -142,11 +146,11 @@ def plot_stage2_progress(df: pd.DataFrame, t1_baseline: float,
     ax_loss.plot(epochs, loss_kd,  color=RED,  lw=1.6, label=r'$L_\mathrm{kd}$',
                  zorder=3)
     vline(ax_loss, best_t2_epoch, color=BLUE, lw=0.8)
-    ax_loss.legend(fontsize=8, frameon=False)
-    ax_loss.set_xlabel('Epoch', fontsize=8)
-    ax_loss.set_ylabel('Loss', fontsize=8)
+    ax_loss.legend(fontsize=11, frameon=False)
+    ax_loss.set_xlabel('Epoch', fontsize=11)
+    ax_loss.set_ylabel('Loss', fontsize=11)
     ax_loss.set_title(r'(C)  Loss components ($L_\mathrm{det}$ vs $L_\mathrm{kd}$)',
-                      fontsize=9, loc='left', pad=4)
+                      fontsize=12, loc='left', pad=4)
 
     # [D] Forgetting Measure
     ax_fm.axhline(0, color=GREY, lw=0.8, ls='-', alpha=0.6)
@@ -160,12 +164,12 @@ def plot_stage2_progress(df: pd.DataFrame, t1_baseline: float,
                   zorder=5, marker='v')
     ax_fm.text(min_fm_epoch + 0.4, min_fm_val,
                f'min FM={min_fm_val:.4f}\n(ep {min_fm_epoch})',
-               fontsize=7, color=RED, va='top')
+               fontsize=10, color=RED, va='top')
     vline(ax_fm, best_t2_epoch, color=BLUE, lw=0.8)
-    ax_fm.legend(fontsize=7, frameon=False, loc='lower right')
-    ax_fm.set_xlabel('Epoch', fontsize=8)
-    ax_fm.set_ylabel('FM', fontsize=8)
-    ax_fm.set_title('(D)  Forgetting Measure (FM)', fontsize=9, loc='left', pad=4)
+    ax_fm.legend(fontsize=10, frameon=False, loc='lower right')
+    ax_fm.set_xlabel('Epoch', fontsize=11)
+    ax_fm.set_ylabel('FM', fontsize=11)
+    ax_fm.set_title('(D)  Forgetting Measure (FM)', fontsize=12, loc='left', pad=4)
 
     # Common x-limit
     for ax in axes.flatten():
@@ -174,7 +178,7 @@ def plot_stage2_progress(df: pd.DataFrame, t1_baseline: float,
     # Blue vertical reference annotation (shared across panels)
     fig.text(0.5, 0.01,
              f'Blue dashed line: peak T2 mAP epoch ({best_t2_epoch})',
-             ha='center', fontsize=7, color=BLUE, alpha=0.7)
+             ha='center', fontsize=10, color=BLUE, alpha=0.7)
 
     plt.tight_layout(rect=[0, 0.03, 1, 1])
     fig.savefig(out_path, dpi=DPI, bbox_inches='tight')
@@ -216,13 +220,13 @@ def plot_loss_decomp(df: pd.DataFrame, out_path: Path):
         (loss_kd,  RED,  r'$L_\mathrm{kd}$'),
     ]:
         ax_abs.text(epochs[-1] + 0.3, vals[-1], name,
-                    color=col, fontsize=8, va='center')
+                    color=col, fontsize=11, va='center')
 
     ax_abs.axvline(best_t2_epoch, color=BLUE, lw=1.0, ls='--', alpha=0.7)
-    ax_abs.set_xlabel('Epoch', fontsize=9)
-    ax_abs.set_ylabel('Loss value', fontsize=9)
+    ax_abs.set_xlabel('Epoch', fontsize=12)
+    ax_abs.set_ylabel('Loss value', fontsize=12)
     ax_abs.set_title('Absolute loss components per epoch',
-                     fontsize=10, loc='left')
+                     fontsize=13, loc='left')
     ax_abs.set_xlim(epochs[0] - 0.5, epochs[-1] + 2)
 
     # Right — kd/det ratio
@@ -231,28 +235,28 @@ def plot_loss_decomp(df: pd.DataFrame, out_path: Path):
     ax_ratio.text(best_t2_epoch + 0.3,
                   ax_ratio.get_ylim()[1] if ax_ratio.get_ylim()[1] != 1.0 else kd_ratio.max() * 0.97,
                   f'ep {best_t2_epoch}',
-                  fontsize=7, color=BLUE, va='top')
+                  fontsize=10, color=BLUE, va='top')
 
     # Annotate start/end ratio values
     ax_ratio.annotate(
         f'{kd_ratio[0]:.2f}×',
         xy=(epochs[0], kd_ratio[0]),
         xytext=(epochs[0] + 1, kd_ratio[0] + 0.05),
-        fontsize=7, color=ORANGE,
+        fontsize=10, color=ORANGE,
         arrowprops=dict(arrowstyle='->', color=ORANGE, lw=0.8),
     )
     ax_ratio.annotate(
         f'{kd_ratio[-1]:.2f}×',
         xy=(epochs[-1], kd_ratio[-1]),
         xytext=(epochs[-1] - 3, kd_ratio[-1] + 0.05),
-        fontsize=7, color=ORANGE,
+        fontsize=10, color=ORANGE,
         arrowprops=dict(arrowstyle='->', color=ORANGE, lw=0.8),
     )
 
-    ax_ratio.set_xlabel('Epoch', fontsize=9)
-    ax_ratio.set_ylabel(r'$L_\mathrm{kd}$ / $L_\mathrm{det}$ ratio', fontsize=9)
+    ax_ratio.set_xlabel('Epoch', fontsize=12)
+    ax_ratio.set_ylabel(r'$L_\mathrm{kd}$ / $L_\mathrm{det}$ ratio', fontsize=12)
     ax_ratio.set_title(r'KD-to-detection loss ratio',
-                       fontsize=10, loc='left')
+                       fontsize=13, loc='left')
     ax_ratio.set_xlim(epochs[0] - 0.5, epochs[-1] + 0.5)
 
     plt.tight_layout()
@@ -274,10 +278,10 @@ def plot_lr(df: pd.DataFrame, out_path: Path):
 
     ax.plot(epochs, lr, color=GREEN, lw=1.8, zorder=3)
     ax.fill_between(epochs, lr, alpha=0.12, color=GREEN, zorder=1)
-    ax.set_xlabel('Epoch', fontsize=9)
-    ax.set_ylabel('Learning rate', fontsize=9)
+    ax.set_xlabel('Epoch', fontsize=12)
+    ax.set_ylabel('Learning rate', fontsize=12)
     ax.set_title('Cosine learning rate schedule (Stage 2)',
-                 fontsize=10, loc='left')
+                 fontsize=13, loc='left')
     ax.yaxis.set_major_formatter(ticker.ScalarFormatter(useMathText=True))
     ax.ticklabel_format(style='sci', axis='y', scilimits=(-4, -3))
     ax.set_xlim(epochs[0] - 0.5, epochs[-1] + 0.5)
@@ -377,12 +381,12 @@ def plot_stage3_progress(df: pd.DataFrame, t1_baseline: float, out_path: Path):
     ax_t3.scatter([best_t3_epoch], [best_t3_val], s=55, color=BLUE, zorder=5, marker='*')
     ax_t3.text(best_t3_epoch + 0.3, best_t3_val,
                f'{best_t3_val:.4f} (ep {best_t3_epoch})',
-               fontsize=7, color=BLUE, va='center')
+               fontsize=10, color=BLUE, va='center')
     vline(ax_t3, best_t3_epoch, color=BLUE, lw=0.8)
-    ax_t3.set_xlabel('Epoch', fontsize=8)
-    ax_t3.set_ylabel('mAP@0.5', fontsize=8)
+    ax_t3.set_xlabel('Epoch', fontsize=11)
+    ax_t3.set_ylabel('mAP@0.5', fontsize=11)
     ax_t3.set_title('(A)  T3 detection performance (CST Anti-UAV)',
-                    fontsize=9, loc='left', pad=4)
+                    fontsize=12, loc='left', pad=4)
 
     # [B] T1 mAP
     ax_t1.axhline(t1_baseline, color=GREEN, lw=1.0, ls='--', alpha=0.8,
@@ -395,11 +399,11 @@ def plot_stage3_progress(df: pd.DataFrame, t1_baseline: float, out_path: Path):
     ax_t1.plot(epochs, t1_vals, color=RED, lw=0.8, alpha=0.35, zorder=2)
     ax_t1.plot(epochs, ra_t1, color=RED, lw=1.8, zorder=3)
     vline(ax_t1, best_t3_epoch, color=BLUE, lw=0.8)
-    ax_t1.legend(fontsize=7, frameon=False, loc='upper right')
-    ax_t1.set_xlabel('Epoch', fontsize=8)
-    ax_t1.set_ylabel('mAP@0.5', fontsize=8)
+    ax_t1.legend(fontsize=10, frameon=False, loc='upper right')
+    ax_t1.set_xlabel('Epoch', fontsize=11)
+    ax_t1.set_ylabel('mAP@0.5', fontsize=11)
     ax_t1.set_title('(B)  T1 retention (Anti-UAV-RGBT val)',
-                    fontsize=9, loc='left', pad=4)
+                    fontsize=12, loc='left', pad=4)
 
     # [C] Per-stratum T1 mAP — the key figure
     for stratum, color in STRATUM_COLORS.items():
@@ -414,16 +418,16 @@ def plot_stage3_progress(df: pd.DataFrame, t1_baseline: float, out_path: Path):
                     f'{vals[2]:.3f}',
                     xy=(epochs[2], vals[2]),
                     xytext=(epochs[2] + 0.5, vals[2] + 0.03),
-                    fontsize=6.5, color=color,
+                    fontsize=9, color=color,
                     arrowprops=dict(arrowstyle='->', color=color, lw=0.7),
                 )
     vline(ax_strat, best_t3_epoch, color=BLUE, lw=0.8)
-    ax_strat.legend(fontsize=8, frameon=False, loc='upper right',
-                    title='Stratum', title_fontsize=7)
-    ax_strat.set_xlabel('Epoch', fontsize=8)
-    ax_strat.set_ylabel('mAP@0.5', fontsize=8)
+    ax_strat.legend(fontsize=11, frameon=False, loc='upper right',
+                    title='Stratum', title_fontsize=10)
+    ax_strat.set_xlabel('Epoch', fontsize=11)
+    ax_strat.set_ylabel('mAP@0.5', fontsize=11)
     ax_strat.set_title('(C)  Per-stratum T1 mAP@0.5  [scale-specific erasure]',
-                       fontsize=9, loc='left', pad=4)
+                       fontsize=12, loc='left', pad=4)
 
     # [D] Forgetting Measure
     ax_fm.axhline(0, color=GREY, lw=0.8, ls='-', alpha=0.6)
@@ -434,20 +438,20 @@ def plot_stage3_progress(df: pd.DataFrame, t1_baseline: float, out_path: Path):
     ax_fm.scatter([max_fm_epoch], [max_fm_val], s=55, color=RED, zorder=5, marker='v')
     ax_fm.text(max_fm_epoch + 0.3, max_fm_val,
                f'min={max_fm_val:.4f}\n(ep {max_fm_epoch})',
-               fontsize=7, color=RED, va='top')
+               fontsize=10, color=RED, va='top')
     vline(ax_fm, best_t3_epoch, color=BLUE, lw=0.8)
-    ax_fm.legend(fontsize=8, frameon=False, loc='upper right', bbox_to_anchor=(1.02, 0.95))
-    ax_fm.set_xlabel('Epoch', fontsize=8)
-    ax_fm.set_ylabel('FM', fontsize=8)
+    ax_fm.legend(fontsize=11, frameon=False, loc='upper right', bbox_to_anchor=(1.02, 0.95))
+    ax_fm.set_xlabel('Epoch', fontsize=11)
+    ax_fm.set_ylabel('FM', fontsize=11)
     ax_fm.set_title('(D)  Forgetting Measure (Stage 3)',
-                    fontsize=9, loc='left', pad=4)
+                    fontsize=12, loc='left', pad=4)
 
     for ax in axes.flatten():
         ax.set_xlim(epochs[0] - 0.5, epochs[-1] + 0.5)
 
     fig.text(0.5, 0.01,
              f'Blue dashed line: best T3 mAP epoch ({best_t3_epoch})',
-             ha='center', fontsize=7, color=BLUE, alpha=0.7)
+             ha='center', fontsize=10, color=BLUE, alpha=0.7)
 
     plt.tight_layout(rect=[0, 0.03, 1, 1])
     fig.savefig(out_path, dpi=DPI, bbox_inches='tight')
