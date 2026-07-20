@@ -313,8 +313,8 @@ analysis/
 
 logs/                             SLURM output logs (see logs/README.md)
 docs/
-  stage2_progress.png            Stage 2 training curves (multi-seed)
   figures/                       Thesis figures (revised July 2026)
+    stage2_progress.png          Stage 2 training dynamics (thesis Fig. 4)
     fig_methodology_pipeline.png Three-stage pipeline diagram (thesis Fig. 1)
     fig_size_distribution.png    Scale distribution across datasets (thesis Fig. 2)
     fig_stage3_progress.png      Stage 3 forgetting dynamics (thesis Fig. 3)
