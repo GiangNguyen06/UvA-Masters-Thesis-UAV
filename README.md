@@ -6,7 +6,8 @@
 **Institution:** University of Amsterdam — MSc Information Studies (Data Science)  
 **Submitted:** June 2026 · **Revised:** July 2026 (post-assessment revision)
 
-📄 **Thesis PDF:** [`Uva_Master_s_Thesis_Giang_Nguyen.pdf`](Uva_Master_s_Thesis_Giang_Nguyen.pdf) (revised version)
+**Thesis PDF (revised, July 2026):** [`Uva_Master_s_Thesis_Giang_Nguyen.pdf`](Uva_Master_s_Thesis_Giang_Nguyen.pdf)  
+**Assessed version (June 2026):** [`Uva_Master_s_Thesis_Giang_Nguyen_assessed_June2026.pdf`](Uva_Master_s_Thesis_Giang_Nguyen_assessed_June2026.pdf)
 
 ---
 
