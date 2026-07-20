@@ -3,18 +3,16 @@
 assemble_vis_comparison.py
 --------------------------
 Assemble the 3-panel Stage 1 / Stage 2 / Stage 3 detection comparison
-(fig_vis_comparison.png) with LARGE, legible panel titles.
+(fig_vis_comparison.png) with large, legible panel titles.
 
-Inputs: three detection-visualisation images of the SAME Anti-UAV-RGBT val
-frame, one per checkpoint. Produce them first with visualise_detections_rgbt.py
-(run once per checkpoint so the predicted boxes are drawn on the frame), then
-pass the three resulting PNGs here. This script only composes and labels them.
+Inputs: three detection-visualisation images of the same Anti-UAV-RGBT val
+frame, one per checkpoint, as produced by visualise_detections_rgbt.py.
+This script only composes and labels them.
 
 Usage:
   python assemble_vis_comparison.py \
       --stage1 s1_frame.png --stage2 s2_frame.png --stage3 s3_frame.png \
-      --out /projects/prjs2041/analysis/fig_vis_comparison.png
-  # then copy fig_vis_comparison.png into the Overleaf media/img/ folder.
+      --out fig_vis_comparison.png
 """
 import argparse
 import matplotlib

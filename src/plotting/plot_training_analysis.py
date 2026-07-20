@@ -12,7 +12,7 @@ results.csv columns (written by train_stage2_ddp.py):
 Derived columns computed here:
   loss_det = loss_box + loss_obj + loss_cls
   kd_ratio = loss_kd / loss_det
-  FM       = mAP50_T1 − T1_baseline   (requires --t1-baseline, default 0.6617)
+  FM       = mAP50_T1 − T1_baseline   (set via --t1-baseline, default 0.6725)
 
 Outputs (all PNG, 300 dpi):
   fig_stage2_progress_v2.png  — 4-panel: T2 mAP / T1 mAP / loss components / FM
@@ -24,7 +24,7 @@ Usage:
   python plot_training_analysis.py \
       --csv  /projects/prjs2041/runs/stage2/stage2_uda1/results.csv \
       --out-dir /projects/prjs2041/runs/stage2/stage2_uda1/analysis \
-      --t1-baseline 0.6617
+      --t1-baseline 0.6725
 
   # Or just run in the stage2 run dir (auto-discovers results.csv):
   cd /projects/prjs2041/runs/stage2/stage2_uda1
@@ -41,7 +41,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
-from scipy.ndimage import uniform_filter1d   # pip install scipy if missing
+from scipy.ndimage import uniform_filter1d
 
 # ── Tufte palette ──────────────────────────────────────────────────────────────
 BLUE      = '#4878A8'
@@ -352,7 +352,7 @@ def plot_stage3_progress(df: pd.DataFrame, t1_baseline: float, out_path: Path):
     Four-panel figure for Stage 3:
       [A] T3 mAP@0.5 (CST val) — new task performance
       [B] T1 mAP@0.5 (Anti-UAV-RGBT val) — forgetting curve
-      [C] Per-stratum T1 mAP@0.5 (tiny / small / normal / large) — KEY FIGURE
+      [C] Per-stratum T1 mAP@0.5 (tiny / small / normal / large)
       [D] Forgetting Measure (fm_abs and fm_stage3)
     """
     epochs = df['epoch'].values
@@ -405,7 +405,7 @@ def plot_stage3_progress(df: pd.DataFrame, t1_baseline: float, out_path: Path):
     ax_t1.set_title('(B)  T1 retention (Anti-UAV-RGBT val)',
                     fontsize=12, loc='left', pad=4)
 
-    # [C] Per-stratum T1 mAP — the key figure
+    # [C] Per-stratum T1 mAP
     for stratum, color in STRATUM_COLORS.items():
         col = f'mAP50_T1_{stratum}'
         if col in df.columns:
@@ -510,8 +510,7 @@ def parse_args():
     p.add_argument('--out-dir', type=str, default=None,
                    help='Output directory (default: same dir as results.csv)')
     p.add_argument('--t1-baseline', type=float, default=0.6725,
-                   help='Stage 1 T1 mAP@0.5 (for FM computation). '
-                        'Updated to 0.6725 from antiuav_rgbt15.')
+                   help='Stage 1 T1 mAP@0.5 ceiling used for FM computation')
     return p.parse_args()
 
 

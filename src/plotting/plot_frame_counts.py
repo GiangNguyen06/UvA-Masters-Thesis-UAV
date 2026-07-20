@@ -2,30 +2,21 @@
 """
 plot_frame_counts.py
 --------------------
-Regenerates the appendix dataset figures, reusing the (corrected) per-format
-parsing in audit_datasets.py.
+Regenerates the appendix dataset figures, reusing the per-format parsing in
+audit_datasets.py. Counts include all splits (train/val/test) for every
+dataset; audit_datasets.PATHS was previously limited to the Anti-UAV-RGBT
+test split, which undercounted that dataset.
 
-WHY THIS EXISTS
----------------
-The original fig_frame_counts.png undercounted Anti-UAV-RGBT: audit_datasets.PATHS
-listed only the RGBT *test* split, so the figure showed RGBT at ~85k (test only)
-while Anti-UAV410 and CST showed all three splits. PATHS has now been fixed to
-include RGBT train/val/test, so re-running this produces a consistent figure.
+Plots ANNOTATED frames (exist == 1) per split, matching the annotated-frame
+counts reported in the thesis.
 
-It plots ANNOTATED frames (exist == 1) per split, to match the annotated-frame
-counts quoted in the thesis text (e.g. RGBT train+val = 208,737).
-
-OUTPUTS
--------
+Outputs:
   <out-dir>/fig_frame_counts.png   annotated frames per dataset split
   <out-dir>/fig_visibility.png     visible fraction (exist=1 / total) per split
   Console: per-dataset totals (all splits) and train+val subtotals.
 
-RUN (Snellius login node is fine; CPU only, a few minutes, no GPU):
-  module load 2023 && module load Miniconda3/23.5.2-0 && source activate uav_master
-  cd /projects/prjs2041/uav_code
-  python plot_frame_counts.py --out-dir /projects/prjs2041/analysis
-Then copy the two PNGs into the Overleaf project's media/img/ folder.
+Usage (CPU only):
+  python plot_frame_counts.py --out-dir <output-dir>
 """
 import argparse
 from pathlib import Path
@@ -55,13 +46,12 @@ SPLIT_ORDER = {"train": 0, "val": 1, "test": 2, "all": 3}
 def collect():
     """Return list of (dataset, split, frames, annotated), preserving split order.
 
-    Prints live progress: parsing hundreds of thousands of annotations takes a
-    few minutes, so each dataset/split is reported as it is counted.
+    Prints per-dataset progress; parsing all annotations takes a few minutes.
     """
     rows = []
 
     def add(ds, audit_call):
-        print(f"[auditing] {ds} ... (reading annotations, please wait)", flush=True)
+        print(f"[auditing] {ds} ... (reading annotations)", flush=True)
         results = audit_call()
         for split in sorted(results, key=lambda s: SPLIT_ORDER.get(s, 9)):
             s = results[split]
@@ -137,7 +127,7 @@ def fig_visibility(rows, out_path):
 
 def print_totals(rows):
     print("\n" + "=" * 60)
-    print("ANNOTATED-FRAME TOTALS (use these for the appendix caption)")
+    print("ANNOTATED-FRAME TOTALS")
     print("=" * 60)
     by_ds = {}
     for ds, split, fr, ann in rows:
@@ -158,8 +148,7 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
 
     print(f"Output dir: {out.resolve()}", flush=True)
-    print("Starting dataset audit (this reads many JSON files; "
-          "expect a few minutes of quiet work per dataset)...", flush=True)
+    print("Starting dataset audit ...", flush=True)
     rows = collect()
     fig_frame_counts(rows, out / "fig_frame_counts.png")
     fig_visibility(rows, out / "fig_visibility.png")
